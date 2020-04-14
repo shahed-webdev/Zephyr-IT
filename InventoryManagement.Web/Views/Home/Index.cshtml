@@ -1,0 +1,87 @@
+﻿@using InventoryManagement.Data
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+    //HtmlHelper.ClientValidationEnabled = false;
+}
+
+@section Styles {
+    <link href="~/css/Login.css" rel="stylesheet" />
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto mt-5">
+            <div class="card card-signin my-5 pt-3">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Sign In</h5>
+                    @*@using (Html.BeginForm("Login", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin", role = "form", id = "LoginForm" }))
+                    {*@
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="form-label-group">
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "User Name" })
+                            <label for="UserName">User Name</label>
+                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-label-group">
+                            @Html.TextBoxFor(m => m.Password, new { @class = "form-control", placeholder = "Password", type = "password" })
+                            <label for="Password">Password</label>
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="custom-control custom-checkbox mb-3">
+                            <input name="RememberMe" type="checkbox" class="custom-control-input" id="customCheck1">
+                            <label class="custom-control-label" for="customCheck1">Remember password</label>
+                        </div>
+                        <button class="btn btn-lg aqua-gradient btn-block text-uppercase" type="submit">Sign in</button>
+
+                        <p class="text-center my-3">
+                            @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                        </p>
+                    @*}*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+
+    <script>
+        $(function () {
+            $("#LoginForm").validate({
+                rules: {
+                    Email: "required",
+                    Password: "required",
+                },
+                messages: {
+                    Email: "Please enter User Name",
+                    Password: "Please enter your Password",
+                },
+                errorElement: "em",
+                errorPlacement: function (error, element) {
+                    // Add the `invalid-feedback` class to the error element
+                    error.addClass("invalid-feedback");
+
+                    if (element.prop("type") === "checkbox") {
+                        error.insertAfter(element.next("label"));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-valid").removeClass("is-invalid");
+                }
+            });
+        });
+    </script>
+}
+
