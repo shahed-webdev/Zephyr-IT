@@ -16,13 +16,13 @@ namespace InventoryManagement.Data.Extensions
                 {
                     Id = ROLE_ID,
                     Name = "admin",
-                    NormalizedName = "admin"
+                    NormalizedName = "ADMIN"
                 },
                 new IdentityRole
                 {
                     Id = Guid.NewGuid().ToString(),
                     Name = "sub-admin",
-                    NormalizedName = "sub-admin"
+                    NormalizedName = "SUB-ADMIN"
                 }
             );
 
@@ -31,12 +31,13 @@ namespace InventoryManagement.Data.Extensions
             {
                 Id = ADMIN_ID,
                 UserName = "admin",
-                NormalizedUserName = "admin",
+                NormalizedUserName = "ADMIN",
                 Email = "admin@gmail.com",
-                NormalizedEmail = "admin@gmail.com",
+                NormalizedEmail = "ADMIN@GMAIL.COM",
                 EmailConfirmed = true,
                 PasswordHash = hasher.HashPassword(null, "Admin_121"),
-                SecurityStamp = string.Empty
+                SecurityStamp = string.Empty,
+                LockoutEnabled = true
             });
 
             builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
