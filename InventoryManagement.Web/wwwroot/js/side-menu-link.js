@@ -7,9 +7,9 @@ jQuery(function ($) {
     //});
 
     //click on link
-    $("#menuItem").on("click", "strong", function () {
-        $(this).toggleClass("open").next().slideToggle(200);
-    });
+    //$("#menuItem").on("click", "strong", function () {
+    //    $(this).toggleClass("open").next().slideToggle(200);
+    //});
 
     //sidebar event
     $('.js-show-sidedrawer').on('click', showSidedrawer);

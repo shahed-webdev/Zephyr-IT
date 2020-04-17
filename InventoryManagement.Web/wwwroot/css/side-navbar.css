@@ -1,5 +1,4 @@
 ﻿
-
 #header { z-index: 5; transition: left 0.2s; }
 #sidedrawer { background-color: #fff; position: fixed; top: 0; bottom: 0; width: 250px; left: -250px; overflow: auto; z-index: 2; transition: transform 0.2s; }
 #content-wrapper { min-height: 830px; overflow-x: auto; padding: 15px 0; margin-left: 0; transition: margin-left 0.2s; }
@@ -18,10 +17,11 @@
 #sidedrawer ul.sub-manu li a.active { color: #263238; font-weight: 400; }
 
 /*Sidebar link*/
-.sub-manu { display: none; }
-#sidedrawer .sub-manu.in { display: block !important; }
+.sub-menu { display: none; }
+.sub-menu.active { display:block; }
+#sidedrawer ul li a.link-active { color: #fc6763 !important }
 #sidedrawer .fa-caret-right { float: right; color: #b0b0b0; }
-#sidedrawer strong.open .fas.fa-caret-right:before { content: "\f0d7"; font-family: 'Font Awesome 5 Pro'; }
+#sidedrawer strong.open .fas.fa-caret-right::before { content: "\f0d7"; font-family: 'Font Awesome 5 Pro'; }
 
 #sidedrawer ul { list-style: none; }
 #sidedrawer > ul { padding-left: 0px; }
@@ -30,8 +30,6 @@
 #sidedrawer strong { display: block; padding: 15px 20px; cursor: pointer; color: #6c7177; letter-spacing: .0125em; font-weight: 500; }
 #sidedrawer strong > span { margin-right: 15px; color: #fc6a63; }
 #sidedrawer strong + ul > li { padding: 9px 0 0 24px; }
-
-.sidebar-footer { background: #eef5f9; position: fixed; z-index: 10; bottom: 0px; left: 0px; border-top: 1px solid rgba(120, 130, 140, 0.13); width: 100%; padding: 10px 0; text-align: center; font-size: 10pt }
 
 @media (min-width: 768px) {
     #header { margin-left: 250px; }
