@@ -6,7 +6,7 @@
 }
 
 @section Styles {
-    <link href="~/css/Login.css" rel="stylesheet"/>
+    <link href="~/css/Login.css" rel="stylesheet" />
 }
 
 <div class="container">
@@ -14,34 +14,28 @@
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto mt-5">
             <div class="card card-signin my-5 pt-3">
                 <div class="card-body">
-                    <h5 class="card-title text-center">Sign In</h5>
+                    <h5 class="card-title text-center">
+                        <strong class="dark-grey-text">Sign In</strong>
+                    </h5>
 
-                    <form asp-controller="Home" asp-action="Index" method="post">
+                    <form class="form-signin" asp-controller="Home" asp-action="Login" method="post">
+                        <div class="md-form mb-5">
+                            <input asp-for="UserName" class="form-control">
+                            <label asp-for="UserName"></label>
+                            <span asp-validation-for="UserName"></span>
+                        </div>
+                        <div class="md-form mb-0 pb-3">
+                            <input asp-for="Password" class="form-control" type="password">
+                            <label asp-for="Password"></label>
+                            <span asp-validation-for="Password"></span>
 
-                        @Html.AntiForgeryToken()
-
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                        <div class="form-label-group">
-                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "User Name" })
-                            <label for="UserName">User Name</label>
-                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                            <p class="font-small blue-text d-flex justify-content-end">
+                                @Html.ActionLink("Forgot password?", "ForgotPassword")
+                            </p>
                         </div>
 
-                        <div class="form-label-group">
-                            @Html.TextBoxFor(m => m.Password, new { @class = "form-control", placeholder = "Password", type = "password" })
-                            <label for="Password">Password</label>
-                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                        </div>
-
-                        <div class="custom-control custom-checkbox mb-3">
-                            <input name="RememberMe" type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">Remember password</label>
-                        </div>
-                        <button class="btn btn-lg aqua-gradient btn-block text-uppercase" type="submit">Sign in</button>
-
-                        <p class="text-center my-3">
-                            @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                        </p>
+                        <button class="btn btn-block btn-rounded z-depth-1a waves-effect waves-light peach-gradient mb-3" type="submit">Sign in</button>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     </form>
                 </div>
             </div>
@@ -50,37 +44,5 @@
 </div>
 
 @section Scripts {
-    @*@Scripts.Render("~/bundles/jqueryval")*@
-
-    <script>
-        $(function() {
-            $("#LoginForm").validate({
-                rules: {
-                    Email: "required",
-                    Password: "required",
-                },
-                messages: {
-                    Email: "Please enter User Name",
-                    Password: "Please enter your Password",
-                },
-                errorElement: "em",
-                errorPlacement: function(error, element) {
-                    // Add the `invalid-feedback` class to the error element
-                    error.addClass("invalid-feedback");
-
-                    if (element.prop("type") === "checkbox") {
-                        error.insertAfter(element.next("label"));
-                    } else {
-                        error.insertAfter(element);
-                    }
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass("is-invalid").removeClass("is-valid");
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).addClass("is-valid").removeClass("is-invalid");
-                }
-            });
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

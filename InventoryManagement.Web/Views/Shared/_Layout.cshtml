@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Inventory Management</title>
+    <title>@ViewBag.Title - Zephyr IT</title>
     <link rel="shortcut icon" href="/favic.ico?v=1" type="image/x-icon" />
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.8.2/css/all.css" />
     <!-- Bootstrap core CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Material Design Bootstrap -->
@@ -17,43 +17,32 @@
     @RenderSection("Styles", false)
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark aqua-gradient">
+    <nav class="navbar navbar-expand-lg navbar-dark peach-gradient">
         <div class="container">
-            <a class="navbar-brand" href="/Home/Index">
-                <img src="~/css/images/logo.png" style="height: 40px;" alt="" />
-                Inventory Management
-            </a>
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#NavToggle" aria-controls="NavToggle" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="NavToggle">
-
-
-                <ul class="navbar-nav ml-auto nav-flex-icons">
-                    <li class="nav-item">
-                        <a class="nav-link waves-effect waves-light">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link waves-effect waves-light">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+            <a class="navbar-brand" href="/Home/Index"><span>Zephyr</span> IT</a>
+            <ul class="navbar-nav ml-auto nav-flex-icons">
+                <partial name="_LoginPartial" />
+                <li class="nav-item">
+                    <a class="nav-link waves-effect waves-light">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-effect waves-light">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>  
     </nav>
 
     <main style="min-height:750px">
         @RenderBody()
     </main>
 
-    <footer class="page-footer font-small wow fadeIn aqua-gradient">
+    <footer class="page-footer font-small wow fadeIn peach-gradient">
         <div class="footer-copyright text-center py-3">
-            © @DateTime.Now.Year Copyright: <a href="#">Inventory Management</a>
+            © @DateTime.Now.Year Copyright: <a href="#">zephyrit.com</a>
         </div>
     </footer>
 
@@ -66,12 +55,12 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <!-- MDB core JavaScript -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.2/js/mdb.min.js"></script>
-    @RenderSection("scripts", required: false)
+    @RenderSection("Scripts", required: false)
 
     <script type="text/javascript">
         $(function () {
             //Back to top
-            $('body').append('<div id="toTop" class="btn btn-primary">TOP</div>');
+            $('body').append('<div id="toTop" class="btn orange darken-4 text-white">TOP</div>');
             $(window).scroll(function () {
                 if ($(this).scrollTop() != 0) {
                     $('#toTop').fadeIn();
