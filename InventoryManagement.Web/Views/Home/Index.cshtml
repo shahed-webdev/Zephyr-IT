@@ -1,8 +1,7 @@
 ﻿@using InventoryManagement.Data
 @model LoginViewModel
 @{
-    ViewBag.Title = "Log in";
-    //HtmlHelper.ClientValidationEnabled = false;
+    ViewBag.Title = "Login";
 }
 
 @section Styles {
@@ -18,7 +17,7 @@
                         <strong class="dark-grey-text">Sign In</strong>
                     </h5>
 
-                    <form class="form-signin" asp-controller="Home" asp-action="Login" method="post">
+                    <form class="form-signin" asp-controller="Home" asp-action="Index" method="post">
                         <div class="md-form mb-5">
                             <input asp-for="UserName" class="form-control">
                             <label asp-for="UserName"></label>

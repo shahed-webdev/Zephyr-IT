@@ -34,7 +34,7 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<IActionResult> Index(LoginViewModel model, string returnUrl)
         {
             returnUrl ??= Url.Content("~/Dashboard");
 
@@ -60,12 +60,19 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            _logger.LogInformation("User logged out.");
+            if (returnUrl != null)
+            {
+                return LocalRedirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }
