@@ -10,8 +10,9 @@ namespace InventoryManagement.Web.Controllers
     [Authorize]
     public class DashboardController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string message)
         {
+            ViewBag.StatusMessage = message;
             return View();
         }
     }
