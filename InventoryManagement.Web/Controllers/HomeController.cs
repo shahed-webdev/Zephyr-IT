@@ -36,7 +36,7 @@ namespace InventoryManagement.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(LoginViewModel model, string returnUrl)
         {
-            returnUrl ??= Url.Content("~/Dashboard");
+            returnUrl ??= Url.Content("~/Dashboard/Index");
 
             if (!ModelState.IsValid) return View(model);   
 
@@ -65,14 +65,10 @@ namespace InventoryManagement.Web.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            if (returnUrl != null)
-            {
-                return LocalRedirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
+
+            if (returnUrl == null) return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

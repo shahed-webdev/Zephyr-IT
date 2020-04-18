@@ -212,11 +212,12 @@ function setNavigation() {
     path = path.replace(/\/$/, "");
     path = decodeURIComponent(path);
 
-    links.forEach(li => {
-        let href = li.getAttribute('href');
+    links.forEach(link => {
+        let href = link.getAttribute('href');
+
         if (path === href) {
-            li.parentElement.parentElement.classList.add("active");
-            li.classList.add('link-active');
+            link.parentElement.parentElement.classList.add("active");
+            link.classList.add('link-active');
         }
     });
 }
