@@ -6,7 +6,7 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-area="Identity" asp-controller="Home" asp-action="Logout" method="post" id="logoutForm">
+    <form asp-area="Identity" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
         <div class="manu-top-wraper">
             <img id="loginUserPhoto" class="rounded-circle img-thumbnail" src="~/images/defaultImage.jpg" style="height: 100px; width: 100px" alt="Photo" />
             <ul class="p-0 mt-1">
@@ -20,7 +20,7 @@
                             <i class="fas fa-tachometer-alt"></i>
                             Dashboard
                         </a>
-                        <a class="dropdown-item" href="/Home/ChangePassword">
+                        <a class="dropdown-item" href="/Account/ChangePassword">
                             <i class="fas fa-lock"></i>
                             Change Password
                         </a>

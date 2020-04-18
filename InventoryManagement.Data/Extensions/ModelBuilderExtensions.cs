@@ -23,8 +23,7 @@ namespace InventoryManagement.Data.Extensions
                     Id = Guid.NewGuid().ToString(),
                     Name = "sub-admin",
                     NormalizedName = "SUB-ADMIN"
-                }
-            );
+                });
 
             var hasher = new PasswordHasher<IdentityUser>();
             builder.Entity<IdentityUser>().HasData(new IdentityUser
