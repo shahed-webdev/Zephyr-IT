@@ -5,29 +5,29 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-decoration-none" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-user"></i>
-                <strong>@UserManager.GetUserName(User)</strong>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-decoration-none" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user"></i>
+            <strong>@UserManager.GetUserName(User)</strong>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/Dashboard/Index">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
             </a>
-            <div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="/Dashboard/Index">
-                    <i class="fas fa-tachometer-alt"></i>
-                    Dashboard
-                </a>
-                <a class="dropdown-item" href="/Account/ChangePassword">
-                    <i class="fas fa-lock"></i>
-                    Change Password
-                </a>
-                <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/Account/ChangePassword">
+                <i class="fas fa-lock"></i>
+                Change Password
+            </a>
+            <div class="dropdown-divider"></div>
+            <form asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="w-auto">
                 <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">
                     <i class="fas fa-sign-out-alt"></i>
                     Logout
                 </a>
-            </div>
-        </li>
-    </form>
+            </form>
+        </div>
+    </li>
 }
 else
 {

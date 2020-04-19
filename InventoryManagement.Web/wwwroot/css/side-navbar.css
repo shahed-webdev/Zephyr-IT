@@ -17,16 +17,16 @@
 #sidedrawer ul.sub-manu li a.active { color: #263238; font-weight: 400; }
 
 /*Sidebar link*/
-.sub-menu { display: none; }
-.sub-menu.active { display:block; }
-#sidedrawer ul li a.link-active { color: #ff1c16 !important; font-weight: 400; }
+.sub-menu { display: none; transition: opacity 1s ease-out; opacity: 0; }
+.sub-menu.active { display: block; opacity: 1; }
+#sidedrawer ul li a.link-active { color: #ff1c16 !important; }
 #sidedrawer .fa-caret-right { float: right; color: #b0b0b0; }
 #sidedrawer strong.open .fas.fa-caret-right::before { content: "\f0d7"; font-family: 'Font Awesome 5 Pro'; }
 
 #sidedrawer ul { list-style: none; }
 #sidedrawer > ul { padding-left: 0px; }
 #sidedrawer > ul > li:first-child { padding-top: 15px; }
-#sidedrawer ul li a { color: #393939 }
+#sidedrawer ul li a.links { color: #393939; }
 
 #sidedrawer strong { display: block; padding: 15px 20px; cursor: pointer; color: #515050; letter-spacing: .0125em; font-weight: 500; }
 #sidedrawer strong > span { margin-right: 15px; color: #fc6a63; }

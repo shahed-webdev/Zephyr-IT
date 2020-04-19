@@ -61,13 +61,13 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
-        // GET: /Manage/ChangePassword
+        // GET: ChangePassword
         public ActionResult ChangePassword()
         {
             return View();
         }
 
-        // POST: /Manage/ChangePassword
+        // POST: ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
