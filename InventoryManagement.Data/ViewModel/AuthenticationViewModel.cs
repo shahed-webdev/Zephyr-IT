@@ -15,7 +15,6 @@ namespace InventoryManagement.Data
 
         [Display(Name = "Remember me?")] public bool RememberMe { get; set; }
     }
-
     public class ChangePasswordViewModel
     {
         [Required]
@@ -33,5 +32,9 @@ namespace InventoryManagement.Data
         [Display(Name = "Confirm new password")]
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+    }
+    public class ForgotPasswordViewModel
+    {
+        [Required] [EmailAddress] public string Email { get; set; }
     }
 }
