@@ -3,4 +3,4 @@
 .card-signin .card-title { margin-bottom: 2rem; font-weight: 300; font-size: 1.5rem; }
 .card-signin .card-body { padding: 2rem; }
 .form-signin { width: 100%; padding:0 1rem }
-.form-signin .btn { color: #fff; font-size: 80%; border-radius: 5rem; letter-spacing: .1rem; font-weight: bold; padding: 1rem; transition: all 0.2s; }
+.form-signin .btn { color: #fff; font-size: 80%; border-radius: 5rem; letter-spacing: .1rem; padding: 1rem; transition: all 0.2s; }

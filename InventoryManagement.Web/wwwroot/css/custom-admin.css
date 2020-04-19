@@ -1,5 +1,5 @@
 ﻿body { background-color: #eef5f9 }
-h3 { text-transform: uppercase; margin: 0; font-weight: 500; }
+h4 { text-transform: uppercase; margin: 0; font-weight: 500; color: #4f4f4f !important; }
 
 a.navbar-brand { font-weight: bold; font-size: 1.5rem }
 a.navbar-brand span { color: #fb5952 }
@@ -20,6 +20,7 @@ a.navbar-brand span { color: #fb5952 }
 .DataTable th { background-color: #777c84; color: #fff; }
 .DataTable .error-color td { color: red; }
 .DataTable .delete { color: #ff0000 }
+
 /*print option*/
 #DataTable_length, .dt-buttons { float: left; }
 
@@ -28,6 +29,16 @@ a.navbar-brand span { color: #fb5952 }
 .btn-floating i { display: inline-block; width: inherit; text-align: center; color: #fff; font-size: 1.25rem; line-height: 47px; }
 
 #toTop { bottom: 10px; cursor: pointer; display: none; position: fixed; right: 10px; }
+
+/* validation helpers */
+.field-validation-error { color: #ee2420; font-size: .85rem; }
+.field-validation-valid { display: none; }
+
+input.input-validation-error { border: 1px solid #b94a48; }
+input[type="checkbox"].input-validation-error { border: 0 none; }
+
+.validation-summary-errors { color: #b94a48; }
+.validation-summary-valid { display: none; }
 
 /*Printing*/
 @page { margin: .5cm; }

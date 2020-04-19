@@ -16,7 +16,7 @@
     <!-- MDB -->
     <link href="~/mdb/css/mdb-core.css" rel="stylesheet"/>
     <!-- Sidebar -->
-    <link href="~/css/side-navbar.css" rel="stylesheet"/>
+    <link href="~/css/side-navbar.css?v=1" rel="stylesheet"/>
     <!-- Image crop-er -->
     <link href="~/css/croper.css" rel="stylesheet"/>
     <!-- custom -->
@@ -25,6 +25,18 @@
     @RenderSection("Styles", false)
 </head>
 <body>
+    <div id="header">
+    <nav class="m-0 navbar navbar-expand-lg navbar-dark peach-gradient">
+        <div class="container-fluid">
+            <div>
+                <a class="sidedrawer-toggle d-md-none js-show-sidedrawer d-print-none"><i class="fas fa-bars"></i></a>
+                <a class="sidedrawer-toggle d-none d-md-inline-block js-hide-sidedrawer d-print-none"><i class="fas fa-bars"></i></a>
+                <a class="navbar-brand ml-1"><span>Zephyr</span> IT</a>
+            </div>
+        </div>
+    </nav>
+</div>
+
     <div id="sidedrawer" class="d-print-none z-depth-1">
         <Partial Name="_AdminLoginPartial"/>
         <ul id="menuItem">
@@ -45,18 +57,6 @@
             <ul class="sub-menu"><li><a class="links" href="/ExpanseCategories/Index">Categories</a></li><li><a class="links" href="/Expanses/Index">Expenses</a></li></ul>
         </li>*@
         </ul>
-    </div>
-
-    <div id="header">
-        <nav class="m-0 navbar navbar-expand-lg navbar-dark peach-gradient">
-            <div class="container-fluid">
-                <div>
-                    <a class="sidedrawer-toggle d-md-none js-show-sidedrawer d-print-none"><i class="fas fa-bars"></i></a>
-                    <a class="sidedrawer-toggle d-none d-md-inline-block js-hide-sidedrawer d-print-none"><i class="fas fa-bars"></i></a>
-                    <a class="navbar-brand"><span>Zephyr</span> IT</a>
-                </div>
-            </div>
-        </nav>
     </div>
 
     <main id="content-wrapper" style="min-height:750px">
@@ -101,7 +101,7 @@
     <script src="~/js/side-menu-link.js"></script>
 
     
-    <script src="~/js/active-links.js?v=1"></script>
+    <script src="~/js/active-links.js?v=1.1"></script>
 
     @RenderSection("Scripts", required: false)
 

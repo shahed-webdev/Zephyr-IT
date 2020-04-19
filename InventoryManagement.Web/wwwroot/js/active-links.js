@@ -1,7 +1,7 @@
 ﻿
 let linkData = [{
     "LinkCategoryID": 1,
-    "SN": 1,
+    "SN": 8,
     "Category": "Sub-Admin",
     "IconClass": "fas fa-user-tie",
     "links": [{
@@ -14,7 +14,7 @@ let linkData = [{
     },
     {
         "LinkID": 1,
-        "SN": 1,
+        "SN": 7,
         "Controller": "SubAdmin",
         "Action": "Index",
         "Title": "Sub-admins",
@@ -31,7 +31,7 @@ let linkData = [{
 },
 {
     "LinkCategoryID": 2,
-    "SN": 2,
+    "SN": 7,
     "Category": "Product",
     "IconClass": "fas fa-shopping-cart",
     "links": [{
@@ -156,7 +156,7 @@ let linkData = [{
     },
     {
         "LinkID": 16,
-        "SN": 6,
+        "SN": 2,
         "Controller": "Report",
         "Action": "ProductSummery",
         "Title": "Product Summery",
@@ -164,7 +164,7 @@ let linkData = [{
     },
     {
         "LinkID": 17,
-        "SN": 8,
+        "SN": 1,
         "Controller": "Report",
         "Action": "NetSummery",
         "Title": "Net Summery",
@@ -185,7 +185,7 @@ menuItem.querySelectorAll("strong").forEach(category => {
 
 //functions
 function getMenus() {
-    let html = "";
+    let html = `<li><strong><span class="fas fa-tachometer-alt"></span><a class="links" href="">Dashboard</a></strong></li>`;
     linkData.forEach(item => {    
         html += `<li><strong><span class="${item.IconClass}"></span>${item.Category} <i class="fas fa-caret-right"></i></strong><ul class="sub-menu">${appendLinks(item.links)}</ul></li>`;
     });
@@ -201,22 +201,29 @@ function appendLinks(links) {
 }
 
 function linkCategoryClicked() {
-    this.nextElementSibling.classList.toggle("active");
-    this.classList.toggle("open");
+    if (this.nextElementSibling) {
+        this.nextElementSibling.classList.toggle("active");
+        this.classList.toggle("open");
+    }
 }
 
 function setNavigation() {
-    let links = menuItem.querySelectorAll(".links");
+    const links = menuItem.querySelectorAll(".links");
     let path = window.location.pathname;
 
     path = path.replace(/\/$/, "");
     path = decodeURIComponent(path);
 
     links.forEach(link => {
-        let href = link.getAttribute('href');
+        const href = link.getAttribute('href');
 
         if (path === href) {
-            link.parentElement.parentElement.classList.add("active");
+            if (link.parentElement.nodeName !== "STRONG") {
+                const prentElement = link.parentElement.parentElement;
+                prentElement.previousElementSibling.classList.add("open");
+                prentElement.classList.add("active");
+            }
+
             link.classList.add('link-active');
         }
     });
