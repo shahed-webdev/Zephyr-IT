@@ -9,8 +9,61 @@ namespace InventoryManagement.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
+        public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<Expanse> Expanse { get; set; }
+        public virtual DbSet<ExpanseCategory> ExpanseCategory { get; set; }
+        public virtual DbSet<Institution> Institution { get; set; }
+        public virtual DbSet<PageLink> PageLink { get; set; }
+        public virtual DbSet<PageLinkAssign> PageLinkAssign { get; set; }
+        public virtual DbSet<PageLinkCategory> PageLinkCategory { get; set; }
+        public virtual DbSet<Product> Product { get; set; }
+        public virtual DbSet<ProductCatalog> ProductCatalog { get; set; }
+        public virtual DbSet<ProductCatalogType> ProductCatalogType { get; set; }
+        public virtual DbSet<ProductStock> ProductStock { get; set; }
+        public virtual DbSet<Purchase> Purchase { get; set; }
+        public virtual DbSet<PurchaseAdjustment> PurchaseAdjustment { get; set; }
+        public virtual DbSet<PurchasePayment> PurchasePayment { get; set; }
+        public virtual DbSet<PurchasePaymentList> PurchasePaymentList { get; set; }
+        public virtual DbSet<Registration> Registration { get; set; }
+        public virtual DbSet<Selling> Selling { get; set; }
+        public virtual DbSet<SellingAdjustment> SellingAdjustment { get; set; }
+        public virtual DbSet<SellingList> SellingList { get; set; }
+        public virtual DbSet<SellingPayment> SellingPayment { get; set; }
+        public virtual DbSet<SellingPaymentList> SellingPaymentList { get; set; }
+        public virtual DbSet<Service> Service { get; set; }
+        public virtual DbSet<ServiceDevice> ServiceDevice { get; set; }
+        public virtual DbSet<ServiceList> ServiceList { get; set; }
+        public virtual DbSet<ServicePaymentList> ServicePaymentList { get; set; }
+        public virtual DbSet<Vendor> Vendor { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyConfiguration(new CustomerConfiguration());
+            builder.ApplyConfiguration(new ExpanseConfiguration());
+            builder.ApplyConfiguration(new ExpanseCategoryConfiguration());
+            builder.ApplyConfiguration(new InstitutionConfiguration());
+            builder.ApplyConfiguration(new PageLinkConfiguration());
+            builder.ApplyConfiguration(new PageLinkAssignConfiguration());
+            builder.ApplyConfiguration(new PageLinkCategoryConfiguration());
+            builder.ApplyConfiguration(new ProductConfiguration());
+            builder.ApplyConfiguration(new ProductCatalogConfiguration());
+            builder.ApplyConfiguration(new ProductCatalogTypeConfiguration());
+            builder.ApplyConfiguration(new ProductStockConfiguration());
+            builder.ApplyConfiguration(new PurchaseConfiguration());
+            builder.ApplyConfiguration(new PurchaseAdjustmentConfiguration());
+            builder.ApplyConfiguration(new PurchasePaymentConfiguration());
+            builder.ApplyConfiguration(new PurchasePaymentListConfiguration());
+            builder.ApplyConfiguration(new RegistrationConfiguration());
+            builder.ApplyConfiguration(new SellingConfiguration());
+            builder.ApplyConfiguration(new SellingAdjustmentConfiguration());
+            builder.ApplyConfiguration(new SellingListConfiguration());
+            builder.ApplyConfiguration(new SellingPaymentConfiguration());
+            builder.ApplyConfiguration(new SellingPaymentListConfiguration());
+            builder.ApplyConfiguration(new ServiceConfiguration());
+            builder.ApplyConfiguration(new ServiceDeviceConfiguration());
+            builder.ApplyConfiguration(new ServiceListConfiguration());
+            builder.ApplyConfiguration(new ServicePaymentListConfiguration());
+            builder.ApplyConfiguration(new VendorConfiguration());
+
             base.OnModelCreating(builder);
             builder.Seed();
         }
