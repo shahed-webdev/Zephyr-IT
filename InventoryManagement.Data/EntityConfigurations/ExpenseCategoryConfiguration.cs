@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InventoryManagement.Data 
 {
-   public class ExpanseCategoryConfiguration :IEntityTypeConfiguration<ExpanseCategory>
+   public class ExpenseCategoryConfiguration :IEntityTypeConfiguration<ExpenseCategory>
     {
-        public void Configure(EntityTypeBuilder<ExpanseCategory> entity)
+        public void Configure(EntityTypeBuilder<ExpenseCategory> entity)
         {
             entity.Property(e => e.CategoryName)
                     .IsRequired()

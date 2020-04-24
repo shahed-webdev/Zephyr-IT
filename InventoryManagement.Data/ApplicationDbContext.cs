@@ -10,8 +10,8 @@ namespace InventoryManagement.Data
         {
         }
         public virtual DbSet<Customer> Customer { get; set; }
-        public virtual DbSet<Expanse> Expanse { get; set; }
-        public virtual DbSet<ExpanseCategory> ExpanseCategory { get; set; }
+        public virtual DbSet<Expense> Expense { get; set; }
+        public virtual DbSet<ExpenseCategory> ExpenseCategory { get; set; }
         public virtual DbSet<Institution> Institution { get; set; }
         public virtual DbSet<PageLink> PageLink { get; set; }
         public virtual DbSet<PageLinkAssign> PageLinkAssign { get; set; }
@@ -38,8 +38,8 @@ namespace InventoryManagement.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new CustomerConfiguration());
-            builder.ApplyConfiguration(new ExpanseConfiguration());
-            builder.ApplyConfiguration(new ExpanseCategoryConfiguration());
+            builder.ApplyConfiguration(new ExpenseConfiguration());
+            builder.ApplyConfiguration(new ExpenseCategoryConfiguration());
             builder.ApplyConfiguration(new InstitutionConfiguration());
             builder.ApplyConfiguration(new PageLinkConfiguration());
             builder.ApplyConfiguration(new PageLinkAssignConfiguration());

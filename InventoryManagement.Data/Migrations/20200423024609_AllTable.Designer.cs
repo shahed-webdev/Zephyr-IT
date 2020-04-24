@@ -76,29 +76,29 @@ namespace InventoryManagement.Data.Migrations
                     b.ToTable("Customer");
                 });
 
-            modelBuilder.Entity("InventoryManagement.Data.Expanse", b =>
+            modelBuilder.Entity("InventoryManagement.Data.Expense", b =>
                 {
-                    b.Property<int>("ExpanseId")
+                    b.Property<int>("ExpenseId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<double>("ExpanseAmount")
+                    b.Property<double>("ExpenseAmount")
                         .HasColumnType("float");
 
-                    b.Property<int>("ExpanseCategoryId")
+                    b.Property<int>("ExpenseCategoryId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ExpanseDate")
+                    b.Property<DateTime>("ExpenseDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("date")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<string>("ExpanseFor")
+                    b.Property<string>("ExpenseFor")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<string>("ExpansePaymentMethod")
+                    b.Property<string>("ExpensePaymentMethod")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
@@ -110,18 +110,18 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<int>("RegistrationId")
                         .HasColumnType("int");
 
-                    b.HasKey("ExpanseId");
+                    b.HasKey("ExpenseId");
 
-                    b.HasIndex("ExpanseCategoryId");
+                    b.HasIndex("ExpenseCategoryId");
 
                     b.HasIndex("RegistrationId");
 
-                    b.ToTable("Expanse");
+                    b.ToTable("Expense");
                 });
 
-            modelBuilder.Entity("InventoryManagement.Data.ExpanseCategory", b =>
+            modelBuilder.Entity("InventoryManagement.Data.ExpenseCategory", b =>
                 {
-                    b.Property<int>("ExpanseCategoryId")
+                    b.Property<int>("ExpenseCategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -131,12 +131,12 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
-                    b.Property<double>("TotalExpanse")
+                    b.Property<double>("TotalExpense")
                         .HasColumnType("float");
 
-                    b.HasKey("ExpanseCategoryId");
+                    b.HasKey("ExpenseCategoryId");
 
-                    b.ToTable("ExpanseCategory");
+                    b.ToTable("ExpenseCategory");
                 });
 
             modelBuilder.Entity("InventoryManagement.Data.Institution", b =>
@@ -1365,18 +1365,18 @@ namespace InventoryManagement.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("InventoryManagement.Data.Expanse", b =>
+            modelBuilder.Entity("InventoryManagement.Data.Expense", b =>
                 {
-                    b.HasOne("InventoryManagement.Data.ExpanseCategory", "ExpanseCategory")
-                        .WithMany("Expanse")
-                        .HasForeignKey("ExpanseCategoryId")
-                        .HasConstraintName("FK_Expanse_ExpanseCategory")
+                    b.HasOne("InventoryManagement.Data.ExpenseCategory", "ExpenseCategory")
+                        .WithMany("Expense")
+                        .HasForeignKey("ExpenseCategoryId")
+                        .HasConstraintName("FK_Expense_ExpenseCategory")
                         .IsRequired();
 
                     b.HasOne("InventoryManagement.Data.Registration", "Registration")
-                        .WithMany("Expanse")
+                        .WithMany("Expense")
                         .HasForeignKey("RegistrationId")
-                        .HasConstraintName("FK_Expanse_Registration")
+                        .HasConstraintName("FK_Expense_Registration")
                         .IsRequired();
                 });
 

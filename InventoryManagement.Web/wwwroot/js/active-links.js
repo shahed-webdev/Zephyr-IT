@@ -59,7 +59,7 @@ let linkData = [{
     "links": [{
         "LinkID": 5,
         "SN": 1,
-        "Controller": "ExpanseCategories",
+        "Controller": "ExpenseCategories",
         "Action": "Index",
         "Title": "Categories",
         "IconClass": null
@@ -67,7 +67,7 @@ let linkData = [{
     {
         "LinkID": 7,
         "SN": 2,
-        "Controller": "Expanses",
+        "Controller": "Expenses",
         "Action": "Index",
         "Title": "Expenses",
         "IconClass": null

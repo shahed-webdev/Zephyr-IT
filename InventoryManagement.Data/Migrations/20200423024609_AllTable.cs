@@ -51,17 +51,17 @@ namespace InventoryManagement.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ExpanseCategory",
+                name: "ExpenseCategory",
                 columns: table => new
                 {
-                    ExpanseCategoryId = table.Column<int>(nullable: false)
+                    ExpenseCategoryId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CategoryName = table.Column<string>(maxLength: 128, nullable: false),
-                    TotalExpanse = table.Column<double>(nullable: false)
+                    TotalExpense = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExpanseCategory", x => x.ExpanseCategoryId);
+                    table.PrimaryKey("PK_ExpenseCategory", x => x.ExpenseCategoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -223,30 +223,30 @@ namespace InventoryManagement.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Expanse",
+                name: "Expense",
                 columns: table => new
                 {
-                    ExpanseId = table.Column<int>(nullable: false)
+                    ExpenseId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RegistrationId = table.Column<int>(nullable: false),
-                    ExpanseCategoryId = table.Column<int>(nullable: false),
-                    ExpanseAmount = table.Column<double>(nullable: false),
-                    ExpanseFor = table.Column<string>(maxLength: 256, nullable: true),
-                    ExpansePaymentMethod = table.Column<string>(maxLength: 50, nullable: true),
-                    ExpanseDate = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "(getdate())"),
+                    ExpenseCategoryId = table.Column<int>(nullable: false),
+                    ExpenseAmount = table.Column<double>(nullable: false),
+                    ExpenseFor = table.Column<string>(maxLength: 256, nullable: true),
+                    ExpensePaymentMethod = table.Column<string>(maxLength: 50, nullable: true),
+                    ExpenseDate = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "(getdate())"),
                     InsertDate = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Expanse", x => x.ExpanseId);
+                    table.PrimaryKey("PK_Expense", x => x.ExpenseId);
                     table.ForeignKey(
-                        name: "FK_Expanse_ExpanseCategory",
-                        column: x => x.ExpanseCategoryId,
-                        principalTable: "ExpanseCategory",
-                        principalColumn: "ExpanseCategoryId",
+                        name: "FK_Expense_ExpenseCategory",
+                        column: x => x.ExpenseCategoryId,
+                        principalTable: "ExpenseCategory",
+                        principalColumn: "ExpenseCategoryId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Expanse_Registration",
+                        name: "FK_Expense_Registration",
                         column: x => x.RegistrationId,
                         principalTable: "Registration",
                         principalColumn: "RegistrationId",
@@ -773,13 +773,13 @@ namespace InventoryManagement.Data.Migrations
                 values: new object[] { "24bca771-762d-457c-8aff-cdd661803190", "837d221e-3d39-4651-b239-66e68d57edb2" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Expanse_ExpanseCategoryId",
-                table: "Expanse",
-                column: "ExpanseCategoryId");
+                name: "IX_Expense_ExpenseCategoryId",
+                table: "Expense",
+                column: "ExpenseCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Expanse_RegistrationId",
-                table: "Expanse",
+                name: "IX_Expense_RegistrationId",
+                table: "Expense",
                 column: "RegistrationId");
 
             migrationBuilder.CreateIndex(
@@ -966,7 +966,7 @@ namespace InventoryManagement.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Expanse");
+                name: "Expense");
 
             migrationBuilder.DropTable(
                 name: "Institution");
@@ -996,7 +996,7 @@ namespace InventoryManagement.Data.Migrations
                 name: "ServicePaymentList");
 
             migrationBuilder.DropTable(
-                name: "ExpanseCategory");
+                name: "ExpenseCategory");
 
             migrationBuilder.DropTable(
                 name: "PageLink");

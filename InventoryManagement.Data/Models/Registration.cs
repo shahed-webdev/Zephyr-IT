@@ -7,7 +7,7 @@ namespace InventoryManagement.Data
     {
         public Registration()
         {
-            Expanse = new HashSet<Expanse>();
+            Expense = new HashSet<Expense>();
             PageLinkAssign = new HashSet<PageLinkAssign>();
             Purchase = new HashSet<Purchase>();
             PurchasePayment = new HashSet<PurchasePayment>();
@@ -33,7 +33,7 @@ namespace InventoryManagement.Data
         public DateTime CreateDate { get; set; }
         public string Ps { get; set; }
 
-        public virtual ICollection<Expanse> Expanse { get; set; }
+        public virtual ICollection<Expense> Expense { get; set; }
         public virtual ICollection<PageLinkAssign> PageLinkAssign { get; set; }
         public virtual ICollection<Purchase> Purchase { get; set; }
         public virtual ICollection<PurchasePayment> PurchasePayment { get; set; }
