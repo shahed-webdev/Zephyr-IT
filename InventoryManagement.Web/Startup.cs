@@ -1,4 +1,5 @@
 using InventoryManagement.Data;
+using InventoryManagement.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -30,7 +31,7 @@ namespace InventoryManagement.Web
                 config.Cookie.Name = "Identity.Cookie";
                 config.LoginPath = "/Account";
             });
-
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddMvc();
         }
 

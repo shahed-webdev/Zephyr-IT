@@ -1,4 +1,5 @@
-﻿
+﻿@using InventoryManagement.Repository 
+@model AdminInfo
 @{
     ViewData["Title"] = "Profile";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -6,3 +7,196 @@
 
 <h1>Profile</h1>
 
+<section class="section team-section p-4">
+    <div class="row">
+        <div class="col-md-8 mb-4">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <div class="card card-cascade cascading-admin-card user-card">
+                    <div class="admin-up d-flex justify-content-start mb-3">
+                        <i class="fas fa-user-circle info-color py-4 mr-3 z-depth-2"></i>
+                        <div class="data">
+                            <h5 class="font-weight-bold dark-grey-text">
+                                Edit Profile - <span class="text-muted"> Complete your profile</span>
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="card-body card-body-cascade">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="md-form form-sm mb-0">
+                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                    <label for="Name">Name</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="md-form form-sm mb-0">
+                                    @Html.EditorFor(model => model.FatherName, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    @Html.ValidationMessageFor(model => model.FatherName, "", new { @class = "text-danger" })
+                                    <label for="FatherName">Father's Name</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-12">
+                                <div class="md-form form-sm mb-0">
+                                    @Html.EditorFor(model => model.Designation, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    @Html.ValidationMessageFor(model => model.Designation, "", new { @class = "text-danger" })
+                                    <label for="Designation">Designation</label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="md-form form-sm mb-0">
+                                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                    <label for="Phone">Phone</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="md-form form-sm mb-0">
+                                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                                    <label for="Address">Address</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="md-form form-sm mb-0">
+                                    <label for="DateofBirth">Date of Birth</label>
+                                    @Html.EditorFor(model => model.DateofBirth, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    @Html.ValidationMessageFor(model => model.DateofBirth, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-4 col-md-12">
+                                <div class="md-form form-sm mb-0">
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                    <label for="Email" class="">Email</label>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-md-12">
+                                <div class="md-form form-sm mb-0">
+                                    @Html.Hidden("Image")
+                                    <div class="file-field">
+                                        <div class="btn aqua-gradient btn-rounded btn-sm float-left">
+                                            <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose file</span>
+                                            <input type="file" id="upload" value="Choose a Image" onchange="clearImage(this)">
+                                        </div>
+                                        <div class="file-path-wrapper">
+                                            <input class="file-path validate" type="text" placeholder="Upload your file">
+                                        </div>
+                                    </div>
+                                    <div id="upload-demo" style="display:none;"></div>
+                                    <img id="prevImage" alt="" />
+                                    <a id="doneButton" class="btn-floating btn-lg btn-default" style="display:none;"><i class="fas fa-crop-alt"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="submit" value="Update" class="btn blue-gradient" />
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card profile-card">
+                <div class="avatar z-depth-1-half mb-4">
+                    @{
+                        var imgSrc = "";
+                        imgSrc = Model.Image != null ? $"data:image/gif;base64,{Convert.ToBase64String(Model.Image)}" : "/CSS/images/DefaultImage.jpg";
+                    }
+
+                    <img src="@imgSrc" class="rounded-circle" style="height:150px; width:150px" alt="" />
+                </div>
+                <div class="card-body pt-0 mt-0">
+                    <div class="text-center">
+                        <h4 class="mb-1 font-weight-bold"><strong>@Model.Designation</strong></h4>
+                    </div>
+                    <ul class="striped list-unstyled">
+                        <li><strong>Name:</strong> @Model.Name</li>
+                        <li><strong>Father's Name:</strong> @Model.FatherName</li>
+                        <li><strong>Email:</strong> @Model.Email</li>
+                        <li><strong>Phone:</strong> @Model.Phone</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+
+    <script>
+        $(function () {
+            $('input[type="file"]').change(function (e) {
+                const $this = $(e.target);
+                const $fileField = $this.closest('.file-field');
+                const $pathInput = $fileField.find('input.file-path');
+                const fileNames = [];
+
+                fileNames.push(e.target.files[0].name);
+
+                $pathInput.val(fileNames.join(', '));
+                $pathInput.trigger('change');
+            });
+
+            ////...........
+            $('#Image').val('');
+            $uploadCrop = $('#upload-demo').croppie(opt);
+
+            $('#upload').on('change', function () {
+                readFile(this);
+            });
+
+            $('#doneButton').on('click', function () {
+                $uploadCrop.croppie('result', { type: 'base64' }).then(function (res) {
+                    $('#Image').val(res.split(',')[1]);
+                    $('#upload-demo').hide();
+                    $('#doneButton').hide();
+                    $('#prevImage').attr('src', res).addClass('img-thumbnail rounded-circle');;
+                });
+            });
+        });
+
+        var $uploadCrop,
+            opt = {
+                viewport: { width: 150, height: 150 },
+                boundary: { width: 180, height: 180 },
+                showZoomer: false,
+                enableResize: true,
+                enableOrientation: true
+            };
+
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $uploadCrop.croppie('bind', { url: e.target.result });
+
+                    $('#Image').val('');
+                    $('#upload-demo').show();
+                    $('#doneButton').show();
+                    $('#prevImage').attr('src', '').removeClass('img-thumbnail rounded-circle');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function clearImage(ctrl) {
+            if ($(ctrl).val() === "") {
+                $('#upload-demo').croppie('destroy');
+                $uploadCrop = $('#upload-demo').croppie(opt);
+            }
+        }
+    </script>
+}
