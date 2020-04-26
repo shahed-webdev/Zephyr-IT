@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200423024609_AllTable")]
-    partial class AllTable
+    [Migration("20200426022923_SeedAdminUser")]
+    partial class SeedAdminUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -691,8 +691,7 @@ namespace InventoryManagement.Data.Migrations
                             Name = "Admin",
                             Ps = "Admin_121",
                             Type = "Admin",
-                            UserName = "Admin",
-                            Validation = true
+                            UserName = "Admin"
                         });
                 });
 
@@ -1157,15 +1156,15 @@ namespace InventoryManagement.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "837d221e-3d39-4651-b239-66e68d57edb2",
-                            ConcurrencyStamp = "c6d562f5-ba4f-4520-9394-792a5f25c409",
+                            Id = "5A71C6C4-9488-4BCC-A680-445A34C6E721",
+                            ConcurrencyStamp = "5A71C6C4-9488-4BCC-A680-445A34C6E721",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "1de93e58-ab8f-4500-8e41-f73d0d9a4edf",
-                            ConcurrencyStamp = "0145818c-8cc2-455c-b5ef-2ff6f9864252",
+                            Id = "F73A5277-2535-48A4-A371-300508ADDD2F",
+                            ConcurrencyStamp = "F73A5277-2535-48A4-A371-300508ADDD2F",
                             Name = "sub-admin",
                             NormalizedName = "SUB-ADMIN"
                         });
@@ -1262,15 +1261,15 @@ namespace InventoryManagement.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "24bca771-762d-457c-8aff-cdd661803190",
+                            Id = "A0456563-F978-4135-B563-97F23EA02FDA",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "541754d1-3242-44e1-92a5-b1912e7e62b1",
+                            ConcurrencyStamp = "A0456563-F978-4135-B563-97F23EA02FDA",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = true,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHghrQ379+HRhnNR7BTluhOFOY8aUpxUZnxbb5mlwDDQxQvhfiQYBJRWIkxZ5dFvGg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDch3arYEB9dCAudNdsYEpVX7ryywa8f3ZIJSVUmEThAI50pLh9RyEu7NjGJccpOog==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -1341,8 +1340,8 @@ namespace InventoryManagement.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "24bca771-762d-457c-8aff-cdd661803190",
-                            RoleId = "837d221e-3d39-4651-b239-66e68d57edb2"
+                            UserId = "A0456563-F978-4135-B563-97F23EA02FDA",
+                            RoleId = "5A71C6C4-9488-4BCC-A680-445A34C6E721"
                         });
                 });
 

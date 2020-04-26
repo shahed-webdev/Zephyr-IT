@@ -4,14 +4,16 @@ using InventoryManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200426022740_All_Tables")]
+    partial class All_Tables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -200,14 +202,6 @@ namespace InventoryManagement.Data.Migrations
                     b.HasKey("InstitutionId");
 
                     b.ToTable("Institution");
-
-                    b.HasData(
-                        new
-                        {
-                            InstitutionId = 1,
-                            InsertDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            InstitutionName = "Institution"
-                        });
                 });
 
             modelBuilder.Entity("InventoryManagement.Data.PageLink", b =>
@@ -680,17 +674,6 @@ namespace InventoryManagement.Data.Migrations
                     b.HasKey("RegistrationId");
 
                     b.ToTable("Registration");
-
-                    b.HasData(
-                        new
-                        {
-                            RegistrationId = 1,
-                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Admin",
-                            Ps = "Admin_121",
-                            Type = "Admin",
-                            UserName = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("InventoryManagement.Data.Selling", b =>
@@ -1150,22 +1133,6 @@ namespace InventoryManagement.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "5A71C6C4-9488-4BCC-A680-445A34C6E721",
-                            ConcurrencyStamp = "5A71C6C4-9488-4BCC-A680-445A34C6E721",
-                            Name = "admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "F73A5277-2535-48A4-A371-300508ADDD2F",
-                            ConcurrencyStamp = "F73A5277-2535-48A4-A371-300508ADDD2F",
-                            Name = "sub-admin",
-                            NormalizedName = "SUB-ADMIN"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1255,24 +1222,6 @@ namespace InventoryManagement.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "A0456563-F978-4135-B563-97F23EA02FDA",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "A0456563-F978-4135-B563-97F23EA02FDA",
-                            Email = "admin@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = true,
-                            NormalizedEmail = "ADMIN@GMAIL.COM",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDch3arYEB9dCAudNdsYEpVX7ryywa8f3ZIJSVUmEThAI50pLh9RyEu7NjGJccpOog==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -1334,13 +1283,6 @@ namespace InventoryManagement.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "A0456563-F978-4135-B563-97F23EA02FDA",
-                            RoleId = "5A71C6C4-9488-4BCC-A680-445A34C6E721"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

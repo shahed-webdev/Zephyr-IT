@@ -63,9 +63,11 @@ namespace InventoryManagement.Data
             builder.ApplyConfiguration(new ServiceListConfiguration());
             builder.ApplyConfiguration(new ServicePaymentListConfiguration());
             builder.ApplyConfiguration(new VendorConfiguration());
+            
 
             base.OnModelCreating(builder);
-            builder.Seed();
+            builder.SeedInsitutionData();
+            builder.SeedAdminData();
         }
     }
 }

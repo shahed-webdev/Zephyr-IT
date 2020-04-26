@@ -45,16 +45,6 @@ namespace InventoryManagement.Data
                 entity.Property(e => e.Validation)
                     .IsRequired()
                     .HasDefaultValueSql("((1))");
-
-                entity.HasData(new Registration
-                {
-                    RegistrationId = 1,
-                    UserName = "Admin",
-                    Validation = true,
-                    Type = "Admin",
-                    Name = "Admin",
-                    Ps = "Admin_121"
-                });
         }
     }
 }
