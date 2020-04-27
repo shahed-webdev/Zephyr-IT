@@ -5,90 +5,93 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>StoreInfo</h1>
+@section Styles{
+    <style>
+        .file-field input.file-path { font-size: .87rem; font-weight: 300; }
+    </style>
+}
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
-    <div class="container">
-        <div class="card card-body">
-            <h3 class="mb-3">Institution Info</h3>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-7 mx-auto">
+            <div class="card card-body">
+                <h4 class="mb-3">Store Info</h4>
 
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.InstitutionId)
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.InstitutionId)
 
-            <div class="md-form">
-                @Html.EditorFor(model => model.InstitutionName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.InstitutionName, "", new { @class = "text-danger" })
-                <label for="InstitutionName">Institution Name</label>
-            </div>
-
-            <div class="md-form">
-                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
-                <label for="Address">Address</label>
-            </div>
-
-            <div class="md-form">
-                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
-                <label for="Phone">Phone</label>
-            </div>
-
-            <div class="md-form">
-                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                <label for="Email">Email</label>
-            </div>
-
-            <div class="md-form">
-                @Html.EditorFor(model => model.Website, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Website, "", new { @class = "text-danger" })
-                <label for="Website">Website</label>
-            </div>
-
-            <div>
-                @{
-                    var imgSrc = "";
-                    imgSrc = Model.InstitutionLogo != null ? $"data:image/gif;base64,{Convert.ToBase64String(Model.InstitutionLogo)}" : "";
-                }
-
-                <img src="@imgSrc" class="rounded-circle" style="height:80px; width:80px" alt="" />
-            </div>
-
-            <div class="md-form form-sm mb-0">
-                @Html.Hidden("InstitutionLogo")
-                <div class="file-field">
-                    <div class="btn aqua-gradient btn-rounded btn-sm float-left">
-                        <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose file</span>
-                        <input type="file" id="upload" value="Choose a Image" onchange="clearImage(this)">
-                    </div>
-                    <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text" placeholder="Upload your file">
-                    </div>
+                <div class="md-form">
+                    @Html.EditorFor(model => model.InstitutionName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.InstitutionName, "", new { @class = "text-danger" })
+                    <label for="InstitutionName">Institution Name</label>
                 </div>
-                <div id="upload-demo" style="display:none;"></div>
-                <img id="prevImage" alt="" />
-                <a id="doneButton" class="btn-floating btn-lg btn-default" style="display:none;"><i class="fas fa-crop-alt"></i></a>
-            </div>
 
+                <div class="md-form">
+                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                    <label for="Address">Address</label>
+                </div>
 
-            <div class="md-form">
-                <input type="submit" value="Save" class="btn blue-gradient" />
+                <div class="md-form">
+                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                    <label for="Phone">Phone</label>
+                </div>
+
+                <div class="md-form">
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    <label for="Email">Email</label>
+                </div>
+
+                <div class="md-form">
+                    @Html.EditorFor(model => model.Website, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Website, "", new { @class = "text-danger" })
+                    <label for="Website">Website</label>
+                </div>
+
+                <div>
+                    @{
+                        var imgSrc = "";
+                        imgSrc = Model.InstitutionLogo != null ? $"data:image/gif;base64,{Convert.ToBase64String(Model.InstitutionLogo)}" : "";
+                    }
+
+                    <img src="@imgSrc" class="rounded-circle" style="height:80px; width:80px" alt="" />
+                </div>
+
+                <div class="md-form form-sm mb-0">
+                    @Html.Hidden("InstitutionLogo")
+                    <div class="file-field">
+                        <div class="btn aqua-gradient btn-rounded btn-sm float-left">
+                            <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose file</span>
+                            <input type="file" id="upload" value="Choose a Image" onchange="clearImage(this)">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" placeholder="Upload your file">
+                        </div>
+                    </div>
+                    <div id="upload-demo" style="display:none;"></div>
+                    <img id="prevImage" alt="" />
+                    <a id="doneButton" class="btn-floating btn-lg btn-default" style="display:none;"><i class="fas fa-crop-alt"></i></a>
+                </div>
+                <div class="md-form">
+                    <input type="submit" value="Save" class="btn blue-gradient" />
+                </div>
             </div>
         </div>
     </div>
-}
-
-
+</div>
+ }
 
 @section Scripts {
-    @*@Scripts.Render("~/bundles/jqueryval")*@
-
+    <partial name="_ValidationScriptsPartial" />
     <script>
-        $(function() {
-            $('input[type="file"]').change(function(e) {
+        $(function () {
+            $('input[type="file"]').change(function (e) {
                 const $this = $(e.target);
                 const $fileField = $this.closest('.file-field');
                 const $pathInput = $fileField.find('input.file-path');
@@ -105,13 +108,13 @@
             $uploadCrop = $('#upload-demo').croppie(opt);
 
             $('#upload').on('change',
-                function() {
+                function () {
                     readFile(this);
                 });
 
             $('#doneButton').on('click',
-                function() {
-                    $uploadCrop.croppie('result', { type: 'base64' }).then(function(res) {
+                function () {
+                    $uploadCrop.croppie('result', { type: 'base64' }).then(function (res) {
                         $('#InstitutionLogo').val(res.split(',')[1]);
                         $('#upload-demo').hide();
                         $('#doneButton').hide();
@@ -133,7 +136,7 @@
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
 
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     $uploadCrop.croppie('bind', { url: e.target.result });
 
                     $('#InstitutionLogo').val('');
@@ -151,6 +154,5 @@
                 $uploadCrop = $('#upload-demo').croppie(opt);
             }
         }
-    </script>
-
+    </script>    
 }

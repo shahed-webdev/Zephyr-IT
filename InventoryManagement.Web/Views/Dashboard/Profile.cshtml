@@ -1,11 +1,15 @@
-﻿@using InventoryManagement.Repository 
+﻿@using InventoryManagement.Repository
 @model AdminInfo
 @{
     ViewData["Title"] = "Profile";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Profile</h1>
+@section Styles{
+<style>
+    .file-field input.file-path { font-size: .87rem; font-weight: 300; }
+</style>
+ }
 
 <section class="section team-section p-4">
     <div class="row">
@@ -82,7 +86,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-4 col-md-12">
+                            <div class="col-lg-8 col-md-12">
                                 <div class="md-form form-sm mb-0">
                                     @Html.Hidden("Image")
                                     <div class="file-field">
@@ -91,7 +95,7 @@
                                             <input type="file" id="upload" value="Choose a Image" onchange="clearImage(this)">
                                         </div>
                                         <div class="file-path-wrapper">
-                                            <input class="file-path validate" type="text" placeholder="Upload your file">
+                                            <input class="file-path validate" type="text" placeholder="Upload your file"/>
                                         </div>
                                     </div>
                                     <div id="upload-demo" style="display:none;"></div>
@@ -111,7 +115,7 @@
                 <div class="avatar z-depth-1-half mb-4">
                     @{
                         var imgSrc = "";
-                        imgSrc = Model.Image != null ? $"data:image/gif;base64,{Convert.ToBase64String(Model.Image)}" : "/CSS/images/DefaultImage.jpg";
+                        imgSrc = Model.Image != null ? $"data:image/gif;base64,{Convert.ToBase64String(Model.Image)}" : "/images/defaultImage.jpg";
                     }
 
                     <img src="@imgSrc" class="rounded-circle" style="height:150px; width:150px" alt="" />
@@ -133,7 +137,7 @@
 </section>
 
 @section Scripts {
-    @*@Scripts.Render("~/bundles/jqueryval")*@
+    <partial name="_ValidationScriptsPartial" />
 
     <script>
         $(function () {
