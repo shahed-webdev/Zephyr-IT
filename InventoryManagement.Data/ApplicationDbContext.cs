@@ -67,7 +67,8 @@ namespace InventoryManagement.Data
 
             base.OnModelCreating(builder);
             builder.SeedInsitutionData();
-            builder.SeedAdminData();
+            builder.SeedAdminData(); 
+           //builder.SeedSubAdminLinkData();
         }
     }
 }

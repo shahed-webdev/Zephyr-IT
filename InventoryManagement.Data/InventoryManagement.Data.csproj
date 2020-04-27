@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20200426022816_SeedInstitution.Designer.cs" />
     <Compile Remove="Migrations\20200426025034_SeedAdminUser1.cs" />
     <Compile Remove="Migrations\20200426025034_SeedAdminUser1.Designer.cs" />
+    <Compile Remove="Migrations\20200427021212_SeedSubAdminLink.cs" />
+    <Compile Remove="Migrations\20200427021212_SeedSubAdminLink.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
