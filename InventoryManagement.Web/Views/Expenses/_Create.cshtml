@@ -17,8 +17,8 @@
             <form method="post" data-ajax-update="#InsertModal" data-ajax="true" data-ajax-url="/Expenses/Create" data-ajax-method="post" data-ajax-success="onCreateSuccess">
                 <div class="form-group">
                     <label>Category</label>
-                    @Html.DropDownList("ExpanseCategoryID", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.ExpenseCategoryID, "", new { @class = "text-danger" })
+                    @Html.DropDownList("ExpanseCategoryId", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ExpenseCategoryId, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
                     <label>Expanse Amount</label>

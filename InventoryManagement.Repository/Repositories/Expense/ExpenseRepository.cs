@@ -19,7 +19,7 @@ namespace InventoryManagement.Repository
             {
                 ExpenseID = e.ExpenseId,
                 RegistrationID = e.RegistrationId,
-                ExpenseCategoryID = e.ExpenseCategoryId,
+                ExpenseCategoryId = e.ExpenseCategoryId,
                 CategoryName = e.ExpenseCategory.CategoryName,
                 ExpenseAmount = e.ExpenseAmount,
                 ExpenseFor = e.ExpenseFor,
@@ -36,7 +36,7 @@ namespace InventoryManagement.Repository
             {
                 ExpenseID = e.ExpenseId,
                 RegistrationID = e.RegistrationId,
-                ExpenseCategoryID = e.ExpenseCategoryId,
+                ExpenseCategoryId = e.ExpenseCategoryId,
                 CategoryName = e.ExpenseCategory.CategoryName,
                 ExpenseAmount = e.ExpenseAmount,
                 ExpenseFor = e.ExpenseFor,
@@ -52,14 +52,14 @@ namespace InventoryManagement.Repository
             Add(new Expense
             {
                 RegistrationId = model.RegistrationID,
-                ExpenseCategoryId = model.ExpenseCategoryID,
+                ExpenseCategoryId = model.ExpenseCategoryId,
                 ExpenseAmount = model.ExpenseAmount,
                 ExpenseFor = model.ExpenseFor,
                 ExpensePaymentMethod = model.ExpensePaymentMethod,
                 ExpenseDate = model.ExpenseDate
             });
 
-            var eCategory = Context.ExpenseCategory.Find(model.ExpenseCategoryID);
+            var eCategory = Context.ExpenseCategory.Find(model.ExpenseCategoryId);
             eCategory.TotalExpense = eCategory.TotalExpense + model.ExpenseAmount;
             Context.ExpenseCategory.Update(eCategory);
         }
@@ -125,7 +125,7 @@ namespace InventoryManagement.Repository
             {
                 ExpenseID = e.ExpenseId,
                 RegistrationID = e.RegistrationId,
-                ExpenseCategoryID = e.ExpenseCategoryId,
+                ExpenseCategoryId = e.ExpenseCategoryId,
                 CategoryName = e.ExpenseCategory.CategoryName,
                 ExpenseAmount = e.ExpenseAmount,
                 ExpenseFor = e.ExpenseFor,
@@ -149,7 +149,7 @@ namespace InventoryManagement.Repository
                 })
                 .Select(g => new ExpenseCategoryWise
                 {
-                    ExpenseCategoryID = g.Key.ExpenseCategoryID,
+                    ExpenseCategoryId = g.Key.ExpenseCategoryID,
                     CategoryName = g.Key.CategoryName,
                     TotalExpense = g.Sum(e => e.ExpenseAmount)
 
