@@ -89,6 +89,11 @@
             indexData();
         }
 
+        //error
+        function onError(err) {
+            console.log(`status: ${err.status}. message: ${err.responseText}`);
+        }
+
         //Delete click
         $('#DataTable').on("click", ".delete",function(evt) {
                 evt.preventDefault();
