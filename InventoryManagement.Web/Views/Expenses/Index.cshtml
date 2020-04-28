@@ -1,0 +1,123 @@
+﻿
+@{
+    ViewBag.Title = "Expense";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="m-3">
+    <div class="row">
+        <div class="col justify-content-center align-self-center">
+            <h3>Expense</h3>
+        </div>
+        <div class="col text-right">
+            <a id="CreateClick" data-url="@Url.Action("Create","Expenses")" class="btn-floating aqua-gradient" title="Add New" data-toggle="modal">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+
+    <table id="DataTable" class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>Expanse Amount</th>
+                <th>Expanse For</th>
+                <th>Payment Method</th>
+                <th>Expanse Date</th>
+                <th style="width:30px">Delete</th>
+            </tr>
+        </thead>
+        <tbody id="row-data"></tbody>
+    </table>
+
+    <!-- Insert Modal -->
+    <div class="modal fade" id="InsertModal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <!-- Update Modal -->
+    <div class="modal fade" id="UpdateModal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+</div>
+
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery-ajax-unobtrusive@3.2.6/dist/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+        $(function() {
+            indexData();
+        });
+
+        //get data
+        function indexData() {
+            const url = '/Expenses/IndexData';
+            const row = $("#row-data");
+            const emptyRow = "<tr><td colspan='5'>No data found!</td></tr>";
+
+            $.get(url, function (response) {
+                if (!response.length) {
+                    row.append(emptyRow);
+                    return;
+                }
+
+                row.children().remove();
+                row.append(tableData(response));
+            });
+        };
+
+        function tableData(data) {
+            var html = "";
+            $.each(data, function(i,item) {
+                html += `<tr>
+                    <td>${item.ExpanseAmount}</td>
+                    <td>${item.ExpanseFor}</td>
+                    <td>${item.Expense_Payment_Method}</td>
+                    <td>${moment(item.ExpanseDate).format('DD MMM YYYY')}</td>
+                    <td><a style="color:#ff0000" class="delete fas fa-trash-alt" href="/Expanses/Delete/${item.ExpanseID}"></a></td>
+                </tr>`;
+            });
+            return html;
+        };
+
+
+        //Insert
+        $("#CreateClick").on("click",function() {
+                $.get($(this).data("url"),
+                    function(data) {
+                        $('#InsertModal').html(data).modal('show');
+                    });
+            });
+
+        function OnCreateSuccess(data) {
+            if (data !== "success") {
+                $('#InsertModal').html(data);
+                return;
+            }
+
+            $('#InsertModal').html(data).modal('hide');
+            indexData();
+        }
+
+        //Delete click
+        $('#DataTable').on("click", ".delete",function(evt) {
+                evt.preventDefault();
+
+                var row = $(this).closest("tr");
+                var btnDelete = $(this);
+                const url = $(this).attr('href');
+
+                $('#table-row em').remove();
+                $('#table-row tr').removeClass("error-color");
+
+                if (!url) return;
+
+                if (confirm("Are you sure you want to delete?")) {
+                    $.post(url,function(response) {
+                            if (response === '0') {
+                                row.addClass("error-color").after('<em class="used-error">This data already used in others place</em>');
+                                btnDelete.removeAttr("href");
+                                return;
+                            }
+                            row.hide();
+                    });
+                }
+            });
+    </script>
+}

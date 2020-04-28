@@ -1,22 +1,22 @@
 ﻿
 let linkData = [{
     "LinkCategoryID": 1,
-    "SN": 8,
+    "SN": 1,
     "Category": "Sub-Admin",
     "IconClass": "fas fa-user-tie",
     "links": [{
         "LinkID": 3,
         "SN": 0,
-        "Controller": "Dashboard",
-        "Action": "Index",
-        "Title": "Dashboard",
+        "Controller": "SubAdmin",
+        "Action": "SignUp",
+        "Title": "Sign Up",
         "IconClass": null
     },
     {
         "LinkID": 1,
         "SN": 7,
         "Controller": "SubAdmin",
-        "Action": "Index",
+        "Action": "List",
         "Title": "Sub-admins",
         "IconClass": null
     },

@@ -1,0 +1,63 @@
+﻿@using InventoryManagement.Repository
+@model ExpenseVM
+@{
+    Layout = null;
+}
+
+<div class="modal-dialog cascading-modal" role="document">
+    <div class="modal-content">
+        <div class="modal-header blue-gradient white-text">
+            <h4 class="m-0"><i class="fas fa-plus-circle"></i> Add Expense</h4>
+            <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            @*@using (Ajax.BeginForm($"Create", $"Expanses", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnCreateSuccess" }, new { role = "form" }))*@
+            {
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    <label>Category</label>
+                    @Html.DropDownList("ExpanseCategoryID", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ExpenseCategoryID, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>Expanse Amount</label>
+                    @Html.EditorFor(model => model.ExpenseAmount, new { htmlAttributes = new { @class = "form-control", required = "" } })
+                    @Html.ValidationMessageFor(model => model.ExpenseAmount, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>Expanse For</label>
+                    @Html.EditorFor(model => model.ExpenseFor, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ExpenseFor, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <select name="Expense_Payment_Method" class="form-control" required="">
+                        <option value="">[ SELECT ]</option>
+                        <option>Cash</option>
+                        <option>Cheque</option>
+                        <option>Bank</option>
+                        <option>Bkash</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Expanse Date</label>
+                    @Html.EditorFor(model => model.ExpenseDate, new { htmlAttributes = new { @class = "form-control datepicker", type="text", required = "" } })
+                    @Html.ValidationMessageFor(model => model.ExpenseDate, "", new { @class = "text-danger" })
+                </div>
+                <div class="text-center mt-1-half">
+                    <button type="submit" class="btn blue-gradient mb-1 waves-effect waves-light">Create <i class="fas fa-check ml-1"></i></button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        $('.datepicker').pickadate();
+    })
+</script>

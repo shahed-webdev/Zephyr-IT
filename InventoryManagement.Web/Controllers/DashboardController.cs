@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using InventoryManagement.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace InventoryManagement.Web.Controllers
 {
-    [Authorize]
+   [Authorize]
     public class DashboardController : Controller
     {
         private readonly IUnitOfWork _db;
@@ -48,6 +49,7 @@ namespace InventoryManagement.Web.Controllers
             var model = _db.Institutions.FindCustom();
             return View(model);
         }
+       
         [HttpPost]
         public IActionResult StoreInfo(InstitutionVM model)
         {
@@ -55,6 +57,14 @@ namespace InventoryManagement.Web.Controllers
             _db.SaveChanges();
 
             return RedirectToAction($"Index", $"Dashboard", new { Message = "Store information Updated" });
+        }
+
+        //Login Info
+        [Authorize(Roles = "admin, sub-admin")]
+        public string GetUserLoggedInInfo()
+        {
+            var admin = _db.Registrations.GetAdminBasic(User.Identity.Name);
+            return JsonConvert.SerializeObject(admin);
         }
     }
 }

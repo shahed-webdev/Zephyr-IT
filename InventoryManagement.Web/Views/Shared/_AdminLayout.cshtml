@@ -101,14 +101,14 @@
     <script src="~/js/side-menu-link.js"></script>
 
     
-    <script src="~/js/active-links.js?v=1.1"></script>
+    <script src="~/js/active-links.js?v=1.2"></script>
 
     @RenderSection("Scripts", required: false)
 
     <script type="text/javascript">
         $(function () {
             //User login Info
-            @*const url = "@Url.Action($"GetUserLoggedInInfo", $"Basic")";
+            const url = "@Url.Action($"GetUserLoggedInInfo", $"Dashboard")";
             $.get(url, response => {
                 const data = JSON.parse(response);
                 if (!data) return;
@@ -117,7 +117,7 @@
                     $("#loginUserPhoto").attr("src", `data:image/png;base64,${data.Image}`);
 
                 $("#loginUserName").html(`<strong class="p-0"><i class="fas fa-user"></i> ${data.Name}</strong>`);
-            });*@
+            });
 
 
             //Back to top

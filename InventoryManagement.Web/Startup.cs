@@ -20,7 +20,7 @@ namespace InventoryManagement.Web
         }
 
         public void ConfigureServices(IServiceCollection services)
-        {
+        {         
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
@@ -32,7 +32,9 @@ namespace InventoryManagement.Web
                 config.LoginPath = "/Account";
             });
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            //services.AddCors();
             services.AddMvc();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -42,6 +44,8 @@ namespace InventoryManagement.Web
           
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            //app.UseCors();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
