@@ -4651,7 +4651,7 @@ button.md-toast-close-button { padding: 0; cursor: pointer; background: 0 0; bor
     .picker .picker__box { display: block; border: 1px solid #777; border-top-color: #898989; border-bottom-width: 0; -webkit-border-radius: 5px 5px 0 0; border-radius: 5px 5px 0 0; -webkit-box-shadow: 0 .75rem 2.25rem 1rem rgba(0,0,0,.24); box-shadow: 0 .75rem 2.25rem 1rem rgba(0,0,0,.24) }
 }
 
-.picker--opened .picker__holder { top: 0; transform: scale(0.5); transform-origin: 0 0; background: rgba(0,0,0,.32); -webkit-transition: background .15s ease-out; -o-transition: background .15s ease-out; transition: background .15s ease-out }
+.picker--opened .picker__holder { top: 0; /*transform: scale(0.5); transform-origin: 0 0;*/ background: rgba(0,0,0,.32); -webkit-transition: background .15s ease-out; -o-transition: background .15s ease-out; transition: background .15s ease-out }
 .picker--opened .picker__frame { top: 0; filter: alpha(opacity=100); opacity: 1 }
 
 @media (min-height:35.875em) {

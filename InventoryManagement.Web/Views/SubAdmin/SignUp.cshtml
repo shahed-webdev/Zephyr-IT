@@ -15,45 +15,47 @@
         <div class="col-sm-9 col-md-7 col-lg-6 mx-auto">
             <div class="card card-signin my-3">
                 <div class="card-body">
-                    <h5 class="card-title text-center">Sign Up Sub-Admin</h5>
+                    <h5 class="card-title text-center">
+                        <strong class="dark-grey-text">Sign Up Sub-Admin</strong>
+                    </h5>
+
                     <form class="form-signin" asp-controller="SubAdmin" asp-action="SignUp" method="post">
-                        <div class="form-group">
-                            <label>Name</label>
-                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                        <div class="md-form">
+                            <input asp-for="Name" class="form-control">
+                            <label for="Name">Name</label>
+                            <span asp-validation-for="Name"></span>
                         </div>
-                        <div class="form-group">
-                            <label>User Name</label>
-                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                        <div class="md-form">
+                            <input asp-for="UserName" class="form-control">
+                            <label for="UserName">User Name</label>
+                            <span asp-validation-for="UserName"></span>
                         </div>
-                        <div class="form-group">
-                            <label>Phone</label>
-                            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+                        <div class="md-form">
+                            <input asp-for="Phone" class="form-control">
+                            <label for="Phone">Phone</label>
+                            <span asp-validation-for="Phone"></span>
                         </div>
-                        <div class="form-group">
-                            <label>Address</label>
-                            @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                        <div class="md-form">
+                            <input asp-for="Address" class="form-control">
+                            <label for="Address">Address</label>
                         </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        <div class="md-form">
+                            <input asp-for="Email" class="form-control">
+                            <label for="Email">Email</label>
+                            <span asp-validation-for="Email"></span>
                         </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        <div class="md-form">
+                            <input asp-for="Password" class="form-control" type="password">
+                            <label for="Password">Password</label>
+                            <span asp-validation-for="Password"></span>
                         </div>
-                        <div class="form-group">
-                            <label>Confirm Password</label>
-                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                        <div class="md-form mb-5">
+                            <input asp-for="ConfirmPassword" class="form-control" type="password">
+                            <label for="ConfirmPassword">ConfirmPassword</label>
+                            <span asp-validation-for="ConfirmPassword"></span>
                         </div>
-                        <div class="form-group">
-                            <button class="btn btn-lg aqua-gradient btn-block text-uppercase" type="submit">Sign Up</button>
-                        </div>
+                        <button class="btn btn-block btn-rounded z-depth-1a waves-effect waves-light peach-gradient mb-3" type="submit">Sign Up</button>
+                        <div asp-validation-summary="ModelOnly"></div>
                     </form>
                 </div>   
             </div>

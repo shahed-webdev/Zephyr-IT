@@ -6,7 +6,7 @@
 
 <div class="modal-dialog cascading-modal" role="document">
     <div class="modal-content">
-        <div class="modal-header blue-gradient white-text">
+        <div class="modal-header peach-gradient white-text">
             <h4 class="m-0"><i class="fas fa-plus-circle"></i> Add Expense</h4>
             <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
@@ -14,10 +14,7 @@
         </div>
 
         <div class="modal-body">
-            @*@using (Ajax.BeginForm($"Create", $"Expanses", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnCreateSuccess" }, new { role = "form" }))*@
-            {
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
+            <form method="post" data-ajax-update="#InsertModal" data-ajax="true" data-ajax-url="/Expenses/Create" data-ajax-method="post" data-ajax-success="onCreateSuccess">
                 <div class="form-group">
                     <label>Category</label>
                     @Html.DropDownList("ExpanseCategoryID", null, htmlAttributes: new { @class = "form-control" })
@@ -45,13 +42,13 @@
                 </div>
                 <div class="form-group">
                     <label>Expanse Date</label>
-                    @Html.EditorFor(model => model.ExpenseDate, new { htmlAttributes = new { @class = "form-control datepicker", type="text", required = "" } })
+                    @Html.EditorFor(model => model.ExpenseDate, new { htmlAttributes = new { @class = "form-control datepicker", type = "text", required = "" } })
                     @Html.ValidationMessageFor(model => model.ExpenseDate, "", new { @class = "text-danger" })
                 </div>
                 <div class="text-center mt-1-half">
-                    <button type="submit" class="btn blue-gradient mb-1 waves-effect waves-light">Create <i class="fas fa-check ml-1"></i></button>
+                    <button type="submit" class="btn peach-gradient mb-1 waves-effect waves-light">Create <i class="fas fa-check ml-1"></i></button>
                 </div>
-            }
+              </form>
         </div>
     </div>
 </div>

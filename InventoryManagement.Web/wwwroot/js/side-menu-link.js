@@ -1,16 +1,5 @@
 ﻿
 jQuery(function ($) {
-    //get links data
-    //const url = "/Basic/GetSideMenu";
-    //$.get(url, function (response) {
-    //    appendLinks(JSON.parse(response));
-    //});
-
-    //click on link
-    //$("#menuItem").on("click", "strong", function () {
-    //    $(this).toggleClass("open").next().slideToggle(200);
-    //});
-
     //sidebar event
     $('.js-show-sidedrawer').on('click', showSidedrawer);
     $('.js-hide-sidedrawer').on('click', hideSidedrawer);  
@@ -21,7 +10,7 @@ jQuery(function ($) {
  var $sidedrawerEl = $('#sidedrawer');
 
  //menu click
- function showSidedrawer() {
+function showSidedrawer() {
     // show overlay
     var options = {
         onclose: function () {
@@ -35,8 +24,7 @@ jQuery(function ($) {
     $sidedrawerEl.appendTo($overlayEl);
     setTimeout(function () {
         $sidedrawerEl.addClass('active');
-    },
-        20);
+    },20);
 }
 
  function hideSidedrawer() {

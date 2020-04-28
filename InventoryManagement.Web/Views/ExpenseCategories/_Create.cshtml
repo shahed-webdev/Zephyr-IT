@@ -4,28 +4,27 @@
     Layout = null;
 }
 
-<div class="modal-dialog cascading-modal" role="document">
-    <div class="modal-content">
-        <div class="modal-header blue-gradient white-text">
-            <h4 class="m-0"><i class="fas fa-plus-circle"></i> Add Expanse Category</h4>
-            <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-        </div>
+    <div class="modal-dialog cascading-modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header peach-gradient white-text">
+                <h4 class="m-0"><i class="fas fa-plus-circle"></i> Add Expense Category</h4>
+                <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
 
-        <div class="modal-body">
-            @*@using (Ajax.BeginForm($"Create", $"ExpanseCategories", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnCreateSuccess" }, new { role = "form" }))*@
-            {
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    <label>Category Name</label>
-                    @Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
-                </div>
-                <div class="text-center mt-1-half">
-                    <button type="submit" class="btn blue-gradient mb-1 waves-effect waves-light">Create <i class="fas fa-check ml-1"></i></button>
-                </div>
-            }
+            <div class="modal-body">
+                <form method="post" data-ajax-update="#InsertModal" data-ajax="true" data-ajax-url="/ExpenseCategories/Create" data-ajax-method="post" data-ajax-success="onCreateSuccess">
+                    <div class="md-form">
+                        <input asp-for="CategoryName" class="form-control" />
+                        <label for="CategoryName">Category Name</label>
+                        <span asp-validation-for="CategoryName"></span>
+                    </div>
+                    <div class="text-center mt-1-half">
+                        <button type="submit" class="btn peach-gradient mb-1 waves-effect waves-light">Create <i class="fas fa-check ml-1"></i></button>
+                    </div>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                </form>
+            </div>
         </div>
     </div>
-</div>

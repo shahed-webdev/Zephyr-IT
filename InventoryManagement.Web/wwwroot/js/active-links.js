@@ -185,7 +185,7 @@ menuItem.querySelectorAll("strong").forEach(category => {
 
 //functions
 function getMenus() {
-    let html = `<li><strong><span class="fas fa-tachometer-alt"></span><a class="links" href="">Dashboard</a></strong></li>`;
+    let html = `<li><strong><span class="fas fa-tachometer-alt"></span><a class="links" href="/Dashboard/Index">Dashboard</a></strong></li>`;
     linkData.forEach(item => {    
         html += `<li><strong><span class="${item.IconClass}"></span>${item.Category} <i class="fas fa-caret-right"></i></strong><ul class="sub-menu">${appendLinks(item.links)}</ul></li>`;
     });

@@ -1,5 +1,5 @@
 ﻿body { background-color: #eef5f9 }
-h4 { text-transform: uppercase; margin: 0; font-weight: 500; color: #4f4f4f !important; }
+.page-header { text-transform: uppercase; margin: 0; font-weight: 500; color: #4f4f4f !important; }
 
 a.navbar-brand { font-weight: bold; font-size: 1.5rem }
 a.navbar-brand span { color: #fb5952 }
@@ -38,6 +38,7 @@ input.input-validation-error { border: 1px solid #b94a48; }
 input[type="checkbox"].input-validation-error { border: 0 none; }
 
 .validation-summary-errors { color: #b94a48; }
+.validation-summary-errors ul{ padding:0; list-style:none; font-size:.85rem}
 .validation-summary-valid { display: none; }
 
 /*Printing*/

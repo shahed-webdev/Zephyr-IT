@@ -8,10 +8,10 @@
 <div class="m-3">
     <div class="row">
         <div class="col justify-content-center align-self-center">
-            <h3>Expense</h3>
+            <h4 class="page-header">Expense</h4>
         </div>
         <div class="col text-right">
-            <a id="CreateClick" data-url="@Url.Action("Create","Expenses")" class="btn-floating aqua-gradient" title="Add New" data-toggle="modal">
+            <a id="CreateClick" data-url="/Expenses/Create" class="btn-floating peach-gradient" title="Add New" data-toggle="modal">
                 <i class="fa fa-plus" aria-hidden="true"></i>
             </a>
         </div>
@@ -32,8 +32,6 @@
 
     <!-- Insert Modal -->
     <div class="modal fade" id="InsertModal" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <!-- Update Modal -->
-    <div class="modal fade" id="UpdateModal" tabindex="-1" role="dialog" aria-hidden="true"></div>
 </div>
 
 
@@ -70,7 +68,7 @@
                     <td>${item.ExpanseFor}</td>
                     <td>${item.Expense_Payment_Method}</td>
                     <td>${moment(item.ExpanseDate).format('DD MMM YYYY')}</td>
-                    <td><a style="color:#ff0000" class="delete fas fa-trash-alt" href="/Expanses/Delete/${item.ExpanseID}"></a></td>
+                    <td><a style="color:#ff0000" class="delete fas fa-trash-alt" href="/Expenses/Delete/${item.ExpanseId}"></a></td>
                 </tr>`;
             });
             return html;
@@ -78,20 +76,16 @@
 
 
         //Insert
-        $("#CreateClick").on("click",function() {
-                $.get($(this).data("url"),
-                    function(data) {
-                        $('#InsertModal').html(data).modal('show');
-                    });
+        $("#CreateClick").on("click", function () {
+            $.get($(this).data("url"), function (data) {
+                $('#InsertModal').html(data).modal('show');
             });
+        });
 
-        function OnCreateSuccess(data) {
-            if (data !== "success") {
-                $('#InsertModal').html(data);
-                return;
-            }
-
-            $('#InsertModal').html(data).modal('hide');
+        function onCreateSuccess(data) {
+            if (data !== "success")  return;
+    
+            $('#InsertModal').modal('hide');
             indexData();
         }
 

@@ -35,7 +35,7 @@ namespace InventoryManagement.Web.Controllers
         public IActionResult Create()
         {
             ViewBag.ExpanseCategoryID = new SelectList(_db.ExpenseCategories.ddl(), "value", "label");
-            return View($"_Create");
+            return PartialView("_Create");
         }
 
         // POST: Expanses/Create
@@ -55,7 +55,7 @@ namespace InventoryManagement.Web.Controllers
             if (task != 0) return Content("success");
 
             ModelState.AddModelError("", "Unable to insert record!");
-            return View($"_Create", model);
+            return PartialView("_Create", model);
         }
 
 

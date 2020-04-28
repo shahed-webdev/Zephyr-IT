@@ -9,16 +9,18 @@
         .DataTable { text-align: left }
         .DataTable th { background-color: #fff; color: #4f4f4f; padding-left: 20px }
         .DataTable td { padding-left: 20px }
-    </style>    
+    </style>
 }
 
 <div class="container">
     <div class="card card-body">
-        <h3 class="mb-3">Page Access</h3>
-        @Html.DropDownList("SubAdmins", null, "[ SELECT ]", htmlAttributes: new { @class = "form-control mb-4" })
+        <h4 class="page-header mb-3">Page Access</h4>
+        <select id="sub-admin" class="form-control" asp-items="ViewBag.SubAdmins">
+            <option value="">SELECT</option>
+        </select>
         <div id="table-container"></div>
 
-        <button id="btnAssign" class="btn aqua-gradient btn-rounded">Assign</button>
+        <input id="btnAssign" value="Assign" type="button" class="btn peach-gradient btn-rounded" />
         <div id="SuccessMessage" class="alert alert-success mt-2" style="display:none;">Assign Successfully!</div>
     </div>
 </div>
@@ -26,7 +28,7 @@
 
 @section Scripts {
     <script>
-        $('#SubAdmins').change(function () {
+        $('#sub-admin').change(function () {
             const regId = $(this).val();
             const url = "@Url.Action("GetLinks", "SubAdmin")";
             var tableContainer = $("#table-container");

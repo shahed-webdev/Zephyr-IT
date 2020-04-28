@@ -27,7 +27,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
-        //Call from ajax
+        //GET: Call from ajax
         public IActionResult IndexData()
         {
             var data = _db.ExpenseCategories.ToList();
@@ -37,7 +37,7 @@ namespace InventoryManagement.Web.Controllers
         // GET: Create
         public IActionResult Create()
         {
-            return View($"_Create");
+            return PartialView("_Create");
         }
 
         //POST
@@ -47,7 +47,7 @@ namespace InventoryManagement.Web.Controllers
             var exist = _db.ExpenseCategories.Any(n => n.CategoryName == model.CategoryName);
 
             if (exist) ModelState.AddModelError("CategoryName", "Category Name already exist!");
-            if (!ModelState.IsValid) return View($"_Create", model);
+            if (!ModelState.IsValid) return PartialView("_Create",model);
 
             _db.ExpenseCategories.Add(model);
 
@@ -56,7 +56,7 @@ namespace InventoryManagement.Web.Controllers
             if (task != 0) return Content("success");
 
             ModelState.AddModelError("", "Unable to insert record!");
-            return View($"_Create", model);
+            return PartialView("_Create",model);
         }
 
 
@@ -69,10 +69,7 @@ namespace InventoryManagement.Web.Controllers
 
             if (model == null) return NotFound();
 
-            /*if (Request..IsAjaxRequest())*/ 
-            return PartialView($"_Edit", model);
-
-            //return View(model);
+            return PartialView("_Edit", model);
         }
 
         //POST
@@ -82,18 +79,17 @@ namespace InventoryManagement.Web.Controllers
             var exist = _db.ExpenseCategories.Any(n => (n.CategoryName == model.CategoryName) && n.ExpenseCategoryId != model.ExpenseCategoryId);
             if (exist) ModelState.AddModelError("CategoryName", "Category Name must be unique!");
 
-            if (!ModelState.IsValid) return View(/*Request.IsAjaxRequest() ?*/ "_Edit" /*: "Edit"*/, model);
+            if (!ModelState.IsValid) return PartialView("_Edit", model);
 
 
             _db.ExpenseCategories.Update(model);
             var task = await _db.SaveChangesAsync();
 
-            if (task != 0)
-                return /*Request.IsAjaxRequest() ?*/ (IActionResult)Content("success") /*: RedirectToAction("Index")*/;
+            if (task != 0) return Content("success");
 
             ModelState.AddModelError("", "Unable to update");
             Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return View(/*Request.IsAjaxRequest() ?*/ "_Edit" /*: "Edit"*/, model);
+            return PartialView("_Edit", model);
         }
 
 
