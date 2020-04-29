@@ -1,4 +1,6 @@
-﻿@model InventoryManagement.Data.Customer
+﻿@using InventoryManagement.Repository
+@model CustomerAddUpdateViewModel
+
 
 @{
     ViewData["Title"] = "Add New Customer";
@@ -7,22 +9,19 @@
 
     <div class="container">
         <div class="card">
-            <h4>Add New Customer</h4>
-            <h5 class="card-header info-color white-text text-center py-4">
-                <strong>Sign up</strong>
-            </h5>
+            <h4 class="page-header">Add New Customer</h4>
 
             <div class="card-body px-lg-5 pt-0">
-                <form class="text-center" style="color: #757575;" action="#!">
+                <form class="text-center" style="color: #757575;">
                     <div class="md-form">
                         <input asp-for="CustomerName" class="form-control" />
                         <label asp-for="CustomerName"></label>
                         <span asp-validation-for="CustomerName"></span>
                     </div>
                     <div class="md-form mt-0">
-                        <input asp-for="CustomerPhone" class="form-control" />
-                        <label asp-for="CustomerPhone"></label>
-                        <span asp-validation-for="CustomerPhone"></span>
+                        <input asp-for="PhoneNumbers" class="form-control" />
+                        <label asp-for="PhoneNumbers"></label>
+                        <span asp-validation-for="PhoneNumbers"></span>
                     </div>
                     <div class="md-form">
                         <input asp-for="OrganizationName" class="form-control" />

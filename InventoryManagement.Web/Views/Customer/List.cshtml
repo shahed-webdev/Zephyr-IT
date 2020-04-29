@@ -1,4 +1,5 @@
-﻿@model IEnumerable<InventoryManagement.Data.Customer>
+﻿@using InventoryManagement.Repository
+@model IEnumerable<CustomerListViewModel>
 
 @{
     ViewData["Title"] = "Customers";
@@ -6,7 +7,17 @@
 }
 
     <div class="card card-body m-md-3">
-        <h4 class="page-header mb-3">Customers</h4>
+        
+        <div class="row">
+            <div class="col justify-content-center align-self-center">
+                <h4 class="page-header mb-3">Customers</h4>
+            </div>
+            <div class="col text-right">
+                <a id="CreateClick" href="/Customer/Add" class="btn-floating peach-gradient" title="Add New">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
 
         <table id="data-table" class="table table-sm table-bordered nowrap">
             <thead>
