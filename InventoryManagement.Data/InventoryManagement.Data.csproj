@@ -11,6 +11,10 @@
     <Compile Remove="Migrations\20200426025034_SeedAdminUser1.Designer.cs" />
     <Compile Remove="Migrations\20200427021212_SeedSubAdminLink.cs" />
     <Compile Remove="Migrations\20200427021212_SeedSubAdminLink.Designer.cs" />
+    <Compile Remove="Migrations\20200429015711_AddCustomerPhoneTable.cs" />
+    <Compile Remove="Migrations\20200429015711_AddCustomerPhoneTable.Designer.cs" />
+    <Compile Remove="Migrations\20200429021013_test.cs" />
+    <Compile Remove="Migrations\20200429021013_test.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

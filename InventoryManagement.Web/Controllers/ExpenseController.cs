@@ -34,7 +34,7 @@ namespace InventoryManagement.Web.Controllers
         // GET: Expanses/Create
         public IActionResult Create()
         {
-            ViewBag.ExpanseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label");
+            ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label");
             return PartialView("_Create");
         }
 
@@ -45,7 +45,7 @@ namespace InventoryManagement.Web.Controllers
             model.RegistrationID = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
             if (!ModelState.IsValid) return View($"_Create", model);
 
-            ViewBag.ExpanseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label", model.ExpenseCategoryId);
+            ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label", model.ExpenseCategoryId);
 
 
             _db.Expenses.AddCustom(model);

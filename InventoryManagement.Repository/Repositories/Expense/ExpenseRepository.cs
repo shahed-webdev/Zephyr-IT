@@ -17,7 +17,7 @@ namespace InventoryManagement.Repository
         {
             var Expense = Context.Expense.Include(e => e.ExpenseCategory).Select(e => new ExpenseVM
             {
-                ExpenseID = e.ExpenseId,
+                ExpenseId = e.ExpenseId,
                 RegistrationID = e.RegistrationId,
                 ExpenseCategoryId = e.ExpenseCategoryId,
                 CategoryName = e.ExpenseCategory.CategoryName,
@@ -34,7 +34,7 @@ namespace InventoryManagement.Repository
         {
             var Expense = await Context.Expense.Include(e => e.ExpenseCategory).Select(e => new ExpenseVM
             {
-                ExpenseID = e.ExpenseId,
+                ExpenseId = e.ExpenseId,
                 RegistrationID = e.RegistrationId,
                 ExpenseCategoryId = e.ExpenseCategoryId,
                 CategoryName = e.ExpenseCategory.CategoryName,
@@ -123,7 +123,7 @@ namespace InventoryManagement.Repository
 
             var Expense = Context.Expense.Include(e => e.ExpenseCategory).Where(e => e.ExpenseDate <= eD && e.ExpenseDate >= sD).Select(e => new ExpenseVM
             {
-                ExpenseID = e.ExpenseId,
+                ExpenseId = e.ExpenseId,
                 RegistrationID = e.RegistrationId,
                 ExpenseCategoryId = e.ExpenseCategoryId,
                 CategoryName = e.ExpenseCategory.CategoryName,

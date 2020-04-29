@@ -32,22 +32,22 @@ let linkData = [{
 {
     "LinkCategoryID": 2,
     "SN": 7,
-    "Category": "Product",
-    "IconClass": "fas fa-shopping-cart",
+    "Category": "Customer",
+    "IconClass": "fas fa-user",
     "links": [{
         "LinkID": 4,
         "SN": 1,
-        "Controller": "ProductCategories",
-        "Action": "IndexView",
-        "Title": "Categories",
+        "Controller": "Customer",
+        "Action": "Add",
+        "Title": "Add Customer",
         "IconClass": null
     },
     {
         "LinkID": 6,
-        "SN": 1,
-        "Controller": "Products",
-        "Action": "Index",
-        "Title": "Products",
+        "SN": 2,
+        "Controller": "Customer",
+        "Action": "List",
+        "Title": "Customers",
         "IconClass": null
     }]
 },
@@ -170,7 +170,30 @@ let linkData = [{
         "Title": "Net Summery",
         "IconClass": null
     }]
-    }]
+    },
+    {
+        "LinkCategoryID": 2,
+        "SN": 7,
+        "Category": "Product",
+        "IconClass": "fas fa-shopping-cart",
+        "links": [{
+            "LinkID": 4,
+            "SN": 1,
+            "Controller": "ProductCategories",
+            "Action": "IndexView",
+            "Title": "Categories",
+            "IconClass": null
+        },
+        {
+            "LinkID": 6,
+            "SN": 1,
+            "Controller": "Products",
+            "Action": "Index",
+            "Title": "Products",
+            "IconClass": null
+        }]
+        },
+]
 
 //selectors
 const menuItem = document.getElementById("menuItem");

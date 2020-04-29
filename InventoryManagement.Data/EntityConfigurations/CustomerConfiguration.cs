@@ -16,10 +16,6 @@ namespace InventoryManagement.Data
                 .IsRequired()
                 .HasMaxLength(128);
 
-            entity.Property(e => e.CustomerPhone)
-                .IsRequired()
-                .HasMaxLength(50);
-
             entity.Property(e => e.Due)
                 .HasComputedColumnSql("(([TotalAmount]+[ReturnAmount])-([TotalDiscount]+[Paid]))");
 

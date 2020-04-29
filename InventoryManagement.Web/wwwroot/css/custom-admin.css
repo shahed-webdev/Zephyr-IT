@@ -9,17 +9,17 @@ a.navbar-brand span { color: #fb5952 }
 
 /*--Table--*/
 .table > tbody > tr > td { vertical-align: middle; }
-#DataTable { text-align: center; background-color: #fff; width:100% }
-#DataTable th { background-color: #777c84; color: #fff; }
-#DataTable tbody td { padding: 0.5rem }
-#DataTable .delete { color: #ff0000 }
+#data-table { text-align: center; background-color: #fff; width: 100% }
+#data-table th { background-color: #777c84; color: #fff; }
+#data-table tbody td { padding: 0.5rem }
+#data-table .delete { color: #ff0000 }
 
 
 /*--Table class--*/
-.DataTable { text-align: center; background-color: #fff; }
-.DataTable th { background-color: #777c84; color: #fff; }
-.DataTable .error-color td { color: red; }
-.DataTable .delete { color: #ff0000 }
+.data-table { text-align: center; background-color: #fff; }
+.data-table th { background-color: #777c84; color: #fff; }
+.data-table .error-color td { color: red; }
+.data-table .delete { color: #ff0000 }
 
 /*print option*/
 #DataTable_length, .dt-buttons { float: left; }
@@ -57,9 +57,9 @@ input[type="checkbox"].input-validation-error { border: 0 none; }
     #content-wrapper { min-height: 0; padding: 0; margin-left: 0; overflow-x: auto !important }
     #content-wrapper h3 { font-size: 1.2rem; }
 
-    .DataTable th { color: #333; font-weight: bold }
-    .DataTable a { color: #333 !important; text-decoration: none }
+    .data-table th { color: #333; font-weight: bold }
+    .data-table a { color: #333 !important; text-decoration: none }
 
-    #DataTable th { color: #333; font-weight: bold }
-    #DataTable a{ color: #333 !important; text-decoration: none}
+    #data-table th { color: #333; font-weight: bold }
+    #data-table a { color: #333 !important; text-decoration: none }
 }

@@ -20,21 +20,22 @@ namespace InventoryManagement.Web
         }
 
         public void ConfigureServices(IServiceCollection services)
-        {         
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+        {
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
-            services.ConfigureApplicationCookie(config => {
+            services.ConfigureApplicationCookie(config =>
+            {
                 config.Cookie.Name = "Identity.Cookie";
                 config.LoginPath = "/Account";
             });
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            //services.AddCors();
-            services.AddMvc();
 
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddMvc().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

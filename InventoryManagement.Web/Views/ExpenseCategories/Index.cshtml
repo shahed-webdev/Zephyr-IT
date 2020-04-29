@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <table id="DataTable" class="table table-sm table-bordered">
+    <table id="data-table" class="table table-sm table-bordered">
         <thead>
             <tr>
                 <th>Category Name</th>
@@ -61,9 +61,9 @@
             var html = "";
             $.each(data, function (i, item) {
                 html += `<tr>
-                        <td>${item.categoryName}</td>
-                        <td><a class="edit fas fa-edit" href="/ExpenseCategories/Edit/${item.expenseCategoryId}"></a></td>
-                        <td><a style="color:#ff0000" class="delete fas fa-trash-alt" href="/ExpenseCategories/Delete/${item.expenseCategoryId}"></a></td>
+                        <td>${item.CategoryName}</td>
+                        <td><a class="edit fas fa-edit" href="/ExpenseCategories/Edit/${item.ExpenseCategoryId}"></a></td>
+                        <td><a style="color:#ff0000" class="delete fas fa-trash-alt" href="/ExpenseCategories/Delete/${item.ExpenseCategoryId}"></a></td>
                     </tr>`;
             });
             return html;
@@ -85,7 +85,7 @@
         }
 
         //Update click
-        $('#DataTable').on("click", ".edit", function (evt) {
+        $('#data-table').on("click", ".edit", function (evt) {
             evt.preventDefault();
             const url = $(this).attr("href");
 
@@ -106,7 +106,7 @@
         }
 
         //Delete click
-        $('#DataTable').on("click", ".delete", function (evt) {
+        $('#data-table').on("click", ".delete", function (evt) {
             evt.preventDefault();
 
             var row = $(this).closest("tr");

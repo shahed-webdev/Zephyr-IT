@@ -10,6 +10,7 @@ namespace InventoryManagement.Data
         {
         }
         public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<CustomerPhone> CustomerPhone { get; set; }
         public virtual DbSet<Expense> Expense { get; set; }
         public virtual DbSet<ExpenseCategory> ExpenseCategory { get; set; }
         public virtual DbSet<Institution> Institution { get; set; }
@@ -38,6 +39,7 @@ namespace InventoryManagement.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new CustomerConfiguration());
+            builder.ApplyConfiguration(new CustomerPhoneConfiguration());
             builder.ApplyConfiguration(new ExpenseConfiguration());
             builder.ApplyConfiguration(new ExpenseCategoryConfiguration());
             builder.ApplyConfiguration(new InstitutionConfiguration());

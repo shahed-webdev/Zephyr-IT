@@ -1,0 +1,46 @@
+﻿@model InventoryManagement.Data.Customer
+
+@{
+    ViewData["Title"] = "Add New Customer";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+    <div class="container">
+        <div class="card">
+            <h4>Add New Customer</h4>
+            <h5 class="card-header info-color white-text text-center py-4">
+                <strong>Sign up</strong>
+            </h5>
+
+            <div class="card-body px-lg-5 pt-0">
+                <form class="text-center" style="color: #757575;" action="#!">
+                    <div class="md-form">
+                        <input asp-for="CustomerName" class="form-control" />
+                        <label asp-for="CustomerName"></label>
+                        <span asp-validation-for="CustomerName"></span>
+                    </div>
+                    <div class="md-form mt-0">
+                        <input asp-for="CustomerPhone" class="form-control" />
+                        <label asp-for="CustomerPhone"></label>
+                        <span asp-validation-for="CustomerPhone"></span>
+                    </div>
+                    <div class="md-form">
+                        <input asp-for="OrganizationName" class="form-control" />
+                        <label asp-for="OrganizationName"></label>
+                        <span asp-validation-for="OrganizationName"></span>
+                    </div>
+                    <div class="md-form">
+                        <input asp-for="CustomerAddress" class="form-control" />
+                        <label asp-for="CustomerAddress"></label>
+                        <span asp-validation-for="CustomerAddress"></span>
+                    </div>
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">Add Customer</button>
+                    <a asp-action="List">Back to List</a>
+                </form>
+            </div>
+        </div>
+    </div>            
+     
+
+

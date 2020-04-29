@@ -5,7 +5,7 @@ namespace InventoryManagement.Repository
 {
     public class ExpenseVM
     {
-        public int ExpenseID { get; set; }
+        public int ExpenseId { get; set; }
         
         [Required]
         public int RegistrationID { get; set; }

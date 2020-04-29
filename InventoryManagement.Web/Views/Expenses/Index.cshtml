@@ -17,13 +17,13 @@
         </div>
     </div>
 
-    <table id="DataTable" class="table table-sm table-bordered">
+    <table id="data-table" class="table table-sm table-bordered">
         <thead>
             <tr>
-                <th>Expanse Amount</th>
-                <th>Expanse For</th>
+                <th>Expense Amount</th>
+                <th>Expense For</th>
                 <th>Payment Method</th>
-                <th>Expanse Date</th>
+                <th>Expense Date</th>
                 <th style="width:30px">Delete</th>
             </tr>
         </thead>
@@ -64,11 +64,11 @@
             var html = "";
             $.each(data, function(i,item) {
                 html += `<tr>
-                    <td>${item.ExpanseAmount}</td>
-                    <td>${item.ExpanseFor}</td>
-                    <td>${item.Expense_Payment_Method}</td>
+                    <td>${item.ExpenseAmount}</td>
+                    <td>${item.ExpenseFor}</td>
+                    <td>${item.ExpensePaymentMethod}</td>
                     <td>${moment(item.ExpanseDate).format('DD MMM YYYY')}</td>
-                    <td><a style="color:#ff0000" class="delete fas fa-trash-alt" href="/Expenses/Delete/${item.ExpanseId}"></a></td>
+                    <td><a style="color:#ff0000" class="delete fas fa-trash-alt" href="/Expenses/Delete/${item.ExpenseId}"></a></td>
                 </tr>`;
             });
             return html;
@@ -90,7 +90,7 @@
         }
 
         //Delete click
-        $('#DataTable').on("click", ".delete",function(evt) {
+        $('#data-table').on("click", ".delete",function(evt) {
                 evt.preventDefault();
 
                 var row = $(this).closest("tr");
