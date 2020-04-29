@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using InventoryManagement.Repository;
 using Microsoft.AspNetCore.Mvc;
@@ -40,16 +41,19 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public IActionResult Add(CustomerAddUpdateViewModel model)
         {
+            if(!ModelState.IsValid) return View(model);
+
             _db.Customers.AddCustom(model);
             _db.SaveChanges();
-            return View(model);
+
+            return View();
         }
 
 
         //GET:// Update customer
         public IActionResult Update(int? id)
         {
-            if (!id.HasValue) return RedirectToAction("Update");
+            if (!id.HasValue) return BadRequest(HttpStatusCode.BadRequest);
 
             var model = _db.Customers.FindCustom(id.GetValueOrDefault());
 
@@ -62,9 +66,12 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public IActionResult Update(CustomerAddUpdateViewModel model)
         {
+            if (!ModelState.IsValid) return View(model);
+
             _db.Customers.CustomUpdate(model);
             _db.SaveChanges();
-            return View(model);
+
+            return RedirectToAction("List");
         }
     }
 }

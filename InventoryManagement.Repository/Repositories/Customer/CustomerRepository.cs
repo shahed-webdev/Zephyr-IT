@@ -33,36 +33,31 @@ namespace InventoryManagement.Repository
 
         public async Task<bool> IsPhoneNumberExistAsync(string number, int id = 0)
         {
-            if(id == null)
-            {
-              return  await Context.CustomerPhone.AnyAsync(c => c.Phone == number);
-            }
-            else
-            {
-                return await Context.CustomerPhone.AnyAsync(c => c.Phone == number | c.CustomerId != id.GetValueOrDefault());
-            }
+            if (id == 0)
+                return await Context.CustomerPhone.AnyAsync(c => c.Phone == number);
+
+            return await Context.CustomerPhone.AnyAsync(c => c.Phone == number | c.CustomerId != id);
         }
 
         public CustomerAddUpdateViewModel FindCustom(int id)
         {
-            var cList = Context.Customer.Select(c => new CustomerAddUpdateViewModel
+            var customerList = Context.Customer.Select(c => new CustomerAddUpdateViewModel
             {
-
                 CustomerId = c.CustomerId,
                 OrganizationName = c.OrganizationName,
                 CustomerName = c.CustomerName,
-                CustomerAddress = c.CustomerAddress, 
-                Photo = c.Photo, 
+                CustomerAddress = c.CustomerAddress,
+                Photo = c.Photo,
                 PhoneNumbers = c.CustomerPhone.Select(p => new CustomerPhoneViewModel
                 {
                     CustomerPhoneId = p.CustomerPhoneId,
-                    Phone = p.Phone, 
+                    Phone = p.Phone,
                     IsPrimary = p.IsPrimary
                 }).ToList(),
 
             });
 
-            return cList.FirstOrDefault(c=> c.CustomerId == id);
+            return customerList.FirstOrDefault(c=> c.CustomerId == id);
         }
 
         public void CustomUpdate(CustomerAddUpdateViewModel model)
@@ -72,17 +67,16 @@ namespace InventoryManagement.Repository
             customer.Photo = model.Photo;
             customer.CustomerAddress = model.CustomerAddress;
             customer.CustomerName = model.CustomerName;
-          customer.OrganizationName = model.OrganizationName;
-          customer.CustomerPhone = model.PhoneNumbers.Select(p => new CustomerPhone
-          {
-              CustomerPhoneId = p.CustomerPhoneId,
-              Phone = p.Phone,
-              IsPrimary = p.IsPrimary
-              
-          }).ToList();
+            customer.OrganizationName = model.OrganizationName;
+            customer.CustomerPhone = model.PhoneNumbers.Select(p => new CustomerPhone
+            {
+                CustomerPhoneId = p.CustomerPhoneId,
+                Phone = p.Phone,
+                IsPrimary = p.IsPrimary
 
-           Update(customer);
-         
+            }).ToList();
+
+            Update(customer);
         }
 
 
@@ -101,9 +95,8 @@ namespace InventoryManagement.Repository
             };
 
             if (model.Photo != null && model.Photo.Length > 0)
-            {
                 customer.Photo = model.Photo;
-            }
+
 
             Add(customer);
         }
