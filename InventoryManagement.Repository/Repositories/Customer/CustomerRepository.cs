@@ -23,7 +23,7 @@ namespace InventoryManagement.Repository
                 OrganizationName = c.OrganizationName,
                 CustomerName = c.CustomerName,
                 CustomerAddress =c.CustomerAddress,
-                PhonePrimary = c.CustomerPhone.FirstOrDefault(p=> p.IsPrimary.GetValueOrDefault()).Phone,
+                PhonePrimary = c.CustomerPhone.FirstOrDefault(p=> p.IsPrimary == true).Phone, 
                 Due = c.Due,
                 SignUpDate = c.InsertDate
             });
