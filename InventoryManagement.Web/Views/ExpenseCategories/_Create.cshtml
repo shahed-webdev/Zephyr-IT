@@ -14,16 +14,17 @@
             </div>
 
             <div class="modal-body">
-                <form method="post" data-ajax-update="#InsertModal" data-ajax="true" data-ajax-url="/ExpenseCategories/Create" data-ajax-method="post" data-ajax-success="onCreateSuccess">
+                <form data-ajax-update="#InsertModal" data-ajax="true" data-ajax-url="/ExpenseCategories/Create" data-ajax-method="post" data-ajax-success="onCreateSuccess">
                     <div class="md-form">
                         <input asp-for="CategoryName" class="form-control" />
                         <label for="CategoryName">Category Name</label>
                         <span asp-validation-for="CategoryName"></span>
                     </div>
                     <div class="text-center mt-1-half">
-                        <button type="submit" class="btn peach-gradient mb-1 waves-effect waves-light">Create <i class="fas fa-check ml-1"></i></button>
+                        <button type="submit" class="btn peach-gradient mb-1 waves-effect waves-light">
+                            Create<i class="fas fa-check ml-1"></i>
+                        </button>
                     </div>
-                    <div asp-validation-summary="All" class="text-danger"></div>
                 </form>
             </div>
         </div>

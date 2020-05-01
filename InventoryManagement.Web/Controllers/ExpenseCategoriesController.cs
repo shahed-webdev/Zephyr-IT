@@ -45,9 +45,9 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> Create(ExpenseCategory model)
         {
             var exist = _db.ExpenseCategories.Any(n => n.CategoryName == model.CategoryName);
-
             if (exist) ModelState.AddModelError("CategoryName", "Category Name already exist!");
-            if (!ModelState.IsValid) return PartialView("_Create",model);
+            
+            if (!ModelState.IsValid) return PartialView("_Create", model);
 
             _db.ExpenseCategories.Add(model);
 
@@ -56,7 +56,7 @@ namespace InventoryManagement.Web.Controllers
             if (task != 0) return Content("success");
 
             ModelState.AddModelError("", "Unable to insert record!");
-            return PartialView("_Create",model);
+            return PartialView("_Create", model);
         }
 
 
@@ -81,10 +81,9 @@ namespace InventoryManagement.Web.Controllers
 
             if (!ModelState.IsValid) return PartialView("_Edit", model);
 
-
             _db.ExpenseCategories.Update(model);
-            var task = await _db.SaveChangesAsync();
 
+            var task = await _db.SaveChangesAsync();
             if (task != 0) return Content("success");
 
             ModelState.AddModelError("", "Unable to update");

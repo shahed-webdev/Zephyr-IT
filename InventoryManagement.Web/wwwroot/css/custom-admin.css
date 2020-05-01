@@ -26,7 +26,7 @@ a.navbar-brand span { color: #fb5952 }
 
 /*--Icon button--*/
 .btn-floating { box-shadow: 0 5px 11px 0 #000000,0 4px 15px 0 #000000; box-shadow: 0 5px 11px 0 rgba(0,0,0,.18),0 4px 15px 0 rgba(0,0,0,.15); width: 47px; height: 47px; position: relative; z-index: 1; vertical-align: middle; display: inline-block; overflow: hidden; transition: all .2s ease-in-out; margin: 10px; border-radius: 50%; padding: 0; cursor: pointer; }
-.btn-floating i { display: inline-block; width: inherit; text-align: center; color: #fff; font-size: 1.25rem; line-height: 47px; }
+.btn-floating i {pointer-events:none; display: inline-block; width: inherit; text-align: center; color: #fff; font-size: 1.25rem; line-height: 47px; }
 
 #toTop { bottom: 10px; cursor: pointer; display: none; position: fixed; right: 10px; }
 
@@ -34,7 +34,7 @@ a.navbar-brand span { color: #fb5952 }
 .field-validation-error { color: #ee2420; font-size: .85rem; }
 .field-validation-valid { display: none; }
 
-input.input-validation-error { border: 1px solid #b94a48; }
+input.input-validation-error { border-bottom: 1px solid #b94a48 !important; }
 input[type="checkbox"].input-validation-error { border: 0 none; }
 
 .validation-summary-errors { color: #b94a48; }

@@ -37,9 +37,9 @@
 
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/jquery-ajax-unobtrusive@3.2.6/dist/jquery.unobtrusive-ajax.min.js"></script>
+    <partial name="_UnobtrusiveAjaxPartial" />
     <script>
-        $(function() {
+        $(function () {
             indexData();
         });
 
@@ -62,14 +62,14 @@
 
         function tableData(data) {
             var html = "";
-            $.each(data, function(i,item) {
+            $.each(data, function (i, item) {
                 html += `<tr>
-                    <td>${item.ExpenseAmount}</td>
-                    <td>${item.ExpenseFor}</td>
-                    <td>${item.ExpensePaymentMethod}</td>
-                    <td>${moment(item.ExpanseDate).format('DD MMM YYYY')}</td>
-                    <td><a style="color:#ff0000" class="delete fas fa-trash-alt" href="/Expenses/Delete/${item.ExpenseId}"></a></td>
-                </tr>`;
+                        <td>${item.ExpenseAmount}</td>
+                        <td>${item.ExpenseFor}</td>
+                        <td>${item.ExpensePaymentMethod}</td>
+                        <td>${moment(item.ExpanseDate).format('DD MMM YYYY')}</td>
+                        <td><a style="color:#ff0000" class="delete fas fa-trash-alt" href="/Expenses/Delete/${item.ExpenseId}"></a></td>
+                    </tr>`;
             });
             return html;
         };
@@ -83,8 +83,8 @@
         });
 
         function onCreateSuccess(data) {
-            if (data !== "success")  return;
-    
+            if (data !== "success") return;
+
             $('#InsertModal').modal('hide');
             indexData();
         }
@@ -95,28 +95,28 @@
         }
 
         //Delete click
-        $('#data-table').on("click", ".delete",function(evt) {
-                evt.preventDefault();
+        $('#data-table').on("click", ".delete", function (evt) {
+            evt.preventDefault();
 
-                var row = $(this).closest("tr");
-                var btnDelete = $(this);
-                const url = $(this).attr('href');
+            var row = $(this).closest("tr");
+            var btnDelete = $(this);
+            const url = $(this).attr('href');
 
-                $('#table-row em').remove();
-                $('#table-row tr').removeClass("error-color");
+            $('#table-row em').remove();
+            $('#table-row tr').removeClass("error-color");
 
-                if (!url) return;
+            if (!url) return;
 
-                if (confirm("Are you sure you want to delete?")) {
-                    $.post(url,function(response) {
-                            if (response === '0') {
-                                row.addClass("error-color").after('<em class="used-error">This data already used in others place</em>');
-                                btnDelete.removeAttr("href");
-                                return;
-                            }
-                            row.hide();
-                    });
-                }
-            });
+            if (confirm("Are you sure you want to delete?")) {
+                $.post(url, function (response) {
+                    if (response === '0') {
+                        row.addClass("error-color").after('<em class="used-error">This data already used in others place</em>');
+                        btnDelete.removeAttr("href");
+                        return;
+                    }
+                    row.hide();
+                });
+            }
+        });
     </script>
 }

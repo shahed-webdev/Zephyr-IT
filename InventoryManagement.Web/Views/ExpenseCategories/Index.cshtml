@@ -2,6 +2,7 @@
     ViewData["Title"] = "Expense Category";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+
 <div class="m-3">
     <div class="row">
         <div class="col justify-content-center align-self-center">
@@ -22,7 +23,7 @@
                 <th style="width:30px">Delete</th>
             </tr>
         </thead>
-        <tbody id="row-data"></tbody>
+        <tbody id="table-body"></tbody>
     </table>
 
     <!-- Insert Modal -->
@@ -34,100 +35,41 @@
 
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/jquery-ajax-unobtrusive@3.2.6/dist/jquery.unobtrusive-ajax.min.js"></script>
+    <partial name="_UnobtrusiveAjaxPartial" />
+    <script src="~/page-js/expense-category.js?v=1"></script>
+
     <script>
-        $(function () {
-            indexData();
-        });
-
-        //get data
-        function indexData() {
-            const url = '/ExpenseCategories/IndexData';
-            const row = $("#row-data");
-            const emptyRow = "<tr><td colspan='3'>No data found!</td></tr>";
-
-            $.get(url, function (response) {
-                if (!response.length) {
-                    row.append(emptyRow);
-                    return;
-                }
-
-                row.children().remove();
-                row.append(tableData(response));
-            });
-        };
-
-        function tableData(data) {
-            var html = "";
-            $.each(data, function (i, item) {
-                html += `<tr>
-                        <td>${item.CategoryName}</td>
-                        <td><a class="edit fas fa-edit" href="/ExpenseCategories/Edit/${item.ExpenseCategoryId}"></a></td>
-                        <td><a style="color:#ff0000" class="delete fas fa-trash-alt" href="/ExpenseCategories/Delete/${item.ExpenseCategoryId}"></a></td>
-                    </tr>`;
-            });
-            return html;
-        };
-
-
         //Insert
-        $("#CreateClick").on("click", function () {
-            $.get($(this).data("url"), function (data) {
-                $('#InsertModal').html(data).modal('show');
-            });
-        });
+        //$("#CreateClick").on("click", function () {
+        //    $.get($(this).data("url"), function (data) {
+        //        $('#InsertModal').html(data).modal('show');
+        //    });
+        //});
 
-        function onCreateSuccess(data) {
-            if (data !== "success") return;
-
-            $('#InsertModal').modal('hide');
-            indexData();
-        }
-
-        //Update click
-        $('#data-table').on("click", ".edit", function (evt) {
-            evt.preventDefault();
-            const url = $(this).attr("href");
-
-            $.get(url, function (data) {
-                $('#UpdateModal').html(data).modal('show');
-            });
-        });
-
-        function onUpdateSuccess(data) {
-            console.log(data)
-            if (data !== "success") {
-                $('#UpdateModal').html(data);
-                return;
-            }
-
-            $('#UpdateModal').html(data).modal('hide');
-            indexData();
-        }
 
         //Delete click
-        $('#data-table').on("click", ".delete", function (evt) {
-            evt.preventDefault();
+        //$('#data-table').on("click", ".delete", function (evt) {
+        //    evt.preventDefault();
 
-            var row = $(this).closest("tr");
-            var btnDelete = $(this);
-            const url = $(this).attr('href');
+        //    var row = $(this).closest("tr");
+        //    var btnDelete = $(this);
+        //    const url = $(this).attr('href');
 
-            $('#table-row em').remove();
-            $('#table-row tr').removeClass("error-color");
+        //    $('#table-row em').remove();
+        //    $('#table-row tr').removeClass("error-color");
 
-            if (!url) return;
+        //    if (!url) return;
 
-            if (confirm("Are you sure you want to delete?")) {
-                $.post(url, function (response) {
-                    if (response === '-1') {
-                        row.addClass("error-color").after('<em class="used-error">This data already used in others place</em>');
-                        btnDelete.removeAttr("href");
-                        return;
-                    }
-                    row.hide();
-                });
-            }
-        });
+        //    if (confirm("Are you sure you want to delete?")) {
+        //        $.post(url, function (response) {
+        //            if (response === '-1') {
+        //                row.addClass("error-color").after('<em class="used-error">This data already used in others place</em>');
+        //                btnDelete.removeAttr("href");
+        //                return;
+        //            }
+        //            row.hide();
+        //        });
+        //    }
+        //});
     </script>
 }

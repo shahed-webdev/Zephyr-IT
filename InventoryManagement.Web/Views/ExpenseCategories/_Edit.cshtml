@@ -14,7 +14,7 @@
             </div>
 
             <div class="modal-body">
-                <form data-ajax-update="#UpdateModal" method="post" data-ajax="true" data-ajax-url="/ExpenseCategories/Edit" data-ajax-method="post" data-ajax-success="onUpdateSuccess">
+                <form data-ajax-update="#UpdateModal" data-ajax="true" data-ajax-url="/ExpenseCategories/Edit" data-ajax-method="post" data-ajax-success="onUpdateSuccess">
                     <div class="md-form">
                         <input asp-for="CategoryName" class="form-control" placeholder="Category Name" />
                         <span asp-validation-for="CategoryName"></span>
@@ -22,7 +22,6 @@
                     <div class="text-center mt-1-half">
                         <button type="submit" class="btn peach-gradient mb-1 waves-effect waves-light">Save <i class="fas fa-check ml-1"></i></button>
                         <input asp-for="ExpenseCategoryId" type="hidden" />
-                        <div asp-validation-summary="All"></div>
                     </div>
                 </form>
             </div>

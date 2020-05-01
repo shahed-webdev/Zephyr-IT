@@ -17,10 +17,9 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET:// MobileIsAvailable
-        public async Task<IActionResult> CheckMobileIsAvailable(string mobile)
+        public async Task<bool> CheckMobileIsAvailable(string mobile)
         {
-            var list = await _db.Customers.IsPhoneNumberExistAsync(mobile);
-            return View(list);
+            return await _db.Customers.IsPhoneNumberExistAsync(mobile);
         }
 
         //GET:// List of customer

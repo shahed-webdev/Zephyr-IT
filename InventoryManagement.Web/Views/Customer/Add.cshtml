@@ -6,31 +6,30 @@
     ViewData["Title"] = "Add New Customer";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-@section Styles{ 
-<style>
-    .phone-container { display: flex; margin: 1.5rem 0; align-items: center; }
-    .phone-container .add-element { margin-left: -23px; padding-bottom: 15px; }
-    .phone-container .btn-floating.btn-sm { width: 22px; height: 22px; }
-    .phone-container .btn-floating.btn-sm i { font-size: .70rem; line-height: 2px; pointer-events: none }
-</style>
+@section Styles{
+    <style>
+        .phone-container { display: flex; margin: 1.5rem 0; align-items: center; }
+        .phone-container .add-element { margin-left: -23px; padding-bottom:10px; }
+        .phone-container .btn-floating.btn-sm { width: 22px; height: 22px; }
+        .phone-container .btn-floating.btn-sm i { font-size: .70rem; line-height: 2px; pointer-events: none }
+    </style>
 }
 
 <div class="container mt-3">
     <div class="row">
         <div class="col-md-8 col-lg-10 mx-auto">
-            <div class="card card-body p-5">
+            <div class="card card-body p-4">
                 <h4 class="page-header mt-3 text-center">Add New Customer</h4>
 
-                <form asp-action="Add">
+                <form id="add-customer">
                     <div class="md-form mb-5">
                         <input asp-for="CustomerName" class="form-control" />
                         <label asp-for="CustomerName">Name</label>
-                        <span asp-validation-for="CustomerName"></span>
                     </div>
                     <div id="phone-wrapper">
                         <div class="phone-container">
                             <div class="md-form m-0 flex-grow-1">
-                                <input id="phone-0" name="PhoneNumbers[0].Phone" required type="number" class="form-control" />
+                                <input id="phone-0" name="PhoneNumbers[0].Phone" type="number" required class="form-control valid-check" minlength="11"/>
                                 <label for="phone-0">Phone Number (Primary)</label>
                                 <input type="hidden" value="true" name="PhoneNumbers[0].IsPrimary">
                             </div>
@@ -39,80 +38,137 @@
                             </div>
                         </div>
                     </div>
-                    <div class="md-form mb-5">
-                        <input asp-for="OrganizationName" class="form-control" />
-                        <label asp-for="OrganizationName">Organization Name</label>
+
+                    <div class="form-row">
+                        <div class="col-lg-5">
+                            <div class="md-form mb-5">
+                                <input asp-for="OrganizationName" class="form-control" />
+                                <label asp-for="OrganizationName">Organization Name</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="md-form mb-5">
+                                <input asp-for="CustomerAddress" class="form-control" />
+                                <label asp-for="CustomerAddress">Address</label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="md-form mb-5">
-                        <input asp-for="CustomerAddress" class="form-control" />
-                        <label asp-for="CustomerAddress">Address</label>
+
+                    <div class="form-row">
+                        <div class="col-lg-9">
+                            <div class="md-form mb-5">
+                                <input id="Description" type="text" class="form-control" />
+                                <label for="Description">Description</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="md-form mb-5">
+                                <input id="DueLimit" type="text" class="form-control" />
+                                <label for="DueLimit">Due Limit</label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="md-form mb-5">
-                        <input id="Description" type="text" class="form-control" />
-                        <label for="Description">Description</label>
-                    </div>
-                    <div class="md-form mb-5">
-                        <input id="DueLimit" type="text" class="form-control" />
-                        <label for="DueLimit">Due Limit</label>
-                    </div>
-                    
+
                     <div class="d-flex justify-content-between align-items-center">
-                        <button class="btn peach-gradient btn-rounded my-4 waves-effect z-depth-0" type="submit">Add Customer</button>
+                        <button id="btnSubmit" disabled class="btn peach-gradient btn-rounded my-4 waves-effect z-depth-0" type="submit">Add Customer</button>
                         <a asp-action="List">Back to List</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-</div>    
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
-<script>
-    //selectors
-    const phoneContainer = document.getElementById("phone-wrapper");
+    <script>
+        //selectors
+        const phoneContainer = document.getElementById("phone-wrapper");
+        const addForm = document.getElementById("add-customer");
+        const btnSubmit = document.getElementById("btnSubmit");
 
-    //functions
-    const createElementName = function(modelName, index) {
-        return `${modelName}[${index}].Phone`;
-    }
+        //functions
+        const createElementName = function (modelName, index) {
+            return `${modelName}[${index}].Phone`;
+        }
 
-    let elementIndex = 1;
-    const addInputelement = function () {
-        const element = `<div class="phone-container">
-            <div class="md-form m-0 flex-grow-1">
-                <input id="phone-${elementIndex}" name="PhoneNumbers[${elementIndex}].Phone" required type="number" class="form-control" />
-                <label for="phone-${elementIndex}">Phone Number</label>
-            </div>
-            <div class="add-element">
-                <a class="btn-floating btn-sm bg-danger remove m-0"><i class="fas fa-minus"></i></a>
-            </div>
-        </div>`;
+        let elementIndex = 1;
 
-        elementIndex++;
-        phoneContainer.insertAdjacentHTML('beforeend', element);
-    }
+        const addInputelement = function () {
+            const element = `<div class="phone-container">
+                <div class="md-form m-0 flex-grow-1">
+                    <input id="phone-${elementIndex}" name="PhoneNumbers[${elementIndex}].Phone" required type="number" class="form-control valid-check" />
+                    <label for="phone-${elementIndex}">Phone Number</label>
+                </div>
+                <div class="add-element">
+                    <a class="btn-floating btn-sm bg-danger remove m-0"><i class="fas fa-minus"></i></a>
+                </div>
+            </div>`;
 
-    const removeInputelement = function (evt) {
-        evt.target.parentElement.parentElement.remove();
-    }
+            elementIndex++;
+            phoneContainer.insertAdjacentHTML('beforeend', element);
+        }
 
+        const removeInputelement = function (evt) {
+            evt.target.parentElement.parentElement.remove();
+        }
 
-    const togglePhoneElement = function (evt) {
-        const addClicked = evt.target.classList.contains("add");
-        const removeClicked = evt.target.classList.contains("remove");
+        const isError = [];
+        const checkPhoneIsExists = function (evt) {
+            const phoneInput = evt.target.classList.contains("valid-check");
+            if (!phoneInput) return;
 
-        if (addClicked)
-            addInputelement(evt);
+            const mobile = evt.target.value;
+            const errorElement = evt.target.nextElementSibling;
 
-        if (removeClicked)
-            removeInputelement(evt);
-    }
+            if (errorElement.nodeName === "SPAN")
+                errorElement.remove();
 
+            if (mobile.length > 10) {
+                const url = '/Customer/CheckMobileIsAvailable';
+                const parameter = { params: { mobile } };
+                const request = axios.get(url, parameter);
+                const element = `<span class="field-validation-error">This Mobile Number Already Exists!</span>`;
+                const self = evt.target;
+                const errorIndex = isError.indexOf(self.id);
 
-   //events
-    phoneContainer.addEventListener("click", togglePhoneElement);   
-</script>
+                request.then(response => {
+                    if (response.data) {
+                        self.insertAdjacentHTML('afterend', element);
+
+                        if (errorIndex === -1)
+                            isError.push(self.id);
+                    } else {
+                        if (errorIndex !== -1)
+                            isError.splice(errorIndex, 1);
+                    }
+
+                    btnSubmit.disabled = isError.length === 0 ? false : true;
+                });
+            }
+        }
+
+        const togglePhoneElement = function (evt) {
+            const addClicked = evt.target.classList.contains("add");
+            const removeClicked = evt.target.classList.contains("remove");
+           
+            if (addClicked)
+                addInputelement(evt);
+
+            if (removeClicked)
+                removeInputelement(evt);
+        }
+
+        const formSubmit = function (evt) {
+            evt.preventDefault();
+            console.log(evt)
+        }
+
+        //events
+        phoneContainer.addEventListener("click", togglePhoneElement);
+        phoneContainer.addEventListener("input", checkPhoneIsExists);
+        addForm.addEventListener("submit", formSubmit);
+    </script>
 }
 
