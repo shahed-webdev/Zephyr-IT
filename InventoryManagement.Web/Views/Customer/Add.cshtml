@@ -9,7 +9,7 @@
 @section Styles{
     <style>
         .phone-container { display: flex; margin: 1.5rem 0; align-items: center; }
-        .phone-container .add-element { margin-left: -23px; padding-bottom:10px; }
+        .phone-container .add-element { margin-left: -23px; padding-bottom: 10px; }
         .phone-container .btn-floating.btn-sm { width: 22px; height: 22px; }
         .phone-container .btn-floating.btn-sm i { font-size: .70rem; line-height: 2px; pointer-events: none }
     </style>
@@ -21,7 +21,7 @@
             <div class="card card-body p-4">
                 <h4 class="page-header mt-3 text-center">Add New Customer</h4>
 
-                <form id="add-customer">
+                <form id="add-customer" asp-action="Add">
                     <div class="md-form mb-5">
                         <input asp-for="CustomerName" class="form-control" />
                         <label asp-for="CustomerName">Name</label>
@@ -29,7 +29,7 @@
                     <div id="phone-wrapper">
                         <div class="phone-container">
                             <div class="md-form m-0 flex-grow-1">
-                                <input id="phone-0" name="PhoneNumbers[0].Phone" type="number" required class="form-control valid-check" minlength="11"/>
+                                <input id="phone-0" name="PhoneNumbers[0].Phone" type="number" required class="form-control valid-check" minlength="11" />
                                 <label for="phone-0">Phone Number (Primary)</label>
                                 <input type="hidden" value="true" name="PhoneNumbers[0].IsPrimary">
                             </div>
@@ -55,22 +55,36 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="col-lg-9">
+                        <div class="col-lg-7">
                             <div class="md-form mb-5">
                                 <input id="Description" type="text" class="form-control" />
                                 <label for="Description">Description</label>
                             </div>
                         </div>
-                        <div class="col-lg-3">
-                            <div class="md-form mb-5">
-                                <input id="DueLimit" type="text" class="form-control" />
-                                <label for="DueLimit">Due Limit</label>
+                        <div class="col-lg-5">
+                            <div class="md-form form-sm mb-0">
+                                <input type="hidden" id="Photo" name="Photo" />
+                                <div class="file-field">
+                                    <div class="btn btn-outline-warning btn-rounded btn-sm float-left">
+                                        <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose Photo</span>
+                                        <input type="file" id="upload" value="Choose a Photo" onchange="clearImage(this)">
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path validate" type="text" placeholder="Upload your file" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="w-50 m-auto text-center">
+                                <div id="upload-demo" style="display:none;"></div>
+                                <img id="prevImage" alt="" />
+                                <a id="doneButton" class="btn-floating btn-lg btn-black" style="display:none;"><i class="fas fa-crop-alt"></i></a>
                             </div>
                         </div>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center">
-                        <button id="btnSubmit" disabled class="btn peach-gradient btn-rounded my-4 waves-effect z-depth-0" type="submit">Add Customer</button>
+                        <button id="btnSubmit" disabled class="btn peach-gradient btn-rounded my-4 waves-effect" type="submit">Add Customer</button>
                         <a asp-action="List">Back to List</a>
                     </div>
                 </form>
@@ -81,94 +95,70 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/page-js/add-customer.js"></script>
 
     <script>
-        //selectors
-        const phoneContainer = document.getElementById("phone-wrapper");
-        const addForm = document.getElementById("add-customer");
-        const btnSubmit = document.getElementById("btnSubmit");
+        let opt = {
+            viewport: { width: 150, height: 150 },
+            boundary: { width: 180, height: 180 },
+            showZoomer: false,
+            enableResize: true,
+            enableOrientation: true
+        };
 
-        //functions
-        const createElementName = function (modelName, index) {
-            return `${modelName}[${index}].Phone`;
-        }
+        let $cropContainer = $('#upload-demo');
+        let $uploadCrop = $cropContainer.croppie(opt);
+        const $photo = $('#Photo');
+        const $preview = $('#prevImage');
+        const $btnDone = $('#doneButton');
 
-        let elementIndex = 1;
+        $('input[type="file"]').change(function (e) {
+            const $this = $(e.target);
+            const $fileField = $this.closest('.file-field');
+            const $pathInput = $fileField.find('input.file-path');
+            const fileNames = [];
 
-        const addInputelement = function () {
-            const element = `<div class="phone-container">
-                <div class="md-form m-0 flex-grow-1">
-                    <input id="phone-${elementIndex}" name="PhoneNumbers[${elementIndex}].Phone" required type="number" class="form-control valid-check" />
-                    <label for="phone-${elementIndex}">Phone Number</label>
-                </div>
-                <div class="add-element">
-                    <a class="btn-floating btn-sm bg-danger remove m-0"><i class="fas fa-minus"></i></a>
-                </div>
-            </div>`;
+            fileNames.push(e.target.files[0].name);
 
-            elementIndex++;
-            phoneContainer.insertAdjacentHTML('beforeend', element);
-        }
+            $pathInput.val(fileNames.join(', '));
+            $pathInput.trigger('change');
+        });
 
-        const removeInputelement = function (evt) {
-            evt.target.parentElement.parentElement.remove();
-        }
+        $('#upload').on('change', function () {
+            readFile(this);
+        });
 
-        const isError = [];
-        const checkPhoneIsExists = function (evt) {
-            const phoneInput = evt.target.classList.contains("valid-check");
-            if (!phoneInput) return;
+        $btnDone.on('click', function () {
+            $uploadCrop.croppie('result', { type: 'base64' }).then(function (res) {
+                $photo.val(res.split(',')[1]);
+                $cropContainer.hide();
+                $btnDone.hide();
+                $preview.attr('src', res).addClass('img-thumbnail rounded-circle');;
+            });
+        });
 
-            const mobile = evt.target.value;
-            const errorElement = evt.target.nextElementSibling;
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
 
-            if (errorElement.nodeName === "SPAN")
-                errorElement.remove();
+                reader.onload = function (e) {
+                    $uploadCrop.croppie('bind', { url: e.target.result });
 
-            if (mobile.length > 10) {
-                const url = '/Customer/CheckMobileIsAvailable';
-                const parameter = { params: { mobile } };
-                const request = axios.get(url, parameter);
-                const element = `<span class="field-validation-error">This Mobile Number Already Exists!</span>`;
-                const self = evt.target;
-                const errorIndex = isError.indexOf(self.id);
-
-                request.then(response => {
-                    if (response.data) {
-                        self.insertAdjacentHTML('afterend', element);
-
-                        if (errorIndex === -1)
-                            isError.push(self.id);
-                    } else {
-                        if (errorIndex !== -1)
-                            isError.splice(errorIndex, 1);
-                    }
-
-                    btnSubmit.disabled = isError.length === 0 ? false : true;
-                });
+                    $photo.val('');
+                    $cropContainer.show();
+                    $btnDone.show();
+                    $preview.attr('src', '').removeClass('img-thumbnail rounded-circle');
+                }
+                reader.readAsDataURL(input.files[0]);
             }
         }
 
-        const togglePhoneElement = function (evt) {
-            const addClicked = evt.target.classList.contains("add");
-            const removeClicked = evt.target.classList.contains("remove");
-           
-            if (addClicked)
-                addInputelement(evt);
-
-            if (removeClicked)
-                removeInputelement(evt);
+        function clearImage(ctrl) {
+            if ($(ctrl).val() === "") {
+                $cropContainer.croppie('destroy');
+                $uploadCrop = $cropContainer.croppie(opt);
+            }
         }
-
-        const formSubmit = function (evt) {
-            evt.preventDefault();
-            console.log(evt)
-        }
-
-        //events
-        phoneContainer.addEventListener("click", togglePhoneElement);
-        phoneContainer.addEventListener("input", checkPhoneIsExists);
-        addForm.addEventListener("submit", formSubmit);
     </script>
 }
 

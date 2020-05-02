@@ -32,7 +32,6 @@ namespace InventoryManagement.Web.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Profile(AdminInfo user)
         {
             if (!ModelState.IsValid) return View(user);
@@ -64,7 +63,7 @@ namespace InventoryManagement.Web.Controllers
         public string GetUserLoggedInInfo()
         {
             var admin = _db.Registrations.GetAdminBasic(User.Identity.Name);
-            return JsonConvert.SerializeObject(admin);
+            return JsonConvert.SerializeObject(admin); //Serialize for image binary data
         }
     }
 }

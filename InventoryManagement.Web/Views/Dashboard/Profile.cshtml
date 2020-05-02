@@ -14,65 +14,54 @@
 <section class="section team-section p-4">
     <div class="row">
         <div class="col-md-8 mb-4">
-            @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
-                <div class="card card-cascade cascading-admin-card user-card">
-                    <div class="admin-up d-flex justify-content-start mb-3">
-                        <i class="fas fa-user-circle info-color py-4 mr-3 z-depth-2"></i>
-                        <div class="data">
-                            <h5 class="font-weight-bold dark-grey-text">
-                                Edit Profile - <span class="text-muted"> Complete your profile</span>
-                            </h5>
-                        </div>
+            <div class="card card-cascade cascading-admin-card user-card">
+                <div class="admin-up d-flex justify-content-start mb-3">
+                    <i class="fas fa-user-circle deep-orange lighten-2 py-4 mr-3 z-depth-2"></i>
+                    <div class="data pt-2">
+                        <h5 class="font-weight-bold dark-grey-text">
+                            Edit Profile - <span class="text-muted"> Complete your profile</span>
+                        </h5>
                     </div>
+                </div><form asp-action="Profile">
                     <div class="card-body card-body-cascade">
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="md-form form-sm mb-0">
-                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                    <input required asp-for="Name" class = "form-control form-control-sm"/>
                                     <label for="Name">Name</label>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="md-form form-sm mb-0">
-                                    @Html.EditorFor(model => model.FatherName, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-                                    @Html.ValidationMessageFor(model => model.FatherName, "", new { @class = "text-danger" })
+                                    <input asp-for="FatherName" class="form-control form-control-sm" />
                                     <label for="FatherName">Father's Name</label>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-12">
                                 <div class="md-form form-sm mb-0">
-                                    @Html.EditorFor(model => model.Designation, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-                                    @Html.ValidationMessageFor(model => model.Designation, "", new { @class = "text-danger" })
+                                    <input asp-for="Designation" class="form-control form-control-sm" />
                                     <label for="Designation">Designation</label>
                                 </div>
                             </div>
-
                         </div>
 
                         <div class="row">
                             <div class="col-lg-3">
                                 <div class="md-form form-sm mb-0">
-                                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-                                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                    <input asp-for="Phone" class="form-control form-control-sm" />
                                     <label for="Phone">Phone</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="md-form form-sm mb-0">
-                                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-                                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                                    <input asp-for="Address" class="form-control form-control-sm" />
                                     <label for="Address">Address</label>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="md-form form-sm mb-0">
+                                    <input asp-for="DateofBirth" class="form-control form-control-sm" />
                                     <label for="DateofBirth">Date of Birth</label>
-                                    @Html.EditorFor(model => model.DateofBirth, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-                                    @Html.ValidationMessageFor(model => model.DateofBirth, "", new { @class = "text-danger" })
-
                                 </div>
                             </div>
                         </div>
@@ -80,35 +69,37 @@
                         <div class="row">
                             <div class="col-lg-4 col-md-12">
                                 <div class="md-form form-sm mb-0">
-                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                    <input asp-for="Email" class="form-control form-control-sm" />
                                     <label for="Email" class="">Email</label>
                                 </div>
                             </div>
 
                             <div class="col-lg-8 col-md-12">
                                 <div class="md-form form-sm mb-0">
-                                    @Html.Hidden("Image")
+                                    <input type="hidden" id="Image" name="Image" />
                                     <div class="file-field">
-                                        <div class="btn aqua-gradient btn-rounded btn-sm float-left">
+                                        <div class="btn btn-outline-warning btn-rounded btn-sm float-left">
                                             <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose file</span>
                                             <input type="file" id="upload" value="Choose a Image" onchange="clearImage(this)">
                                         </div>
                                         <div class="file-path-wrapper">
-                                            <input class="file-path validate" type="text" placeholder="Upload your file"/>
+                                            <input class="file-path validate" type="text" placeholder="Upload your file" />
                                         </div>
-                                    </div>
+                                    </div>                                   
+                                </div>
+
+                                <div class="w-50 m-auto text-center">
                                     <div id="upload-demo" style="display:none;"></div>
                                     <img id="prevImage" alt="" />
-                                    <a id="doneButton" class="btn-floating btn-lg btn-default" style="display:none;"><i class="fas fa-crop-alt"></i></a>
+                                    <a id="doneButton" class="btn-floating btn-lg btn-black" style="display:none;"><i class="fas fa-crop-alt"></i></a>
                                 </div>
                             </div>
                         </div>
-                        <input type="submit" value="Update" class="btn blue-gradient" />
+                        <input type="submit" value="Update" class="btn peach-gradient btn-rounded waves-effect" />
                     </div>
-                </div>
-            }
-        </div>
+                </form>
+            </div>
+        </div> 
 
         <div class="col-md-4 mb-4">
             <div class="card profile-card">

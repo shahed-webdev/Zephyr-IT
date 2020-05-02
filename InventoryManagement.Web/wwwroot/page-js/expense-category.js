@@ -72,15 +72,29 @@ const onEdit = function (evt) {
     });
 }
 
-const onDelete = function (evt) {
-    if (confirm("Are you sure you want to delete?")) {
-        const element = evt.target;
-        const url = element.getAttribute("href");
+function onUpdateSuccess(data) {
+    if (data !== "success") return;
+    updateModal.modal('hide');
+    getData();
+}
 
-        axios.get(url).then(res => {
-            element.parentElement.parentElement.remove();
-        }).catch(err => console.log(err));
-    }
+const onDelete = function (evt) {
+    const target = evt.target;
+    const element = target.parentElement.parentElement;
+    const url = target.getAttribute("href");
+    if (!url) return;
+
+    const isConfirm = confirm("Are you sure you want to delete?");
+    if (!isConfirm) return;
+
+    axios.get(url).then(res => {
+        if (res.data === -1) {
+            target.removeAttribute("href");
+            element.insertAdjacentHTML('afterend', `<em class="used-error">"${element.innerText}" already used!</em>`);
+            return;
+        }
+        element.remove();
+    }).catch(err => console.log(err));
 }
 
 const onEditDeleteClicked = function (evt) {
@@ -97,11 +111,6 @@ const onEditDeleteClicked = function (evt) {
         onDelete(evt);
 }
 
-function onUpdateSuccess(data) {
-    if (data !== "success") return;
-    updateModal.modal('hide');
-}
-
 const onCreateClicked = function (evt) {
     const url = evt.target.getAttribute("data-url");
     axios.get(url).then(res => {
@@ -112,6 +121,7 @@ const onCreateClicked = function (evt) {
 function onCreateSuccess(data) {
     if (data !== "success") return;
     insertModal.modal('hide');
+    getData();
 }
 
 

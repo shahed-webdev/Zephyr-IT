@@ -14,7 +14,7 @@
         </div>
 
         <div class="modal-body">
-            <form method="post" data-ajax-update="#InsertModal" data-ajax="true" data-ajax-url="/Expenses/Create" data-ajax-method="post" data-ajax-success="onCreateSuccess" data-ajax-failure="onError">
+            <form data-ajax-update="#InsertModal" data-ajax="true" data-ajax-url="/Expenses/Create" data-ajax-method="post" data-ajax-success="onCreateSuccess" data-ajax-failure="onError">
                 <div class="form-group">
                     <label>Category</label>
                     @Html.DropDownList("ExpenseCategoryId", null, htmlAttributes: new { @class = "form-control" })

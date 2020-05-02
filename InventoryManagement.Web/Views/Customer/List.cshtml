@@ -10,7 +10,7 @@
         
         <div class="row">
             <div class="col justify-content-center align-self-center">
-                <h4 class="page-header mb-3">Customers</h4>
+                <h4 class="page-header mb-0">Customers</h4>
             </div>
             <div class="col text-right">
                 <a id="CreateClick" href="/Customer/Add" class="btn-floating peach-gradient" title="Add New">
@@ -23,7 +23,7 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Mobile</th>
+                    <th>Mobile (Primary)</th>
                     <th>Org. Name</th>
                     <th>Address</th>
                     <th>Signup Date</th>
@@ -36,7 +36,7 @@
                     <td>@item.PhonePrimary</td>
                     <td>@item.OrganizationName</td>
                     <td>@item.CustomerAddress</td>
-                    <td>@item.SignUpDate</td>
+                    <td>@item.SignUpDate.ToString("dd MMM yyyy")</td>
                 </tr>
                 }
             </tbody>

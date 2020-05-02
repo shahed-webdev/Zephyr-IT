@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using InventoryManagement.Repository;
@@ -17,9 +15,9 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET:// MobileIsAvailable
-        public async Task<bool> CheckMobileIsAvailable(string mobile)
+        public async Task<bool> CheckMobileIsAvailable(string mobile, int id = 0)
         {
-            return await _db.Customers.IsPhoneNumberExistAsync(mobile);
+            return await _db.Customers.IsPhoneNumberExistAsync(mobile, id);
         }
 
         //GET:// List of customer
@@ -38,12 +36,19 @@ namespace InventoryManagement.Web.Controllers
 
         //POST:// Add customer
         [HttpPost]
-        public IActionResult Add(CustomerAddUpdateViewModel model)
+        public async Task<IActionResult> Add(CustomerAddUpdateViewModel model)
         {
-            if(!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid) return View(model);
+            var phone = model.PhoneNumbers.FirstOrDefault().Phone;
+            var checkPhone = await _db.Customers.IsPhoneNumberExistAsync(phone);
 
-            _db.Customers.AddCustom(model);
-            _db.SaveChanges();
+            if (!checkPhone)
+            {
+                _db.Customers.AddCustom(model);
+                _db.SaveChanges();
+
+                RedirectToAction("List");
+            }
 
             return View();
         }
@@ -63,12 +68,18 @@ namespace InventoryManagement.Web.Controllers
 
         //POST:// Update customer
         [HttpPost]
-        public IActionResult Update(CustomerAddUpdateViewModel model)
+        public async Task<IActionResult> Update(CustomerAddUpdateViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
+            var phone = model.PhoneNumbers.FirstOrDefault().Phone;
+            var checkPhone = await _db.Customers.IsPhoneNumberExistAsync(phone);
 
-            _db.Customers.CustomUpdate(model);
-            _db.SaveChanges();
+            if (!checkPhone)
+            {
+                _db.Customers.CustomUpdate(model);
+                _db.SaveChanges();
+                RedirectToAction("List");
+            }
 
             return RedirectToAction("List");
         }
