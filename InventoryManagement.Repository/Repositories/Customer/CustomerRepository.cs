@@ -36,7 +36,7 @@ namespace InventoryManagement.Repository
             if (id == 0)
                 return await Context.CustomerPhone.AnyAsync(c => c.Phone == number);
 
-            return await Context.CustomerPhone.AnyAsync(c => c.Phone == number | c.CustomerId != id);
+            return await Context.CustomerPhone.AnyAsync(c => c.Phone == number && c.CustomerId != id);
         }
 
         public CustomerAddUpdateViewModel FindCustom(int id)
@@ -62,21 +62,31 @@ namespace InventoryManagement.Repository
 
         public void CustomUpdate(CustomerAddUpdateViewModel model)
         {
-            var customer = Find(model.CustomerId);
+            var customer =Find(model.CustomerId);
+            if (model.Photo != null && model.Photo.Length > 0)
+                customer.Photo = model.Photo;
 
-            customer.Photo = model.Photo;
             customer.CustomerAddress = model.CustomerAddress;
             customer.CustomerName = model.CustomerName;
             customer.OrganizationName = model.OrganizationName;
-            customer.CustomerPhone = model.PhoneNumbers.Select(p => new CustomerPhone
-            {
-                CustomerPhoneId = p.CustomerPhoneId,
-                Phone = p.Phone,
-                IsPrimary = p.IsPrimary
-
-            }).ToList();
-
             Update(customer);
+
+            foreach (var item in model.PhoneNumbers.Where(p => p.CustomerPhoneId != 0))
+            {
+                var phone = Context.CustomerPhone.Find(item.CustomerPhoneId);
+                phone.Phone = item.Phone;
+                phone.IsPrimary = item.IsPrimary ?? false;
+                Context.CustomerPhone.Update(phone);
+            }
+
+            var newPhones = model.PhoneNumbers.Where(p => p.CustomerPhoneId == 0).Select(p => new CustomerPhone
+            {
+                CustomerId = model.CustomerId,
+                Phone = p.Phone,
+                IsPrimary = p.IsPrimary ?? false
+            });
+
+            Context.CustomerPhone.AddRange(newPhones);
         }
 
 

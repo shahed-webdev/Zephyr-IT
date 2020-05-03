@@ -1,0 +1,37 @@
+﻿@using InventoryManagement.Repository
+@model IEnumerable<CustomerPhoneViewModel>
+
+
+@{
+    var index = 0;
+    foreach (var item in Model)
+    {
+        <div class="phone-container">
+            <div class="md-form m-0 flex-grow-1">
+                <input id="phone-@index" value="@item.Phone" name="PhoneNumbers[@index].Phone" type="number" required class="form-control valid-check" minlength="11" />
+                <label for="phone-@index">Phone Number @(item.IsPrimary == true ? "(Primary)" : "")</label>
+                <input type="hidden" value="@item.CustomerPhoneId" name="PhoneNumbers[@index].CustomerPhoneId">
+
+                @if (item.IsPrimary == true)
+                {
+                    <input type="hidden" value="true" name="PhoneNumbers[@index].IsPrimary">
+                }
+            </div>
+
+            <div class="add-element">
+                @if (item.IsPrimary == true)
+                {
+                    <a class="btn-floating btn-sm bg-success add m-0"><i class="fas fa-plus"></i></a>
+                }
+                else
+                {
+                    <a class="btn-floating btn-sm bg-danger remove m-0"><i class="fas fa-minus"></i></a>
+                }
+            </div>
+        </div>
+
+        index++;
+    }
+
+    <input type="hidden" id="last-item-index" value="@index" />
+}    

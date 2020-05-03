@@ -1,13 +1,9 @@
 ﻿//selectors
 const phoneContainer = document.getElementById("phone-wrapper");
 const btnSubmit = document.getElementById("btnSubmit");
+const hiddenLastIndex = +document.getElementById("last-item-index").value;
 
 //functions
-//const createElementName = function (modelName, index) {
-//    return `${modelName}[${index}].Phone`;
-//}
-
-let elementIndex = 1;
 const isError = [];
 
 const btnEnabledDisable = function () {
@@ -19,6 +15,7 @@ const checkPhoneIsExists = function (evt) {
     if (!phoneInput) return;
 
     const mobile = evt.target.value;
+    const Id = document.getElementById("customerId").value;
     const errorElement = evt.target.nextElementSibling;
 
     if (errorElement.nodeName === "SPAN")
@@ -26,7 +23,7 @@ const checkPhoneIsExists = function (evt) {
 
     if (mobile.length > 10) {
         const url = '/Customer/CheckMobileIsAvailable';
-        const parameter = { params: { mobile } };
+        const parameter = { params: { mobile, Id } };
         const request = axios.get(url, parameter);
         const element = `<span class="field-validation-error">This Mobile Number Already Exists!</span>`;
         const self = evt.target;
@@ -46,11 +43,13 @@ const checkPhoneIsExists = function (evt) {
     }
 }
 
+let elementIndex = hiddenLastIndex;
 const addInputelement = function () {
     const element = `<div class="phone-container">
                 <div class="md-form m-0 flex-grow-1">
                     <input id="phone-${elementIndex}" name="PhoneNumbers[${elementIndex}].Phone" required type="number" class="form-control valid-check" />
                     <label for="phone-${elementIndex}">Phone Number</label>
+                    <input type="hidden" value="0" name="PhoneNumbers[${elementIndex}].CustomerPhoneId">
                 </div>
                 <div class="add-element">
                     <a class="btn-floating btn-sm bg-danger remove m-0"><i class="fas fa-minus"></i></a>

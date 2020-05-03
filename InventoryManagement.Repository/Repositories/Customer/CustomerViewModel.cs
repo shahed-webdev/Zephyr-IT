@@ -23,7 +23,7 @@ namespace InventoryManagement.Repository
 
     public class CustomerPhoneViewModel
     {
-        public int CustomerPhoneId { get; set; }
+        public int? CustomerPhoneId { get; set; }
         [Required]
         public string Phone { get; set; }
         public bool? IsPrimary { get; set; }

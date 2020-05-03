@@ -15,9 +15,9 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET:// MobileIsAvailable
-        public async Task<bool> CheckMobileIsAvailable(string mobile, int id = 0)
+        public async Task<bool> CheckMobileIsAvailable(string mobile, int Id = 0)
         {
-            return await _db.Customers.IsPhoneNumberExistAsync(mobile, id);
+            return await _db.Customers.IsPhoneNumberExistAsync(mobile, Id);
         }
 
         //GET:// List of customer
@@ -42,7 +42,7 @@ namespace InventoryManagement.Web.Controllers
             var phone = model.PhoneNumbers.FirstOrDefault().Phone;
             var checkPhone = await _db.Customers.IsPhoneNumberExistAsync(phone);
 
-            if (!checkPhone)
+            if (checkPhone == false)
             {
                 _db.Customers.AddCustom(model);
                 _db.SaveChanges();
@@ -72,9 +72,10 @@ namespace InventoryManagement.Web.Controllers
         {
             if (!ModelState.IsValid) return View(model);
             var phone = model.PhoneNumbers.FirstOrDefault().Phone;
-            var checkPhone = await _db.Customers.IsPhoneNumberExistAsync(phone);
+            var checkPhone = await _db.Customers.IsPhoneNumberExistAsync(phone,model.CustomerId);
 
-            if (!checkPhone)
+
+            if (checkPhone == false)
             {
                 _db.Customers.CustomUpdate(model);
                 _db.SaveChanges();

@@ -27,6 +27,7 @@
                     <th>Org. Name</th>
                     <th>Address</th>
                     <th>Signup Date</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,6 +38,7 @@
                     <td>@item.OrganizationName</td>
                     <td>@item.CustomerAddress</td>
                     <td>@item.SignUpDate.ToString("dd MMM yyyy")</td>
+                    <td><a class="fas fa-edit" href="/Customer/Update/@item.CustomerId"></a></td>
                 </tr>
                 }
             </tbody>
