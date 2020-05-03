@@ -17,6 +17,7 @@ namespace InventoryManagement.Data
         public int CustomerId { get; set; }
         public string OrganizationName { get; set; }
         public string CustomerName { get; set; }
+        public string Description { get; set; }
         public string CustomerAddress { get; set; }
         public double TotalAmount { get; set; }
         public double TotalDiscount { get; set; }
