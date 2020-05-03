@@ -34,9 +34,9 @@ namespace InventoryManagement.Repository
         public async Task<bool> IsPhoneNumberExistAsync(string number, int id = 0)
         {
             if (id == 0)
-                return await Context.CustomerPhone.AnyAsync(c => c.Phone == number);
+                return await Context.CustomerPhone.AnyAsync(c => c.Phone == number).ConfigureAwait(false);
 
-            return await Context.CustomerPhone.AnyAsync(c => c.Phone == number && c.CustomerId != id);
+            return await Context.CustomerPhone.AnyAsync(c => c.Phone == number && c.CustomerId != id).ConfigureAwait(false);
         }
 
         public CustomerAddUpdateViewModel FindCustom(int id)
