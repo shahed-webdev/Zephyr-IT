@@ -1,6 +1,7 @@
 ﻿//selectors
 const phoneContainer = document.getElementById("phone-wrapper");
 const btnSubmit = document.getElementById("btnSubmit");
+const customerForm = document.getElementById("customer-form");
 const hiddenLastIndex = +document.getElementById("last-item-index").value;
 
 //functions
@@ -20,6 +21,10 @@ const checkPhoneIsExists = function (evt) {
 
     if (errorElement.nodeName === "SPAN")
         errorElement.remove();
+
+    //check Duplicate Phone number
+    const isDuplicate = checkDuplicatePhone(evt);
+    if (isDuplicate) return;
 
     if (mobile.length > 10) {
         const url = '/Customer/CheckMobileIsAvailable';
@@ -42,6 +47,40 @@ const checkPhoneIsExists = function (evt) {
         });
     }
 }
+
+const checkDuplicatePhone = function (evt) {
+    let valid = false;
+    const self = evt.target;
+    const others = document.querySelectorAll(`.valid-check`);
+    if (others.length === 1) return;
+
+    if (self.value.length > 10) {
+        let element = '<span class="field-validation-error">Duplicate phone number not allow!</span>';
+        const id = `d-${self.id}`;
+        const errorIndex = isError.indexOf(id);
+
+        others.forEach(input => {
+            if (self.id === input.id) return;
+
+            if (self.value === input.value) {
+                self.insertAdjacentHTML('afterend', element);
+
+                if (errorIndex === -1)
+                    isError.push(id);
+
+                valid = true;
+                return;
+            } else {
+                if (errorIndex !== -1) isError.splice(errorIndex, 1);
+            }
+        });
+    }
+
+    btnEnabledDisable();
+
+    return valid;
+}
+
 
 let elementIndex = hiddenLastIndex;
 const addInputelement = function () {
@@ -81,7 +120,17 @@ const togglePhoneElement = function (evt) {
         removeInputelement(evt);
 }
 
+const onFormSubmit = function () {
+    btnSubmit.disabled = true;
+    btnSubmit.innerText = "Please wait...";
+
+    setTimeout(() => {
+        btnSubmit.disabled = false;
+        btnSubmit.innerText = "Update Customer";
+    }, 3000);
+}
 
 //events
 phoneContainer.addEventListener("click", togglePhoneElement);
 phoneContainer.addEventListener("input", checkPhoneIsExists);
+customerForm.addEventListener('submit', onFormSubmit);

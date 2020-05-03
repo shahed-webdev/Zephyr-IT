@@ -29,7 +29,7 @@
                 <img src="@imgSrc" class="rounded-circle z-depth-1 img-thumbnail" style="height:100px; width:100px" alt="Photo" />
             </div>
 
-            <form asp-action="Update">
+            <form id="customer-form" asp-action="Update">
                 <input id="customerId" type="hidden" name="CustomerId" value="@Model.CustomerId">
 
                 <div class="md-form mb-5">
@@ -85,7 +85,7 @@
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center">
-                    <button id="btnSubmit" disabled class="btn peach-gradient btn-rounded my-4 waves-effect" type="submit">Update Customer</button>
+                    <button id="btnSubmit" class="btn peach-gradient btn-rounded my-4 waves-effect" type="submit">Update Customer</button>
                     <a asp-action="List">Back to List</a>
                 </div>
             </form>
@@ -96,7 +96,7 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/page-js/update-customer.js?v=1"></script>
+    <script src="~/page-js/update-customer.js?v=1.1"></script>
 
     <script>
         let opt = {

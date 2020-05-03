@@ -60,7 +60,7 @@ namespace InventoryManagement.Repository
             });
 
             var eCategory = Context.ExpenseCategory.Find(model.ExpenseCategoryId);
-            eCategory.TotalExpense = eCategory.TotalExpense + model.ExpenseAmount;
+            eCategory.TotalExpense += model.ExpenseAmount;
             Context.ExpenseCategory.Update(eCategory);
         }
 
