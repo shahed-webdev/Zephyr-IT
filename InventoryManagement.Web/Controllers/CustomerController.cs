@@ -17,7 +17,7 @@ namespace InventoryManagement.Web.Controllers
         //GET:// MobileIsAvailable
         public async Task<bool> CheckMobileIsAvailable(string mobile, int Id = 0)
         {
-            return await _db.Customers.IsPhoneNumberExistAsync(mobile, Id);
+            return await _db.Customers.IsPhoneNumberExistAsync(mobile, Id).ConfigureAwait(false);
         }
 
         //GET:// List of customer
@@ -40,17 +40,15 @@ namespace InventoryManagement.Web.Controllers
         {
             if (!ModelState.IsValid) return View(model);
             var phone = model.PhoneNumbers.FirstOrDefault().Phone;
-            var checkPhone = await _db.Customers.IsPhoneNumberExistAsync(phone);
+            var checkPhone = await _db.Customers.IsPhoneNumberExistAsync(phone).ConfigureAwait(false);
 
-            if (checkPhone == false)
-            {
-                _db.Customers.AddCustom(model);
-                await _db.SaveChangesAsync();
+            if (checkPhone) return View(model);
 
-                return RedirectToAction("List");
-            }
+            _db.Customers.AddCustom(model);
+            await _db.SaveChangesAsync().ConfigureAwait(false);
 
-            return View(model);
+            return RedirectToAction("List");
+
         }
 
 
@@ -71,14 +69,14 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> Update(CustomerAddUpdateViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            var phone = model.PhoneNumbers.FirstOrDefault().Phone;
-            var checkPhone = await _db.Customers.IsPhoneNumberExistAsync(phone,model.CustomerId);
+            var phone = model.PhoneNumbers.FirstOrDefault()?.Phone;
+            var checkPhone = await _db.Customers.IsPhoneNumberExistAsync(phone,model.CustomerId).ConfigureAwait(false);
 
 
             if (checkPhone == false)
             {
                 _db.Customers.CustomUpdate(model);
-                await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("List");
             }
 
