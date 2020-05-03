@@ -16,6 +16,7 @@ namespace InventoryManagement.Repository
         [Required]
         public string CustomerName { get; set; }
         public string CustomerAddress { get; set; }
+        public string Description { get; set; }
         public byte[] Photo { get; set; }
         [Required]
         public ICollection<CustomerPhoneViewModel> PhoneNumbers { get; set; }
