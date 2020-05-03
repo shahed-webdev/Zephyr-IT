@@ -13,7 +13,7 @@ namespace InventoryManagement.Repository
         IExpenseCategoryRepository ExpenseCategories { get; }
         IExpenseRepository Expenses { get; }
         IInstitutionRepository Institutions { get; }
-
+        IVendorRepository Vendors { get; }
         int SaveChanges();
         Task<int> SaveChangesAsync();
     }

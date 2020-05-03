@@ -3,29 +3,28 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InventoryManagement.Repository
 {
-    public class ExpenseVM
+    public class ExpenseViewModel
     {
         public int ExpenseId { get; set; }
-        
+
         [Required]
-        public int RegistrationID { get; set; }
-        
+        public int RegistrationId { get; set; }
+
         [Required]
         public int ExpenseCategoryId { get; set; }
-        
+
         [Display(Name = "Category")]
         public string CategoryName { get; set; }
-        
+
         [Required]
         [Display(Name = "Amount")]
         public double ExpenseAmount { get; set; }
-        
+
         [Display(Name = "Expense For")]
-        
         public string ExpenseFor { get; set; }
         [Display(Name = "Payment Method")]
         public string ExpensePaymentMethod { get; set; }
-        
+
         [Required]
         [Display(Name = "Date")]
         [DisplayFormat(DataFormatString = "d mmm yyyy")]

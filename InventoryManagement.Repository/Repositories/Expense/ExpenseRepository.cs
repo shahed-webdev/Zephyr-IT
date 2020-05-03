@@ -13,12 +13,12 @@ namespace InventoryManagement.Repository
         {
         }
 
-        public ICollection<ExpenseVM> ToListCustom()
+        public ICollection<ExpenseViewModel> ToListCustom()
         {
-            var Expense = Context.Expense.Include(e => e.ExpenseCategory).Select(e => new ExpenseVM
+            var expense = Context.Expense.Include(e => e.ExpenseCategory).Select(e => new ExpenseViewModel
             {
                 ExpenseId = e.ExpenseId,
-                RegistrationID = e.RegistrationId,
+                RegistrationId = e.RegistrationId,
                 ExpenseCategoryId = e.ExpenseCategoryId,
                 CategoryName = e.ExpenseCategory.CategoryName,
                 ExpenseAmount = e.ExpenseAmount,
@@ -27,31 +27,31 @@ namespace InventoryManagement.Repository
                 ExpenseDate = e.ExpenseDate
             }).ToList();
 
-            return Expense;
+            return expense;
         }
 
-        public async Task<ICollection<ExpenseVM>> ToListCustomAsync()
+        public async Task<ICollection<ExpenseViewModel>> ToListCustomAsync()
         {
-            var Expense = await Context.Expense.Include(e => e.ExpenseCategory).Select(e => new ExpenseVM
+            var expense = await Context.Expense.Include(e => e.ExpenseCategory).Select(e => new ExpenseViewModel
             {
                 ExpenseId = e.ExpenseId,
-                RegistrationID = e.RegistrationId,
+                RegistrationId = e.RegistrationId,
                 ExpenseCategoryId = e.ExpenseCategoryId,
                 CategoryName = e.ExpenseCategory.CategoryName,
                 ExpenseAmount = e.ExpenseAmount,
                 ExpenseFor = e.ExpenseFor,
                 ExpensePaymentMethod = e.ExpensePaymentMethod,
                 ExpenseDate = e.ExpenseDate
-            }).ToListAsync();
+            }).ToListAsync().ConfigureAwait(false);
 
-            return Expense;
+            return expense;
         }
 
-        public void AddCustom(ExpenseVM model)
+        public void AddCustom(ExpenseViewModel model)
         {
             Add(new Expense
             {
-                RegistrationId = model.RegistrationID,
+                RegistrationId = model.RegistrationId,
                 ExpenseCategoryId = model.ExpenseCategoryId,
                 ExpenseAmount = model.ExpenseAmount,
                 ExpenseFor = model.ExpenseFor,
@@ -66,21 +66,19 @@ namespace InventoryManagement.Repository
 
         public void RemoveCustom(int id)
         {
-            var Expense = Find(id);
-            Remove(Expense);
-            var eCategory = Context.ExpenseCategory.Find(Expense.ExpenseCategoryId);
-            eCategory.TotalExpense = eCategory.TotalExpense - Expense.ExpenseAmount;
+            var expense = Find(id);
+            Remove(expense);
+            var eCategory = Context.ExpenseCategory.Find(expense.ExpenseCategoryId);
+            eCategory.TotalExpense = eCategory.TotalExpense - expense.ExpenseAmount;
             Context.ExpenseCategory.Update(eCategory);
         }
 
         public ICollection<int> Years()
         {
-            var years = new List<int>();
-
-            years = Context.Expense
+            var years = Context.Expense
                 .GroupBy(e => new
                 {
-                    Year = e.ExpenseDate.Year
+                    e.ExpenseDate.Year
                 })
                 .Select(g => g.Key.Year)
                 .OrderBy(o => o)
@@ -113,18 +111,18 @@ namespace InventoryManagement.Repository
                 })
                 .ToList();
 
-            return months ?? new List<MonthlyAmount>(); ;
+            return months;
         }
 
-        public ICollection<ExpenseVM> DateToDate(DateTime? sDateTime, DateTime? eDateTime)
+        public ICollection<ExpenseViewModel> DateToDate(DateTime? sDateTime, DateTime? eDateTime)
         {
             var sD = sDateTime ?? new DateTime(1000, 1, 1);
             var eD = eDateTime ?? new DateTime(3000, 1, 1);
 
-            var Expense = Context.Expense.Include(e => e.ExpenseCategory).Where(e => e.ExpenseDate <= eD && e.ExpenseDate >= sD).Select(e => new ExpenseVM
+            var expense = Context.Expense.Include(e => e.ExpenseCategory).Where(e => e.ExpenseDate <= eD && e.ExpenseDate >= sD).Select(e => new ExpenseViewModel
             {
                 ExpenseId = e.ExpenseId,
-                RegistrationID = e.RegistrationId,
+                RegistrationId = e.RegistrationId,
                 ExpenseCategoryId = e.ExpenseCategoryId,
                 CategoryName = e.ExpenseCategory.CategoryName,
                 ExpenseAmount = e.ExpenseAmount,
@@ -133,7 +131,7 @@ namespace InventoryManagement.Repository
                 ExpenseDate = e.ExpenseDate
             }).ToList();
 
-            return Expense;
+            return expense;
         }
         public ICollection<ExpenseCategoryWise> CategoryWistDateToDate(DateTime? sDateTime, DateTime? eDateTime)
         {
@@ -144,7 +142,7 @@ namespace InventoryManagement.Repository
                 .GroupBy(e => new
                 {
                     ExpenseCategoryID = e.ExpenseCategoryId,
-                    CategoryName = e.ExpenseCategory.CategoryName
+                    e.ExpenseCategory.CategoryName
 
                 })
                 .Select(g => new ExpenseCategoryWise

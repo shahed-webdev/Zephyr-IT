@@ -18,6 +18,9 @@ namespace InventoryManagement.Repository
             ExpenseCategories = new ExpenseCategoryRepository(_context);
             Expenses = new ExpenseRepository(_context);
             Institutions = new InstitutionRepository(_context);
+            Vendors = new VendorRepository(_context);
+
+
         }
 
 
@@ -29,6 +32,7 @@ namespace InventoryManagement.Repository
         public IExpenseCategoryRepository ExpenseCategories { get; private set; }
         public IExpenseRepository Expenses { get; }
         public IInstitutionRepository Institutions { get; }
+        public IVendorRepository Vendors { get; }
 
 
         public int SaveChanges()

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using InventoryManagement.Repository;
+﻿using InventoryManagement.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
 {
@@ -40,9 +37,9 @@ namespace InventoryManagement.Web.Controllers
 
         // POST: Expanses/Create
         [HttpPost]
-        public async Task<IActionResult> Create(ExpenseVM model)
+        public async Task<IActionResult> Create(ExpenseViewModel model)
         {
-            model.RegistrationID = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+            model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
             if (!ModelState.IsValid) return View($"_Create", model);
 
             ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label", model.ExpenseCategoryId);
