@@ -46,7 +46,8 @@ namespace InventoryManagement.Repository
                 CustomerId = c.CustomerId,
                 OrganizationName = c.OrganizationName,
                 CustomerName = c.CustomerName,
-                CustomerAddress = c.CustomerAddress,
+                CustomerAddress = c.CustomerAddress, 
+                Description = c.Description,
                 Photo = c.Photo,
                 PhoneNumbers = c.CustomerPhone.Select(p => new CustomerPhoneViewModel
                 {
@@ -69,6 +70,7 @@ namespace InventoryManagement.Repository
             customer.CustomerAddress = model.CustomerAddress;
             customer.CustomerName = model.CustomerName;
             customer.OrganizationName = model.OrganizationName;
+            customer.Description = model.Description;
             Update(customer);
 
             foreach (var item in model.PhoneNumbers.Where(p => p.CustomerPhoneId != 0))
@@ -96,7 +98,8 @@ namespace InventoryManagement.Repository
             {
                 OrganizationName = model.OrganizationName,
                 CustomerName = model.CustomerName,
-                CustomerAddress = model.CustomerAddress,
+                CustomerAddress = model.CustomerAddress, 
+                Description = model.Description,
                 CustomerPhone = model.PhoneNumbers.Select(p => new CustomerPhone
                 {
                     Phone = p.Phone,
