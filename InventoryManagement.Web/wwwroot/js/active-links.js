@@ -76,7 +76,7 @@ let linkData = [{
 {
     "LinkCategoryID": 6,
     "SN": 4,
-    "Category": "Vendor/Party",
+    "Category": "Vendor",
     "IconClass": "fas fa-user-tie",
     "links": [{
         "LinkID": 8,

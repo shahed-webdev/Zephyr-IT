@@ -13,22 +13,17 @@ namespace InventoryManagement.Repository
         [Required]
         public int ExpenseCategoryId { get; set; }
         
-        [Display(Name = "Category")]
         public string CategoryName { get; set; }
         
         [Required]
-        [Display(Name = "Amount")]
         public double ExpenseAmount { get; set; }
         
-        [Display(Name = "Expense For")]
-        
         public string ExpenseFor { get; set; }
-        [Display(Name = "Payment Method")]
+
         public string ExpensePaymentMethod { get; set; }
         
         [Required]
-        [Display(Name = "Date")]
-        [DisplayFormat(DataFormatString = "d mmm yyyy")]
+        [DisplayFormat(DataFormatString = "dd MMM yyyy")]
         public DateTime ExpenseDate { get; set; }
     }
 

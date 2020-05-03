@@ -60,7 +60,7 @@ namespace InventoryManagement.Repository
             });
 
             var eCategory = Context.ExpenseCategory.Find(model.ExpenseCategoryId);
-            eCategory.TotalExpense = eCategory.TotalExpense + model.ExpenseAmount;
+            eCategory.TotalExpense += model.ExpenseAmount;
             Context.ExpenseCategory.Update(eCategory);
         }
 
@@ -69,7 +69,7 @@ namespace InventoryManagement.Repository
             var Expense = Find(id);
             Remove(Expense);
             var eCategory = Context.ExpenseCategory.Find(Expense.ExpenseCategoryId);
-            eCategory.TotalExpense = eCategory.TotalExpense - Expense.ExpenseAmount;
+            eCategory.TotalExpense -= Expense.ExpenseAmount;
             Context.ExpenseCategory.Update(eCategory);
         }
 
