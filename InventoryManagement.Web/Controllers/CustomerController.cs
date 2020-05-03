@@ -45,12 +45,12 @@ namespace InventoryManagement.Web.Controllers
             if (checkPhone == false)
             {
                 _db.Customers.AddCustom(model);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
-                RedirectToAction("List");
+                return RedirectToAction("List");
             }
 
-            return View();
+            return View(model);
         }
 
 
@@ -78,11 +78,11 @@ namespace InventoryManagement.Web.Controllers
             if (checkPhone == false)
             {
                 _db.Customers.CustomUpdate(model);
-                _db.SaveChanges();
-                RedirectToAction("List");
+                await _db.SaveChangesAsync();
+                return RedirectToAction("List");
             }
 
-            return RedirectToAction("List");
+            return View(model);
         }
     }
 }
