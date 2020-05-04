@@ -7,7 +7,6 @@
 }
 
     <div class="card card-body m-md-3">
-        
         <div class="row">
             <div class="col justify-content-center align-self-center">
                 <h4 class="page-header mb-0">Customers</h4>
@@ -19,28 +18,31 @@
             </div>
         </div>
 
-        <table id="data-table" class="table table-sm table-bordered nowrap">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Mobile (Primary)</th>
-                    <th>Org. Name</th>
-                    <th>Address</th>
-                    <th>Signup Date</th>
-                    <th>Edit</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model) {
-                <tr>
-                    <td>@item.CustomerName</td>
-                    <td>@item.PhonePrimary</td>
-                    <td>@item.OrganizationName</td>
-                    <td>@item.CustomerAddress</td>
-                    <td>@item.SignUpDate.ToString("dd MMM yyyy")</td>
-                    <td><a class="fas fa-edit" href="/Customer/Update/@item.CustomerId"></a></td>
-                </tr>
-                }
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="data-table" class="table table-sm table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Mobile&nbsp;(Primary)</th>
+                        <th>Org.&nbsp;Name</th>
+                        <th>Address</th>
+                        <th>Signup&nbsp;Date</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.CustomerName</td>
+                            <td>@item.PhonePrimary</td>
+                            <td>@item.OrganizationName</td>
+                            <td>@item.CustomerAddress</td>
+                            <td>@item.SignUpDate.ToString("dd MMM yyyy")</td>
+                            <td><a class="fas fa-edit" href="/Customer/Update/@item.CustomerId"></a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>

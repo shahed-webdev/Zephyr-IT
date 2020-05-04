@@ -16,19 +16,20 @@
                 </a>
             </div>
         </div>
-
-        <table id="data-table" class="table table-sm table-bordered">
-            <thead>
-                <tr>
-                    <th>Expense Amount</th>
-                    <th>Expense For</th>
-                    <th>Payment Method</th>
-                    <th>Expense Date</th>
-                    <th style="width:30px">Delete</th>
-                </tr>
-            </thead>
-            <tbody id="row-data"></tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="data-table" class="table table-sm table-bordered">
+                <thead>
+                    <tr>
+                        <th>Amount</th>
+                        <th>Expense&nbsp;For</th>
+                        <th>Payment&nbsp;Method</th>
+                        <th>Expense&nbsp;Date</th>
+                        <th style="width:30px">Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="row-data"></tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Insert Modal -->
@@ -66,7 +67,7 @@
             $.each(data, function (i, item) {
                 html += `<tr>
                         <td>${item.ExpenseAmount}</td>
-                        <td>${item.ExpenseFor}</td>
+                        <td>${item.ExpenseFor? item.ExpenseFor: ''}</td>
                         <td>${item.ExpensePaymentMethod}</td>
                         <td>${moment(item.ExpanseDate).format('DD MMM YYYY')}</td>
                         <td><a style="color:#ff0000" class="delete fas fa-trash-alt" href="/Expenses/Delete/${item.ExpenseId}"></a></td>

@@ -53,7 +53,7 @@ namespace InventoryManagement.Web.Controllers
 
             var task = await _db.SaveChangesAsync();
 
-            if (task != 0) return Content("success");
+            if (task != 0) return Json(model);
 
             ModelState.AddModelError("", "Unable to insert record!");
             return PartialView("_Create", model);
@@ -84,10 +84,11 @@ namespace InventoryManagement.Web.Controllers
             _db.ExpenseCategories.Update(model);
 
             var task = await _db.SaveChangesAsync();
-            if (task != 0) return Content("success");
+            if (task != 0) return Json(model);
 
             ModelState.AddModelError("", "Unable to update");
             Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
             return PartialView("_Edit", model);
         }
 

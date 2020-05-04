@@ -7,6 +7,10 @@ const insertModal = $('#InsertModal');
 
 
 //functions
+const isObject = function (value) {
+    return value && typeof value === 'object' && value.constructor === Object;
+}
+
 const createLink = function (type, item) {
     let link = document.createElement("a");
 
@@ -25,6 +29,7 @@ const createLink = function (type, item) {
 
 const createTableRow = function (item) {
     let tr = document.createElement("tr");
+    tr.setAttribute('data-id', item.ExpenseCategoryId);
 
     //column 1
     let td1 = tr.insertCell(0);
@@ -73,9 +78,19 @@ const onEdit = function (evt) {
 }
 
 function onUpdateSuccess(data) {
-    if (data !== "success") return;
+    if (!isObject(data)) return;
     updateModal.modal('hide');
-    getData();
+
+    const updatedId = data.ExpenseCategoryId;
+
+    tableBody.querySelectorAll('tr').forEach(tr => {
+        const id = +tr.getAttribute('data-id');
+
+        if (updatedId === id) {
+            tr.children[0].innerText = data.CategoryName;
+            return;
+        }
+    });
 }
 
 const onDelete = function (evt) {
@@ -119,10 +134,14 @@ const onCreateClicked = function (evt) {
 }
 
 function onCreateSuccess(data) {
-    if (data !== "success") return;
+    if (!isObject(data)) return;
     insertModal.modal('hide');
-    getData();
+
+    //append new row
+    const tr = createTableRow(data);
+    tableBody.appendChild(tr);
 }
+
 
 
 //event listners
