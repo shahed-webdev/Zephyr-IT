@@ -87,90 +87,6 @@ let linkData = [{
         "IconClass": null
     }]
 },
-{
-    "LinkCategoryID": 4,
-    "SN": 5,
-    "Category": "Sell",
-    "IconClass": "fas fa-cart-plus",
-    "links": [{
-        "LinkID": 9,
-        "SN": null,
-        "Controller": "Selling",
-        "Action": "Selling",
-        "Title": "Selling",
-        "IconClass": null
-    },
-    {
-        "LinkID": 10,
-        "SN": null,
-        "Controller": "Selling",
-        "Action": "Record",
-        "Title": "Records",
-        "IconClass": null
-    }]
-},
-{
-    "LinkCategoryID": 5,
-    "SN": 6,
-    "Category": "Reports",
-    "IconClass": "fas fa-file-alt",
-    "links": [{
-        "LinkID": 11,
-        "SN": 1,
-        "Controller": "Report",
-        "Action": "Income",
-        "Title": "Income",
-        "IconClass": null
-    },
-    {
-        "LinkID": 12,
-        "SN": 2,
-        "Controller": "Report",
-        "Action": "Expense",
-        "Title": "Expense",
-        "IconClass": null
-    },
-    {
-        "LinkID": 13,
-        "SN": 3,
-        "Controller": "Report",
-        "Action": "Selling",
-        "Title": "Selling",
-        "IconClass": null
-    },
-    {
-        "LinkID": 14,
-        "SN": 4,
-        "Controller": "Report",
-        "Action": "Vendor",
-        "Title": "Due Summery",
-        "IconClass": null
-    },
-    {
-        "LinkID": 15,
-        "SN": 5,
-        "Controller": "Report",
-        "Action": "PaymentSummery",
-        "Title": "Payment Summery",
-        "IconClass": null
-    },
-    {
-        "LinkID": 16,
-        "SN": 2,
-        "Controller": "Report",
-        "Action": "ProductSummery",
-        "Title": "Product Summery",
-        "IconClass": null
-    },
-    {
-        "LinkID": 17,
-        "SN": 1,
-        "Controller": "Report",
-        "Action": "NetSummery",
-        "Title": "Net Summery",
-        "IconClass": null
-    }]
-    },
     {
         "LinkCategoryID": 2,
         "SN": 7,
@@ -192,7 +108,7 @@ let linkData = [{
             "Title": "Products",
             "IconClass": null
         }]
-        },
+    }
 ]
 
 //selectors
