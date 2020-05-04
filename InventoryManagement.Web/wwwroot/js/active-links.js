@@ -81,8 +81,8 @@ let linkData = [{
     "links": [{
         "LinkID": 8,
         "SN": 1,
-        "Controller": "Vendors",
-        "Action": "Index",
+        "Controller": "Vendor",
+        "Action": "List",
         "Title": "Vendors",
         "IconClass": null
     }]
