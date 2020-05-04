@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using InventoryManagement.Data;
+﻿using InventoryManagement.Data;
 using InventoryManagement.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
 {
@@ -49,29 +48,29 @@ namespace InventoryManagement.Web.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var user = new IdentityUser { UserName = model.Email, Email = model.Email };
-            var result = await _userManager.CreateAsync(user, model.Password);
-            
+            var user = new IdentityUser { UserName = model.UserName, Email = model.Email };
+            var result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(false);
+
             if (result.Succeeded)
             {
                 _logger.LogInformation("User created a new account with password.");
 
-                await _userManager.AddToRoleAsync(user, "sub-admin");
+                await _userManager.AddToRoleAsync(user, "sub-admin").ConfigureAwait(false);
 
-                    var reg = new Registration()
-                    {
-                        Type = "sub-admin",
-                        Name = model.Name,
-                        UserName = model.UserName,
-                        Email = model.Email,
-                        Address = model.Address,
-                        Ps = model.Password,
-                        Phone = model.Phone
-                    };
+                var reg = new Registration()
+                {
+                    Type = "sub-admin",
+                    Name = model.Name,
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    Address = model.Address,
+                    Ps = model.Password,
+                    Phone = model.Phone
+                };
 
-                    _db.Registrations.Add(reg);
-                    await _db.SaveChangesAsync();
-           
+                _db.Registrations.Add(reg);
+                await _db.SaveChangesAsync().ConfigureAwait(false);
+
 
                 return RedirectToAction("List", "SubAdmin");
             }
@@ -104,16 +103,16 @@ namespace InventoryManagement.Web.Controllers
             {
                 var userName = _db.PageLinkAssigns.AssignLink(regId, links);
 
-                _db.SaveChanges();
+                await _db.SaveChangesAsync().ConfigureAwait(false);
 
-                var user = await _userManager.FindByNameAsync(userName);
+                var user = await _userManager.FindByNameAsync(userName).ConfigureAwait(false);
                 var roleList = links.Select(l => l.RoleName).ToList();
 
                 roleList.Add("Sub-Admin");
 
-                var userRoles = await _userManager.GetRolesAsync(user);
-                await _userManager.RemoveFromRolesAsync(user, userRoles.ToArray());
-                await _userManager.AddToRolesAsync(user, roleList.ToArray());
+                var userRoles = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
+                await _userManager.RemoveFromRolesAsync(user, userRoles.ToArray()).ConfigureAwait(false);
+                await _userManager.AddToRolesAsync(user, roleList.ToArray()).ConfigureAwait(false);
                 return true;
             }
             catch

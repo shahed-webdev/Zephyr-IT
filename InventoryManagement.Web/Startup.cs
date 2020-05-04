@@ -24,7 +24,18 @@ namespace InventoryManagement.Web
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>(config =>
+                {
+                    config.Password = new PasswordOptions
+                    {
+                        RequireDigit = false,
+                        RequiredLength = 6,
+                        RequiredUniqueChars = 0,
+                        RequireLowercase = false,
+                        RequireNonAlphanumeric = false,
+                        RequireUppercase = false
+                    };
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -40,9 +51,9 @@ namespace InventoryManagement.Web
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment()) 
+            if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
-          
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
