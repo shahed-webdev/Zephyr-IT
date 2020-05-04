@@ -85,6 +85,7 @@ namespace InventoryManagement.Repository
                 VendorAddress = vendor.VendorAddress,
                 VendorPhone = vendor.VendorPhone,
                 InsertDate = vendor.InsertDate,
+                Description = vendor.Description,
                 Due = vendor.Due
             };
         }
