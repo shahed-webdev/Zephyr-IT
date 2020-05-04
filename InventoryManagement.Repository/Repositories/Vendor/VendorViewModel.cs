@@ -17,6 +17,7 @@ namespace InventoryManagement.Repository
         [Required]
         [Display(Name = "Phone")]
         public string VendorPhone { get; set; }
+        public string Description { get; set; }
         [Display(Name = "Add Date")]
         public DateTime InsertDate { get; set; }
         public double Due { get; set; }

@@ -50,7 +50,8 @@ namespace InventoryManagement.Repository
                 VendorCompanyName = model.VendorCompanyName,
                 VendorName = model.VendorName,
                 VendorAddress = model.VendorAddress,
-                VendorPhone = model.VendorPhone
+                VendorPhone = model.VendorPhone,
+                Description = model.Description
             };
             Add(vendor);
             return vendor;
@@ -63,6 +64,7 @@ namespace InventoryManagement.Repository
             vendor.VendorName = model.VendorName;
             vendor.VendorAddress = model.VendorAddress;
             vendor.VendorPhone = model.VendorPhone;
+            vendor.Description = model.Description;
             Update(vendor);
         }
 

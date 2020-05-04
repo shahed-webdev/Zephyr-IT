@@ -16,6 +16,7 @@ namespace InventoryManagement.Data
         public string VendorName { get; set; }
         public string VendorAddress { get; set; }
         public string VendorPhone { get; set; }
+        public string Description { get; set; }
         public double TotalAmount { get; set; }
         public double TotalDiscount { get; set; }
         public double ReturnAmount { get; set; }

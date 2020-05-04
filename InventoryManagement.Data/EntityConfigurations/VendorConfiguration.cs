@@ -24,6 +24,8 @@ namespace InventoryManagement.Data
 
             entity.Property(e => e.VendorPhone).HasMaxLength(50);
 
+            entity.Property(e => e.Description).HasMaxLength(1000);
+
         }
     }
 }
