@@ -42,10 +42,10 @@ input[type="checkbox"].input-validation-error { border: 0 none; }
 .validation-summary-valid { display: none; }
 
 /*Printing*/
-@page { margin: .5cm; }
+@page { margin: 5px; }
 @media print {
-    body { min-width: 0 !important; background-color: #ffffff }
-    .btn-floating { display: none !important }
+    body { min-width: 0 !important; background-color: #ffffff; padding:0 !important }
+    .btn-floating, footer { display: none !important }
  
     #header { margin-left:0; margin-bottom: 15px}
     .navbar { display: block}

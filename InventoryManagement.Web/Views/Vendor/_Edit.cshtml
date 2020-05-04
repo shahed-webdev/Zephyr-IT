@@ -4,48 +4,59 @@
     Layout = null;
 }
 
-<div class="modal-dialog cascading-modal" role="document">
-    <div class="modal-content">
-        <div class="modal-header peach-gradient white-text">
-            <h4 class="m-0"><i class="fas fa-plus-circle"></i> Update Vendor</h4>
-            <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-        </div>
-
-        <div class="modal-body">
-            <form data-ajax-update="#UpdateModal" data-ajax="true" data-ajax-url="/Vendor/Edit" data-ajax-method="post" data-ajax-success="onUpdateSuccess">
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.HiddenFor(model => model.VendorId)
-
-                <div class="md-form">
-                    <label>Company Name</label>
-                    @Html.EditorFor(model => model.VendorCompanyName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.VendorCompanyName, "", new { @class = "text-danger" })
-                </div>
-                <div class="md-form">
-                    <label>Name</label>
-                    @Html.EditorFor(model => model.VendorName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.VendorName, "", new { @class = "text-danger" })
-                </div>
-                <div class="md-form">
-                    <label>Address</label>
-                    @Html.EditorFor(model => model.VendorAddress, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.VendorAddress, "", new { @class = "text-danger" })
-                </div>
-                <div class="md-form">
-                    <label>Phone</label>
-                    @Html.EditorFor(model => model.VendorPhone, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.VendorPhone, "", new { @class = "text-danger" })
-                </div>
-                <div class="md-form">
-                    <input id="Description" name="Description" class="form-control" type="text" />
-                    <label for="Description">Description</label>
-                </div>
-                <div class="text-center mt-1-half">
-                    <button type="submit" class="btn peach-gradient mb-1 waves-effect waves-light">Save <i class="fas fa-check ml-1"></i></button>
-                </div>
-            </form>
+    <div class="modal-dialog cascading-modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header peach-gradient white-text">
+                <h4 class="m-0"><i class="fas fa-plus-circle"></i> Update Vendor</h4>
+                <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
             </div>
-    </div>
-</div>
+
+            <div class="modal-body">
+                <form data-ajax-update="#UpdateModal" data-ajax="true" data-ajax-url="/Vendor/Edit" data-ajax-method="post" data-ajax-success="onUpdateSuccess">
+                    <input asp-for="VendorId" type="hidden" />
+
+                    <div class="form-row">
+                        <div class="col-7">
+                            <div class="md-form">
+                                <input asp-for="VendorCompanyName" class="form-control" />
+                                <label asp-for="VendorCompanyName" class="active">Company Name</label>
+                                <span asp-validation-for="VendorCompanyName"></span>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="md-form">
+                                <input asp-for="VendorName" class="form-control" />
+                                <label for="VendorName" class="active">Name</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-4">
+                            <div class="md-form">
+                                <input asp-for="VendorPhone" class="form-control" />
+                                <label for="VendorPhone" class="active">Phone</label>
+                                <span asp-validation-for="VendorPhone"></span>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="md-form">
+                                <input asp-for="VendorAddress" class="form-control" />
+                                <label for="VendorAddress" class="active">Address</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="md-form">
+                        <input asp-for="Description" class="form-control" />
+                        <label for="Description" class="active">Description</label>
+                    </div>
+                    <div class="text-center mt-1-half">
+                        <button type="submit" class="btn peach-gradient mb-1 waves-effect waves-light">Save <i class="fas fa-check ml-1"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>    

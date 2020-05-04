@@ -95,16 +95,16 @@ let linkData = [{
         "links": [{
             "LinkID": 4,
             "SN": 1,
-            "Controller": "ProductCategories",
-            "Action": "IndexView",
-            "Title": "Categories",
+            "Controller": "Product",
+            "Action": "Barcode",
+            "Title": "Barcode",
             "IconClass": null
         },
         {
             "LinkID": 6,
             "SN": 1,
-            "Controller": "Products",
-            "Action": "Index",
+            "Controller": "Product",
+            "Action": "List",
             "Title": "Products",
             "IconClass": null
         }]

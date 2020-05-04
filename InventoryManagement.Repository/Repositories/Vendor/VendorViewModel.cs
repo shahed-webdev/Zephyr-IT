@@ -10,17 +10,19 @@ namespace InventoryManagement.Repository
         [Required]
         [Display(Name = "Company Name")]
         public string VendorCompanyName { get; set; }
-        [Display(Name = "Name")]
+        
         public string VendorName { get; set; }
-        [Display(Name = "Address")]
+      
         public string VendorAddress { get; set; }
+        
         [Required]
-        [Display(Name = "Phone")]
         public string VendorPhone { get; set; }
+
         public string Description { get; set; }
+        public double Due { get; set; }
+       
         [Display(Name = "Add Date")]
         public DateTime InsertDate { get; set; }
-        public double Due { get; set; }
     }
 
     public class VendorPaidDue

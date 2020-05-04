@@ -53,26 +53,30 @@ namespace InventoryManagement.Repository
                 VendorPhone = model.VendorPhone,
                 Description = model.Description
             };
+
             Add(vendor);
+
             return vendor;
         }
 
         public void UpdateCustom(VendorViewModel model)
         {
             var vendor = Find(model.VendorId);
+
             vendor.VendorCompanyName = model.VendorCompanyName;
             vendor.VendorName = model.VendorName;
             vendor.VendorAddress = model.VendorAddress;
             vendor.VendorPhone = model.VendorPhone;
             vendor.Description = model.Description;
+
             Update(vendor);
         }
 
         public VendorViewModel FindCustom(int? id)
         {
             var vendor = Find(id.GetValueOrDefault());
-
             if (vendor == null) return null;
+
             return new VendorViewModel
             {
                 VendorId = vendor.VendorId,
@@ -82,7 +86,6 @@ namespace InventoryManagement.Repository
                 VendorPhone = vendor.VendorPhone,
                 InsertDate = vendor.InsertDate,
                 Due = vendor.Due
-
             };
         }
 

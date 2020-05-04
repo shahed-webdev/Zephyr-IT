@@ -1,0 +1,8 @@
+﻿#code-container { background-color: #fff; border-radius: 5px; -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16),0 2px 10px 0 rgba(0,0,0,.12); box-shadow: 0 2px 5px 0 rgba(0,0,0,.16),0 2px 10px 0 rgba(0,0,0,.12); }
+#code-container canvas { margin: 10px; border: 1px solid #ddd; border-radius: 3px; padding: 3px; }
+
+@media print {
+    #header { display:none}
+    #code-container { background-color: #fff; border-radius: 0; box-shadow: none !important }
+    #code-container canvas { margin: 5px; padding: 2px; }
+}
