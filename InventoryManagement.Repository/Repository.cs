@@ -130,22 +130,22 @@ namespace InventoryManagement.Repository
         //Async and await
         public async Task<TEntity> FindAsync(int id)
         {
-            return await Context.Set<TEntity>().FindAsync(id);
+            return await Context.Set<TEntity>().FindAsync(id).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<TEntity>> ToListAsync()
         {
-            return await Context.Set<TEntity>().ToListAsync();
+            return await Context.Set<TEntity>().ToListAsync().ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<TEntity>> WhereAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await Context.Set<TEntity>().Where(predicate).ToListAsync();
+            return await Context.Set<TEntity>().Where(predicate).ToListAsync().ConfigureAwait(false);
         }
 
         public async Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await Context.Set<TEntity>().SingleOrDefaultAsync(predicate);
+            return await Context.Set<TEntity>().SingleOrDefaultAsync(predicate).ConfigureAwait(false);
         }
 
         public Task AnyAsync(Expression<Func<TEntity, bool>> predicate)

@@ -8,7 +8,7 @@ namespace InventoryManagement.Repository
     public interface IExpenseRepository : IRepository<Expense>, IAddCustom<ExpenseViewModel>
     {
         ICollection<ExpenseViewModel> ToListCustom();
-        Task<ICollection<ExpenseViewModel>> ToListCustomAsync();
+        Task<List<ExpenseViewModel>> ToListCustomAsync();
         // void AddCustom(ExpenseViewModel model);
         void RemoveCustom(int id);
         ICollection<int> Years();

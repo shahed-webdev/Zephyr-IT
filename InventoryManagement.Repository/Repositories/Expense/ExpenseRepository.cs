@@ -30,9 +30,9 @@ namespace InventoryManagement.Repository
             return expense;
         }
 
-        public async Task<ICollection<ExpenseViewModel>> ToListCustomAsync()
+        public Task<List<ExpenseViewModel>> ToListCustomAsync()
         {
-            var expense = await Context.Expense.Include(e => e.ExpenseCategory).Select(e => new ExpenseViewModel
+            var expense = Context.Expense.Include(e => e.ExpenseCategory).Select(e => new ExpenseViewModel
             {
                 ExpenseId = e.ExpenseId,
                 RegistrationId = e.RegistrationId,
@@ -42,7 +42,7 @@ namespace InventoryManagement.Repository
                 ExpenseFor = e.ExpenseFor,
                 ExpensePaymentMethod = e.ExpensePaymentMethod,
                 ExpenseDate = e.ExpenseDate
-            }).ToListAsync().ConfigureAwait(false);
+            }).ToListAsync();
 
             return expense;
         }
