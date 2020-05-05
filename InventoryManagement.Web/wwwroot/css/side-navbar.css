@@ -33,15 +33,16 @@
 #sidedrawer strong + ul > li { padding: 9px 0 0 24px; }
 #sidedrawer strong + ul > li:first-child { padding: 0 0 0 24px; }
 
-@media (min-width: 768px) { #header { margin-left: 250px; }
+@media (min-width: 768px) {
+    #header { margin-left: 250px; }
     #sidedrawer { transform: translate(250px); }
     #content-wrapper { margin-left: 250px; }
-    #footer { margin-left: 250px; }
+    footer { margin-left: 250px; }
 
     body.hide-sidedrawer #header { margin-left: 0; }
     body.hide-sidedrawer #sidedrawer { transform: translate(0px); }
     body.hide-sidedrawer #content-wrapper { margin-left: 0; }
-    body.hide-sidedrawer #footer { margin-left: 0; }
+    body.hide-sidedrawer footer { margin-left: 0; }
 }
 
 @media (max-width: 767.98px) {

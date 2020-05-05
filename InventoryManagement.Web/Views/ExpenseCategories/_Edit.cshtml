@@ -17,6 +17,7 @@
                 <form data-ajax-update="#UpdateModal" data-ajax="true" data-ajax-url="/ExpenseCategories/Edit" data-ajax-method="post" data-ajax-success="onUpdateSuccess">
                     <div class="md-form">
                         <input asp-for="CategoryName" class="form-control" placeholder="Category Name" />
+                        <label for="CategoryName" class="active">Category Name</label>
                         <span asp-validation-for="CategoryName"></span>
                     </div>
                     <div class="text-center mt-1-half">

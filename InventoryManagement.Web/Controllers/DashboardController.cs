@@ -52,8 +52,11 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public IActionResult StoreInfo(InstitutionVM model)
         {
-            _db.Institutions.UpdateCustom(model);
-            _db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                _db.Institutions.UpdateCustom(model);
+                _db.SaveChanges();
+            }
 
             return RedirectToAction($"Index", $"Dashboard", new { Message = "Store information Updated" });
         }

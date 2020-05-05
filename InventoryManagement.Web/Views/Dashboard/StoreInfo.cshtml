@@ -11,148 +11,50 @@
     </style>
 }
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
 
 <div class="container">
     <div class="row">
-        <div class="col-lg-7 mx-auto">
+        <div class="col-lg-9 col-md-10 mx-auto">
             <div class="card card-body">
-                <h4 class="page-header mb-3">Store Info</h4>
+                <h4 class="page-header my-3 text-center">Store Info</h4>
+                <form asp-action="StoreInfo">
+                    <div class="md-form">
+                        <input asp-for="InstitutionName" class="form-control" />
+                        <label for="InstitutionName">Institution Name</label>
+                        <span asp-validation-for="InstitutionName"></span>
+                    </div>
 
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.HiddenFor(model => model.InstitutionId)
+                    <div class="md-form">
+                        <input asp-for="Address" class="form-control" />
+                        <label for="InstitutionName">Address</label>
+                        <span asp-validation-for="Address"></span>
+                    </div>
 
-                <div class="md-form">
-                    @Html.EditorFor(model => model.InstitutionName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.InstitutionName, "", new { @class = "text-danger" })
-                    <label for="InstitutionName">Institution Name</label>
-                </div>
-
-                <div class="md-form">
-                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
-                    <label for="Address">Address</label>
-                </div>
-
-                <div class="md-form">
-                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
-                    <label for="Phone">Phone</label>
-                </div>
-
-                <div class="md-form">
-                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                    <label for="Email">Email</label>
-                </div>
-
-                <div class="md-form">
-                    @Html.EditorFor(model => model.Website, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Website, "", new { @class = "text-danger" })
-                    <label for="Website">Website</label>
-                </div>
-
-                <div>
-                    @{
-                        var imgSrc = "";
-                        imgSrc = Model.InstitutionLogo != null ? $"data:image/gif;base64,{Convert.ToBase64String(Model.InstitutionLogo)}" : "";
-                    }
-
-                    <img src="@imgSrc" class="rounded-circle" style="height:80px; width:80px" alt="" />
-                </div>
-
-                <div class="md-form form-sm mb-0">
-                    @Html.Hidden("InstitutionLogo")
-                    <div class="file-field">
-                        <div class="btn aqua-gradient btn-rounded btn-sm float-left">
-                            <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose file</span>
-                            <input type="file" id="upload" value="Choose a Image" onchange="clearImage(this)">
+                    <div class="form-row">
+                        <div class="col-md-5">
+                            <div class="md-form">
+                                <input asp-for="Phone" class="form-control" />
+                                <label for="InstitutionName">Phone</label>
+                                <span asp-validation-for="Phone"></span>
+                            </div>
                         </div>
-                        <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text" placeholder="Upload your file">
+                        <div class="col-md-7">
+                            <div class="md-form">
+                                <input asp-for="Email" class="form-control" />
+                                <label for="Email">Email</label>
+                            </div>
                         </div>
                     </div>
-                    <div id="upload-demo" style="display:none;"></div>
-                    <img id="prevImage" alt="" />
-                    <a id="doneButton" class="btn-floating btn-lg btn-default" style="display:none;"><i class="fas fa-crop-alt"></i></a>
-                </div>
-                <div class="md-form">
-                    <input type="submit" value="Save" class="btn blue-gradient" />
-                </div>
+                    <div class="md-form">
+                        <input type="submit" value="Save" class="btn peach-gradient" />
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
- }
+ 
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script>
-        $(function () {
-            $('input[type="file"]').change(function (e) {
-                const $this = $(e.target);
-                const $fileField = $this.closest('.file-field');
-                const $pathInput = $fileField.find('input.file-path');
-                const fileNames = [];
-
-                fileNames.push(e.target.files[0].name);
-
-                $pathInput.val(fileNames.join(', '));
-                $pathInput.trigger('change');
-            });
-
-            ////...........
-            $('#InstitutionLogo').val('');
-            $uploadCrop = $('#upload-demo').croppie(opt);
-
-            $('#upload').on('change',
-                function () {
-                    readFile(this);
-                });
-
-            $('#doneButton').on('click',
-                function () {
-                    $uploadCrop.croppie('result', { type: 'base64' }).then(function (res) {
-                        $('#InstitutionLogo').val(res.split(',')[1]);
-                        $('#upload-demo').hide();
-                        $('#doneButton').hide();
-                        $('#prevImage').attr('src', res).addClass('img-thumbnail');;
-                    });
-                });
-        });
-
-        var $uploadCrop,
-            opt = {
-                viewport: { width: 150, height: 150 },
-                boundary: { width: 200, height: 200 },
-                showZoomer: false,
-                enableResize: true,
-                enableOrientation: true
-            };
-
-        function readFile(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-
-                reader.onload = function (e) {
-                    $uploadCrop.croppie('bind', { url: e.target.result });
-
-                    $('#InstitutionLogo').val('');
-                    $('#upload-demo').show();
-                    $('#doneButton').show();
-                    $('#prevImage').attr('src', '').removeClass('img-thumbnail');
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        function clearImage(ctrl) {
-            if ($(ctrl).val() === "") {
-                $('#upload-demo').croppie('destroy');
-                $uploadCrop = $('#upload-demo').croppie(opt);
-            }
-        }
-    </script>    
+    <partial name="_ValidationScriptsPartial" />  
 }
