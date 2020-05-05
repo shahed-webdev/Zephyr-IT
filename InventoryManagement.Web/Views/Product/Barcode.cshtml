@@ -5,7 +5,7 @@
 }
 
 @section Styles{
-    <link href="~/css/barcode.css" rel="stylesheet" />
+    <link href="~/css/barcode.css?v=1.4" rel="stylesheet" />
 }
 
 <div class="container">
@@ -14,7 +14,7 @@
             <div class="form-row">
                 <div class="col-md-6 col-lg-3">
                     <div class="md-form">
-                        <input id="inputNumerOfCode" name="inputNumerOfCode" type="number" class="form-control" min="1" max="100" required />
+                        <input id="inputNumerOfCode" name="inputNumerOfCode" type="number" class="form-control" min="1" max="280" required />
                         <label for="inputNumerOfCode">Numer of barcode</label>
                     </div>
                 </div>
@@ -34,8 +34,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.0/JsBarcode.all.min.js"></script>
     <script>
         const getRandom = function () {
-            const max = 9999999999, min = 1000000000;
-            return Math.floor(Math.random() * (max - min + 1) + min);
+            const rand = (Math.random() * 100);
+            return Math.floor(Date.now() + rand);
         }
 
         const generateBarcode = function (evt) {
@@ -43,8 +43,6 @@
             const inputNumerOfCode = +document.getElementById('inputNumerOfCode').value;
             const fragment = document.createDocumentFragment();
             codeContainer.innerHTML = '';
-
-            if (inputNumerOfCode < 1 || inputNumerOfCode > 100) return;
 
             for (let i = 0; i < inputNumerOfCode; i++) {
                 const canvas = document.createElement('canvas');
@@ -57,7 +55,7 @@
 
             const canvas = document.querySelectorAll('.barcode');
             const options = {
-                height: 57,
+                height: 55,
                 width: 1.5,
                 margin: 5,
                 fontSize: 13,

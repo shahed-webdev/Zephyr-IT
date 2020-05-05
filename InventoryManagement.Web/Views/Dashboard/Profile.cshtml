@@ -131,45 +131,44 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        $(function () {
-            $('input[type="file"]').change(function (e) {
-                const $this = $(e.target);
-                const $fileField = $this.closest('.file-field');
-                const $pathInput = $fileField.find('input.file-path');
-                const fileNames = [];
+        let opt = {
+            viewport: { width: 150, height: 150 },
+            boundary: { width: 180, height: 180 },
+            showZoomer: false,
+            enableResize: true,
+            enableOrientation: true
+        };
 
-                fileNames.push(e.target.files[0].name);
+        let $cropContainer = $('#upload-demo');
+        let $uploadCrop = $cropContainer.croppie(opt);
+        const $photo = $('#Image');
+        const $preview = $('#prevImage');
+        const $btnDone = $('#doneButton');
 
-                $pathInput.val(fileNames.join(', '));
-                $pathInput.trigger('change');
-            });
+        $('input[type="file"]').change(function (e) {
+            const $this = $(e.target);
+            const $fileField = $this.closest('.file-field');
+            const $pathInput = $fileField.find('input.file-path');
+            const fileNames = [];
 
-            ////...........
-            $('#Image').val('');
-            $uploadCrop = $('#upload-demo').croppie(opt);
+            fileNames.push(e.target.files[0].name);
 
-            $('#upload').on('change', function () {
-                readFile(this);
-            });
-
-            $('#doneButton').on('click', function () {
-                $uploadCrop.croppie('result', { type: 'base64' }).then(function (res) {
-                    $('#Image').val(res.split(',')[1]);
-                    $('#upload-demo').hide();
-                    $('#doneButton').hide();
-                    $('#prevImage').attr('src', res).addClass('img-thumbnail rounded-circle');;
-                });
-            });
+            $pathInput.val(fileNames.join(', '));
+            $pathInput.trigger('change');
         });
 
-        var $uploadCrop,
-            opt = {
-                viewport: { width: 150, height: 150 },
-                boundary: { width: 180, height: 180 },
-                showZoomer: false,
-                enableResize: true,
-                enableOrientation: true
-            };
+        $('#upload').on('change', function () {
+            readFile(this);
+        });
+
+        $btnDone.on('click', function () {
+            $uploadCrop.croppie('result', { type: 'base64' }).then(function (res) {
+                $photo.val(res.split(',')[1]);
+                $cropContainer.hide();
+                $btnDone.hide();
+                $preview.attr('src', res).addClass('img-thumbnail rounded-circle');;
+            });
+        });
 
         function readFile(input) {
             if (input.files && input.files[0]) {
@@ -178,10 +177,10 @@
                 reader.onload = function (e) {
                     $uploadCrop.croppie('bind', { url: e.target.result });
 
-                    $('#Image').val('');
-                    $('#upload-demo').show();
-                    $('#doneButton').show();
-                    $('#prevImage').attr('src', '').removeClass('img-thumbnail rounded-circle');
+                    $photo.val('');
+                    $cropContainer.show();
+                    $btnDone.show();
+                    $preview.attr('src', '').removeClass('img-thumbnail rounded-circle');
                 }
                 reader.readAsDataURL(input.files[0]);
             }
@@ -189,8 +188,8 @@
 
         function clearImage(ctrl) {
             if ($(ctrl).val() === "") {
-                $('#upload-demo').croppie('destroy');
-                $uploadCrop = $('#upload-demo').croppie(opt);
+                $cropContainer.croppie('destroy');
+                $uploadCrop = $cropContainer.croppie(opt);
             }
         }
     </script>
