@@ -1,0 +1,50 @@
+﻿@using InventoryManagement.Repository
+@model ProductCatalogViewModel
+@{
+    ViewData["Title"] = "Catalog";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="container">
+    <form asp-action="Catalog">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card card-body p-4">
+                    <h4 class="page-header mt-4 text-center">Add Product Category</h4>
+
+                    <select name="CatalogTypeId" class="mdb-select md-form" style="display: none">
+                        <option value="" disabled selected>Category Type</option>
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                        <option value="3">Option 3</option>
+                    </select>
+
+                    <select name="ParentId" class="mdb-select md-form" style="display: none">
+                        <option value="" disabled selected>Preant Category</option>
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                        <option value="3">Option 3</option>
+                    </select>
+
+                    <div class="md-form">
+                        <input asp-for="CatalogName" class="form-control" required />
+                        <label for="CatalogName">Sub Category</label>
+                    </div>
+
+                    <button id="btnSubmit" class="btn peach-gradient btn-rounded my-4" type="submit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $('.mdb-select').materialSelect();
+
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+    </script>
+}

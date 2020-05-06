@@ -93,11 +93,19 @@ let linkData = [{
         "Category": "Product",
         "IconClass": "fas fa-shopping-cart",
         "links": [{
-            "LinkID": 4,
+            "LinkID": 9,
             "SN": 1,
             "Controller": "Product",
             "Action": "Barcode",
             "Title": "Barcode",
+            "IconClass": null
+        },
+        {
+            "LinkID": 10,
+            "SN": 2,
+            "Controller": "Product",
+            "Action": "Catalog",
+            "Title": "Category",
             "IconClass": null
         },
         {
