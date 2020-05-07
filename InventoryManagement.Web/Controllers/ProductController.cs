@@ -29,13 +29,14 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Catalog(ProductCatalogViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                var response = await _db.ProductCatalogs.AddCustomAsync(model).ConfigureAwait(false);
-                return response.IsSuccess ? Json(response.Data) : Json(response.Message);
-            }
+            if (!ModelState.IsValid) return UnprocessableEntity(ModelState);
 
-            return View(model);
+            var response = await _db.ProductCatalogs.AddCustomAsync(model).ConfigureAwait(false);
+
+            if (response.IsSuccess)
+                return Ok(response.Data);
+            else
+                return UnprocessableEntity(response.Message);
         }
 
         //Get:
@@ -49,13 +50,14 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CatalogType([FromBody] ProductCatalogTypeViewModel model)
         {
-            if (!ModelState.IsValid) return BadRequest("model not valid");
+            if (!ModelState.IsValid) return UnprocessableEntity(ModelState);
 
             var response = await _db.ProductCatalogTypes.AddCustomAsync(model).ConfigureAwait(false);
 
-            if (response.IsSuccess) return Ok(response.Data);
+            if (response.IsSuccess) 
+                return Ok(response.Data);
             else
-                return BadRequest(response.Message);
+                return UnprocessableEntity(response.Message);
         }    
         
 
