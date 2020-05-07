@@ -9,6 +9,6 @@ namespace InventoryManagement.Repository
 
     public interface IAddCustomAsync<TObject> where TObject : class
     {
-        Task AddCustomAsync(TObject model);
+        Task<DbResponse<TObject>> AddCustomAsync(TObject model);
     }
 }

@@ -16,7 +16,7 @@ namespace InventoryManagement.Data
         public int? CatalogTypeId { get; set; }
         public string CatalogName { get; set; }
         public int CatalogLevel { get; set; }
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
         public int ItemCount { get; set; }
         public DateTime InsertDate { get; set; }
 

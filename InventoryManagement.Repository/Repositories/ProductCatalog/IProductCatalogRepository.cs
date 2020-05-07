@@ -2,7 +2,7 @@
 
 namespace InventoryManagement.Repository
 {
-    public interface IProductCatalogRepository : IRepository<ProductCatalog>
+    public interface IProductCatalogRepository : IRepository<ProductCatalog>, IAddCustomAsync<ProductCatalogViewModel>
     {
 
     }

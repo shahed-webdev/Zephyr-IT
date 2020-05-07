@@ -1,5 +1,6 @@
 ﻿using InventoryManagement.Repository;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
 {
@@ -26,12 +27,14 @@ namespace InventoryManagement.Web.Controllers
 
         //POST: Catalog
         [HttpPost]
-        public IActionResult Catalog(ProductCatalogViewModel model)
+        public async Task<IActionResult> Catalog(ProductCatalogViewModel model)
         {
             if (ModelState.IsValid)
             {
-               // _db.ProductCatalogs.add(model);
-                //_db.SaveChanges();
+
+                var response = await _db.ProductCatalogs.AddCustomAsync(model).ConfigureAwait(false);
+
+                return response.IsSuccess ? Json(response.Data) : Json(response.Message);
             }
 
             return View();
@@ -39,9 +42,11 @@ namespace InventoryManagement.Web.Controllers
 
         //POST: Catalog type
         [HttpPost]
-        public IActionResult CatalogType(ProductCatalogTypeViewModel model)
+        public async Task<IActionResult> CatalogType(ProductCatalogTypeViewModel model)
         {
-            return View();
+            var response = await _db.ProductCatalogTypes.AddCustomAsync(model).ConfigureAwait(false);
+
+            return response.IsSuccess ? Json(response.Data) : Json(response.Message);
         }
     }
 }

@@ -11,15 +11,32 @@ namespace InventoryManagement.Repository
         public ProductCatalogTypeRepository(ApplicationDbContext context) : base(context)
         {
         }
-
-        public async Task AddCustomAsync(ProductCatalogTypeViewModel model)
+        public async Task<DbResponse<ProductCatalogTypeViewModel>> AddCustomAsync(ProductCatalogTypeViewModel model)
         {
             var catalogType = new ProductCatalogType
             {
                 CatalogType = model.CatalogType
             };
 
-            await Context.AddAsync(catalogType).ConfigureAwait(false);
+            var response = new DbResponse<ProductCatalogTypeViewModel>();
+
+            await Context.ProductCatalogType.AddAsync(catalogType).ConfigureAwait(false);
+
+            try
+            {
+                await Context.SaveChangesAsync().ConfigureAwait(false);
+                model.CatalogTypeId = catalogType.CatalogTypeId;
+                response.IsSuccess = true;
+                response.Message = "Success";
+                response.Data = model;
+            }
+            catch (DbUpdateException e)
+            {
+                response.Message = e.Message;
+                response.IsSuccess = false;
+            }
+
+            return response;
         }
 
 
@@ -41,5 +58,7 @@ namespace InventoryManagement.Repository
         {
             throw new System.NotImplementedException();
         }
+
+
     }
 }
