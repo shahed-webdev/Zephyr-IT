@@ -53,7 +53,7 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-body text-center mb-1">
-                <h5 class="mt-1 mb-2">Maria Doe</h5>
+                <h5 class="mt-1 mb-2">Add Category Type</h5>
                 <form id="formCatalogType">
                     <div class="md-form ml-0 mr-0">
                         <input name="CatalogType" required type="text" id="inputCatalogType" class="form-control" />
@@ -76,29 +76,42 @@
             $('.mdb-select').materialSelect();
         });
 
+        axios.get('/Product/CatalogType')
+            .then(function (response) {
+                console.log(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
+
 
         const onTypeSubmit = function (evt) {
             evt.preventDefault();
 
             const url = '/Product/CatalogType';
-            const CatalogType = evt.target.inputCatalogType.value;
-            const data = { CatalogType }
+            let CatalogType = evt.target.inputCatalogType.value;
+            let data = { CatalogType }
 
-            axios.post(url, data)
+            const selectCatalogType = document.getElementById("CatalogTypeId");
+            const option = document.createElement("option");
+
+            axios({
+                method: 'post',
+                url: url,
+                data: data
+            })
                 .then(function (response) {
-                    console.log(response);
+                    const { CatalogType, CatalogTypeId } = response.data;
+                    
+                    option.text = CatalogType;
+                    option.value = CatalogTypeId;
+
+                    selectCatalogType.add(option);
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
-
-
-            const CatalogTypeId = document.getElementById("CatalogTypeId");
-            const option = document.createElement("option");
-            option.text = "type";
-            option.value = 10;
-
-            CatalogTypeId.add(option);
         }
 
         const formCatalogType = document.getElementById("formCatalogType");

@@ -38,9 +38,16 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
+        //Get:
+        public async Task<IActionResult> CatalogType()
+        {
+            var response = await _db.ProductCatalogTypes.ToListAsync();
+            return Json(response);
+        }
+
         //POST: Catalog type
         [HttpPost]
-        public async Task<IActionResult> CatalogType(ProductCatalogTypeViewModel model)
+        public async Task<IActionResult> CatalogType([FromBody] ProductCatalogTypeViewModel model)
         {
             if (!ModelState.IsValid) return Content("model not valid");
 
