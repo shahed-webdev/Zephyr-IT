@@ -49,12 +49,15 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CatalogType([FromBody] ProductCatalogTypeViewModel model)
         {
-            if (!ModelState.IsValid) return Content("model not valid");
+            if (!ModelState.IsValid) return BadRequest("model not valid");
 
             var response = await _db.ProductCatalogTypes.AddCustomAsync(model).ConfigureAwait(false);
 
-            return response.IsSuccess ? Json(response.Data) : Json(response.Message);
-        }
+            if (response.IsSuccess) return Ok(response.Data);
+            else
+                return BadRequest(response.Message);
+        }    
+        
 
 
         public IActionResult Purchase()

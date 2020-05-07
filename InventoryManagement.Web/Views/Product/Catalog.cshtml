@@ -23,7 +23,7 @@
                         </div>
                         <div class="col-3">
                             <div class="md-form">
-                                <a class="btn btn-blue-grey btn-rounded btn-sm" data-toggle="modal" data-target="#modalLoginAvatar">Add New</a>
+                                <a class="btn btn-blue-grey btn-rounded btn-sm" data-toggle="modal" data-target="#modalCatalogType">Add New</a>
                             </div>
                         </div>
                         </div>
@@ -48,7 +48,7 @@
 </div>
 
 <!--Modal-->
-<div class="modal fade" id="modalLoginAvatar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div class="modal fade" id="modalCatalogType" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -56,7 +56,7 @@
                 <h5 class="mt-1 mb-2">Add Category Type</h5>
                 <form id="formCatalogType">
                     <div class="md-form ml-0 mr-0">
-                        <input name="CatalogType" required type="text" id="inputCatalogType" class="form-control" />
+                        <input name="CatalogType" type="text" id="inputCatalogType" class="form-control" />
                         <label for="inputCatalogType">Type</label>
                     </div>
 
@@ -76,25 +76,35 @@
             $('.mdb-select').materialSelect();
         });
 
-        axios.get('/Product/CatalogType')
-            .then(function (response) {
-                console.log(response.data);
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
+        const selectCatalogType = document.getElementById("CatalogTypeId");
 
+        const appendCatalogType = function (text, value) {
+            const option = document.createElement("option");
+            option.text = text;
+            option.value = value;
 
+            selectCatalogType.add(option);
+        }
+
+        const getCatalogType = function () {
+            axios.get('/Product/CatalogType')
+                .then(function (response) {
+                    response.data.forEach(item => {
+                        appendCatalogType(item.CatalogType, item.CatalogTypeId);
+                    });
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+
+        }
 
         const onTypeSubmit = function (evt) {
             evt.preventDefault();
 
             const url = '/Product/CatalogType';
-            let CatalogType = evt.target.inputCatalogType.value;
-            let data = { CatalogType }
-
-            const selectCatalogType = document.getElementById("CatalogTypeId");
-            const option = document.createElement("option");
+            let inputCatalogType = evt.target.inputCatalogType;
+            let data = { CatalogType: inputCatalogType.value }
 
             axios({
                 method: 'post',
@@ -102,12 +112,11 @@
                 data: data
             })
                 .then(function (response) {
+                    console.log(response)
                     const { CatalogType, CatalogTypeId } = response.data;
-                    
-                    option.text = CatalogType;
-                    option.value = CatalogTypeId;
-
-                    selectCatalogType.add(option);
+                    appendCatalogType(CatalogType, CatalogTypeId);
+                    $("#modalCatalogType").modal('hide');
+                    inputCatalogType.value = '';
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -115,6 +124,9 @@
         }
 
         const formCatalogType = document.getElementById("formCatalogType");
-        formCatalogType.addEventListener('submit', onTypeSubmit)
+        formCatalogType.addEventListener('submit', onTypeSubmit);
+
+
+        getCatalogType();
     </script>
 }
