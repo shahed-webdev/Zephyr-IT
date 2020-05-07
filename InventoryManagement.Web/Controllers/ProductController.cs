@@ -31,22 +31,37 @@ namespace InventoryManagement.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 var response = await _db.ProductCatalogs.AddCustomAsync(model).ConfigureAwait(false);
-
                 return response.IsSuccess ? Json(response.Data) : Json(response.Message);
             }
 
-            return View();
+            return View(model);
         }
 
         //POST: Catalog type
         [HttpPost]
         public async Task<IActionResult> CatalogType(ProductCatalogTypeViewModel model)
         {
+            if (!ModelState.IsValid) return Content("model not valid");
+
             var response = await _db.ProductCatalogTypes.AddCustomAsync(model).ConfigureAwait(false);
 
             return response.IsSuccess ? Json(response.Data) : Json(response.Message);
+        }
+
+
+        public IActionResult Purchase()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Purchase(PurchaseViewModel model)
+        {
+            if (ModelState.IsValid) return Content("error");
+
+
+            return View(model);
         }
     }
 }

@@ -7,18 +7,26 @@
 
 
 <div class="container">
-    <form asp-action="Catalog">
-        <div class="row">
-            <div class="col-lg-8 mx-auto">
-                <div class="card card-body p-4">
-                    <h4 class="page-header mt-4 text-center">Add Product Category</h4>
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card card-body p-4">
+                <h4 class="page-header mt-4 text-center">Add Product Category</h4>
 
-                    <select name="CatalogTypeId" class="mdb-select md-form" style="display: none">
-                        <option value="" disabled selected>Category Type</option>
-                        <option value="1">Option 1</option>
-                        <option value="2">Option 2</option>
-                        <option value="3">Option 3</option>
-                    </select>
+                <form asp-action="Catalog">
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="md-form">
+                                <select id="CatalogTypeId" name="CatalogTypeId" class="mdb-select md-form" style="display: none">
+                                    <option value="" disabled selected>Category Type</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="md-form">
+                                <a class="btn btn-blue-grey btn-rounded btn-sm" data-toggle="modal" data-target="#modalLoginAvatar">Add New</a>
+                            </div>
+                        </div>
+                        </div>
 
                     <select name="ParentId" class="mdb-select md-form" style="display: none">
                         <option value="" disabled selected>Preant Category</option>
@@ -29,22 +37,71 @@
 
                     <div class="md-form">
                         <input asp-for="CatalogName" class="form-control" required />
-                        <label for="CatalogName">Sub Category</label>
+                        <label for="CatalogName">Category Name</label>
                     </div>
 
                     <button id="btnSubmit" class="btn peach-gradient btn-rounded my-4" type="submit">Submit</button>
-                </div>
+                </form>
             </div>
         </div>
-    </form>
+    </div>
 </div>
+
+<!--Modal-->
+<div class="modal fade" id="modalLoginAvatar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center mb-1">
+                <h5 class="mt-1 mb-2">Maria Doe</h5>
+                <form id="formCatalogType">
+                    <div class="md-form ml-0 mr-0">
+                        <input name="CatalogType" required type="text" id="inputCatalogType" class="form-control" />
+                        <label for="inputCatalogType">Type</label>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <input type="submit" id="btnInputType" value="add" class="btn btn-deep-purple btn-sm" />
+                    </div>
+                </form>    
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section Scripts{
     <script>
         $(function () {
             $('.mdb-select').materialSelect();
-
-            $('[data-toggle="tooltip"]').tooltip()
         });
+
+
+        const onTypeSubmit = function (evt) {
+            evt.preventDefault();
+
+            const url = '/Product/CatalogType';
+            const CatalogType = evt.target.inputCatalogType.value;
+            const data = { CatalogType }
+
+            axios.post(url, data)
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+
+            const CatalogTypeId = document.getElementById("CatalogTypeId");
+            const option = document.createElement("option");
+            option.text = "type";
+            option.value = 10;
+
+            CatalogTypeId.add(option);
+        }
+
+        const formCatalogType = document.getElementById("formCatalogType");
+        formCatalogType.addEventListener('submit', onTypeSubmit)
     </script>
 }
