@@ -15,26 +15,20 @@
                 <form asp-action="Catalog">
                     <div class="form-row">
                         <div class="col">
-                            <div class="md-form">
-                                <select id="CatalogTypeId" name="CatalogTypeId" class="mdb-select md-form" style="display: none">
-                                    <option value="" disabled selected>Category Type</option>
-                                </select>
-                            </div>
+                            <select id="CatalogTypeId" name="CatalogTypeId" class="mdb-select" style="display: none">
+                                <option value="" disabled selected>Category Type</option>
+                            </select>
                         </div>
                         <div class="col-1">
-                            <div class="md-form">
-                                <a class="btn-floating peach-gradient btn-sm" data-toggle="modal" data-target="#modalCatalogType"><i class="far fa-plus" aria-hidden="true"></i></a>
-                            </div>
+                            <a class="btn-floating peach-gradient btn-sm" data-toggle="modal" data-target="#modalCatalogType"><i class="far fa-plus" aria-hidden="true"></i></a>
                         </div>
                     </div>
 
-                    <div class="md-form">
-                        <select name="ParentId" asp-items="ViewBag.ParentId" class="mdb-select md-form">
-                            <option value="" disabled selected>Parent Category</option>
-                        </select>
-                    </div>
+                    <select name="ParentId" asp-items="ViewBag.ParentId" class="mdb-select md-form" style="display: none">
+                        <option value="" disabled selected>Parent Category</option>
+                    </select>
 
-                    <div class="md-form">
+                    <div class="md-form mt-4">
                         <input asp-for="CatalogName" class="form-control" required />
                         <label for="CatalogName">Category Name</label>
                     </div>

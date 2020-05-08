@@ -1,0 +1,504 @@
+﻿
+@{
+    ViewData["Title"] = "Purchase";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section Styles{
+    <style>
+
+        #vendor-info li { font-size: 19px; line-height: 3.17; }
+        #vendor-info i { color: #13c7d4 }
+
+        #payment-area li strong { font-size: 19px; }
+        #inputDiscount, #inputPaid { display: inline-block; width: auto; border-radius: 50px; text-align: right; color: #000; }
+
+        .has-error { border: 2px solid #ff0000 }
+    </style>
+}
+
+<div class="m-md-3">
+    <h4 class="mb-3 page-header">Purchase</h4>
+
+    
+    <section class="card card-body">
+        <form>
+            <div class="form-row">
+                <div class="col-lg-3">
+                    <div class="md-form">
+                        <select name="ParentId" asp-items="ViewBag.ParentId" class="mdb-select" style="display: none" required>
+                            <option value="" disabled selected>Select Category</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="md-form">
+                        <input id="inputProductName" class="form-control" type="text" required />
+                        <label for="inputProductName">Product Name</label>
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="md-form">
+                        <input id="inputPurchasePrice" class="form-control" type="number" required />
+                        <label for="inputPurchasePrice">Purchase Price</label>
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="md-form">
+                        <input id="inputSellingPrice" class="form-control" type="number" required />
+                        <label for="inputSellingPrice">Selling Price</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col-lg-3">
+                    <div class="md-form">
+                        <input id="inputWarranty" class="form-control" type="text" />
+                        <label for="inputWarranty">Warranty</label>
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="md-form">
+                        <input id="inputBarcode" class="form-control" type="number" required />
+                        <label for="inputBarcode">Barcode</label>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="md-form">
+                        <input id="inputDescription" class="form-control" type="text" />
+                        <label for="inputDescription">Description</label>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="md-form text-right">
+                        <input type="submit" value="add" id="btnaddProduct" class="btn aqua-gradient btn-rounded" />
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><strong>Category</strong></th>
+                    <th><strong>Product Name</strong></th>
+                    <th><strong>Purchase Price</strong></th>
+                    <th><strong>Selling Price</strong></th>
+                    <th><strong>Warranty</strong></th>
+                    <th><strong>Stock</strong></th>              
+                </tr>
+            </thead>
+        </table>
+    </section>   
+    
+
+
+    <section class="card card-body my-4">
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="d-flex">
+                    <div class="flex-grow-1">
+                        <div class="md-form">
+                            <input placeholder="Find Vendor" type="text" id="inputFindVendor" class="form-control" autocomplete="off" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <a id="CreateClick" data-url="/Vendor/Create" class="btn btn-outline-primary mt-3" title="Add New" data-toggle="modal">
+                            Add New <i class="fa fa-plus" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+                <ul id="vendor-info" class="list-group list-group-flush"></ul>
+                <input type="hidden" id="vendorId" />
+            </div>
+            <div class="col-lg-6">
+                <ul class="list-group list-group-flush" id="payment-area">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Total Price</strong>
+                        <strong>৳<span id="totalPrice"></span></strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Discount</strong>
+                        <div>
+                            <input placeholder="Discount" id="inputDiscount" type="text" class="form-control" />
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center green-text">
+                        <strong>Total Payable</strong>
+                        <strong>৳<span id="grandTotal"></span></strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Total Paid</strong>
+                        <div>
+                            <input placeholder="Paid Amount" id="inputPaid" type="text" class="form-control" />
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center orange-text">
+                        <strong>Total Due</strong>
+                        <strong>৳<span id="totalDue"></span></strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Payment Method</strong>
+                        <div>
+                            <select id="selectPaymentMethod" class="mdb-select">
+                                <option value="" selected>[ SELECT ]</option>
+                                <option>Cash</option>
+                                <option>Bank</option>
+                                <option>Cheque</option>
+                                <option>bkash</option>
+                            </select>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Purchase Date</strong>
+                        <div>
+                            <input placeholder="Purchase Date" id="inputPurchaseDate" type="text" class="form-control datepicker" />
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="mt-4 text-right">
+                    <input type="button" value="Submit" id="btnPurchase" class="btn peach-gradient btn-rounded" />
+                    <h5 id="vendor-error" class="mt-2 text-center"></h5>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Insert Modal -->
+<div class="modal fade" id="InsertModal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery-ajax-unobtrusive@3.2.6/dist/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
+
+    <script>//global cart data
+        var cart = [];
+
+        $(function() {
+            $('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'));
+
+            //clear id if refresh page
+            $("#vendorId").val("");
+
+            // Material Select Initialization
+            $('.mdb-select').materialSelect();
+
+            //input Paid, input Discount
+            $('#inputPaid,#inputDiscount').on('input keypress', function(event) {
+                if ((event.which !== 46 || $(this).val().indexOf('.') !== -1) && (event.which < 48 || event.which > 57)) {
+                    event.preventDefault();
+                }
+            });
+
+            //load table data
+            loadCartData();
+        });
+
+        //save to cart
+        function saveProductList(product) {
+            product.SN = (cart.length) + 1;
+            product.PurchaseQuantity = 0;
+            product.PurchaseUnitPrice = product.ProductPrice;
+            product.LineTotal = 0;
+            product.Details = '';
+
+            cart.push(product);
+            localStorage.setItem('cart', JSON.stringify(cart));
+        };
+
+        //load Cart Data
+        function loadCartData() {
+            if (localStorage.getItem('cart')) {
+                cart = JSON.parse(localStorage.getItem('cart'));
+            };
+            calculateTotal();
+        };
+
+        //find table
+        var $tableBody = $('#table-row');
+
+        //delete click
+        $tableBody.on("click", ".delete", function(evt) {
+            evt.preventDefault();
+            const row = $(this).closest('tr');
+            var serialNumber = row.find('.SN').text();
+
+            const filteredItems = cart.filter(function(item) {
+                return item.SN !== parseInt(serialNumber);
+            });
+
+
+            localStorage.setItem('cart', JSON.stringify(filteredItems));
+            loadCartData();
+        });
+
+        //input length, width
+        $tableBody.on('input', '.length, .width', function() {
+            const row = $(this).closest('tr');
+            const quantity = row.find('.quantity');
+            const length = row.find('.length');
+            const width = row.find('.width');
+
+            const total = (parseNumber(length.val()) * parseNumber(width.val()));
+            quantity.val(total.toFixed(2));
+        });
+
+        //input unit Price
+        $tableBody.on('input', '.unitPrice, .length, .width', function() {
+            const row = $(this).closest('tr');
+            const quantity = row.find('.quantity');
+            const unitPrice = row.find('.unitPrice');
+            const lineTotal = row.find('.lineTotal');
+
+            const total = (parseNumber(quantity.val()) * parseNumber(unitPrice.val()));
+            lineTotal.val(total.toFixed(2));
+        });
+
+        //convert to float number
+        function parseNumber(n) {
+            const f = parseFloat(n);
+            return isNaN(f) ? 0 : f;
+        }
+
+        //update data
+        $tableBody.on('change', 'input', function(e) {
+            const row = $(this).closest('tr');
+            const serialNumber = parseInt(row.find(".SN").text());
+            const index = cart.findIndex((p => p.SN === serialNumber));
+
+            row.find('input').each(function(i, element) {
+                cart[index][element.name] = element.type === 'number' ? parseNumber(element.value) : element.value;
+            });
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            calculateTotal();
+            validation();
+        });
+
+        //sum table value
+        function calculateTotal() {
+            const row = $('#table-row tr');
+            var total = 0;
+
+            if (row.length > 0) {
+                row.find('input').each(function(i, element) {
+                    if (element.name === 'LineTotal')
+                        total += Math.ceil(parseNumber(element.value));
+                });
+            };
+
+            $("#totalPrice").text(total);
+            $("#grandTotal").text(total);
+            $("#totalDue").text(total);
+            resetPayment();
+        };
+
+        //discount change
+        $("#inputDiscount").on("change", function() {
+            const totalPrice = parseNumber($("#totalPrice").text());
+            const discount = parseNumber($(this).val());
+            const isValid = compareValidation(totalPrice, discount);
+            const grandTotal = (totalPrice - discount);
+
+            $(this).next('em').remove();
+
+            if (!isValid) {
+                $(this).after(`<em class="d-block red-text text-right">Discount within ৳${totalPrice}</em>`);
+                return;
+            }
+
+            $("#grandTotal").text(grandTotal.toFixed());
+            $("#totalDue").text(grandTotal.toFixed());
+
+            const inputPaid = $("#inputPaid");
+            if (inputPaid.val())
+                inputPaid.val('');
+        });
+
+        //paid change
+        $("#inputPaid").on("change", function() {
+            const grandTotal = parseNumber($("#grandTotal").text());
+            const paid = parseNumber($(this).val());
+            const isValid = compareValidation(grandTotal, paid);
+
+            $(this).next('em').remove();
+
+            if (!isValid) {
+                $(this).after(`<em class="d-block red-text text-right">Pay within ৳${grandTotal}</em>`);
+                return;
+            }
+
+            $("#totalDue").text(grandTotal - paid);
+
+            const paymentMethod = $("#selectPaymentMethod");
+            paymentMethod.next('em').remove();
+
+            if (paid > 0)
+                paymentMethod.after('<em class="d-block red-text text-right">Select payment method</em>');
+        });
+
+        //remove error
+        $("#selectPaymentMethod").on("change", function() {
+            $(this).next('em').remove();
+        });
+
+        //reset discount/paid amount
+        function resetPayment() {
+            $("#inputDiscount").val('').next('em').remove();
+            $("#inputPaid").val('').next('em').remove();
+            $("#payment-method-error").text('');
+        }
+
+        //input field validation
+        function validation() {
+            const row = $('#table-row tr');
+            var isValid = true;
+
+            if (row.length > 0) {
+                row.find('input[type="number"]').each(function() {
+                    const input = $(this);
+
+                    if (input.val() === '' || input.val() === '0' || input.val() === 0) {
+                        input.addClass("has-error");
+                        isValid = false;
+                    } else {
+                        input.removeClass("has-error");
+                    }
+                });
+            }
+
+            return isValid;
+        }
+
+        //compare Validation
+        function compareValidation(total, inputted) {
+            var isValid = true;
+
+            if (total < inputted) {
+                isValid = false;
+            }
+            return isValid;
+        }
+
+        //vendor autocomplete
+        $("#inputFindVendor").typeahead({
+            minLength: 1,
+            displayText: function(item) {
+                return `${item.VendorCompanyName} (${item.VendorName}, ${item.VendorPhone})`;
+            },
+            afterSelect: function(item) {
+                this.$element[0].value = item.VendorCompanyName
+            },
+            source: function(request, result) {
+                $.ajax({
+                    url: "/Purchase/FindVendor",
+                    data: JSON.stringify({ 'prefix': request }),
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function(response) { result(response); }
+                });
+            },
+            updater: function(item) {
+                bindData(item);
+                return item;
+            }
+        });
+
+        //insert vendor
+        $("#CreateClick").on("click", function() {
+            $.get($(this).data("url"), function(response) {
+                $('#InsertModal').html(response).modal('show');
+            });
+        });
+
+        function OnCreateSuccess(response) {
+            if (response.Status) {
+                $('#InsertModal').html(response).modal('hide');
+                bindData(response.Data);
+                $("#inputFindVendor").val('');
+            } else {
+                $('#InsertModal').html(response);
+            }
+        }
+
+        function bindData(data) {
+            const vendorInfo = $("#vendor-info");
+            $("#vendorId").val(data.VendorID);
+
+            const html = `<li class="list-group-item"><i class="fas fa-building"></i> ${data.VendorCompanyName}</li>
+                     <li class="list-group-item"><i class="fas fa-user-tie"></i> ${data.VendorName}</li>
+                     <li class="list-group-item"><i class="fas fa-phone"></i> ${data.VendorPhone}</li>
+                     <li class="list-group-item"><i class="fas fa-map-marker-alt"></i> ${data.VendorAddress}</li>`;
+
+            if (vendorInfo.children)
+                vendorInfo.empty();
+
+            vendorInfo.append(html);
+        }
+
+
+        //Submit Sell
+        $("#btnPurchase").on("click", function(evt) {
+            const isValid = validation();
+            const that = $(this);
+            const vendorId = $("#vendorId").val();
+            const totalPrice = $("#totalPrice").text() | 0;
+            const discountAmount = $("#inputDiscount").val();
+            const paidAmount = parseNumber($("#inputPaid").val());
+            const date = $("#inputPurchaseDate").val();
+            const paymentMethod = $("#selectPaymentMethod").children("option:selected").val();
+            const vendorInfo = $("#vendor-info");
+
+
+            if (!vendorId) {
+                if (!vendorInfo.children().length) {
+                    $("#vendor-info").append(`<li class="list-group-item list-group-item-danger"><i class="fas fa-exclamation-triangle mr-1 red-text"></i>Select/add Vendor for Purchase!</li>`);
+                    return;
+                }
+
+                if (vendorInfo.children().length) return;
+            }
+
+            if ($("#payment-area em").length) return;
+
+
+            const data = {
+                VendorID: vendorId,
+                PurchaseTotalPrice: totalPrice,
+                PurchaseDiscountAmount: discountAmount,
+                PurchasePaidAmount: paidAmount,
+                PurchaseDate: date,
+                Payment_Situation: paymentMethod,
+                PurchaseCarts: cart
+            };
+
+
+            if (isValid && data.PurchaseTotalPrice > 0) {
+                $.ajax({
+                    url: "/Purchase/PostPurchase",
+                    data: JSON.stringify({ model: data }),
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    beforeSend: function() { that.prop('disabled', true).val('Submitting..') },
+                    success: function(id) {
+                        localStorage.removeItem('cart');
+                        window.location.href = `/Purchase/Receipt/${id}`;
+                    },
+                    error: function(error) { console.log(error) },
+                    complete: function() { that.prop('disabled', false).val('Submit') }
+                });
+            }
+        });</script>
+}
+

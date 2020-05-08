@@ -13,8 +13,6 @@
     <link href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css" rel="stylesheet" />
     <!-- data-tables responsive -->
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css" rel="stylesheet" />
-    <!-- axios -->
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- MDB -->
     <link href="~/mdb/css/mdb-core.css" rel="stylesheet" />
     <!-- Sidebar -->
@@ -22,42 +20,42 @@
     <!-- Image crop-er -->
     <link href="~/css/croper.css" rel="stylesheet" />
     <!-- custom -->
-    <link href="~/css/custom-admin.css?v=1" rel="stylesheet" />
+    <link href="~/css/custom-admin.css" rel="stylesheet" />
 
     @RenderSection("Styles", false)
 </head>
 <body>
     <div id="header">
-    <nav class="m-0 navbar navbar-expand-lg navbar-dark peach-gradient">
-        <div class="container-fluid">
-            <div>
-                <a class="sidedrawer-toggle d-md-none js-show-sidedrawer d-print-none"><i class="fas fa-bars"></i></a>
-                <a class="sidedrawer-toggle d-none d-md-inline-block js-hide-sidedrawer d-print-none"><i class="fas fa-bars"></i></a>
-                <a class="navbar-brand ml-1"><span>Zephyr</span> IT</a>
+        <nav class="m-0 navbar navbar-expand-lg navbar-dark peach-gradient">
+            <div class="container-fluid">
+                <div>
+                    <a class="sidedrawer-toggle d-md-none js-show-sidedrawer d-print-none"><i class="fas fa-bars"></i></a>
+                    <a class="sidedrawer-toggle d-none d-md-inline-block js-hide-sidedrawer d-print-none"><i class="fas fa-bars"></i></a>
+                    <a class="navbar-brand ml-1"><span>Zephyr</span> IT</a>
+                </div>
             </div>
-        </div>
-    </nav>
-</div>
+        </nav>
+    </div>
 
     <div id="sidedrawer" class="d-print-none z-depth-1">
-        <Partial Name="_AdminLoginPartial"/>
+        <Partial Name="_AdminLoginPartial" />
         <ul id="menuItem">
             @*<li>
-            <strong><span class="fas fa-user-tie"></span> Sub-Admin <i class="fas fa-caret-right"></i></strong>
-            <ul class="sub-menu">
-                <li><a class="links" href="/Account/Register">Signup Sub-admin</a></li>
-                <li><a class="links" href="/SubAdmin/Index">Sub-admins</a></li>
-                <li><a class="links" href="/SubAdmin/PageAccess">Page Access</a></li>
-            </ul>
-        </li>
-        <li>
-            <strong><span class="fas fa-shopping-cart"></span> Product <i class="fas fa-caret-right"></i></strong>
-            <ul class="sub-menu"><li><a class="links" href="/ProductCategories/IndexView">Categories</a></li><li><a class="links" href="/Products/Index">Products</a></li></ul>
-        </li>
-        <li>
-            <strong><span class="fas fa-chart-pie"></span> Expense <i class="fas fa-caret-right"></i></strong>
-            <ul class="sub-menu"><li><a class="links" href="/ExpenseCategories/Index">Categories</a></li><li><a class="links" href="/Expenses/Index">Expenses</a></li></ul>
-        </li>*@
+                    <strong><span class="fas fa-user-tie"></span> Sub-Admin <i class="fas fa-caret-right"></i></strong>
+                    <ul class="sub-menu">
+                        <li><a class="links" href="/Account/Register">Signup Sub-admin</a></li>
+                        <li><a class="links" href="/SubAdmin/Index">Sub-admins</a></li>
+                        <li><a class="links" href="/SubAdmin/PageAccess">Page Access</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <strong><span class="fas fa-shopping-cart"></span> Product <i class="fas fa-caret-right"></i></strong>
+                    <ul class="sub-menu"><li><a class="links" href="/ProductCategories/IndexView">Categories</a></li><li><a class="links" href="/Products/Index">Products</a></li></ul>
+                </li>
+                <li>
+                    <strong><span class="fas fa-chart-pie"></span> Expense <i class="fas fa-caret-right"></i></strong>
+                    <ul class="sub-menu"><li><a class="links" href="/ExpenseCategories/Index">Categories</a></li><li><a class="links" href="/Expenses/Index">Expenses</a></li></ul>
+                </li>*@
         </ul>
     </div>
 
@@ -90,6 +88,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.4/croppie.min.js"></script>
     <!--scroll-->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- MDB core JavaScript -->
     <script src="~/mdb/js/mdb-core.js"></script>
     <!--notify js-->
@@ -101,8 +101,7 @@
     <!--Sidebar-->
     <script src="//cdn.muicss.com/mui-latest/js/mui.min.js"></script>
     <script src="~/js/side-menu-link.js"></script>
-
-    
+    <!-- active-links -->
     <script src="~/js/active-links.js?v=1"></script>
 
     @RenderSection("Scripts", required: false)

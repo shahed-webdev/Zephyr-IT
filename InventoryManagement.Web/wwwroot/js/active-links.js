@@ -86,13 +86,21 @@ let linkData = [{
         "Title": "Vendors",
         "IconClass": null
     }]
-},
+    },
     {
         "LinkCategoryID": 2,
         "SN": 7,
         "Category": "Product",
         "IconClass": "fas fa-shopping-cart",
         "links": [{
+            "LinkID": 11,
+            "SN": 3,
+            "Controller": "Product",
+            "Action": "Cataloglist",
+            "Title": "Category",
+            "IconClass": null
+        },
+        {
             "LinkID": 9,
             "SN": 1,
             "Controller": "Product",
@@ -101,31 +109,14 @@ let linkData = [{
             "IconClass": null
         },
         {
-            "LinkID": 10,
-            "SN": 2,
-            "Controller": "Product",
-            "Action": "Catalog",
-            "Title": "Category",
-            "IconClass": null
-            },
-            {
-            "LinkID": 11,
-            "SN": 3,
-            "Controller": "Product",
-            "Action": "Cataloglist",
-            "Title": "Category List",
-            "IconClass": null
-        },
-        {
             "LinkID": 6,
             "SN": 1,
             "Controller": "Product",
-            "Action": "List",
-            "Title": "Products",
+            "Action": "Purchase",
+            "Title": "Purchase",
             "IconClass": null
         }]
-    }
-]
+    }]
 
 //selectors
 const menuItem = document.getElementById("menuItem");

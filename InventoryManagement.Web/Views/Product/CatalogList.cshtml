@@ -2,18 +2,27 @@
 @model IEnumerable<ProductCatalogShow>
 
 @{
-    ViewData["Title"] = "CatalogList";
+    ViewData["Title"] = "Category";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-
-<div class="treeview w-20 border">
-    <h6 class="pt-3 pl-3">Catalog List</h6>
-    <hr>
-    <ul class="mb-1 pl-3 pb-2">
-        @foreach (var catalog in Model)
-        {
-            <li>
+<div class="m-3 card card-body">
+    <div class="row">
+        <div class="col justify-content-center align-self-center">
+            <h4 class="page-header">Category List</h4>
+        </div>
+        <div class="col text-right">
+            <a href="/Product/Catalog" class="btn-floating peach-gradient" title="Add New">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+    <hr />
+    <div class="treeview">
+        <ul class="list-group list-group-flush">
+            @foreach (var catalog in Model)
+            {
+            <li class="list-group-item">
                 <i class="fas fa-angle-right rotate"></i>
                 <span><i class="far fa-folder-open ic-w mx-1"></i>@catalog.CatalogName</span>
 
@@ -21,7 +30,9 @@
                 {
                     <partial name="_SubCatalog" model="@catalog.SubCatalog" />
                 }
-            </li>
-        }
-    </ul>
+            </li>  
+            }
+        </ul>
+    </div>
 </div>
+

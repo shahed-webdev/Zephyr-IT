@@ -20,19 +20,20 @@ namespace InventoryManagement.Web.Controllers
             return View();
         }
 
-        //GET: Catalog
-
+        //GET: Catalog list
         public IActionResult CatalogList()
         {
             var model = _db.ProductCatalogs.ListCustom();
             return View(model);
         }
 
+        //GET: Catalog
         public IActionResult Catalog()
         {
             ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
             return View();
         }
+       
         //POST: Catalog
         [HttpPost]
         public async Task<IActionResult> Catalog(ProductCatalogViewModel model)
@@ -42,12 +43,12 @@ namespace InventoryManagement.Web.Controllers
             var response = await _db.ProductCatalogs.AddCustomAsync(model).ConfigureAwait(false);
 
             if (response.IsSuccess)
-                return RedirectToAction("CatalogList", "Product");
+                return RedirectToAction("CatalogList");
             else
                 return UnprocessableEntity(response.Message);
         }
 
-        //Get:
+        //GET: Catalog Type
         public async Task<IActionResult> CatalogType()
         {
             var response = await _db.ProductCatalogTypes.ToListAsync();
@@ -69,16 +70,18 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
-
+        //GET: Purchase
         public IActionResult Purchase()
         {
+            ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
             return View();
         }
 
+        //POST: Purchase
         [HttpPost]
         public async Task<IActionResult> Purchase(PurchaseViewModel model)
         {
-            if (ModelState.IsValid) return Content("error");
+            if (!ModelState.IsValid) return View(model);
 
 
             return View(model);
