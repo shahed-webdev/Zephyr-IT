@@ -8,12 +8,12 @@
 @section Styles{
     <style>
 
-        #vendor-info li { font-size: 19px; line-height: 3.17; }
+        #vendor-info li { font-size: 17px; line-height: 3.17; }
         #vendor-info i { color: #13c7d4 }
 
-        #payment-area li strong { font-size: 19px; }
-        #inputDiscount, #inputPaid { display: inline-block; width: auto; border-radius: 50px; text-align: right; color: #000; }
-
+        #payment-area li strong { font-size: 17px; }
+        #inputDiscount, #inputPaid, #inputPurchaseDate { display: inline-block; border-radius: 50px; text-align: right; color: #000; }
+        .list-group-item { padding: .75rem 0; }
         .has-error { border: 2px solid #ff0000 }
     </style>
 }
@@ -21,13 +21,12 @@
 <div class="m-md-3">
     <h4 class="mb-3 page-header">Purchase</h4>
 
-    
     <section class="card card-body">
-        <form>
+        <form id="cart-form">
             <div class="form-row">
                 <div class="col-lg-3">
                     <div class="md-form">
-                        <select name="ParentId" asp-items="ViewBag.ParentId" class="mdb-select" style="display: none" required>
+                        <select id="ParentId" asp-items="ViewBag.ParentId" class="mdb-select" style="display: none" required>
                             <option value="" disabled selected>Select Category</option>
                         </select>
                     </div>
@@ -63,42 +62,45 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3">
-                    <div class="md-form">
-                        <input id="inputBarcode" class="form-control" type="number" required />
-                        <label for="inputBarcode">Barcode</label>
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
+                <div class="col-lg-5">
                     <div class="md-form">
                         <input id="inputDescription" class="form-control" type="text" />
                         <label for="inputDescription">Description</label>
                     </div>
                 </div>
-                <div class="col-lg-2">
-                    <div class="md-form text-right">
-                        <input type="submit" value="add" id="btnaddProduct" class="btn aqua-gradient btn-rounded" />
+
+                <div class="col-lg-4">
+                    <div class="md-form">
+                        <input id="inputProductCode" class="form-control" type="number" required />
+                        <label for="inputProductCode">Product Code</label>
                     </div>
                 </div>
             </div>
+            <div class="text-right">
+                <button type="submit" id="btnaddProduct" class="btn amber accent-4 btn-rounded">
+                    add product<i class="fal fa-cart-arrow-down ml-1"></i>
+                </button>
+            </div>
         </form>
+    </section>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th><strong>Category</strong></th>
-                    <th><strong>Product Name</strong></th>
-                    <th><strong>Purchase Price</strong></th>
-                    <th><strong>Selling Price</strong></th>
-                    <th><strong>Warranty</strong></th>
-                    <th><strong>Stock</strong></th>              
-                </tr>
-            </thead>
-        </table>
-    </section>   
-    
-
+    <section class="card card-body mt-3">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th><strong>Category</strong></th>
+                        <th><strong>Product&nbspName</strong></th>
+                        <th><strong>Purchase&nbspPrice</strong></th>
+                        <th><strong>Selling&nbspPrice</strong></th>
+                        <th><strong>Warranty</strong></th>
+                        <th><strong>Stock</strong></th>
+                    </tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+            </table>
+        </div>
+    </section>
 
     <section class="card card-body my-4">
         <div class="row">
@@ -111,8 +113,8 @@
                     </div>
 
                     <div>
-                        <a id="CreateClick" data-url="/Vendor/Create" class="btn btn-outline-primary mt-3" title="Add New" data-toggle="modal">
-                            Add New <i class="fa fa-plus" aria-hidden="true"></i>
+                        <a id="CreateClick" data-url="/Vendor/Create" class="btn btn-floating amber accent-4 mt-3" title="Add New" data-toggle="modal">
+                            <i class="fal fa-user-plus ml-1"></i>
                         </a>
                     </div>
                 </div>
@@ -160,7 +162,7 @@
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <strong>Purchase Date</strong>
                         <div>
-                            <input placeholder="Purchase Date" id="inputPurchaseDate" type="text" class="form-control datepicker" />
+                            <input placeholder="Purchase Date" id="inputPurchaseDate" type="text" class="form-control datepicker text-center" />
                         </div>
                     </li>
                 </ul>
@@ -179,13 +181,14 @@
 
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/jquery-ajax-unobtrusive@3.2.6/dist/jquery.unobtrusive-ajax.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
+    <partial name="_UnobtrusiveAjaxPartial" />
+    <script src="~/page-js/product-purchase.js"></script>
 
-    <script>//global cart data
+    <script>
+        //global cart data
         var cart = [];
 
-        $(function() {
+        $(function () {
             $('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'));
 
             //clear id if refresh page
@@ -195,7 +198,7 @@
             $('.mdb-select').materialSelect();
 
             //input Paid, input Discount
-            $('#inputPaid,#inputDiscount').on('input keypress', function(event) {
+            $('#inputPaid,#inputDiscount').on('input keypress', function (event) {
                 if ((event.which !== 46 || $(this).val().indexOf('.') !== -1) && (event.which < 48 || event.which > 57)) {
                     event.preventDefault();
                 }
@@ -229,12 +232,12 @@
         var $tableBody = $('#table-row');
 
         //delete click
-        $tableBody.on("click", ".delete", function(evt) {
+        $tableBody.on("click", ".delete", function (evt) {
             evt.preventDefault();
             const row = $(this).closest('tr');
             var serialNumber = row.find('.SN').text();
 
-            const filteredItems = cart.filter(function(item) {
+            const filteredItems = cart.filter(function (item) {
                 return item.SN !== parseInt(serialNumber);
             });
 
@@ -244,7 +247,7 @@
         });
 
         //input length, width
-        $tableBody.on('input', '.length, .width', function() {
+        $tableBody.on('input', '.length, .width', function () {
             const row = $(this).closest('tr');
             const quantity = row.find('.quantity');
             const length = row.find('.length');
@@ -255,7 +258,7 @@
         });
 
         //input unit Price
-        $tableBody.on('input', '.unitPrice, .length, .width', function() {
+        $tableBody.on('input', '.unitPrice, .length, .width', function () {
             const row = $(this).closest('tr');
             const quantity = row.find('.quantity');
             const unitPrice = row.find('.unitPrice');
@@ -272,12 +275,12 @@
         }
 
         //update data
-        $tableBody.on('change', 'input', function(e) {
+        $tableBody.on('change', 'input', function (e) {
             const row = $(this).closest('tr');
             const serialNumber = parseInt(row.find(".SN").text());
             const index = cart.findIndex((p => p.SN === serialNumber));
 
-            row.find('input').each(function(i, element) {
+            row.find('input').each(function (i, element) {
                 cart[index][element.name] = element.type === 'number' ? parseNumber(element.value) : element.value;
             });
 
@@ -292,7 +295,7 @@
             var total = 0;
 
             if (row.length > 0) {
-                row.find('input').each(function(i, element) {
+                row.find('input').each(function (i, element) {
                     if (element.name === 'LineTotal')
                         total += Math.ceil(parseNumber(element.value));
                 });
@@ -305,7 +308,7 @@
         };
 
         //discount change
-        $("#inputDiscount").on("change", function() {
+        $("#inputDiscount").on("change", function () {
             const totalPrice = parseNumber($("#totalPrice").text());
             const discount = parseNumber($(this).val());
             const isValid = compareValidation(totalPrice, discount);
@@ -327,7 +330,7 @@
         });
 
         //paid change
-        $("#inputPaid").on("change", function() {
+        $("#inputPaid").on("change", function () {
             const grandTotal = parseNumber($("#grandTotal").text());
             const paid = parseNumber($(this).val());
             const isValid = compareValidation(grandTotal, paid);
@@ -349,7 +352,7 @@
         });
 
         //remove error
-        $("#selectPaymentMethod").on("change", function() {
+        $("#selectPaymentMethod").on("change", function () {
             $(this).next('em').remove();
         });
 
@@ -366,7 +369,7 @@
             var isValid = true;
 
             if (row.length > 0) {
-                row.find('input[type="number"]').each(function() {
+                row.find('input[type="number"]').each(function () {
                     const input = $(this);
 
                     if (input.val() === '' || input.val() === '0' || input.val() === 0) {
@@ -394,30 +397,30 @@
         //vendor autocomplete
         $("#inputFindVendor").typeahead({
             minLength: 1,
-            displayText: function(item) {
+            displayText: function (item) {
                 return `${item.VendorCompanyName} (${item.VendorName}, ${item.VendorPhone})`;
             },
-            afterSelect: function(item) {
+            afterSelect: function (item) {
                 this.$element[0].value = item.VendorCompanyName
             },
-            source: function(request, result) {
+            source: function (request, result) {
                 $.ajax({
                     url: "/Purchase/FindVendor",
                     data: JSON.stringify({ 'prefix': request }),
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
-                    success: function(response) { result(response); }
+                    success: function (response) { result(response); }
                 });
             },
-            updater: function(item) {
+            updater: function (item) {
                 bindData(item);
                 return item;
             }
         });
 
         //insert vendor
-        $("#CreateClick").on("click", function() {
-            $.get($(this).data("url"), function(response) {
+        $("#CreateClick").on("click", function () {
+            $.get($(this).data("url"), function (response) {
                 $('#InsertModal').html(response).modal('show');
             });
         });
@@ -437,9 +440,9 @@
             $("#vendorId").val(data.VendorID);
 
             const html = `<li class="list-group-item"><i class="fas fa-building"></i> ${data.VendorCompanyName}</li>
-                     <li class="list-group-item"><i class="fas fa-user-tie"></i> ${data.VendorName}</li>
-                     <li class="list-group-item"><i class="fas fa-phone"></i> ${data.VendorPhone}</li>
-                     <li class="list-group-item"><i class="fas fa-map-marker-alt"></i> ${data.VendorAddress}</li>`;
+                             <li class="list-group-item"><i class="fas fa-user-tie"></i> ${data.VendorName}</li>
+                             <li class="list-group-item"><i class="fas fa-phone"></i> ${data.VendorPhone}</li>
+                             <li class="list-group-item"><i class="fas fa-map-marker-alt"></i> ${data.VendorAddress}</li>`;
 
             if (vendorInfo.children)
                 vendorInfo.empty();
@@ -448,8 +451,8 @@
         }
 
 
-        //Submit Sell
-        $("#btnPurchase").on("click", function(evt) {
+        //Submit
+        $("#btnPurchase").on("click", function (evt) {
             const isValid = validation();
             const that = $(this);
             const vendorId = $("#vendorId").val();
@@ -490,15 +493,16 @@
                     data: JSON.stringify({ model: data }),
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
-                    beforeSend: function() { that.prop('disabled', true).val('Submitting..') },
-                    success: function(id) {
+                    beforeSend: function () { that.prop('disabled', true).val('Submitting..') },
+                    success: function (id) {
                         localStorage.removeItem('cart');
                         window.location.href = `/Purchase/Receipt/${id}`;
                     },
-                    error: function(error) { console.log(error) },
-                    complete: function() { that.prop('disabled', false).val('Submit') }
+                    error: function (error) { console.log(error) },
+                    complete: function () { that.prop('disabled', false).val('Submit') }
                 });
             }
-        });</script>
+        });
+    </script>
 }
 
