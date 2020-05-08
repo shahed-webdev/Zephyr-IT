@@ -1,0 +1,16 @@
+﻿@using InventoryManagement.Repository
+@model IEnumerable<ProductCatalogShow>
+@{
+    Layout = null;
+}
+
+@foreach (var sub in Model)
+{
+    <ul class="nested">
+        <li><i class="far fa-folder-open ic-w mr-1"></i>@sub.CatalogName</li>
+        @if (sub.SubCatalog != null)
+        {
+            <partial name="_SubCatalog" model="@sub.SubCatalog" />
+        }
+    </ul>
+}

@@ -6,45 +6,45 @@
 }
 
 
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 mx-auto">
-                <div class="card card-body p-4">
-                    <h4 class="page-header mt-4 text-center">Add Product Category</h4>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card card-body p-4">
+                <h4 class="page-header mt-4 text-center">Add Product Category</h4>
 
-                    <form asp-action="Catalog">
-                        <div class="form-row">
-                            <div class="col">
-                                <div class="md-form">
-                                    <select id="CatalogTypeId" name="CatalogTypeId" class="mdb-select md-form" style="display: none">
-                                        <option value="" disabled selected>Category Type</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-1">
-                                <div class="md-form">
-                                    <a class="btn-floating peach-gradient btn-sm" data-toggle="modal" data-target="#modalCatalogType"><i class="far fa-plus" aria-hidden="true"></i></a>
-                                </div>
+                <form asp-action="Catalog">
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="md-form">
+                                <select id="CatalogTypeId" name="CatalogTypeId" class="mdb-select md-form" style="display: none">
+                                    <option value="" disabled selected>Category Type</option>
+                                </select>
                             </div>
                         </div>
-
-                        <div class="md-form">
-                            <select name="ParentId" class="mdb-select md-form" style="display: none">
-                                <option value="" disabled selected>Preant Category</option>
-                            </select>
+                        <div class="col-1">
+                            <div class="md-form">
+                                <a class="btn-floating peach-gradient btn-sm" data-toggle="modal" data-target="#modalCatalogType"><i class="far fa-plus" aria-hidden="true"></i></a>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="md-form">
-                            <input asp-for="CatalogName" class="form-control" required />
-                            <label for="CatalogName">Category Name</label>
-                        </div>
+                    <div class="md-form">
+                        <select name="ParentId" asp-items="ViewBag.ParentId" class="mdb-select md-form">
+                            <option value="" disabled selected>Parent Category</option>
+                        </select>
+                    </div>
 
-                        <button id="btnSubmit" class="btn peach-gradient btn-rounded my-4" type="submit">Submit</button>
-                    </form>
-                </div>
+                    <div class="md-form">
+                        <input asp-for="CatalogName" class="form-control" required />
+                        <label for="CatalogName">Category Name</label>
+                    </div>
+
+                    <button id="btnSubmit" class="btn peach-gradient btn-rounded my-4" type="submit">Submit</button>
+                </form>
             </div>
         </div>
-    </div>       
+    </div>
+</div>
 
 <!--Modal-->
 <div class="modal fade" id="modalCatalogType" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -56,10 +56,10 @@
                     <div class="md-form ml-0 mr-0">
                         <input name="CatalogType" type="text" id="inputCatalogType" class="form-control" />
                         <label for="inputCatalogType">Add Category Type</label>
-                    
+
                         <input type="submit" id="btnInputType" value="add" class="btn btn-deep-purple btn-sm" />
                     </div>
-                </form>    
+                </form>
             </div>
         </div>
     </div>

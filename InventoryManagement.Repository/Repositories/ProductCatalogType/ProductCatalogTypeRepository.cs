@@ -13,12 +13,21 @@ namespace InventoryManagement.Repository
         }
         public async Task<DbResponse<ProductCatalogTypeViewModel>> AddCustomAsync(ProductCatalogTypeViewModel model)
         {
+            var response = new DbResponse<ProductCatalogTypeViewModel>();
+
+            if (await Context.ProductCatalogType.AnyAsync(c => c.CatalogType == model.CatalogType).ConfigureAwait(false))
+            {
+                response.Message = "This category type already exist";
+                response.IsSuccess = false;
+                return response;
+            }
+
+
             var catalogType = new ProductCatalogType
             {
                 CatalogType = model.CatalogType
             };
 
-            var response = new DbResponse<ProductCatalogTypeViewModel>();
 
             await Context.ProductCatalogType.AddAsync(catalogType).ConfigureAwait(false);
 
@@ -29,14 +38,16 @@ namespace InventoryManagement.Repository
                 response.IsSuccess = true;
                 response.Message = "Success";
                 response.Data = model;
+                return response;
             }
             catch (DbUpdateException e)
             {
                 response.Message = e.Message;
                 response.IsSuccess = false;
+                return response;
             }
 
-            return response;
+
         }
 
 

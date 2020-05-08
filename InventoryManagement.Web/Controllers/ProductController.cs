@@ -1,5 +1,6 @@
 ﻿using InventoryManagement.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
@@ -20,11 +21,18 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET: Catalog
-        public IActionResult Catalog()
+
+        public IActionResult CatalogList()
         {
-            return View();
+            var model = _db.ProductCatalogs.ListCustom();
+            return View(model);
         }
 
+        public IActionResult Catalog()
+        {
+            ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
+            return View();
+        }
         //POST: Catalog
         [HttpPost]
         public async Task<IActionResult> Catalog(ProductCatalogViewModel model)
@@ -34,7 +42,7 @@ namespace InventoryManagement.Web.Controllers
             var response = await _db.ProductCatalogs.AddCustomAsync(model).ConfigureAwait(false);
 
             if (response.IsSuccess)
-                return Ok(response.Data);
+                return RedirectToAction("CatalogList", "Product");
             else
                 return UnprocessableEntity(response.Message);
         }
@@ -54,12 +62,12 @@ namespace InventoryManagement.Web.Controllers
 
             var response = await _db.ProductCatalogTypes.AddCustomAsync(model).ConfigureAwait(false);
 
-            if (response.IsSuccess) 
+            if (response.IsSuccess)
                 return Ok(response.Data);
             else
                 return UnprocessableEntity(response.Message);
-        }    
-        
+        }
+
 
 
         public IActionResult Purchase()

@@ -1,5 +1,8 @@
 ﻿using InventoryManagement.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Repository
@@ -39,6 +42,45 @@ namespace InventoryManagement.Repository
             }
 
             return response;
+        }
+
+        public IEnumerable<ProductCatalogShow> ListCustom()
+        {
+
+            var catalogs = Context.ProductCatalog
+                .AsEnumerable()?
+                .Where(x => x.Parent == null)
+                .ToList()
+                .Select(c => new ProductCatalogShow(c));
+
+            return catalogs;
+        }
+
+        public ICollection<DDL> CatalogDll()
+        {
+            var ddls = Context.ProductCatalog
+                .AsEnumerable()?
+                .ToList()
+                .Select(c => new DDL
+                {
+                    value = c.ProductCatalogId,
+                    label =   CatalogDllFunction(c.Parent, c.CatalogName)
+                });
+
+            return ddls.ToList();
+        }
+
+        string CatalogDllFunction(ProductCatalog catalog, string cat)
+        {
+            
+            if(catalog != null)
+            {
+                cat +=">";
+                cat +=CatalogDllFunction(catalog.Parent, catalog.CatalogName);
+            }
+
+
+            return cat;
         }
     }
 }

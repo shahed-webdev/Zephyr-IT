@@ -107,6 +107,14 @@ let linkData = [{
             "Action": "Catalog",
             "Title": "Category",
             "IconClass": null
+            },
+            {
+            "LinkID": 11,
+            "SN": 3,
+            "Controller": "Product",
+            "Action": "Cataloglist",
+            "Title": "Category List",
+            "IconClass": null
         },
         {
             "LinkID": 6,

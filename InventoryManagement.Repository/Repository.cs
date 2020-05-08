@@ -22,6 +22,12 @@ namespace InventoryManagement.Repository
             return Context.Set<TEntity>().Find(id);
         }
 
+        public TT FindGeneric<TT>(int id) where TT : class
+        {
+            return Context.Set<TT>().Find(id);
+        }
+
+
         IEnumerable<TEntity> IRepository<TEntity>.ToList()
         {
             return ToList();

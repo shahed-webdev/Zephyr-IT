@@ -1,0 +1,27 @@
+﻿@using InventoryManagement.Repository
+@model IEnumerable<ProductCatalogShow>
+
+@{
+    ViewData["Title"] = "CatalogList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="treeview w-20 border">
+    <h6 class="pt-3 pl-3">Catalog List</h6>
+    <hr>
+    <ul class="mb-1 pl-3 pb-2">
+        @foreach (var catalog in Model)
+        {
+            <li>
+                <i class="fas fa-angle-right rotate"></i>
+                <span><i class="far fa-folder-open ic-w mx-1"></i>@catalog.CatalogName</span>
+
+                @if (catalog.SubCatalog != null)
+                {
+                    <partial name="_SubCatalog" model="@catalog.SubCatalog" />
+                }
+            </li>
+        }
+    </ul>
+</div>
