@@ -185,6 +185,7 @@ const onAddtoCart = function (form) {
         updateStock(product, ProductCode);
     }
 
+    appendTotalPrice();
     localStorage.setItem('cart-storage', JSON.stringify(storage));
 }
 
