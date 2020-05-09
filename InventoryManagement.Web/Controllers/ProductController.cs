@@ -69,6 +69,12 @@ namespace InventoryManagement.Web.Controllers
                 return UnprocessableEntity(response.Message);
         }
 
+        //GET: find vendor from ajax autocomplete
+        public async Task<IActionResult> FindVendor(string prefix)
+        {
+            var data = await _db.Vendors.SearchAsync(prefix);
+            return Json(data);
+        }
 
         //GET: Purchase
         public IActionResult Purchase()

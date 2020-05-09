@@ -4,29 +4,107 @@ let storage = [];
 
 //selectors
 const cartForm = document.getElementById("cart-form");
+const selectCategory = cartForm.querySelector("#ParentId");
+const codeExistError = cartForm.querySelector("#code-exist-error");
 const tbody = document.getElementById("tbody");
 
- //functions
+
+//functions
 const getStorage = function () {
     if (localStorage.getItem('cart-storage')) {
         storage = JSON.parse(localStorage.getItem('cart-storage'));
     };
 }
 
+//set row to selected
+const selectedRow = function (row, isFound) {
+    const rStyle = row.classList;
+    const isAdded = rStyle.contains('active-row');
+
+    if (isFound) {
+        if (!isAdded) rStyle.add('active-row');
+    }
+    else {
+        if (isAdded) rStyle.remove('active-row');
+    }
+
+}
+
+//added product code count
+const productCodeCount = function (value = null) {
+    let codeCount = cartForm.querySelector('#codeCount');
+    codeCount.innerText = value ? value : 0;
+}
+
+//increment the stock value
+const increaseStockValue = function (ParentId, value) {
+    const tRows = tbody.querySelectorAll('tr');
+    productCodeCount();
+
+    tRows.forEach(row => {
+        const id = row.getAttribute('data-id');
+
+        if (id === ParentId) {
+            row.cells[row.cells.length - 1].querySelector('strong').textContent = value;
+
+            //count product on text field 
+            productCodeCount(value);
+
+            //row selected
+            selectedRow(row, true);
+            return;
+        }
+        else selectedRow(row, false);
+    });
+}
+
+//check product already added
 const isProductExist = function (product) {
     return storage.some(elem => elem.ParentId === product.ParentId)
 }
 
-const updateStock = function (product, ProductCode) {
+//calculate purchase Total
+const purchaseTotalPrice = function () {
+    const multi = storage.map(item => item.PurchasePrice * item.ProductStocks.length);
+    return multi.reduce((prev, curr) => prev + curr, 0);
+}
+
+//append total price to DOM
+const appendTotalPrice = function () {
+    const totalPrice = document.getElementById('totalPrice');
+    const totalPayable = document.getElementById('totalPayable');
+    const totalDue = document.getElementById('totalDue');
+    const totalAmount = purchaseTotalPrice();
+
+    totalPrice.innerText = totalAmount
+    totalPayable.innerText = totalAmount;
+    totalDue.innerText = totalAmount;
+}
+
+//update stock on table
+const updateStock = function (product, newCode) {
+    codeExistError.innerText = '';
+
     storage.forEach(item => {
         if (item.ParentId === product.ParentId) {
-            item.ProductStocks.push(ProductCode);
+
+            const codeExist = item.ProductStocks.some(code => code.ProductCode === newCode.ProductCode);
+            if (!codeExist) {
+                //update storage
+                item.ProductStocks.push(newCode);
+                //update on DOM
+                increaseStockValue(item.ParentId, item.ProductStocks.length);
+            } else
+                codeExistError.innerText = `${newCode.ProductCode}: Already Added!`;
+            return;
         }
     });
 }
 
+//create table rows
 const createTableRow = function (item) {
     let tr = document.createElement("tr");
+    tr.setAttribute('data-id', item.ParentId);
 
     //column 1
     let td1 = tr.insertCell(0);
@@ -35,6 +113,7 @@ const createTableRow = function (item) {
     //column 2
     let td2 = tr.insertCell(1);
     td2.appendChild(document.createTextNode(item.ProductName));
+    td2.setAttribute('title', item.Description);
 
     //column 3
     let td3 = tr.insertCell(2);
@@ -58,10 +137,11 @@ const createTableRow = function (item) {
     return tr;
 }
 
+//show product on table
 const showCartedProduct = function () {
     getStorage();
+    appendTotalPrice();
 
-    tbody.innerHTML = '';
     const fragment = document.createDocumentFragment();
 
     storage.forEach(item => {
@@ -72,14 +152,15 @@ const showCartedProduct = function () {
     tbody.appendChild(fragment);
  }
 
+//add product submit
 const onAddtoCart = function (form) {
     form.preventDefault();
     const element = form.target;
 
     const ParentId = element.ParentId;
     const ProductName = element.inputProductName.value;
-    const PurchasePrice = element.inputPurchasePrice.value;
-    const SellingPrice = element.inputSellingPrice.value;
+    const PurchasePrice = +element.inputPurchasePrice.value;
+    const SellingPrice = +element.inputSellingPrice.value;
     const Warranty = element.inputWarranty.value;
     const Description = element.inputDescription.value;
 
@@ -88,23 +169,174 @@ const onAddtoCart = function (form) {
     const product = { ParentId: ParentId.value, ProductName, PurchasePrice, SellingPrice, Warranty, Description, ProductStocks: [] };
     product.ProductStocks.push(ProductCode);
 
-
     const uniqueProduct = !isProductExist(product);
-    if (uniqueProduct)
+    if (uniqueProduct) {
         storage.push(product);
-    else
+
+        //append the new product
+        const tr = createTableRow(product);
+        tr.classList.add('active-row');
+        tbody.appendChild(tr);
+
+        productCodeCount(1);
+    }
+    else {
+        //update the stock
         updateStock(product, ProductCode);
+    }
 
-
+    appendTotalPrice();
     localStorage.setItem('cart-storage', JSON.stringify(storage));
-    console.log(storage)
-    showCartedProduct();
 }
+
+//bind textbox field
+const bindTextinput = function (cells = null) {
+    let productName = cartForm.inputProductName;
+    let purchasePrice = cartForm.inputPurchasePrice;
+    let sellingPrice = cartForm.inputSellingPrice;
+    let warranty = cartForm.inputWarranty;
+    let description = cartForm.inputDescription;
+
+   //count added product code on taxt field
+    if (cells) productCodeCount(cells[5].querySelector('strong').textContent);
+    else productCodeCount();
+
+    const elements = [productName, purchasePrice, sellingPrice, warranty, description];
+    elements.forEach((element, index) => {
+        if (cells) {
+            index === 4 ? elements[index].value = cells[1].getAttribute('title') : element.value = cells[index + 1].textContent;
+            element.nextElementSibling.classList.add('active');
+            element.disabled = true;
+        }
+        else {
+            element.value = '';
+            element.nextElementSibling.classList.remove('active');
+            element.disabled = false;
+        }
+    });
+}
+
+//category drodown change
+const onCategoryChanged = function () {
+    const id = this.value;
+    const tRows = tbody.querySelectorAll('tr');
+
+    //clear bind text field
+    bindTextinput();
+
+    tRows.forEach(row => {
+        const rowId = row.getAttribute('data-id');
+        if (id === rowId) {
+            //selected table row
+            selectedRow(row, true);
+            //bind text field
+            bindTextinput(row.cells);
+            return;
+        }
+        else {
+            //un-select table row
+            selectedRow(row, false);
+        }
+    });
+}
+
+//product code input
+const onProductCodeInput = function () {
+    if (codeExistError.innerText)
+        codeExistError.innerText = '';
+
+    storage.forEach(item => {
+        const codeExist = item.ProductStocks.some(code => code.ProductCode === this.value);
+
+        if (codeExist) {
+            codeExistError.innerText = `${this.value}: Already Added!`;
+            return;
+        }
+    });
+}
+
+
 
 //event listners
 cartForm.addEventListener('submit', onAddtoCart);
-
+selectCategory.addEventListener('change', onCategoryChanged);
+cartForm.inputProductCode.addEventListener('input', onProductCodeInput);
 
 //call function
 showCartedProduct();
-console.log(storage)
+
+
+//****VENDORS****//
+
+//selectors
+const vendorAddClick = document.getElementById('vendorAddClick');
+const inputFindVendor = document.getElementById('inputFindVendor');
+const vendorInfo = document.getElementById('vendor-info');
+const hiddenVendorId = document.getElementById('vendorId');
+const insertModal = $('#InsertModal');
+
+//functions
+
+//get vendor insert modal
+const onVendorAddClicked = function () {
+    const url = this.getAttribute('data-url');
+
+    axios.get(url)
+        .then(response => {
+            insertModal.html(response.data).modal('show');
+        })
+        .catch(err => console.log(err))
+}
+
+//append vendor info to DOM
+const appendVendorInfo = function (Data) {
+    hiddenVendorId.value = Data.VendorId;
+    vendorInfo.innerHTML = '';
+
+    const html = `
+        <li class="list-group-item"><i class="fas fa-building"></i> ${Data.VendorCompanyName}</li>
+        <li class="list-group-item"><i class="fas fa-user-tie"></i> ${Data.VendorName}</li>
+        <li class="list-group-item"><i class="fas fa-phone"></i> ${Data.VendorPhone}</li>
+        <li class="list-group-item"><i class="fas fa-map-marker-alt"></i> ${Data.VendorAddress}</li>`;
+
+    vendorInfo.innerHTML= html;
+}
+
+//vendor create success
+function onCreateSuccess(response) {
+    console.log(response.Data)
+    if (response.Status) {
+        insertModal.modal('hide');
+        inputFindVendor.value = '';
+
+        appendVendorInfo(response.Data);
+    }
+    else {
+        insertModal.html(response);
+    }
+}
+
+//vendor autocomplete
+$('#inputFindVendor').typeahead({
+    minLength: 3,
+    displayText: function (item) {
+        return `${item.VendorCompanyName} (${item.VendorName}, ${item.VendorPhone})`;
+    },
+    afterSelect: function (item) {
+        this.$element[0].value = item.VendorCompanyName
+    },
+    source: function (request, result) {
+        $.ajax({
+            url: "/Product/FindVendor",
+            data: { prefix: request },
+            success: function (response) { result(response); }
+        });
+    },
+    updater: function (item) {
+        appendVendorInfo(item);
+        return item;
+    }
+});
+
+//event listner
+vendorAddClick.addEventListener('click', onVendorAddClicked);

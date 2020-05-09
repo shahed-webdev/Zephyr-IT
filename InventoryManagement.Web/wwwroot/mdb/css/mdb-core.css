@@ -5061,7 +5061,7 @@ img.rounded-circle { -webkit-border-radius: 50%; border-radius: 50% }
 
 
 /*treeview*/
-.treeview.w-20 { width: 20rem }
+/*.treeview.w-20 { width: 20rem }
 
 .treeview .rotate { margin-top: .2rem; font-size: .8rem; vertical-align: text-top; cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; -webkit-transition: all .1s linear; transition: all .1s linear }
 
@@ -5142,6 +5142,3 @@ img.rounded-circle { -webkit-border-radius: 50%; border-radius: 50% }
 .treeview-colorful .treeview-colorful-items-header .fas { position: relative; color: #ffac47; -webkit-transition: all .2s linear; transition: all .2s linear; -webkit-transform: rotate(90deg); transform: rotate(90deg) }
 
 .treeview-colorful .treeview-colorful-items-header .fa-minus-circle { position: relative; color: #ffac47; -webkit-transition: all .2s linear; transition: all .2s linear; -webkit-transform: rotate(180deg); transform: rotate(180deg) }
-
-
-/*# sourceMappingURL=mdb.min.css.map*/

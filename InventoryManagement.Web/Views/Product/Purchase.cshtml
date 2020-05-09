@@ -7,14 +7,17 @@
 
 @section Styles{
     <style>
-
-        #vendor-info li { font-size: 17px; line-height: 3.17; }
-        #vendor-info i { color: #13c7d4 }
+        #vendor-info li { font-size: 17px; line-height: 2.5; }
+        #vendor-info li:first-child { border-top:0 }
+        #vendor-info li:last-child { border-bottom:0 }
+        #vendor-info i { color: #8a8383 }
 
         #payment-area li strong { font-size: 17px; }
         #inputDiscount, #inputPaid, #inputPurchaseDate { display: inline-block; border-radius: 50px; text-align: right; color: #000; }
         .list-group-item { padding: .75rem 0; }
         .has-error { border: 2px solid #ff0000 }
+
+        .active-row { background-color: #c9ffc8; transition: background-color 1s ease }
     </style>
 }
 
@@ -72,10 +75,12 @@
                 <div class="col-lg-4">
                     <div class="md-form">
                         <input id="inputProductCode" class="form-control" type="number" required />
-                        <label for="inputProductCode">Product Code</label>
+                        <label for="inputProductCode">Product Code <strong id="codeCount" class="badge-pill badge-light">0</strong></label>
+                        <i id="code-exist-error" class="text-danger"></i>
                     </div>
                 </div>
             </div>
+
             <div class="text-right">
                 <button type="submit" id="btnaddProduct" class="btn amber accent-4 btn-rounded">
                     add product<i class="fal fa-cart-arrow-down ml-1"></i>
@@ -113,7 +118,7 @@
                     </div>
 
                     <div>
-                        <a id="CreateClick" data-url="/Vendor/Create" class="btn btn-floating amber accent-4 mt-3" title="Add New" data-toggle="modal">
+                        <a id="vendorAddClick" data-url="/Vendor/Create" class="btn btn-floating amber accent-4 mt-3" title="Add New" data-toggle="modal">
                             <i class="fal fa-user-plus ml-1"></i>
                         </a>
                     </div>
@@ -121,6 +126,7 @@
                 <ul id="vendor-info" class="list-group list-group-flush"></ul>
                 <input type="hidden" id="vendorId" />
             </div>
+
             <div class="col-lg-6">
                 <ul class="list-group list-group-flush" id="payment-area">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -135,7 +141,7 @@
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center green-text">
                         <strong>Total Payable</strong>
-                        <strong>৳<span id="grandTotal"></span></strong>
+                        <strong>৳<span id="totalPayable"></span></strong>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <strong>Total Paid</strong>
@@ -185,14 +191,8 @@
     <script src="~/page-js/product-purchase.js"></script>
 
     <script>
-        //global cart data
-        var cart = [];
-
         $(function () {
             $('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'));
-
-            //clear id if refresh page
-            $("#vendorId").val("");
 
             // Material Select Initialization
             $('.mdb-select').materialSelect();
@@ -203,70 +203,23 @@
                     event.preventDefault();
                 }
             });
-
-            //load table data
-            loadCartData();
         });
 
-        //save to cart
-        function saveProductList(product) {
-            product.SN = (cart.length) + 1;
-            product.PurchaseQuantity = 0;
-            product.PurchaseUnitPrice = product.ProductPrice;
-            product.LineTotal = 0;
-            product.Details = '';
-
-            cart.push(product);
-            localStorage.setItem('cart', JSON.stringify(cart));
-        };
-
-        //load Cart Data
-        function loadCartData() {
-            if (localStorage.getItem('cart')) {
-                cart = JSON.parse(localStorage.getItem('cart'));
-            };
-            calculateTotal();
-        };
-
-        //find table
-        var $tableBody = $('#table-row');
 
         //delete click
-        $tableBody.on("click", ".delete", function (evt) {
-            evt.preventDefault();
-            const row = $(this).closest('tr');
-            var serialNumber = row.find('.SN').text();
+        //$tableBody.on("click", ".delete", function (evt) {
+        //    evt.preventDefault();
+        //    const row = $(this).closest('tr');
+        //    var serialNumber = row.find('.SN').text();
 
-            const filteredItems = cart.filter(function (item) {
-                return item.SN !== parseInt(serialNumber);
-            });
+        //    const filteredItems = cart.filter(function (item) {
+        //        return item.SN !== parseInt(serialNumber);
+        //    });
 
 
-            localStorage.setItem('cart', JSON.stringify(filteredItems));
-            loadCartData();
-        });
+        //    localStorage.setItem('cart', JSON.stringify(filteredItems));
+        //});
 
-        //input length, width
-        $tableBody.on('input', '.length, .width', function () {
-            const row = $(this).closest('tr');
-            const quantity = row.find('.quantity');
-            const length = row.find('.length');
-            const width = row.find('.width');
-
-            const total = (parseNumber(length.val()) * parseNumber(width.val()));
-            quantity.val(total.toFixed(2));
-        });
-
-        //input unit Price
-        $tableBody.on('input', '.unitPrice, .length, .width', function () {
-            const row = $(this).closest('tr');
-            const quantity = row.find('.quantity');
-            const unitPrice = row.find('.unitPrice');
-            const lineTotal = row.find('.lineTotal');
-
-            const total = (parseNumber(quantity.val()) * parseNumber(unitPrice.val()));
-            lineTotal.val(total.toFixed(2));
-        });
 
         //convert to float number
         function parseNumber(n) {
@@ -274,38 +227,6 @@
             return isNaN(f) ? 0 : f;
         }
 
-        //update data
-        $tableBody.on('change', 'input', function (e) {
-            const row = $(this).closest('tr');
-            const serialNumber = parseInt(row.find(".SN").text());
-            const index = cart.findIndex((p => p.SN === serialNumber));
-
-            row.find('input').each(function (i, element) {
-                cart[index][element.name] = element.type === 'number' ? parseNumber(element.value) : element.value;
-            });
-
-            localStorage.setItem('cart', JSON.stringify(cart));
-            calculateTotal();
-            validation();
-        });
-
-        //sum table value
-        function calculateTotal() {
-            const row = $('#table-row tr');
-            var total = 0;
-
-            if (row.length > 0) {
-                row.find('input').each(function (i, element) {
-                    if (element.name === 'LineTotal')
-                        total += Math.ceil(parseNumber(element.value));
-                });
-            };
-
-            $("#totalPrice").text(total);
-            $("#grandTotal").text(total);
-            $("#totalDue").text(total);
-            resetPayment();
-        };
 
         //discount change
         $("#inputDiscount").on("change", function () {
@@ -356,12 +277,6 @@
             $(this).next('em').remove();
         });
 
-        //reset discount/paid amount
-        function resetPayment() {
-            $("#inputDiscount").val('').next('em').remove();
-            $("#inputPaid").val('').next('em').remove();
-            $("#payment-method-error").text('');
-        }
 
         //input field validation
         function validation() {
@@ -393,63 +308,6 @@
             }
             return isValid;
         }
-
-        //vendor autocomplete
-        $("#inputFindVendor").typeahead({
-            minLength: 1,
-            displayText: function (item) {
-                return `${item.VendorCompanyName} (${item.VendorName}, ${item.VendorPhone})`;
-            },
-            afterSelect: function (item) {
-                this.$element[0].value = item.VendorCompanyName
-            },
-            source: function (request, result) {
-                $.ajax({
-                    url: "/Purchase/FindVendor",
-                    data: JSON.stringify({ 'prefix': request }),
-                    type: "POST",
-                    contentType: "application/json; charset=utf-8",
-                    success: function (response) { result(response); }
-                });
-            },
-            updater: function (item) {
-                bindData(item);
-                return item;
-            }
-        });
-
-        //insert vendor
-        $("#CreateClick").on("click", function () {
-            $.get($(this).data("url"), function (response) {
-                $('#InsertModal').html(response).modal('show');
-            });
-        });
-
-        function OnCreateSuccess(response) {
-            if (response.Status) {
-                $('#InsertModal').html(response).modal('hide');
-                bindData(response.Data);
-                $("#inputFindVendor").val('');
-            } else {
-                $('#InsertModal').html(response);
-            }
-        }
-
-        function bindData(data) {
-            const vendorInfo = $("#vendor-info");
-            $("#vendorId").val(data.VendorID);
-
-            const html = `<li class="list-group-item"><i class="fas fa-building"></i> ${data.VendorCompanyName}</li>
-                             <li class="list-group-item"><i class="fas fa-user-tie"></i> ${data.VendorName}</li>
-                             <li class="list-group-item"><i class="fas fa-phone"></i> ${data.VendorPhone}</li>
-                             <li class="list-group-item"><i class="fas fa-map-marker-alt"></i> ${data.VendorAddress}</li>`;
-
-            if (vendorInfo.children)
-                vendorInfo.empty();
-
-            vendorInfo.append(html);
-        }
-
 
         //Submit
         $("#btnPurchase").on("click", function (evt) {
