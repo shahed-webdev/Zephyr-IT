@@ -264,3 +264,79 @@ cartForm.inputProductCode.addEventListener('input', onProductCodeInput);
 
 //call function
 showCartedProduct();
+
+
+//****VENDORS****//
+
+//selectors
+const vendorAddClick = document.getElementById('vendorAddClick');
+const inputFindVendor = document.getElementById('inputFindVendor');
+const vendorInfo = document.getElementById('vendor-info');
+const hiddenVendorId = document.getElementById('vendorId');
+const insertModal = $('#InsertModal');
+
+//functions
+
+//get vendor insert modal
+const onVendorAddClicked = function () {
+    const url = this.getAttribute('data-url');
+
+    axios.get(url)
+        .then(response => {
+            insertModal.html(response.data).modal('show');
+        })
+        .catch(err => console.log(err))
+}
+
+//append vendor info to DOM
+const appendVendorInfo = function (Data) {
+    hiddenVendorId.value = Data.VendorId;
+    vendorInfo.innerHTML = '';
+
+    const html = `
+        <li class="list-group-item"><i class="fas fa-building"></i> ${Data.VendorCompanyName}</li>
+        <li class="list-group-item"><i class="fas fa-user-tie"></i> ${Data.VendorName}</li>
+        <li class="list-group-item"><i class="fas fa-phone"></i> ${Data.VendorPhone}</li>
+        <li class="list-group-item"><i class="fas fa-map-marker-alt"></i> ${Data.VendorAddress}</li>`;
+
+    vendorInfo.innerHTML= html;
+}
+
+//vendor create success
+function onCreateSuccess(response) {
+    console.log(response.Data)
+    if (response.Status) {
+        insertModal.modal('hide');
+        inputFindVendor.value = '';
+
+        appendVendorInfo(response.Data);
+    }
+    else {
+        insertModal.html(response);
+    }
+}
+
+//vendor autocomplete
+$('#inputFindVendor').typeahead({
+    minLength: 3,
+    displayText: function (item) {
+        return `${item.VendorCompanyName} (${item.VendorName}, ${item.VendorPhone})`;
+    },
+    afterSelect: function (item) {
+        this.$element[0].value = item.VendorCompanyName
+    },
+    source: function (request, result) {
+        $.ajax({
+            url: "/Product/FindVendor",
+            data: { prefix: request },
+            success: function (response) { result(response); }
+        });
+    },
+    updater: function (item) {
+        appendVendorInfo(item);
+        return item;
+    }
+});
+
+//event listner
+vendorAddClick.addEventListener('click', onVendorAddClicked);
