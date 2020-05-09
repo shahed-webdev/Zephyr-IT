@@ -33,7 +33,7 @@ namespace InventoryManagement.Web.Controllers
             ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
             return View();
         }
-       
+
         //POST: Catalog
         [HttpPost]
         public async Task<IActionResult> Catalog(ProductCatalogViewModel model)

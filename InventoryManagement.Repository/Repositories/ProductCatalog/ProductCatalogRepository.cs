@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Repository
@@ -15,15 +14,30 @@ namespace InventoryManagement.Repository
 
         public async Task<DbResponse<ProductCatalogViewModel>> AddCustomAsync(ProductCatalogViewModel model)
         {
+            var response = new DbResponse<ProductCatalogViewModel>();
+
+            if (Context.ProductCatalog.Any(c => c.ParentId == model.ParentId && c.CatalogName == model.CatalogName))
+            {
+                response.Message = "Name already exists";
+                response.IsSuccess = false;
+                return response;
+            }
+
+            var level = 0;
+            if (model.ParentId != null)
+            {
+                level = Context.ProductCatalog.Find(model.ParentId).CatalogLevel + 1;
+            }
+
             var catalog = new ProductCatalog
             {
                 CatalogTypeId = model.CatalogTypeId,
                 CatalogName = model.CatalogName,
-                CatalogLevel = 0,
+                CatalogLevel = level,
                 ParentId = model.ParentId
             };
 
-            var response = new DbResponse<ProductCatalogViewModel>();
+
 
             await Context.ProductCatalog.AddAsync(catalog).ConfigureAwait(false);
 
@@ -64,7 +78,7 @@ namespace InventoryManagement.Repository
                 .Select(c => new DDL
                 {
                     value = c.ProductCatalogId,
-                    label =   CatalogDllFunction(c.Parent, c.CatalogName)
+                    label = CatalogDllFunction(c.Parent, c.CatalogName)
                 });
 
             return ddls.ToList();
@@ -72,11 +86,11 @@ namespace InventoryManagement.Repository
 
         string CatalogDllFunction(ProductCatalog catalog, string cat)
         {
-            
-            if(catalog != null)
+
+            if (catalog != null)
             {
-                cat +=">";
-                cat +=CatalogDllFunction(catalog.Parent, catalog.CatalogName);
+                cat += ">";
+                cat += CatalogDllFunction(catalog.Parent, catalog.CatalogName);
             }
 
 
