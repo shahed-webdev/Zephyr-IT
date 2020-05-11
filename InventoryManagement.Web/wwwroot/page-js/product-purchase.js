@@ -7,27 +7,13 @@ const cartForm = document.getElementById("cart-form");
 const selectCategory = cartForm.querySelector("#ParentId");
 const codeExistError = cartForm.querySelector("#code-exist-error");
 const tbody = document.getElementById("tbody");
-
+const productCodeBody = document.getElementById('product-code-body');
 
 //functions
 const getStorage = function () {
     if (localStorage.getItem('cart-storage')) {
         storage = JSON.parse(localStorage.getItem('cart-storage'));
     };
-}
-
-//set row to selected
-const selectedRow = function (row, isFound) {
-    const rStyle = row.classList;
-    const isAdded = rStyle.contains('active-row');
-
-    if (isFound) {
-        if (!isAdded) rStyle.add('active-row');
-    }
-    else {
-        if (isAdded) rStyle.remove('active-row');
-    }
-
 }
 
 //added product code count
@@ -42,25 +28,21 @@ const increaseStockValue = function (ParentId, value) {
     productCodeCount();
 
     tRows.forEach(row => {
-        const id = row.getAttribute('data-id');
+        const rowSn= row.getAttribute('SN');
 
-        if (id === ParentId) {
-            row.cells[row.cells.length - 1].querySelector('strong').textContent = value;
+        if (rowSn === SN) {
+            row.cells[5].querySelector('strong').textContent = value;
 
             //count product on text field 
             productCodeCount(value);
-
-            //row selected
-            selectedRow(row, true);
             return;
         }
-        else selectedRow(row, false);
     });
 }
 
 //check product already added
 const isProductExist = function (product) {
-    return storage.some(elem => elem.ParentId === product.ParentId)
+    return storage.some(elem => (elem.ProductName === product.ProductName) && (elem.ParentId === product.ParentId));
 }
 
 //calculate purchase Total
@@ -86,14 +68,13 @@ const updateStock = function (product, newCode) {
     codeExistError.innerText = '';
 
     storage.forEach(item => {
-        if (item.ParentId === product.ParentId) {
-
+        if (item.SN === product.SN) {
             const codeExist = item.ProductStocks.some(code => code.ProductCode === newCode.ProductCode);
             if (!codeExist) {
                 //update storage
                 item.ProductStocks.push(newCode);
                 //update on DOM
-                increaseStockValue(item.ParentId, item.ProductStocks.length);
+                increaseStockValue(item.SN, item.ProductStocks.length);
             } else
                 codeExistError.innerText = `${newCode.ProductCode}: Already Added!`;
             return;
@@ -102,13 +83,13 @@ const updateStock = function (product, newCode) {
 }
 
 //create table rows
-const createTableRow = function (item) {
+const createTableRow = function (item, SN) {
     let tr = document.createElement("tr");
-    tr.setAttribute('data-id', item.ParentId);
+    tr.setAttribute('SN', SN);
 
     //column 1
     let td1 = tr.insertCell(0);
-    td1.appendChild(document.createTextNode(item.ParentId));
+    td1.appendChild(document.createTextNode(item.Category));
 
     //column 2
     let td2 = tr.insertCell(1);
@@ -129,10 +110,17 @@ const createTableRow = function (item) {
 
     //column 6
     let td6 = tr.insertCell(5);
-    let span = document.createElement('strong');
-    span.appendChild(document.createTextNode(item.ProductStocks.length));
-    span.classList.add('badge-pill', 'badge-success');
-    td6.appendChild(span);
+    let strong = document.createElement('strong');
+    strong.appendChild(document.createTextNode(item.ProductStocks.length));
+    strong.classList.add('badge-pill', 'badge-success', 'stock');
+    td6.appendChild(strong);
+
+    //column 6
+    let td7 = tr.insertCell(6);
+    let removeIcon = document.createElement('i');
+    removeIcon.classList.add('fal', 'fa-trash-alt', 'remove');
+    td7.appendChild(removeIcon);
+    td7.classList.add('text-center');
 
     return tr;
 }
@@ -144,13 +132,29 @@ const showCartedProduct = function () {
 
     const fragment = document.createDocumentFragment();
 
-    storage.forEach(item => {
-        const tr = createTableRow(item);
+    storage.forEach((item ,SN) => {
+        const tr = createTableRow(item, SN+1);
         fragment.appendChild(tr);
     });
 
     tbody.appendChild(fragment);
  }
+
+//clear textbox field
+const clearTextinput = function () {
+    let productName = cartForm.inputProductName;
+    let purchasePrice = cartForm.inputPurchasePrice;
+    let sellingPrice = cartForm.inputSellingPrice;
+    let warranty = cartForm.inputWarranty;
+    let description = cartForm.inputDescription;
+    let productCode = cartForm.inputProductCode;
+
+    const elements = [productName, purchasePrice, sellingPrice, warranty, description, productCode];
+    elements.forEach((element) => {
+        element.value = '';
+        element.nextElementSibling.classList.remove('active');
+    });
+}
 
 //add product submit
 const onAddtoCart = function (form) {
@@ -163,21 +167,34 @@ const onAddtoCart = function (form) {
     const SellingPrice = +element.inputSellingPrice.value;
     const Warranty = element.inputWarranty.value;
     const Description = element.inputDescription.value;
+    const SN = tbody.querySelectorAll('tr').length +1;
 
     //stock
     const ProductCode = { ProductCode: element.inputProductCode.value };
-    const product = { ParentId: ParentId.value, ProductName, PurchasePrice, SellingPrice, Warranty, Description, ProductStocks: [] };
+    const product = {
+        SN,
+        ParentId: ParentId.value,
+        Category: ParentId.options[ParentId.selectedIndex].text,
+        ProductName,
+        PurchasePrice,
+        SellingPrice,
+        Warranty,
+        Description,
+        ProductStocks: []
+    };
+
     product.ProductStocks.push(ProductCode);
 
     const uniqueProduct = !isProductExist(product);
     if (uniqueProduct) {
+        //add product to global store
         storage.push(product);
 
         //append the new product
-        const tr = createTableRow(product);
-        tr.classList.add('active-row');
+        const tr = createTableRow(product, SN);
         tbody.appendChild(tr);
 
+        //count added product
         productCodeCount(1);
     }
     else {
@@ -185,59 +202,20 @@ const onAddtoCart = function (form) {
         updateStock(product, ProductCode);
     }
 
+    //product code clear
+    cartForm.inputProductCode.value = '';
+
+    //sum total purchase amount
     appendTotalPrice();
+
+    //save to local storage
     localStorage.setItem('cart-storage', JSON.stringify(storage));
-}
-
-//bind textbox field
-const bindTextinput = function (cells = null) {
-    let productName = cartForm.inputProductName;
-    let purchasePrice = cartForm.inputPurchasePrice;
-    let sellingPrice = cartForm.inputSellingPrice;
-    let warranty = cartForm.inputWarranty;
-    let description = cartForm.inputDescription;
-
-   //count added product code on taxt field
-    if (cells) productCodeCount(cells[5].querySelector('strong').textContent);
-    else productCodeCount();
-
-    const elements = [productName, purchasePrice, sellingPrice, warranty, description];
-    elements.forEach((element, index) => {
-        if (cells) {
-            index === 4 ? elements[index].value = cells[1].getAttribute('title') : element.value = cells[index + 1].textContent;
-            element.nextElementSibling.classList.add('active');
-            element.disabled = true;
-        }
-        else {
-            element.value = '';
-            element.nextElementSibling.classList.remove('active');
-            element.disabled = false;
-        }
-    });
 }
 
 //category drodown change
 const onCategoryChanged = function () {
-    const id = this.value;
-    const tRows = tbody.querySelectorAll('tr');
-
     //clear bind text field
-    bindTextinput();
-
-    tRows.forEach(row => {
-        const rowId = row.getAttribute('data-id');
-        if (id === rowId) {
-            //selected table row
-            selectedRow(row, true);
-            //bind text field
-            bindTextinput(row.cells);
-            return;
-        }
-        else {
-            //un-select table row
-            selectedRow(row, false);
-        }
-    });
+    clearTextinput();
 }
 
 //product code input
@@ -255,12 +233,71 @@ const onProductCodeInput = function () {
     });
 }
 
+//show product code
+const displayProductCode = function (SN) {
+    const fragment = document.createDocumentFragment();
+    let codes = [];
 
+    storage.forEach(item => {
+        if (item.SN === SN) {
+            codes = item.ProductStocks;
+            return;
+        }
+    });
+
+    codes.forEach(code => {
+        let span = document.createElement('span');
+        let i = document.createElement('i');
+
+        i.classList.add('fal', 'fa-times','ml-1');
+        span.classList.add('badge-pill', 'badge-primary','m-1');
+        span.appendChild(document.createTextNode(code.ProductCode));
+        span.appendChild(i);
+
+        fragment.appendChild(span);
+    });
+
+    productCodeBody.innerHTML = '';
+    productCodeBody.appendChild(fragment);
+    $('#modalProductCode').modal('show');
+}
+
+//remove product from list
+const removeProduct = function (row, SN) {
+    //remove product from storage
+    storage = storage.filter(item => item.SN !== SN);
+
+    //save to local storage
+    localStorage.setItem('cart-storage', JSON.stringify(storage));
+
+    //remove the row
+    row.remove();
+
+    //re calculate total amount
+    appendTotalPrice();
+}
+
+//click remove or stock
+const ontableRowElementClicked = function (evt) {
+    const element = evt.target;
+    const removeClicked = element.classList.contains('remove');
+    const stockClicked = element.classList.contains('stock');
+    const row = element.parentElement.parentElement;
+    const SN = +row.getAttribute('SN');
+
+    if (removeClicked)
+        removeProduct(row, SN);
+
+    if (stockClicked)
+        displayProductCode(SN);
+
+}
 
 //event listners
 cartForm.addEventListener('submit', onAddtoCart);
 selectCategory.addEventListener('change', onCategoryChanged);
 cartForm.inputProductCode.addEventListener('input', onProductCodeInput);
+tbody.addEventListener('click', ontableRowElementClicked);
 
 //call function
 showCartedProduct();
