@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace InventoryManagement.Repository
 {
-    public interface IPurchaseRepository : IRepository<Purchase>
+    public interface IPurchasePaymentRepository : IRepository<PurchasePayment>
     {
         Task<int> GetNewSnAsync();
-        Task<DbResponse<int>> AddCustomAsync(PurchaseViewModel model, IUnitOfWork db);
+
     }
 }

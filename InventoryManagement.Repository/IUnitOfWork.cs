@@ -11,6 +11,9 @@ namespace InventoryManagement.Repository
         IPageLinkAssignRepository PageLinkAssigns { get; }
         IProductCatalogRepository ProductCatalogs { get; }
         IProductCatalogTypeRepository ProductCatalogTypes { get; }
+        IProductStockRepository ProductStocks { get; }
+        IPurchaseRepository Purchases { get; }
+        IPurchasePaymentRepository PurchasePayments { get; }
         IRegistrationRepository Registrations { get; }
         IExpenseCategoryRepository ExpenseCategories { get; }
         IExpenseRepository Expenses { get; }

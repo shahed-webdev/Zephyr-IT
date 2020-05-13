@@ -72,7 +72,7 @@ namespace InventoryManagement.Web.Controllers
         //GET: find vendor from ajax autocomplete
         public async Task<IActionResult> FindVendor(string prefix)
         {
-            var data = await _db.Vendors.SearchAsync(prefix);
+            var data = await _db.Vendors.SearchAsync(prefix).ConfigureAwait(false);
             return Json(data);
         }
 
@@ -89,8 +89,12 @@ namespace InventoryManagement.Web.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
+            var response = await _db.Purchases.AddCustomAsync(model, _db).ConfigureAwait(false);
 
-            return View(model);
+            if (response.IsSuccess)
+                return Ok(response.Data);
+            else
+                return UnprocessableEntity(response.Message);
         }
     }
 }

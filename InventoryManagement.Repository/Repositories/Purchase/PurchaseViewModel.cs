@@ -16,6 +16,8 @@ namespace InventoryManagement.Repository
         public double PurchaseTotalPrice { get; set; }
         public double PurchaseDiscountAmount { get; set; }
         public double PurchasePaidAmount { get; set; }
+        public string PaymentMethod { get; set; }
+
         public DateTime PurchaseDate { get; set; }
         public ICollection<ProductViewModel> Products { get; set; }
     }

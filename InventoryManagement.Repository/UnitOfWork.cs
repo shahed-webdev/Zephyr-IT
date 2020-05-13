@@ -16,6 +16,9 @@ namespace InventoryManagement.Repository
             PageLinkAssigns = new PageLinkAssignRepository(_context);
             ProductCatalogs = new ProductCatalogRepository(_context);
             ProductCatalogTypes = new ProductCatalogTypeRepository(_context);
+            ProductStocks = new ProductStockRepository(_context);
+            Purchases = new PurchaseRepository(_context);
+            PurchasePayments = new PurchasePaymentRepository(_context);
             Registrations = new RegistrationRepository(_context);
             ExpenseCategories = new ExpenseCategoryRepository(_context);
             Expenses = new ExpenseRepository(_context);
@@ -32,6 +35,9 @@ namespace InventoryManagement.Repository
         public IPageLinkAssignRepository PageLinkAssigns { get; private set; }
         public IProductCatalogRepository ProductCatalogs { get; }
         public IProductCatalogTypeRepository ProductCatalogTypes { get; }
+        public IProductStockRepository ProductStocks { get; }
+        public IPurchaseRepository Purchases { get; }
+        public IPurchasePaymentRepository PurchasePayments { get; }
         public IRegistrationRepository Registrations { get; private set; }
         public IExpenseCategoryRepository ExpenseCategories { get; private set; }
         public IExpenseRepository Expenses { get; }
