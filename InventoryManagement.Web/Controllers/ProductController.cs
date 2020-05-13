@@ -1,6 +1,7 @@
 ﻿using InventoryManagement.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
@@ -85,7 +86,7 @@ namespace InventoryManagement.Web.Controllers
 
         //POST: Purchase
         [HttpPost]
-        public async Task<IActionResult> Purchase(PurchaseViewModel model)
+        public async Task<IActionResult> Purchase([FromBody] PurchaseViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
 
@@ -95,6 +96,17 @@ namespace InventoryManagement.Web.Controllers
                 return Ok(response.Data);
             else
                 return UnprocessableEntity(response.Message);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PurchaseCodeIsExist([FromBody] List<string> stocks)
+        {
+            var existList = await _db.ProductStocks.IsExistListAsync(stocks).ConfigureAwait(false);
+
+            if (existList == null)
+                return Ok();
+            else
+                return UnprocessableEntity(existList);
         }
     }
 }
