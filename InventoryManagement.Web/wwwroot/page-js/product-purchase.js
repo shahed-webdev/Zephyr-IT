@@ -1,13 +1,74 @@
 ﻿
 //globar store
 let storage = [];
+let tempStorage = null;
+let codeStorage = [];
 
 //selectors
 const cartForm = document.getElementById("cart-form");
+const formAddCode = document.getElementById("formAddCode");
+const codeExistError = formAddCode.querySelector("#code-exist-error");
 const selectCategory = cartForm.querySelector("#ParentId");
-const codeExistError = cartForm.querySelector("#code-exist-error");
 const tbody = document.getElementById("tbody");
-const productCodeBody = document.getElementById('product-code-body');
+const modalInsetCode = $('#modalInsetCode');
+const showAddedCode = document.getElementById('showAddedCode');
+
+
+//selectors object
+const productFormSelectors = function(){
+    let productName = cartForm.inputProductName;
+    let purchasePrice = cartForm.inputPurchasePrice;
+    let sellingPrice = cartForm.inputSellingPrice;
+    let warranty = cartForm.inputWarranty;
+    let description = cartForm.inputDescription;
+
+    return [productName, purchasePrice, sellingPrice, warranty, description];
+}
+
+//****Global product Code Storage****//
+const productCode = {
+    isExistServer: function (codeArray) {
+        const url = '/Product/PurchaseCodeIsExist';
+        const options = {
+            method: 'post',
+            url: url,
+            data: codeArray
+        }
+
+        axios(options)
+            .then(function (response) {
+                console.log(response)
+            })
+            .catch(function (error) {
+                console.log(error.response);
+            });
+    },
+    isExist: function (newCode) {
+        if (!codeStorage.length) return false;
+
+        const codeExis = codeStorage.some(code => code === newCode);
+        codeExistError.innerText = codeExis ? `${newCode}: Already Added!` : '';
+
+        return codeExis;
+    },
+    setStorage: function (code) {
+        if (codeStorage.indexOf(code) === -1) {
+            codeStorage.push(code);
+            localStorage.setItem('code-storage', JSON.stringify(codeStorage));
+        }
+    },
+    getStorage: function () {
+        if (localStorage.getItem('code-storage'))
+            codeStorage = JSON.parse(localStorage.getItem('code-storage'));
+    },
+    updateStorage: function (code) {
+        const index = codeStorage.indexOf(code);
+        if (index > -1) {
+            codeStorage.splice(index, 1);
+            localStorage.setItem('code-storage', JSON.stringify(codeStorage));
+        }
+    }
+}
 
 //functions
 const getStorage = function () {
@@ -16,33 +77,40 @@ const getStorage = function () {
     };
 }
 
-//added product code count
-const productCodeCount = function (value = null) {
-    let codeCount = cartForm.querySelector('#codeCount');
-    codeCount.innerText = value ? value : 0;
+//product stock temp storage
+const getTempStorage = function () {
+    if (localStorage.getItem('temp-storage')) {
+        tempStorage = JSON.parse(localStorage.getItem('temp-storage'));
+    }
 }
 
-//increment the stock value
-const increaseStockValue = function (ParentId, value) {
-    const tRows = tbody.querySelectorAll('tr');
-    productCodeCount();
+//append un-added data to form
+const setTempDataToForm = function () {
+    getTempStorage();
 
-    tRows.forEach(row => {
-        const rowSn= row.getAttribute('SN');
+    if (!tempStorage) return;
 
-        if (rowSn === SN) {
-            row.cells[5].querySelector('strong').textContent = value;
+    cartForm.ParentId.value = tempStorage.ParentId;
+    const elements = { ...productFormSelectors() };
 
-            //count product on text field 
-            productCodeCount(value);
-            return;
-        }
-    });
-}
+    elements['0'].value = tempStorage.ProductName
+    elements['0'].nextElementSibling.classList.add('active');
 
-//check product already added
-const isProductExist = function (product) {
-    return storage.some(elem => (elem.ProductName === product.ProductName) && (elem.ParentId === product.ParentId));
+    elements['1'].value = tempStorage.PurchasePrice
+    elements['1'].nextElementSibling.classList.add('active');
+
+    elements['2'].value = tempStorage.SellingPrice
+    elements['2'].nextElementSibling.classList.add('active');
+
+    if (tempStorage.Warranty) {
+        elements['3'].value = tempStorage.Warranty
+        elements['3'].nextElementSibling.classList.add('active');
+    }
+
+    if (tempStorage.Description) {
+        elements['4'].value = tempStorage.Description
+        elements['4'].nextElementSibling.classList.add('active');
+    }
 }
 
 //calculate purchase Total
@@ -63,29 +131,10 @@ const appendTotalPrice = function () {
     totalDue.innerText = totalAmount;
 }
 
-//update stock on table
-const updateStock = function (product, newCode) {
-    codeExistError.innerText = '';
-
-    storage.forEach(item => {
-        if (item.SN === product.SN) {
-            const codeExist = item.ProductStocks.some(code => code.ProductCode === newCode.ProductCode);
-            if (!codeExist) {
-                //update storage
-                item.ProductStocks.push(newCode);
-                //update on DOM
-                increaseStockValue(item.SN, item.ProductStocks.length);
-            } else
-                codeExistError.innerText = `${newCode.ProductCode}: Already Added!`;
-            return;
-        }
-    });
-}
-
 //create table rows
-const createTableRow = function (item, SN) {
+const createTableRow = function (item) {
     let tr = document.createElement("tr");
-    tr.setAttribute('SN', SN);
+    tr.setAttribute('data-sn', item.SN);
 
     //column 1
     let td1 = tr.insertCell(0);
@@ -140,130 +189,14 @@ const showCartedProduct = function () {
     tbody.appendChild(fragment);
  }
 
-//clear textbox field
-const clearTextinput = function () {
-    let productName = cartForm.inputProductName;
-    let purchasePrice = cartForm.inputPurchasePrice;
-    let sellingPrice = cartForm.inputSellingPrice;
-    let warranty = cartForm.inputWarranty;
-    let description = cartForm.inputDescription;
-    let productCode = cartForm.inputProductCode;
-
-    const elements = [productName, purchasePrice, sellingPrice, warranty, description, productCode];
-    elements.forEach((element) => {
-        element.value = '';
-        element.nextElementSibling.classList.remove('active');
-    });
-}
-
-//add product submit
-const onAddtoCart = function (form) {
-    form.preventDefault();
-    const element = form.target;
-
-    const ParentId = element.ParentId;
-    const ProductName = element.inputProductName.value;
-    const PurchasePrice = +element.inputPurchasePrice.value;
-    const SellingPrice = +element.inputSellingPrice.value;
-    const Warranty = element.inputWarranty.value;
-    const Description = element.inputDescription.value;
-    const SN = tbody.querySelectorAll('tr').length +1;
-
-    //stock
-    const ProductCode = { ProductCode: element.inputProductCode.value };
-    const product = {
-        SN,
-        ParentId: ParentId.value,
-        Category: ParentId.options[ParentId.selectedIndex].text,
-        ProductName,
-        PurchasePrice,
-        SellingPrice,
-        Warranty,
-        Description,
-        ProductStocks: []
-    };
-
-    product.ProductStocks.push(ProductCode);
-
-    const uniqueProduct = !isProductExist(product);
-    if (uniqueProduct) {
-        //add product to global store
-        storage.push(product);
-
-        //append the new product
-        const tr = createTableRow(product, SN);
-        tbody.appendChild(tr);
-
-        //count added product
-        productCodeCount(1);
-    }
-    else {
-        //update the stock
-        updateStock(product, ProductCode);
-    }
-
-    //product code clear
-    cartForm.inputProductCode.value = '';
-
-    //sum total purchase amount
-    appendTotalPrice();
-
-    //save to local storage
-    localStorage.setItem('cart-storage', JSON.stringify(storage));
-}
-
-//category drodown change
-const onCategoryChanged = function () {
-    //clear bind text field
-    clearTextinput();
-}
-
-//product code input
-const onProductCodeInput = function () {
-    if (codeExistError.innerText)
-        codeExistError.innerText = '';
-
-    storage.forEach(item => {
-        const codeExist = item.ProductStocks.some(code => code.ProductCode === this.value);
-
-        if (codeExist) {
-            codeExistError.innerText = `${this.value}: Already Added!`;
-            return;
-        }
-    });
-}
-
-//show product code
-const displayProductCode = function (SN) {
-    const fragment = document.createDocumentFragment();
-    let codes = [];
-
-    storage.forEach(item => {
-        if (item.SN === SN) {
-            codes = item.ProductStocks;
-            return;
-        }
-    });
-
-    codes.forEach(code => {
-        let span = document.createElement('span');
-        let i = document.createElement('i');
-
-        i.classList.add('fal', 'fa-times','ml-1');
-        span.classList.add('badge-pill', 'badge-primary','m-1');
-        span.appendChild(document.createTextNode(code.ProductCode));
-        span.appendChild(i);
-
-        fragment.appendChild(span);
-    });
-
-    productCodeBody.innerHTML = '';
-    productCodeBody.appendChild(fragment);
-    $('#modalProductCode').modal('show');
-}
-
 //remove product from list
 const removeProduct = function (row, SN) {
+    //remove product code from code storage
+    const removedObj = storage.find(item => item.SN === SN).ProductStocks;
+    removedObj.forEach(stock => {
+        productCode.updateStorage(stock.ProductCode);
+    });
+
     //remove product from storage
     storage = storage.filter(item => item.SN !== SN);
 
@@ -277,30 +210,214 @@ const removeProduct = function (row, SN) {
     appendTotalPrice();
 }
 
+//clear textbox field
+const clearTextinput = function () {
+    const elements = productFormSelectors();
+    elements.forEach(element => {
+        if (element.value) {
+            element.value = '';
+            element.nextElementSibling.classList.remove('active');
+        }
+    });
+}
+
+//category drodown change
+const onCategoryChanged = function () {
+    //clear bind text field
+    clearTextinput();
+}
+
+
 //click remove or stock
 const ontableRowElementClicked = function (evt) {
     const element = evt.target;
     const removeClicked = element.classList.contains('remove');
-    const stockClicked = element.classList.contains('stock');
     const row = element.parentElement.parentElement;
-    const SN = +row.getAttribute('SN');
+    const SN = +row.getAttribute('data-sn');
 
     if (removeClicked)
         removeProduct(row, SN);
-
-    if (stockClicked)
-        displayProductCode(SN);
-
 }
 
+//show product code on popup
+const showAddedProductCode = function () {
+    showAddedCode.innerHTML = '';
+    if (!tempStorage) return;
+
+    const stocks = tempStorage.ProductStocks;
+    const fragment = document.createDocumentFragment();
+
+    if (stocks.length > 0) {
+        stocks.forEach(stock => {
+            let iCode = document.createElement('span');
+            iCode.classList.add('badge-pill', 'badge-success','code-span');
+            iCode.appendChild(document.createTextNode(stock.ProductCode));
+
+            fragment.appendChild(iCode);
+        });
+       
+        showAddedCode.appendChild(fragment);
+    }
+}
+
+//set temp Storage value
+const setProductTempObject = function (element) {
+    const SN = tbody.querySelectorAll('tr').length + 1;
+    const ParentId = element.ParentId;
+    const ProductName = element.inputProductName.value;
+    const PurchasePrice = +element.inputPurchasePrice.value;
+    const SellingPrice = +element.inputSellingPrice.value;
+    const Warranty = element.inputWarranty.value;
+    const Description = element.inputDescription.value;
+
+    if (!tempStorage) {
+        tempStorage = {
+            SN,
+            ParentId: ParentId.value,
+            Category: ParentId.options[ParentId.selectedIndex].text,
+            ProductName,
+            PurchasePrice,
+            SellingPrice,
+            Warranty,
+            Description,
+            ProductStocks: []
+        }
+    }
+    else {
+        tempStorage.ParentId = ParentId.value;
+        tempStorage.Category = ParentId.options[ParentId.selectedIndex].text;
+        tempStorage.ProductName = ProductName;
+        tempStorage.PurchasePrice = PurchasePrice;
+        tempStorage.SellingPrice = SellingPrice;
+        tempStorage.Warranty = Warranty;
+        tempStorage.Description = Description;
+    }
+
+    localStorage.setItem('temp-storage', JSON.stringify(tempStorage));
+}
+
+//open product code modal submit
+const onOpenProductCodeModal = function (form) {
+    form.preventDefault();
+
+    //save the last value of input
+    setProductTempObject(form.target);
+
+    //show product code on modal
+    showAddedProductCode();
+
+    //auto focus code input
+    document.getElementById('inputProductCode').focus();
+
+    //open modal popup
+    modalInsetCode.modal('show');
+}
+
+//add product code to temp storage
+const onSubmitProductCode = function (form) {
+    form.preventDefault();
+
+    const element = form.target.inputProductCode;
+    const stock = { ProductCode: element.value };
+    const codeExist = productCode.isExist(stock.ProductCode);
+
+    if (!codeExist) {
+        //add code to temp storage
+        tempStorage.ProductStocks.push(stock);
+
+        //save code to global hub
+        productCode.setStorage(stock.ProductCode);
+
+        //show code on modal
+        showAddedProductCode();
+
+        //save to local storage
+        localStorage.setItem('temp-storage', JSON.stringify(tempStorage));
+    }
+
+    //clear the code input field
+    element.value = '';
+}
+
+//remove product code
+const onProductCodeClicked = function (evt) {
+    const codeClicked = evt.target.classList.contains('code-span');
+    if (!codeClicked) return;
+
+    const code = evt.target.innerText;
+
+    tempStorage.ProductStocks = tempStorage.ProductStocks.filter(stock => stock.ProductCode !== code);
+
+    productCode.updateStorage(code);
+
+    //show code on modal
+    showAddedProductCode();
+
+    //save to local storage
+    localStorage.setItem('temp-storage', JSON.stringify(tempStorage));
+}
+
+//add product to list
+const onAddProductToList = function (evt) {
+    const ParentId = cartForm.ParentId.value;
+    const ProductName = cartForm.inputProductName.value;
+    const PurchasePrice = cartForm.inputPurchasePrice.value;
+    const SellingPrice = cartForm.inputSellingPrice.value;
+
+    if (!ParentId && !ProductName && !PurchasePrice && !SellingPrice) {
+        console.log('form value can not be empty');
+        return;
+    }
+
+    //set the last value of input
+    setProductTempObject(cartForm);
+
+    if (tempStorage.ProductStocks.length) {
+
+        //check product code on server
+        productCode.isExistServer(tempStorage.ProductStocks);
+
+        //add value to cart storage
+        storage.push(tempStorage);
+
+        //show cart on table
+        tbody.appendChild(createTableRow(tempStorage));
+
+        //calculate and show price
+        appendTotalPrice();
+
+        //save to local storage
+        localStorage.setItem('cart-storage', JSON.stringify(storage));
+
+        //remove the stock temp storage
+        tempStorage = null;
+        localStorage.removeItem('temp-storage');
+
+        //clear the text input
+        clearTextinput();
+    }
+    else {
+        modalInsetCode.modal('show');
+    }
+}
+
+
 //event listners
-cartForm.addEventListener('submit', onAddtoCart);
+cartForm.addEventListener('submit', onOpenProductCodeModal);
+cartForm.btnAddToList.addEventListener('click', onAddProductToList);
+
+//add product code form
+formAddCode.addEventListener('submit', onSubmitProductCode);
+showAddedCode.addEventListener('click', onProductCodeClicked);
+
 selectCategory.addEventListener('change', onCategoryChanged);
-cartForm.inputProductCode.addEventListener('input', onProductCodeInput);
 tbody.addEventListener('click', ontableRowElementClicked);
 
 //call function
 showCartedProduct();
+setTempDataToForm();
+productCode.getStorage();
+
 
 
 //****VENDORS****//

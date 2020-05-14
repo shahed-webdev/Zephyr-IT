@@ -7,22 +7,23 @@
 
 @section Styles{
     <style>
-        #vendor-info li { font-size: 17px; line-height: 2.5; }
-        #vendor-info li:first-child { border-top: 0 }
-        #vendor-info li:last-child { border-bottom: 0 }
-        #vendor-info i { color: #8a8383 }
+        #showAddedCode .code-span { display: inline-block; margin: 5px;cursor:pointer }
+        #showAddedCode .code-span:hover::after { content: 'x'; padding-left: 2px; font-size: 16px;}
 
         #payment-area li strong { font-size: 17px; }
         #inputDiscount, #inputPaid, #inputPurchaseDate { display: inline-block; border-radius: 50px; text-align: right; color: #000; }
         .list-group-item { padding: .75rem 0; }
         .has-error { border: 2px solid #ff0000 }
 
-        .active-row { background-color: #c9ffc8; transition: background-color 1s ease }
         .remove { color: #ff0707; cursor: pointer; font-size: 15px; }
-        .stock { cursor: pointer; padding: .18rem .5rem; }
-        .stock:hover { padding: .3rem .6rem; transition: padding .1s ease-in-out }
+        .stock { padding: .18rem .5rem; }
 
-        #product-code-body span > i {font-size: .8rem }
+        #product-code-body span > i { font-size: .8rem }
+
+        #vendor-info li { font-size: 17px; line-height: 2.5; }
+        #vendor-info li:first-child { border-top: 0 }
+        #vendor-info li:last-child { border-bottom: 0 }
+        #vendor-info i { color: #8a8383 }
     </style>
 }
 
@@ -32,7 +33,7 @@
     <section class="card card-body">
         <form id="cart-form">
             <div class="form-row">
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="md-form">
                         <select id="ParentId" asp-items="ViewBag.ParentId" class="mdb-select" style="display: none" required>
                             <option value="" disabled selected>Select Category</option>
@@ -40,24 +41,17 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="md-form">
                         <input id="inputProductName" class="form-control" type="text" required />
                         <label for="inputProductName">Product Name</label>
                     </div>
                 </div>
 
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="md-form">
                         <input id="inputPurchasePrice" class="form-control" type="number" required />
                         <label for="inputPurchasePrice">Purchase Price</label>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="md-form">
-                        <input id="inputSellingPrice" class="form-control" type="number" required />
-                        <label for="inputSellingPrice">Selling Price</label>
                     </div>
                 </div>
             </div>
@@ -65,32 +59,31 @@
             <div class="form-row">
                 <div class="col-lg-3">
                     <div class="md-form">
+                        <input id="inputSellingPrice" class="form-control" type="number" required />
+                        <label for="inputSellingPrice">Selling Price</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="md-form">
                         <input id="inputWarranty" class="form-control" type="text" />
                         <label for="inputWarranty">Warranty</label>
                     </div>
                 </div>
 
-                <div class="col-lg-5">
+                <div class="col-lg-4">
                     <div class="md-form">
                         <input id="inputDescription" class="form-control" type="text" />
                         <label for="inputDescription">Description</label>
                     </div>
                 </div>
-
-                <div class="col-lg-4">
-                    <div class="md-form">
-                        <input id="inputProductCode" class="form-control" type="number" required />
-                        <label for="inputProductCode">Product Code <strong id="codeCount" class="badge-pill badge-light">0</strong></label>
-                        <i id="code-exist-error" class="text-danger"></i>
+                <div class="col-lg-2">
+                    <div class="md-form text-right pt-1">
+                        <button type="submit" class="btn btn-sm btn-blue-grey btn-rounded"><i class="far fa-qrcode pr-2"></i>Add Code</button>
                     </div>
                 </div>
             </div>
 
-            <div class="text-right">
-                <button type="submit" id="btnaddProduct" class="btn amber accent-4 btn-rounded">
-                    add product<i class="fal fa-cart-arrow-down ml-1"></i>
-                </button>
-            </div>
+            <button id="btnAddToList" type="button" class="btn btn-rounded btn-success"> add product to List<i class="fal fa-cart-arrow-down ml-1 text-white"></i></button>
         </form>
     </section>
 
@@ -189,22 +182,33 @@
 </div>
 
 
-
-
-<!-- product Code Modal -->
-<div class="modal fade" id="modalProductCode" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<!-- insert product Code Modal -->
+<div class="modal fade right" id="modalInsetCode" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-full-height modal-right modal-notify modal-success" role="document">
         <div class="modal-content">
-            <div class="modal-header text-center p-2">
-                <h4 class="modal-title w-100 m-0">Product Code</h4>
+            <div class="modal-header">
+                <p class="heading lead">Add Product Code</p>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true" class="white-text">×</span>
                 </button>
             </div>
-            <div class="modal-body mx-3" id="product-code-body"></div>
+
+            <div class="modal-body">
+                <form id="formAddCode">
+                    <div class="md-form mt-0 mb-2">
+                        <input id="inputProductCode" class="form-control" type="text" required/>
+                        <label for="inputProductCode">Product Code</label>
+                        <i id="code-exist-error" class="text-danger"></i>
+                        <small class="d-block">Double click on code to remove</small>
+                    </div>
+                </form>
+
+                <div id="showAddedCode"></div>
+            </div>  
         </div>
     </div>
 </div>
+
 
 <!-- Insert Modal -->
 <div class="modal fade" id="InsertModal" tabindex="-1" role="dialog" aria-hidden="true"></div>
@@ -212,7 +216,7 @@
 
 @section Scripts {
     <partial name="_UnobtrusiveAjaxPartial" />
-    <script src="~/page-js/product-purchase.js"></script>
+    <script src="~/page-js/product-purchase.js?v=1.5"></script>
 
     <script>
         $(function () {
@@ -230,161 +234,147 @@
         });
 
 
-        //delete click
-        //$tableBody.on("click", ".delete", function (evt) {
-        //    evt.preventDefault();
-        //    const row = $(this).closest('tr');
-        //    var serialNumber = row.find('.SN').text();
 
-        //    const filteredItems = cart.filter(function (item) {
-        //        return item.SN !== parseInt(serialNumber);
-        //    });
+        //convert to float number
+        //function parseNumber(n) {
+        //    const f = parseFloat(n);
+        //    return isNaN(f) ? 0 : f;
+        //}
 
 
-        //    localStorage.setItem('cart', JSON.stringify(filteredItems));
+        ////discount change
+        //$("#inputDiscount").on("change", function () {
+        //    const totalPrice = parseNumber($("#totalPrice").text());
+        //    const discount = parseNumber($(this).val());
+        //    const isValid = compareValidation(totalPrice, discount);
+        //    const grandTotal = (totalPrice - discount);
+
+        //    $(this).next('em').remove();
+
+        //    if (!isValid) {
+        //        $(this).after(`<em class="d-block red-text text-right">Discount within ৳${totalPrice}</em>`);
+        //        return;
+        //    }
+
+        //    $("#grandTotal").text(grandTotal.toFixed());
+        //    $("#totalDue").text(grandTotal.toFixed());
+
+        //    const inputPaid = $("#inputPaid");
+        //    if (inputPaid.val())
+        //        inputPaid.val('');
+        //});
+
+        ////paid change
+        //$("#inputPaid").on("change", function () {
+        //    const grandTotal = parseNumber($("#grandTotal").text());
+        //    const paid = parseNumber($(this).val());
+        //    const isValid = compareValidation(grandTotal, paid);
+
+        //    $(this).next('em').remove();
+
+        //    if (!isValid) {
+        //        $(this).after(`<em class="d-block red-text text-right">Pay within ৳${grandTotal}</em>`);
+        //        return;
+        //    }
+
+        //    $("#totalDue").text(grandTotal - paid);
+
+        //    const paymentMethod = $("#selectPaymentMethod");
+        //    paymentMethod.next('em').remove();
+
+        //    if (paid > 0)
+        //        paymentMethod.after('<em class="d-block red-text text-right">Select payment method</em>');
+        //});
+
+        ////remove error
+        //$("#selectPaymentMethod").on("change", function () {
+        //    $(this).next('em').remove();
         //});
 
 
-        //convert to float number
-        function parseNumber(n) {
-            const f = parseFloat(n);
-            return isNaN(f) ? 0 : f;
-        }
+        ////input field validation
+        //function validation() {
+        //    const row = $('#table-row tr');
+        //    var isValid = true;
+
+        //    if (row.length > 0) {
+        //        row.find('input[type="number"]').each(function () {
+        //            const input = $(this);
+
+        //            if (input.val() === '' || input.val() === '0' || input.val() === 0) {
+        //                input.addClass("has-error");
+        //                isValid = false;
+        //            } else {
+        //                input.removeClass("has-error");
+        //            }
+        //        });
+        //    }
+
+        //    return isValid;
+        //}
+
+        ////compare Validation
+        //function compareValidation(total, inputted) {
+        //    var isValid = true;
+
+        //    if (total < inputted) {
+        //        isValid = false;
+        //    }
+        //    return isValid;
+        //}
+
+        ////Submit
+        //$("#btnPurchase").on("click", function (evt) {
+        //    const isValid = validation();
+        //    const that = $(this);
+        //    const vendorId = $("#vendorId").val();
+        //    const totalPrice = $("#totalPrice").text() | 0;
+        //    const discountAmount = $("#inputDiscount").val();
+        //    const paidAmount = parseNumber($("#inputPaid").val());
+        //    const date = $("#inputPurchaseDate").val();
+        //    const paymentMethod = $("#selectPaymentMethod").children("option:selected").val();
+        //    const vendorInfo = $("#vendor-info");
 
 
-        //discount change
-        $("#inputDiscount").on("change", function () {
-            const totalPrice = parseNumber($("#totalPrice").text());
-            const discount = parseNumber($(this).val());
-            const isValid = compareValidation(totalPrice, discount);
-            const grandTotal = (totalPrice - discount);
+        //    if (!vendorId) {
+        //        if (!vendorInfo.children().length) {
+        //            $("#vendor-info").append(`<li class="list-group-item list-group-item-danger"><i class="fas fa-exclamation-triangle mr-1 red-text"></i>Select/add Vendor for Purchase!</li>`);
+        //            return;
+        //        }
 
-            $(this).next('em').remove();
+        //        if (vendorInfo.children().length) return;
+        //    }
 
-            if (!isValid) {
-                $(this).after(`<em class="d-block red-text text-right">Discount within ৳${totalPrice}</em>`);
-                return;
-            }
-
-            $("#grandTotal").text(grandTotal.toFixed());
-            $("#totalDue").text(grandTotal.toFixed());
-
-            const inputPaid = $("#inputPaid");
-            if (inputPaid.val())
-                inputPaid.val('');
-        });
-
-        //paid change
-        $("#inputPaid").on("change", function () {
-            const grandTotal = parseNumber($("#grandTotal").text());
-            const paid = parseNumber($(this).val());
-            const isValid = compareValidation(grandTotal, paid);
-
-            $(this).next('em').remove();
-
-            if (!isValid) {
-                $(this).after(`<em class="d-block red-text text-right">Pay within ৳${grandTotal}</em>`);
-                return;
-            }
-
-            $("#totalDue").text(grandTotal - paid);
-
-            const paymentMethod = $("#selectPaymentMethod");
-            paymentMethod.next('em').remove();
-
-            if (paid > 0)
-                paymentMethod.after('<em class="d-block red-text text-right">Select payment method</em>');
-        });
-
-        //remove error
-        $("#selectPaymentMethod").on("change", function () {
-            $(this).next('em').remove();
-        });
+        //    if ($("#payment-area em").length) return;
 
 
-        //input field validation
-        function validation() {
-            const row = $('#table-row tr');
-            var isValid = true;
-
-            if (row.length > 0) {
-                row.find('input[type="number"]').each(function () {
-                    const input = $(this);
-
-                    if (input.val() === '' || input.val() === '0' || input.val() === 0) {
-                        input.addClass("has-error");
-                        isValid = false;
-                    } else {
-                        input.removeClass("has-error");
-                    }
-                });
-            }
-
-            return isValid;
-        }
-
-        //compare Validation
-        function compareValidation(total, inputted) {
-            var isValid = true;
-
-            if (total < inputted) {
-                isValid = false;
-            }
-            return isValid;
-        }
-
-        //Submit
-        $("#btnPurchase").on("click", function (evt) {
-            const isValid = validation();
-            const that = $(this);
-            const vendorId = $("#vendorId").val();
-            const totalPrice = $("#totalPrice").text() | 0;
-            const discountAmount = $("#inputDiscount").val();
-            const paidAmount = parseNumber($("#inputPaid").val());
-            const date = $("#inputPurchaseDate").val();
-            const paymentMethod = $("#selectPaymentMethod").children("option:selected").val();
-            const vendorInfo = $("#vendor-info");
+        //    const data = {
+        //        VendorID: vendorId,
+        //        PurchaseTotalPrice: totalPrice,
+        //        PurchaseDiscountAmount: discountAmount,
+        //        PurchasePaidAmount: paidAmount,
+        //        PurchaseDate: date,
+        //        Payment_Situation: paymentMethod,
+        //        PurchaseCarts: cart
+        //    };
 
 
-            if (!vendorId) {
-                if (!vendorInfo.children().length) {
-                    $("#vendor-info").append(`<li class="list-group-item list-group-item-danger"><i class="fas fa-exclamation-triangle mr-1 red-text"></i>Select/add Vendor for Purchase!</li>`);
-                    return;
-                }
-
-                if (vendorInfo.children().length) return;
-            }
-
-            if ($("#payment-area em").length) return;
-
-
-            const data = {
-                VendorID: vendorId,
-                PurchaseTotalPrice: totalPrice,
-                PurchaseDiscountAmount: discountAmount,
-                PurchasePaidAmount: paidAmount,
-                PurchaseDate: date,
-                Payment_Situation: paymentMethod,
-                PurchaseCarts: cart
-            };
-
-
-            if (isValid && data.PurchaseTotalPrice > 0) {
-                $.ajax({
-                    url: "/Purchase/PostPurchase",
-                    data: JSON.stringify({ model: data }),
-                    type: "POST",
-                    contentType: "application/json; charset=utf-8",
-                    beforeSend: function () { that.prop('disabled', true).val('Submitting..') },
-                    success: function (id) {
-                        localStorage.removeItem('cart');
-                        window.location.href = `/Purchase/Receipt/${id}`;
-                    },
-                    error: function (error) { console.log(error) },
-                    complete: function () { that.prop('disabled', false).val('Submit') }
-                });
-            }
-        });
+        //    if (isValid && data.PurchaseTotalPrice > 0) {
+        //        $.ajax({
+        //            url: "/Purchase/PostPurchase",
+        //            data: JSON.stringify({ model: data }),
+        //            type: "POST",
+        //            contentType: "application/json; charset=utf-8",
+        //            beforeSend: function () { that.prop('disabled', true).val('Submitting..') },
+        //            success: function (id) {
+        //                localStorage.removeItem('cart');
+        //                window.location.href = `/Purchase/Receipt/${id}`;
+        //            },
+        //            error: function (error) { console.log(error) },
+        //            complete: function () { that.prop('disabled', false).val('Submit') }
+        //        });
+        //    }
+        //});
     </script>
 }
 

@@ -99,14 +99,16 @@ namespace InventoryManagement.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PurchaseCodeIsExist([FromBody] List<string> stocks)
+        public async Task<IActionResult> PurchaseCodeIsExist([FromBody] List<ProductStockViewModel> stocks)
         {
-            var existList = await _db.ProductStocks.IsExistListAsync(stocks).ConfigureAwait(false);
+            //var existList = await _db.ProductStocks.IsExistListAsync(stocks).ConfigureAwait(false);
 
-            if (existList == null)
-                return Ok();
-            else
-                return UnprocessableEntity(existList);
+            //if (existList == null)
+            //    return Ok();
+            //else
+            //    return UnprocessableEntity(existList);
+
+            return Json(stocks);
         }
     }
 }

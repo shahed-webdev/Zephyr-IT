@@ -1,5 +1,5 @@
 ﻿#code-container { background-color: #fff; text-align:center; border-radius: 5px; -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16),0 2px 10px 0 rgba(0,0,0,.12); box-shadow: 0 2px 5px 0 rgba(0,0,0,.16),0 2px 10px 0 rgba(0,0,0,.12); }
-#code-container canvas { margin: 5.4px; border: 1px solid #bdbdbd; border-radius: 3px; }
+#code-container canvas { margin: 5.4px; }
 
 @media print {
     #header { display:none}
