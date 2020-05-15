@@ -1,5 +1,5 @@
 ﻿
-//globar store
+//global store
 let storage = [];
 let tempStorage = null;
 let codeStorage = [];
@@ -494,3 +494,8 @@ $('#inputFindVendor').typeahead({
 
 //event listner
 vendorAddClick.addEventListener('click', onVendorAddClicked);
+
+
+//****PAYMENT SECTION****/
+const formPayment = document.getElementById('formPayment');
+
