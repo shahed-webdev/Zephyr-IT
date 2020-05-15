@@ -104,5 +104,14 @@ namespace InventoryManagement.Web.Controllers
             var existList = await _db.ProductStocks.IsExistListAsync(stocks).ConfigureAwait(false);
             return Json(existList);
         }
+
+        public async Task<IActionResult> PurchaseReceipt(int? id)
+        {
+            if (id == null) return RedirectToAction($"");
+            var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault()).ConfigureAwait(false);
+            model.InstitutionInfo = _db.Institutions.FindCustom();
+
+            return View(model);
+        }
     }
 }

@@ -100,5 +100,57 @@ namespace InventoryManagement.Repository
             return response;
         }
 
+        public Task<PurchaseReceiptViewModel> PurchaseReceiptAsync(int id)
+        {
+            var purchaseReceipt = Context.Purchase
+                .Include(p => p.Vendor)
+                .Include(p => p.Registration)
+                .Include(p => p.Product)
+                .ThenInclude(pd => pd.ProductStock)
+                .Include(p => p.PurchasePaymentList)
+                .ThenInclude(p => p.PurchasePayment)
+                .Select(p => new PurchaseReceiptViewModel
+                {
+                    PurchaseSn = p.PurchaseSn,
+                    PurchaseId = p.PurchaseId,
+                    PurchaseTotalPrice = p.PurchaseTotalPrice,
+                    PurchaseDiscountAmount = p.PurchaseDiscountAmount,
+                    PurchasePaidAmount = p.PurchasePaidAmount,
+                    PurchaseDueAmount = p.PurchaseDueAmount,
+                    PurchaseDate = p.PurchaseDate,
+                    Products = p.Product.Select(pd => new ProductViewModel
+                    {
+                        ProductId = pd.ProductId,
+                        ProductCatalogId = pd.ProductCatalogId,
+                        ProductName = pd.ProductName,
+                        Description = pd.Description,
+                        Warranty = pd.Warranty,
+                        PurchasePrice = pd.PurchasePrice,
+                        SellingPrice = pd.SellingPrice,
+                        ProductStocks = pd.ProductStock.Select(s => new ProductStockViewModel
+                        {
+                            ProductCode = s.ProductCode
+                        }).ToList()
+                    }).ToList(),
+                    Payments = p.PurchasePaymentList.Select(pp => new PurchasePaymentListViewModel
+                    {
+                        PaymentMethod = pp.PurchasePayment.PaymentMethod,
+                        PaidAmount = pp.PurchasePaidAmount,
+                        PaidDate = pp.PurchasePayment.PaidDate
+                    }).ToList(),
+                    VendorInfo = new VendorViewModel
+                    {
+                        VendorId = p.Vendor.VendorId,
+                        VendorCompanyName = p.Vendor.VendorCompanyName,
+                        VendorName = p.Vendor.VendorName,
+                        VendorAddress = p.Vendor.VendorAddress,
+                        VendorPhone = p.Vendor.VendorPhone,
+                        InsertDate = p.Vendor.InsertDate,
+                        Due = p.Vendor.Due
+                    },
+                    SoildBy = p.Registration.Name
+                }).FirstOrDefaultAsync(p => p.PurchaseId == id);
+            return purchaseReceipt;
+        }
     }
 }

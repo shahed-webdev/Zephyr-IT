@@ -1,0 +1,265 @@
+﻿@using InventoryManagement.Repository
+@model PurchaseReceiptViewModel
+@{
+    ViewData["Title"] = "PurchaseReceipt";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>PurchaseReceipt</h1>
+
+@section Styles{
+    <link href="/CSS/receipt.css?v=1" rel="stylesheet" />
+}
+
+<section class="my-4 d-print-none">
+    <div class="card">
+        <div class="card-body d-flex justify-content-between">
+            <a class="btn btn-success btn-rounded" href="/Purchase/DueCollection/@Model.PurchaseId"><i class="fas fa-money-bill-alt mr-1"></i>Pay Due</a>
+            <div>
+                <a class="btn btn-elegant btn-rounded" href="/Purchase/Purchase"><i class="fas fa-shopping-cart mr-1"></i>Sell</a>
+                <button class="btn btn-default btn-rounded" onclick="print()"><i class="fas fa-print mr-1"></i>Print</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div id="main-page">
+    <div id="institution-info" class="mb-4 text-center">
+        @{
+            var imgSrc = "";
+            var logo = Model.InstitutionInfo.InstitutionLogo;
+            imgSrc = logo != null ? $"data:image/gif;base64,{Convert.ToBase64String(logo)}" : "";
+        }
+
+        <h3 class="mb-2">
+            <img src="@imgSrc" class="rounded-circle" style="height: 35px; width: 35px" alt="" />
+            @Model.InstitutionInfo.InstitutionName
+        </h3>
+        <p><i class="fas fa-map-marker-alt mr-1"></i>@Model.InstitutionInfo.Address</p>
+        <p><i class="fas fa-globe mr-1"></i>@Model.InstitutionInfo.Website, <i class="fas fa-at mr-1"></i>@Model.InstitutionInfo.Email</p>
+        <p><i class="fas fa-phone mr-1"></i>@Model.InstitutionInfo.Phone</p>
+    </div>
+
+    <div class="row mb-4 receipt-date">
+        <div class="col pt-3">
+            RECEIPT# @Model.PurchaseSn
+        </div>
+        <div class="col text-center">
+            <h5>INVOICE</h5>
+        </div>
+        <div class="col text-right col pt-3">
+            Purchase Date: @Model.PurchaseDate.ToString("d MMM yyyy")
+        </div>
+    </div>
+
+    <div id="vendor-area" class="row">
+        <div class="col">
+            <h5>Company: <strong>@Model.VendorInfo.VendorCompanyName</strong></h5>
+            <h5>Name: <strong>@Model.VendorInfo.VendorName</strong></h5>
+        </div>
+        <div class="col text-right">
+            <h5>Phone: <strong>@Model.VendorInfo.VendorPhone</strong></h5>
+            <h5>Address: <strong>@Model.VendorInfo.VendorAddress</strong></h5>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30px"><strong>No.</strong></th>
+                <th><strong>Product&nbsp;Name</strong></th>
+                <th><strong>Description</strong></th>
+                <th><strong>Square&nbsp;Inch</strong></th>
+                <th><strong>Unit&nbsp;Price</strong></th>
+                <th><strong>Line&nbsp;Total</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var index = 0;
+                foreach (var item in Model.Products)
+                {
+                    index++;
+                    <tr>
+                        <td>@index</td>
+                        <td>@item.ProductName</td>
+                        <td>@item.Description</td>
+                        <td>@item.ProductStocks.Count</td>
+                        <td>@item.Warranty/-</td>
+                        <td>@item.PurchasePrice/-</td>
+                    </tr>
+                }
+            }
+            <tr>
+                <td colspan="5">
+                    <span id="amount-word"></span>
+                </td>
+                <td>
+                    <div class="text-right">
+                        <h5>Total: <strong>@Model.PurchaseTotalPrice/-</strong></h5>
+                        @{
+                            var discount = Model.PurchaseDiscountAmount;
+
+                            if (discount > 0)
+                            {
+                                <h5>Discount: <strong>@Model.PurchaseDiscountAmount/-</strong></h5>
+                            }
+                        }
+
+                        <h5>Paid: <strong> @Model.PurchasePaidAmount/-</strong></h5>
+                        <h5>Due: <strong>@Model.PurchaseDueAmount/-</strong></h5>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    @{
+        var paymentRecord = Model.Payments;
+
+        if (paymentRecord.Count > 0)
+        {
+            <h5 class="mt-4">PAYMENT RECORD</h5>
+            <table>
+                <thead>
+                    <tr>
+                        <th><strong>Paid Date</strong></th>
+                        <th><strong>Paid Amount</strong></th>
+                        <th><strong>Payment Method</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+                    @foreach (var item in paymentRecord)
+                    {
+                        <tr>
+                            <td>@item.PaidDate.ToString("d MMM yyyy")</td>
+                            <td class="text-right">@item.PaidAmount/-</td>
+                            <td class="text-center">@item.PaymentMethod</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        }
+    }
+
+    <div class="p-footer">
+        <div class="row">
+            <div class="col">
+                Received By
+                <small class="d-block text-muted">@DateTime.Now.ToString("ddd, dd-MMM-yyyy (hh: mm tt)")</small>
+            </div>
+            <div class="col text-center font-weight-bold">
+                Thank you for your business!
+                <small class="d-block text-muted">Technical support: www.loopsit.com</small>
+            </div>
+
+            <div class="col text-right">
+                For: <strong>@Model.InstitutionInfo.InstitutionName</strong>
+                <small class="d-block text-muted">Served By: <strong>@Model.SoildBy</strong></small>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        function number2text(value) {
+            const fraction = Math.round((value % 1) * 100);
+            var fullText = "";
+
+            if (fraction > 0) {
+                fullText = `AND ${convertNumber(fraction)} PAISA`;
+            }
+
+            return convertNumber(value) + " TK " + fullText + " ONLY";
+        }
+
+        function convertNumber(number) {
+            if ((number < 0) || (number > 999999999)) return "NUMBER OUT OF RANGE!";
+
+            var coreAmount = Math.floor(number / 10000000);
+            number -= coreAmount * 10000000;
+
+            var lakhAmount = Math.floor(number / 100000);
+            number -= lakhAmount * 100000;
+
+            var thousandAmount = Math.floor(number / 1000);
+            number -= thousandAmount * 1000;
+
+            var hundredAmount = Math.floor(number / 100);
+            number = number % 100;
+
+            var tn = Math.floor(number / 10);
+            var one = Math.floor(number % 10);
+            var res = "";
+
+            if (coreAmount > 0) {
+                res += (convertNumber(coreAmount) + " CRORE");
+            }
+            if (lakhAmount > 0) {
+                res += (((res === "") ? "" : " ") + convertNumber(lakhAmount) + " LAKH");
+            }
+            if (thousandAmount > 0) {
+                res += (((res === "") ? "" : " ") + convertNumber(thousandAmount) + " THOUSAND");
+            }
+
+            if (hundredAmount) {
+                res += (((res === "") ? "" : " ") + convertNumber(hundredAmount) + " HUNDRED");
+            }
+
+
+            var ones = Array("",
+                "ONE",
+                "TWO",
+                "THREE",
+                "FOUR",
+                "FIVE",
+                "SIX",
+                "SEVEN",
+                "EIGHT",
+                "NINE",
+                "TEN",
+                "ELEVEN",
+                "TWELVE",
+                "THIRTEEN",
+                "FOURTEEN",
+                "FIFTEEN",
+                "SIXTEEN",
+                "SEVENTEEN",
+                "EIGHTEEN",
+                "NINETEEN");
+            var tens = Array("", "", "TWENTY", "THIRTY", "FORTY", "FIFTY", "SIXTY", "SEVENTY", "EIGHTY", "NINETY");
+
+            if (tn > 0 || one > 0) {
+                if (!(res === "")) {
+                    res += " AND ";
+                }
+
+                if (tn < 2) {
+                    res += ones[tn * 10 + one];
+                } else {
+                    res += tens[tn];
+                    if (one > 0) {
+                        res += (`-${ones[one]}`);
+                    }
+                }
+            }
+
+            if (res === "") {
+                res = "zero";
+            }
+            return res;
+        }
+
+        $(function() {
+            $("#amount-word").text(`Taka (in word): ${number2text(@Model.PurchaseTotalPrice)}`);
+        });
+    </script>
+}
+
