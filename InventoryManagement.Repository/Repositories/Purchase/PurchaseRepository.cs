@@ -27,7 +27,7 @@ namespace InventoryManagement.Repository
         public async Task<DbResponse<int>> AddCustomAsync(PurchaseViewModel model, IUnitOfWork db)
         {
             var response = new DbResponse<int>();
-            var newStocks = model.Products.SelectMany(p => p.ProductStocks.Select(s => s.ProductCode)).ToList();
+            var newStocks = model.Products.SelectMany(p => p.ProductStocks.Select(s => s)).ToList();
 
             var duplicateStocks = await db.ProductStocks.IsExistListAsync(newStocks).ConfigureAwait(false);
 
