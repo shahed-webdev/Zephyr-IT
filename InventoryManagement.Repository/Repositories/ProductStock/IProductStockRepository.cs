@@ -7,7 +7,7 @@ namespace InventoryManagement.Repository
     public interface IProductStockRepository : IRepository<ProductStock>
     {
         Task<bool> IsExistAsync(string productStock);
-        Task<List<string>> IsExistListAsync(List<string> stocks);
+        Task<List<ProductStockViewModel>> IsExistListAsync(List<ProductStockViewModel> stocks);
 
     }
 }
