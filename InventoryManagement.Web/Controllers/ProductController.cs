@@ -104,7 +104,7 @@ namespace InventoryManagement.Web.Controllers
             //var existList = await _db.ProductStocks.IsExistListAsync(stocks).ConfigureAwait(false);
 
             //if (existList == null)
-            //    return Ok();
+            //    return Ok();z
             //else
             //    return UnprocessableEntity(existList);
 
