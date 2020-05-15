@@ -17,9 +17,13 @@ namespace InventoryManagement.Repository
             return Context.ProductStock.AnyAsync(s => s.ProductCode == productStock);
         }
 
-        public Task<List<string>> IsExistListAsync(List<string> stocks)
+        public Task<List<ProductStockViewModel>> IsExistListAsync(List<ProductStockViewModel> stocks)
         {
-            return Context.ProductStock.Where(s => stocks.Contains(s.ProductCode)).Select(s => s.ProductCode).ToListAsync();
+            // var codes = stocks.Select(c => c.ProductCode).ToList();
+            return Context.ProductStock.Where(s => stocks.Select(c => c.ProductCode).Contains(s.ProductCode)).Select(s => new ProductStockViewModel
+            {
+                ProductCode = s.ProductCode
+            }).ToListAsync();
         }
 
     }
