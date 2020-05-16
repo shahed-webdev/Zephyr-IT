@@ -41,6 +41,13 @@ input[type="checkbox"].input-validation-error { border: 0 none; }
 .validation-summary-errors ul{ padding:0; list-style:none; font-size:.85rem}
 .validation-summary-valid { display: none; }
 
+
+/**DISABLE INPUT TYPE NUMBER WHEEL**/
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
+
+
 /*Printing*/
 @page { margin: 5px; }
 @media print {

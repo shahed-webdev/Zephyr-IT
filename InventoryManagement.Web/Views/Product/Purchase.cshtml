@@ -29,7 +29,7 @@
 
 <div class="m-md-3">
     <h4 class="mb-3 page-header">Purchase</h4>
-
+    
     <section class="card card-body">
         <form id="cart-form">
             <div class="form-row">
@@ -135,8 +135,8 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <strong>Discount</strong>
-                            <div>
-                                <input placeholder="Discount" id="inputDiscount" type="text" class="form-control" />
+                            <div class="flex-1 ml-3">
+                                <input placeholder="Discount" id="inputDiscount" type="number" min="0" class="form-control" />
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center green-text">
@@ -145,8 +145,8 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <strong>Total Paid</strong>
-                            <div>
-                                <input placeholder="Paid Amount" id="inputPaid" type="text" class="form-control" />
+                            <div class="flex-1 ml-3">
+                                <input placeholder="Paid Amount" id="inputPaid" type="number" min="0" class="form-control" />
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center orange-text">
@@ -155,8 +155,8 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <strong>Payment Method</strong>
-                            <div>
-                                <select id="selectPaymentMethod" class="mdb-select">
+                            <div class="flex-1 ml-3">
+                                <select id="selectPaymentMethod" class="mdb-select" style="position: absolute; top: 1rem; left: 0px; height: 0px; width: 0px; opacity: 0; padding: 0px; pointer-events: none; display: inline!important;">
                                     <option value="" selected>[ SELECT ]</option>
                                     <option>Cash</option>
                                     <option>Bank</option>
@@ -167,15 +167,15 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <strong>Purchase Date</strong>
-                            <div>
+                            <div class="flex-1 ml-3">
                                 <input placeholder="Purchase Date" id="inputPurchaseDate" type="text" class="form-control datepicker text-center" />
                             </div>
                         </li>
                     </ul>
 
                     <div class="mt-4 text-right">
-                        <input type="button" value="Submit" id="btnPurchase" class="btn peach-gradient btn-rounded" />
-                        <h5 id="vendor-error" class="mt-2 text-center"></h5>
+                        <input type="submit" value="Submit" id="btnPurchase" class="btn peach-gradient btn-rounded" />
+                        <h5 id="vendor-error" class="mt-2 text-center red-text"></h5>
                     </div>
                 </form>
             </div>
@@ -198,13 +198,13 @@
             <div class="modal-body">
                 <form id="formAddCode">
                     <div class="md-form mt-0 mb-2">
-                        <input id="inputProductCode" class="form-control" type="text" required/>
+                        <input id="inputProductCode" class="form-control" type="text" required />
                         <label for="inputProductCode">Product Code</label>
                         <i id="code-exist-error" class="text-danger"></i>
                         <small class="d-block">Double click on code to remove</small>
                     </div>
                 </form>
-
+                
                 <div id="showAddedCode"></div>
             </div>  
         </div>
@@ -214,11 +214,13 @@
 
 <!-- Insert Modal -->
 <div class="modal fade" id="InsertModal" tabindex="-1" role="dialog" aria-hidden="true"></div>
-
+<div>
+    <audio id="audio" src="~/audio/buzz.mp3" />
+</div>
 
 @section Scripts {
     <partial name="_UnobtrusiveAjaxPartial" />
-    <script src="~/page-js/product-purchase.js?v=1.5"></script>
+    <script src="~/page-js/product-purchase.js?v=2.7"></script>
 
     <script>
         $(function () {
@@ -226,104 +228,7 @@
 
             // Material Select Initialization
             $('.mdb-select').materialSelect();
-
-            //input Paid, input Discount
-            $('#inputPaid,#inputDiscount').on('input keypress', function (event) {
-                if ((event.which !== 46 || $(this).val().indexOf('.') !== -1) && (event.which < 48 || event.which > 57)) {
-                    event.preventDefault();
-                }
-            });
         });
-
-
-
-        //convert to float number
-        //function parseNumber(n) {
-        //    const f = parseFloat(n);
-        //    return isNaN(f) ? 0 : f;
-        //}
-
-
-        ////discount change
-        //$("#inputDiscount").on("change", function () {
-        //    const totalPrice = parseNumber($("#totalPrice").text());
-        //    const discount = parseNumber($(this).val());
-        //    const isValid = compareValidation(totalPrice, discount);
-        //    const grandTotal = (totalPrice - discount);
-
-        //    $(this).next('em').remove();
-
-        //    if (!isValid) {
-        //        $(this).after(`<em class="d-block red-text text-right">Discount within ৳${totalPrice}</em>`);
-        //        return;
-        //    }
-
-        //    $("#grandTotal").text(grandTotal.toFixed());
-        //    $("#totalDue").text(grandTotal.toFixed());
-
-        //    const inputPaid = $("#inputPaid");
-        //    if (inputPaid.val())
-        //        inputPaid.val('');
-        //});
-
-        ////paid change
-        //$("#inputPaid").on("change", function () {
-        //    const grandTotal = parseNumber($("#grandTotal").text());
-        //    const paid = parseNumber($(this).val());
-        //    const isValid = compareValidation(grandTotal, paid);
-
-        //    $(this).next('em').remove();
-
-        //    if (!isValid) {
-        //        $(this).after(`<em class="d-block red-text text-right">Pay within ৳${grandTotal}</em>`);
-        //        return;
-        //    }
-
-        //    $("#totalDue").text(grandTotal - paid);
-
-        //    const paymentMethod = $("#selectPaymentMethod");
-        //    paymentMethod.next('em').remove();
-
-        //    if (paid > 0)
-        //        paymentMethod.after('<em class="d-block red-text text-right">Select payment method</em>');
-        //});
-
-        ////remove error
-        //$("#selectPaymentMethod").on("change", function () {
-        //    $(this).next('em').remove();
-        //});
-
-
-        ////input field validation
-        //function validation() {
-        //    const row = $('#table-row tr');
-        //    var isValid = true;
-
-        //    if (row.length > 0) {
-        //        row.find('input[type="number"]').each(function () {
-        //            const input = $(this);
-
-        //            if (input.val() === '' || input.val() === '0' || input.val() === 0) {
-        //                input.addClass("has-error");
-        //                isValid = false;
-        //            } else {
-        //                input.removeClass("has-error");
-        //            }
-        //        });
-        //    }
-
-        //    return isValid;
-        //}
-
-        ////compare Validation
-        //function compareValidation(total, inputted) {
-        //    var isValid = true;
-
-        //    if (total < inputted) {
-        //        isValid = false;
-        //    }
-        //    return isValid;
-        //}
 
         ////Submit
         //$("#btnPurchase").on("click", function (evt) {

@@ -1,22 +1,21 @@
 ﻿@using InventoryManagement.Repository
 @model PurchaseReceiptViewModel
 @{
-    ViewData["Title"] = "PurchaseReceipt";
+    ViewData["Title"] = "Purchase Receipt";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>PurchaseReceipt</h1>
 
 @section Styles{
-    <link href="/CSS/receipt.css?v=1" rel="stylesheet" />
+    <link href="/CSS/receipt.css" rel="stylesheet" />
 }
 
 <section class="my-4 d-print-none">
     <div class="card">
         <div class="card-body d-flex justify-content-between">
-            <a class="btn btn-success btn-rounded" href="/Purchase/DueCollection/@Model.PurchaseId"><i class="fas fa-money-bill-alt mr-1"></i>Pay Due</a>
+            <a class="btn btn-success btn-rounded" href="/Product/DueCollection/@Model.PurchaseId"><i class="fas fa-money-bill-alt mr-1"></i>Pay Due</a>
             <div>
-                <a class="btn btn-elegant btn-rounded" href="/Purchase/Purchase"><i class="fas fa-shopping-cart mr-1"></i>Sell</a>
+                <a class="btn btn-elegant btn-rounded" href="/Product/Purchase"><i class="fas fa-shopping-cart mr-1"></i>Purchase</a>
                 <button class="btn btn-default btn-rounded" onclick="print()"><i class="fas fa-print mr-1"></i>Print</button>
             </div>
         </div>
@@ -69,10 +68,10 @@
             <tr>
                 <th style="width: 30px"><strong>No.</strong></th>
                 <th><strong>Product&nbsp;Name</strong></th>
+                <th><strong>Purchase&nbsp;Price</strong></th>
+                <th><strong>Stocks</strong></th>
+                <th><strong>Warranty</strong></th>
                 <th><strong>Description</strong></th>
-                <th><strong>Square&nbsp;Inch</strong></th>
-                <th><strong>Unit&nbsp;Price</strong></th>
-                <th><strong>Line&nbsp;Total</strong></th>
             </tr>
         </thead>
         <tbody>
@@ -84,10 +83,10 @@
                     <tr>
                         <td>@index</td>
                         <td>@item.ProductName</td>
-                        <td>@item.Description</td>
+                        <td>@item.PurchasePrice</td>
                         <td>@item.ProductStocks.Count</td>
-                        <td>@item.Warranty/-</td>
-                        <td>@item.PurchasePrice/-</td>
+                        <td>@item.Warranty</td>
+                        <td>@item.Description</td>
                     </tr>
                 }
             }
@@ -131,8 +130,6 @@
                     </tr>
                 </thead>
                 <tbody>
-
-
                     @foreach (var item in paymentRecord)
                     {
                         <tr>
@@ -141,11 +138,10 @@
                             <td class="text-center">@item.PaymentMethod</td>
                         </tr>
                     }
-
                 </tbody>
             </table>
+            }
         }
-    }
 
     <div class="p-footer">
         <div class="row">
@@ -168,95 +164,8 @@
 
 
 @section scripts{
+    <script src="~/js/amount-in-word.js"></script>
     <script>
-        function number2text(value) {
-            const fraction = Math.round((value % 1) * 100);
-            var fullText = "";
-
-            if (fraction > 0) {
-                fullText = `AND ${convertNumber(fraction)} PAISA`;
-            }
-
-            return convertNumber(value) + " TK " + fullText + " ONLY";
-        }
-
-        function convertNumber(number) {
-            if ((number < 0) || (number > 999999999)) return "NUMBER OUT OF RANGE!";
-
-            var coreAmount = Math.floor(number / 10000000);
-            number -= coreAmount * 10000000;
-
-            var lakhAmount = Math.floor(number / 100000);
-            number -= lakhAmount * 100000;
-
-            var thousandAmount = Math.floor(number / 1000);
-            number -= thousandAmount * 1000;
-
-            var hundredAmount = Math.floor(number / 100);
-            number = number % 100;
-
-            var tn = Math.floor(number / 10);
-            var one = Math.floor(number % 10);
-            var res = "";
-
-            if (coreAmount > 0) {
-                res += (convertNumber(coreAmount) + " CRORE");
-            }
-            if (lakhAmount > 0) {
-                res += (((res === "") ? "" : " ") + convertNumber(lakhAmount) + " LAKH");
-            }
-            if (thousandAmount > 0) {
-                res += (((res === "") ? "" : " ") + convertNumber(thousandAmount) + " THOUSAND");
-            }
-
-            if (hundredAmount) {
-                res += (((res === "") ? "" : " ") + convertNumber(hundredAmount) + " HUNDRED");
-            }
-
-
-            var ones = Array("",
-                "ONE",
-                "TWO",
-                "THREE",
-                "FOUR",
-                "FIVE",
-                "SIX",
-                "SEVEN",
-                "EIGHT",
-                "NINE",
-                "TEN",
-                "ELEVEN",
-                "TWELVE",
-                "THIRTEEN",
-                "FOURTEEN",
-                "FIFTEEN",
-                "SIXTEEN",
-                "SEVENTEEN",
-                "EIGHTEEN",
-                "NINETEEN");
-            var tens = Array("", "", "TWENTY", "THIRTY", "FORTY", "FIFTY", "SIXTY", "SEVENTY", "EIGHTY", "NINETY");
-
-            if (tn > 0 || one > 0) {
-                if (!(res === "")) {
-                    res += " AND ";
-                }
-
-                if (tn < 2) {
-                    res += ones[tn * 10 + one];
-                } else {
-                    res += tens[tn];
-                    if (one > 0) {
-                        res += (`-${ones[one]}`);
-                    }
-                }
-            }
-
-            if (res === "") {
-                res = "zero";
-            }
-            return res;
-        }
-
         $(function() {
             $("#amount-word").text(`Taka (in word): ${number2text(@Model.PurchaseTotalPrice)}`);
         });

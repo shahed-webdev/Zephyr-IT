@@ -20,7 +20,7 @@
     <!-- Image crop-er -->
     <link href="~/css/croper.css" rel="stylesheet" />
     <!-- custom -->
-    <link href="~/css/custom-admin.css" rel="stylesheet" />
+    <link href="~/css/custom-admin.css?v=1" rel="stylesheet" />
 
     @RenderSection("Styles", false)
 </head>
@@ -104,7 +104,7 @@
     <script src="//cdn.muicss.com/mui-latest/js/mui.min.js"></script>
     <script src="~/js/side-menu-link.js"></script>
     <!-- active-links -->
-    <script src="~/js/active-links.js?v=1"></script>
+    <script src="~/js/active-links.js"></script>
 
     @RenderSection("Scripts", required: false)
 
@@ -153,6 +153,12 @@
             $("#sidedrawer").mouseover(function () {
                 $("#sidedrawer").getNiceScroll().resize();
             });
+        });
+
+        //disable wheel in number type input
+        document.addEventListener("wheel", () => {
+            if (document.activeElement.type === "number")
+                document.activeElement.blur();
         });
 
         //select-picker error

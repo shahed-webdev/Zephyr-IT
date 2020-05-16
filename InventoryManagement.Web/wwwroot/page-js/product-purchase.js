@@ -12,6 +12,7 @@ const selectCategory = cartForm.querySelector("#ParentId");
 const tbody = document.getElementById("tbody");
 const modalInsetCode = $('#modalInsetCode');
 const showAddedCode = document.getElementById('showAddedCode');
+const buzzAudio = document.getElementById('audio');
 
 
 //selectors object
@@ -35,19 +36,15 @@ const productCode = {
             data: codeArray
         }
 
-        axios(options)
-            .then(function (response) {
-                console.log(response)
-            })
-            .catch(function (error) {
-                console.log(error.response);
-            });
+        return axios(options).then(response => response.data).catch(error => console.log(error.response));
     },
     isExist: function (newCode) {
         if (!codeStorage.length) return false;
 
         const codeExis = codeStorage.some(code => code === newCode);
         codeExistError.innerText = codeExis ? `${newCode}: Already Added!` : '';
+
+        if (codeExis) buzzAudio.play();
 
         return codeExis;
     },
@@ -273,7 +270,7 @@ const setProductTempObject = function (element) {
     if (!tempStorage) {
         tempStorage = {
             SN,
-            ParentId: ParentId.value,
+            ProductCatalogId: +ParentId.value,
             Category: ParentId.options[ParentId.selectedIndex].text,
             ProductName,
             PurchasePrice,
@@ -284,7 +281,7 @@ const setProductTempObject = function (element) {
         }
     }
     else {
-        tempStorage.ParentId = ParentId.value;
+        tempStorage.ProductCatalogId = +ParentId.value;
         tempStorage.Category = ParentId.options[ParentId.selectedIndex].text;
         tempStorage.ProductName = ProductName;
         tempStorage.PurchasePrice = PurchasePrice;
@@ -375,26 +372,31 @@ const onAddProductToList = function (evt) {
     if (tempStorage.ProductStocks.length) {
 
         //check product code on server
-        productCode.isExistServer(tempStorage.ProductStocks);
+        const serverCode = productCode.isExistServer(tempStorage.ProductStocks);
+        serverCode.then(res => {
+            console.log(res)
 
-        //add value to cart storage
-        storage.push(tempStorage);
+            if (res.length) return;
 
-        //show cart on table
-        tbody.appendChild(createTableRow(tempStorage));
+            //add value to cart storage
+            storage.push(tempStorage);
 
-        //calculate and show price
-        appendTotalPrice();
+            //show cart on table
+            tbody.appendChild(createTableRow(tempStorage));
 
-        //save to local storage
-        localStorage.setItem('cart-storage', JSON.stringify(storage));
+            //calculate and show price
+            appendTotalPrice();
 
-        //remove the stock temp storage
-        tempStorage = null;
-        localStorage.removeItem('temp-storage');
+            //save to local storage
+            localStorage.setItem('cart-storage', JSON.stringify(storage));
 
-        //clear the text input
-        clearTextinput();
+            //remove the stock temp storage
+            tempStorage = null;
+            localStorage.removeItem('temp-storage');
+
+            //clear the text input
+            clearTextinput();
+        });
     }
     else {
         modalInsetCode.modal('show');
@@ -436,9 +438,7 @@ const onVendorAddClicked = function () {
     const url = this.getAttribute('data-url');
 
     axios.get(url)
-        .then(response => {
-            insertModal.html(response.data).modal('show');
-        })
+        .then(response => insertModal.html(response.data).modal('show'))
         .catch(err => console.log(err))
 }
 
@@ -458,7 +458,6 @@ const appendVendorInfo = function (Data) {
 
 //vendor create success
 function onCreateSuccess(response) {
-    console.log(response.Data)
     if (response.Status) {
         insertModal.modal('hide');
         inputFindVendor.value = '';
@@ -470,9 +469,12 @@ function onCreateSuccess(response) {
     }
 }
 
+//reset vendorId
+hiddenVendorId.value = ''
+
 //vendor autocomplete
 $('#inputFindVendor').typeahead({
-    minLength: 3,
+    minLength: 1,
     displayText: function (item) {
         return `${item.VendorCompanyName} (${item.VendorName}, ${item.VendorPhone})`;
     },
@@ -497,5 +499,104 @@ vendorAddClick.addEventListener('click', onVendorAddClicked);
 
 
 //****PAYMENT SECTION****/
+
 const formPayment = document.getElementById('formPayment');
+const totalPrice = formPayment.querySelector('#totalPrice');
+const inputDiscount = formPayment.inputDiscount;
+const totalPayable = formPayment.querySelector('#totalPayable');
+const inputPaid = formPayment.inputPaid;
+const totalDue = formPayment.querySelector('#totalDue');
+const selectPaymentMethod = formPayment.selectPaymentMethod;
+const inputPurchaseDate = formPayment.inputPurchaseDate;
+const vendorError = formPayment.querySelector('#vendor-error');
+
+//functions
+//compare Validation
+const validInput = function(total, inputted) {
+    return (total < inputted) ? false: true;
+}
+
+//input discount amount
+const onInputDiscount = function () {
+    const total = +totalPrice.textContent;
+    const discount = +this.value;
+    const isValid = validInput(total, discount);
+    const grandTotal = (total - discount);
+
+    this.setAttribute('max', total);
+    
+    totalPayable.innerText = isValid ? grandTotal.toFixed() : total;
+    totalDue.innerText = isValid ? grandTotal.toFixed() : total;
+
+    if (inputPaid.value)
+        inputPaid.value = '';
+}
+
+//input paid amount
+const onInputPaid = function () {
+    const payable = +totalPayable.textContent;
+    const paid = +this.value;
+    const isValid = validInput(payable, paid);
+    const due = (payable - paid);
+
+    paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
+
+    this.setAttribute('max', payable);
+
+    totalDue.innerText = isValid ? due.toFixed() : payable;
+}
+
+//validation info
+const validation = function () {
+    let isValid = true;
+
+    if (!hiddenVendorId.value) {
+        isValid = false;
+        vendorInfo.innerHTML = '<li class="list-group-item list-group-item-danger text-center"><i class="fas fa-exclamation-triangle mr-1 red-text"></i>Select or add Vendor for Purchase!</li>';
+    }
+
+    if (!storage.length)
+        isValid = false;
+
+    vendorError.textContent = storage.length ? '' : 'Product not added!';
+
+    return isValid;
+}
+
+//submit on server
+const onPurchaseSubmitClicked = function (evt) {
+    evt.preventDefault();
+
+    const valid = validation();
+    if (!valid) return;
+
+    const body = {
+        VendorId: +hiddenVendorId.value,
+        PurchaseTotalPrice: +totalPrice.textContent,
+        PurchaseDiscountAmount: +inputDiscount.value | 0,
+        PurchasePaidAmount: +inputPaid.value | 0,
+        PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
+        PurchaseDate: new Date(inputPurchaseDate.value),
+        Products: storage
+    }
+    console.log(body)
+
+    const url = '/Product/Purchase';
+    const options = {
+        method: 'post',
+        url: url,
+        data: body
+    }
+
+    axios(options).then(response => {
+        console.log(response.data);
+        //localStorage.clear(); 
+        //location.href = `/Product/PurchaseReceipt/${id}`;
+    }).catch(error => console.log('error:', error.response));
+}
+
+//event listner
+formPayment.addEventListener('submit', onPurchaseSubmitClicked);
+inputDiscount.addEventListener('input', onInputDiscount);
+inputPaid.addEventListener('input', onInputPaid);
 

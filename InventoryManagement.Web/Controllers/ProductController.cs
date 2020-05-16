@@ -88,14 +88,14 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Purchase([FromBody] PurchaseViewModel model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid) UnprocessableEntity(ModelState);
 
             var response = await _db.Purchases.AddCustomAsync(model, _db).ConfigureAwait(false);
 
             if (response.IsSuccess)
-                return Ok(response.Data);
+                return Ok(response);
             else
-                return UnprocessableEntity(response.Message);
+                return UnprocessableEntity(response);
         }
 
         [HttpPost]
@@ -107,7 +107,8 @@ namespace InventoryManagement.Web.Controllers
 
         public async Task<IActionResult> PurchaseReceipt(int? id)
         {
-            if (id == null) return RedirectToAction($"");
+            if (id == null) return RedirectToAction("Purchase");
+
             var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault()).ConfigureAwait(false);
             model.InstitutionInfo = _db.Institutions.FindCustom();
 
