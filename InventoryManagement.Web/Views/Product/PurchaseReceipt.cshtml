@@ -70,6 +70,7 @@
                 <th><strong>Product&nbsp;Name</strong></th>
                 <th><strong>Purchase&nbsp;Price</strong></th>
                 <th><strong>Stocks</strong></th>
+                <th><strong>Product Code</strong></th>
                 <th><strong>Warranty</strong></th>
                 <th><strong>Description</strong></th>
             </tr>
@@ -84,7 +85,17 @@
                         <td>@index</td>
                         <td>@item.ProductName</td>
                         <td>@item.PurchasePrice</td>
-                        <td>@item.ProductStocks.Count</td>
+                        <td>
+                            @item.ProductStocks.Count
+                        </td>
+                        <td>
+                            <ul>
+                                @foreach (var stock in item.ProductStocks)
+                                {
+                                    <li>@stock.ProductCode</li>
+                                }
+                            </ul>
+                        </td>
                         <td>@item.Warranty</td>
                         <td>@item.Description</td>
                     </tr>
@@ -140,8 +151,8 @@
                     }
                 </tbody>
             </table>
-            }
         }
+    }
 
     <div class="p-footer">
         <div class="row">

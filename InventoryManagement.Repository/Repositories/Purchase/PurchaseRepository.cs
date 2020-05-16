@@ -31,7 +31,7 @@ namespace InventoryManagement.Repository
 
             var duplicateStocks = await db.ProductStocks.IsExistListAsync(newStocks).ConfigureAwait(false);
 
-            if (duplicateStocks != null)
+            if (duplicateStocks.Count > 0)
             {
                 response.Message = "Product code already exists";
                 response.IsSuccess = false;
