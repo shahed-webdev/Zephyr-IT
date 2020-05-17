@@ -173,9 +173,9 @@
                         </li>
                     </ul>
 
-                    <div class="mt-4 text-right">
-                        <input type="submit" value="Submit" id="btnPurchase" class="btn peach-gradient btn-rounded" />
-                        <h5 id="vendor-error" class="mt-2 text-center red-text"></h5>
+                    <div class="mt-4 text-center">
+                        <i id="vendor-error" class="mt-2 text-center red-text"></i>
+                        <button type="submit" id="btnPurchase" class="btn peach-gradient btn-rounded btn-block mt-0"><i class="fal fa-shopping-bag"></i> PURCHASE</button>
                     </div>
                 </form>
             </div>
@@ -220,8 +220,8 @@
 
 @section Scripts {
     <partial name="_UnobtrusiveAjaxPartial" />
-    <script src="~/page-js/product-purchase.js?v=2.7"></script>
-
+    <script src="~/page-js/product-purchase.js"></script>
+    
     <script>
         $(function () {
             $('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'));

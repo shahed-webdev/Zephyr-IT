@@ -5,10 +5,13 @@ namespace InventoryManagement.Repository
     public class InstitutionVM
     {
         public int InstitutionId { get; set; }
+       
         [Required]
         public string InstitutionName { get; set; }
+        
         [Required]
         public string Address { get; set; }
+        
         [Required]
         public string Phone { get; set; }
         public string Email { get; set; }

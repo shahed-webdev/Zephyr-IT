@@ -7,7 +7,7 @@
 
 
 @section Styles{
-    <link href="/CSS/receipt.css" rel="stylesheet" />
+    <link href="/css/purchase-receipt.css" rel="stylesheet" />
 }
 
 <section class="my-4 d-print-none">
@@ -16,7 +16,7 @@
             <a class="btn btn-success btn-rounded" href="/Product/DueCollection/@Model.PurchaseId"><i class="fas fa-money-bill-alt mr-1"></i>Pay Due</a>
             <div>
                 <a class="btn btn-elegant btn-rounded" href="/Product/Purchase"><i class="fas fa-shopping-cart mr-1"></i>Purchase</a>
-                <button class="btn btn-default btn-rounded" onclick="print()"><i class="fas fa-print mr-1"></i>Print</button>
+                <button class="btn btn-amber btn-rounded" onclick="print()"><i class="fas fa-print mr-1"></i>Print</button>
             </div>
         </div>
     </div>
@@ -70,7 +70,7 @@
                 <th><strong>Product&nbsp;Name</strong></th>
                 <th><strong>Purchase&nbsp;Price</strong></th>
                 <th><strong>Stocks</strong></th>
-                <th><strong>Product Code</strong></th>
+                <th><strong>Product&nbsp;Code</strong></th>
                 <th><strong>Warranty</strong></th>
                 <th><strong>Description</strong></th>
             </tr>
@@ -89,7 +89,7 @@
                             @item.ProductStocks.Count
                         </td>
                         <td>
-                            <ul>
+                            <ul class="list-group">
                                 @foreach (var stock in item.ProductStocks)
                                 {
                                     <li>@stock.ProductCode</li>
@@ -102,7 +102,7 @@
                 }
             }
             <tr>
-                <td colspan="5">
+                <td colspan="6">
                     <span id="amount-word"></span>
                 </td>
                 <td>
@@ -154,7 +154,7 @@
         }
     }
 
-    <div class="p-footer">
+    @*<div class="p-footer">
         <div class="row">
             <div class="col">
                 Received By
@@ -170,7 +170,7 @@
                 <small class="d-block text-muted">Served By: <strong>@Model.SoildBy</strong></small>
             </div>
         </div>
-    </div>
+    </div>*@
 </div>
 
 

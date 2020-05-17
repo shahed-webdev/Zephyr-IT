@@ -37,11 +37,9 @@ function convertNumber(number) {
     if (thousandAmount > 0) {
         res += (((res === "") ? "" : " ") + convertNumber(thousandAmount) + " THOUSAND");
     }
-
     if (hundredAmount) {
         res += (((res === "") ? "" : " ") + convertNumber(hundredAmount) + " HUNDRED");
     }
-
 
     let ones = Array("","ONE","TWO","THREE","FOUR","FIVE", "SIX","SEVEN","EIGHT","NINE","TEN","ELEVEN","TWELVE","THIRTEEN","FOURTEEN","FIFTEEN","SIXTEEN","SEVENTEEN","EIGHTEEN","NINETEEN");
     let tens = Array("", "", "TWENTY", "THIRTY", "FORTY", "FIFTY", "SIXTY", "SEVENTY", "EIGHTY", "NINETY");

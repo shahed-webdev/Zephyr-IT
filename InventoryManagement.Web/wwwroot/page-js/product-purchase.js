@@ -87,7 +87,7 @@ const setTempDataToForm = function () {
 
     if (!tempStorage) return;
 
-    cartForm.ParentId.value = tempStorage.ParentId;
+    cartForm.ParentId.value = tempStorage.ProductCatalogId;
     const elements = { ...productFormSelectors() };
 
     elements['0'].value = tempStorage.ProductName
@@ -355,7 +355,8 @@ const onProductCodeClicked = function (evt) {
 }
 
 //add product to list
-const onAddProductToList = function (evt) {
+const onAddProductToList = function (evt)
+{
     const ParentId = cartForm.ParentId.value;
     const ProductName = cartForm.inputProductName.value;
     const PurchasePrice = cartForm.inputPurchasePrice.value;
@@ -410,7 +411,7 @@ cartForm.btnAddToList.addEventListener('click', onAddProductToList);
 
 //add product code form
 formAddCode.addEventListener('submit', onSubmitProductCode);
-showAddedCode.addEventListener('click', onProductCodeClicked);
+showAddedCode.addEventListener('dblclick', onProductCodeClicked);
 
 selectCategory.addEventListener('change', onCategoryChanged);
 tbody.addEventListener('click', ontableRowElementClicked);
@@ -558,9 +559,15 @@ const validation = function () {
     if (!storage.length)
         isValid = false;
 
-    vendorError.textContent = storage.length ? '' : 'Product not added!';
+    vendorError.textContent = storage.length ? '' : 'Add product to purchase!';
 
     return isValid;
+}
+
+//remove localstore
+const localstoreClear = function () {
+    localStorage.removeItem('cart-storage');
+    localStorage.removeItem('code-storage');
 }
 
 //submit on server
@@ -590,8 +597,10 @@ const onPurchaseSubmitClicked = function (evt) {
 
     axios(options).then(response => {
         console.log(response.data);
-        //localStorage.clear(); 
-        //location.href = `/Product/PurchaseReceipt/${id}`;
+        if (response.data.IsSuccess) {
+            localstoreClear(); 
+            location.href = `/Product/PurchaseReceipt/${response.data.Data}`;  
+        }
     }).catch(error => console.log('error:', error.response));
 }
 
