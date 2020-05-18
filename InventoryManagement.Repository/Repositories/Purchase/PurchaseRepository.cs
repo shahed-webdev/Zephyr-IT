@@ -100,8 +100,10 @@ namespace InventoryManagement.Repository
             return response;
         }
 
-        public Task<PurchaseReceiptViewModel> PurchaseReceiptAsync(int id)
+        public Task<PurchaseReceiptViewModel> PurchaseReceiptAsync(int id, IUnitOfWork db)
         {
+            // var categoryList = db.ProductCatalogs.CatalogDll();
+
             var purchaseReceipt = Context.Purchase
                 .Include(p => p.Vendor)
                 .Include(p => p.Registration)
@@ -122,6 +124,7 @@ namespace InventoryManagement.Repository
                     {
                         ProductId = pd.ProductId,
                         ProductCatalogId = pd.ProductCatalogId,
+                        ProductCatalogName = db.ProductCatalogs.CatalogNameNode(pd.ProductCatalogId),
                         ProductName = pd.ProductName,
                         Description = pd.Description,
                         Warranty = pd.Warranty,
@@ -148,8 +151,10 @@ namespace InventoryManagement.Repository
                         InsertDate = p.Vendor.InsertDate,
                         Due = p.Vendor.Due
                     },
+                    InstitutionInfo = db.Institutions.FindCustom(),
                     SoildBy = p.Registration.Name
                 }).FirstOrDefaultAsync(p => p.PurchaseId == id);
+
             return purchaseReceipt;
         }
     }

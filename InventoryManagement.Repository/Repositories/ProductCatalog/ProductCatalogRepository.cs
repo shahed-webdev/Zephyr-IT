@@ -74,7 +74,7 @@ namespace InventoryManagement.Repository
         {
             var ddls = Context.ProductCatalog
                 .AsEnumerable()?
-                .ToList()
+                .ToList().OrderBy(c => c.ParentId).ThenBy(c => c.CatalogLevel).ThenBy(c => c.CatalogName)
                 .Select(c => new DDL
                 {
                     value = c.ProductCatalogId,
@@ -84,15 +84,22 @@ namespace InventoryManagement.Repository
             return ddls.ToList();
         }
 
+        public string CatalogNameNode(int id)
+        {
+            return Context.ProductCatalog
+                   .AsEnumerable()?
+                   .Where(c => c.ProductCatalogId == id)
+                   .Select(c => CatalogDllFunction(c.Parent, c.CatalogName))
+                   .FirstOrDefault();
+        }
+
         string CatalogDllFunction(ProductCatalog catalog, string cat)
         {
 
             if (catalog != null)
             {
-                cat += ">";
-                cat += CatalogDllFunction(catalog.Parent, catalog.CatalogName);
+                cat = CatalogDllFunction(catalog.Parent, catalog.CatalogName) + ">" + cat;
             }
-
 
             return cat;
         }

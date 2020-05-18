@@ -58,6 +58,7 @@
         <thead>
             <tr>
                 <th style="width: 30px"><strong>No.</strong></th>
+                <th><strong>Product&nbsp;Category</strong></th>
                 <th><strong>Product&nbsp;Name</strong></th>
                 <th><strong>Purchase&nbsp;Price</strong></th>
                 <th><strong>Stocks</strong></th>
@@ -74,6 +75,7 @@
                     index++;
                     <tr>
                         <td>@index</td>
+                        <td>@item.ProductCatalogName</td>
                         <td>@item.ProductName</td>
                         <td>@item.PurchasePrice</td>
                         <td>
@@ -93,7 +95,7 @@
                 }
             }
             <tr>
-                <td colspan="6">
+                <td colspan="7">
                     <span id="amount-word"></span>
                 </td>
                 <td>
@@ -146,22 +148,22 @@
     }
 
     @*<div class="p-footer">
-        <div class="row">
-            <div class="col">
-                Received By
-                <small class="d-block text-muted">@DateTime.Now.ToString("ddd, dd-MMM-yyyy (hh: mm tt)")</small>
-            </div>
-            <div class="col text-center font-weight-bold">
-                Thank you for your business!
-                <small class="d-block text-muted">Technical support: www.loopsit.com</small>
-            </div>
+            <div class="row">
+                <div class="col">
+                    Received By
+                    <small class="d-block text-muted">@DateTime.Now.ToString("ddd, dd-MMM-yyyy (hh: mm tt)")</small>
+                </div>
+                <div class="col text-center font-weight-bold">
+                    Thank you for your business!
+                    <small class="d-block text-muted">Technical support: www.loopsit.com</small>
+                </div>
 
-            <div class="col text-right">
-                For: <strong>@Model.InstitutionInfo.InstitutionName</strong>
-                <small class="d-block text-muted">Served By: <strong>@Model.SoildBy</strong></small>
+                <div class="col text-right">
+                    For: <strong>@Model.InstitutionInfo.InstitutionName</strong>
+                    <small class="d-block text-muted">Served By: <strong>@Model.SoildBy</strong></small>
+                </div>
             </div>
-        </div>
-    </div>*@
+        </div>*@
 </div>
 
 

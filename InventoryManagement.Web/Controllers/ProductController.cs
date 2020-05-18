@@ -113,8 +113,8 @@ namespace InventoryManagement.Web.Controllers
         {
             if (id == null) return RedirectToAction("Purchase");
 
-            var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault()).ConfigureAwait(false);
-            model.InstitutionInfo = _db.Institutions.FindCustom();
+            var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault(),_db).ConfigureAwait(false);
+
 
             return View(model);
         }
