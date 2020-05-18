@@ -18,15 +18,16 @@
 
 <div class="container mt-3">
     <div class="row">
-        <div class="col-md-8 col-lg-10 mx-auto">
-            <div class="card card-body p-4">
+        <div class="col-md-10 col-lg-9 mx-auto">
+            <div class="card card-body p-4 px-5">
                 <h4 class="page-header mt-3 text-center">Add New Customer</h4>
 
                 <form id="customer-form" asp-action="Add">
                     <div class="md-form mb-5">
-                        <input asp-for="CustomerName" class="form-control" />
+                        <input id="CustomerName" name="CustomerName" type="text" class="form-control" required />
                         <label for="CustomerName">Name</label>
                     </div>
+
                     <div id="phone-wrapper">
                         <div class="phone-container">
                             <div class="md-form m-0 flex-grow-1">
@@ -43,13 +44,13 @@
                     <div class="form-row">
                         <div class="col-lg-5">
                             <div class="md-form mb-5">
-                                <input asp-for="OrganizationName" class="form-control" />
+                                <input id="OrganizationName" name="OrganizationName" type="text" class="form-control" />
                                 <label for="OrganizationName">Organization Name</label>
                             </div>
                         </div>
                         <div class="col-lg-7">
                             <div class="md-form mb-5">
-                                <input asp-for="CustomerAddress" class="form-control" />
+                                <input id="CustomerAddress" name="CustomerAddress" type="text" class="form-control" />
                                 <label for="CustomerAddress">Address</label>
                             </div>
                         </div>
@@ -58,7 +59,7 @@
                     <div class="form-row">
                         <div class="col-lg-7">
                             <div class="md-form mb-5">
-                                <input asp-for="Description" class="form-control" />
+                                <input id="Description" name="Description" type="text" class="form-control" />
                                 <label for="Description">Description</label>
                             </div>
                         </div>
@@ -67,11 +68,11 @@
                                 <input type="hidden" id="Photo" name="Photo" />
                                 <div class="file-field">
                                     <div class="btn btn-outline-warning btn-rounded btn-sm float-left">
-                                        <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose Photo</span>
-                                        <input type="file" id="upload" value="Choose a Photo" onchange="clearImage(this)">
+                                        <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose</span>
+                                        <input type="file" id="upload" value="Choose" onchange="clearImage(this)">
                                     </div>
                                     <div class="file-path-wrapper">
-                                        <input class="file-path validate" type="text" placeholder="Upload your file" />
+                                        <input class="file-path validate" type="text" placeholder="Upload photo" />
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +86,7 @@
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center">
-                        <button id="btnSubmit" disabled class="btn peach-gradient btn-rounded my-4 waves-effect" type="submit">Add Customer</button>
+                        <button id="btnSubmit" type="submit" disabled class="btn peach-gradient btn-rounded my-4 waves-effect">Add Customer</button>
                         <a asp-action="List">Back to List</a>
                     </div>
                 </form>
@@ -95,7 +96,6 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
     <script src="~/page-js/add-customer.js"></script>
 
     <script>

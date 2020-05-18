@@ -1,14 +1,35 @@
 ﻿
+//date picker
+ $('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'));
+
+ // Material Select Initialization
+$('.mdb-select').materialSelect();
+
 //global store
 let storage = [];
 let tempStorage = null;
 let codeStorage = [];
 
 //selectors
-const cartForm = document.getElementById("cart-form");
+//product info form
+const formCart = document.getElementById("cart-form");
+const selectCategory = formCart.querySelector("#ParentId");
+
+//payment selectors
+const formPayment = document.getElementById('formPayment');
+const totalPrice = formPayment.querySelector('#totalPrice');
+const inputDiscount = formPayment.inputDiscount;
+const totalPayable = formPayment.querySelector('#totalPayable');
+const inputPaid = formPayment.inputPaid;
+const totalDue = formPayment.querySelector('#totalDue');
+const selectPaymentMethod = formPayment.selectPaymentMethod;
+const inputPurchaseDate = formPayment.inputPurchaseDate;
+const vendorError = formPayment.querySelector('#vendor-error');
+
+//form add code
 const formAddCode = document.getElementById("formAddCode");
 const codeExistError = formAddCode.querySelector("#code-exist-error");
-const selectCategory = cartForm.querySelector("#ParentId");
+
 const tbody = document.getElementById("tbody");
 const modalInsetCode = $('#modalInsetCode');
 const showAddedCode = document.getElementById('showAddedCode');
@@ -18,11 +39,11 @@ const buzzAudio = document.getElementById('audio');
 
 //selectors object
 const productFormSelectors = function(){
-    let productName = cartForm.inputProductName;
-    let purchasePrice = cartForm.inputPurchasePrice;
-    let sellingPrice = cartForm.inputSellingPrice;
-    let warranty = cartForm.inputWarranty;
-    let description = cartForm.inputDescription;
+    let productName = formCart.inputProductName;
+    let purchasePrice = formCart.inputPurchasePrice;
+    let sellingPrice = formCart.inputSellingPrice;
+    let warranty = formCart.inputWarranty;
+    let description = formCart.inputDescription;
 
     return [productName, purchasePrice, sellingPrice, warranty, description];
 }
@@ -82,13 +103,27 @@ const getTempStorage = function () {
     }
 }
 
+//dropdown selected index 0
+const clearMDBdropDownList = function (mainSelector) {
+    const content = mainSelector.querySelectorAll('.select-dropdown li');
+    content.forEach(li => {
+        content[0].classList.add('active','selected');
+
+        if (li.classList.contains('selected')) {
+            li.classList.remove(['active', 'selected']);
+            li.click();
+            return;
+        }
+    });
+}
+
 //append un-added data to form
 const setTempDataToForm = function () {
     getTempStorage();
 
     if (!tempStorage) return;
 
-    cartForm.ParentId.value = tempStorage.ProductCatalogId;
+    formCart.ParentId.value = tempStorage.ProductCatalogId;
     const elements = { ...productFormSelectors() };
 
     elements['0'].value = tempStorage.ProductName
@@ -119,14 +154,22 @@ const purchaseTotalPrice = function () {
 
 //append total price to DOM
 const appendTotalPrice = function () {
-    const totalPrice = document.getElementById('totalPrice');
-    const totalPayable = document.getElementById('totalPayable');
-    const totalDue = document.getElementById('totalDue');
     const totalAmount = purchaseTotalPrice();
 
     totalPrice.innerText = totalAmount
     totalPayable.innerText = totalAmount;
     totalDue.innerText = totalAmount;
+
+    if (inputDiscount.value)
+        inputDiscount.value = '';
+
+    if (inputPaid.value)
+        inputPaid.value = '';
+
+    if (selectPaymentMethod.selectedIndex > 0) {
+        clearMDBdropDownList(formPayment);
+        selectPaymentMethod.removeAttribute('required');
+    }
 }
 
 //create table rows
@@ -237,6 +280,15 @@ const ontableRowElementClicked = function (evt) {
         removeProduct(row, SN);
 }
 
+//create product code span on modal
+const createCodeSpan = function (newCode) {
+    let iCode = document.createElement('span');
+    iCode.classList.add('badge-pill', 'badge-success', 'code-span');
+    iCode.appendChild(document.createTextNode(newCode));
+
+    return iCode;
+}
+
 //show product code on popup
 const showAddedProductCode = function () {
     showAddedCode.innerHTML = '';
@@ -246,14 +298,7 @@ const showAddedProductCode = function () {
     const fragment = document.createDocumentFragment();
 
     if (stocks.length > 0) {
-        stocks.forEach(stock => {
-            let iCode = document.createElement('span');
-            iCode.classList.add('badge-pill','badge-success','code-span');
-            iCode.appendChild(document.createTextNode(stock.ProductCode));
-
-            fragment.appendChild(iCode);
-        });
-       
+        stocks.forEach(stock => fragment.appendChild(createCodeSpan(stock.ProductCode)));    
         showAddedCode.appendChild(fragment);
     }
 }
@@ -323,11 +368,11 @@ const onSubmitProductCode = function (form) {
         //add code to temp storage
         tempStorage.ProductStocks.push(stock);
 
-        //save code to global hub
+        //save code to global code hub
         productCode.setStorage(stock.ProductCode);
 
-        //show code on modal
-        showAddedProductCode();
+        //append code on modal
+        showAddedCode.appendChild(createCodeSpan(stock.ProductCode));
 
         //save to local storage
         localStorage.setItem('temp-storage', JSON.stringify(tempStorage));
@@ -371,10 +416,11 @@ const matchExistingProductCode = function (stocks) {
 //add product to list
 const onAddProductToList = function ()
 {
-    const ParentId = cartForm.ParentId.value;
-    const ProductName = cartForm.inputProductName.value;
-    const PurchasePrice = +cartForm.inputPurchasePrice.value;
-    const SellingPrice = +cartForm.inputSellingPrice.value;
+    const ParentId = formCart.ParentId.value;
+    const ProductName = formCart.inputProductName.value;
+    const PurchasePrice = +formCart.inputPurchasePrice.value;
+    const SellingPrice = +formCart.inputSellingPrice.value;
+
 
     if (!ParentId || !ProductName || !PurchasePrice || !SellingPrice) {
         alert('Provide product info!');
@@ -382,9 +428,13 @@ const onAddProductToList = function ()
     }
 
     //set the last value of input
-    setProductTempObject(cartForm);
+    setProductTempObject(formCart);
 
     if (tempStorage.ProductStocks.length) {
+        //start loading spnner
+        this.children[0].style.display = "none";
+        this.children[1].style.display = "inline-block";
+        this.disabled = true;
 
         //check product code on server
         const serverCode = productCode.isExistServer(tempStorage.ProductStocks);
@@ -415,6 +465,14 @@ const onAddProductToList = function ()
 
             //clear the text input
             clearTextinput();
+
+            //clear cart-form select
+            clearMDBdropDownList(formCart);
+
+        }).finally(() => {
+            this.children[0].style.display = "inline-block";
+            this.children[1].style.display = "none";
+            this.disabled = false;
         });
     }
     else {
@@ -424,7 +482,7 @@ const onAddProductToList = function ()
 
 
 //event listners
-cartForm.addEventListener('submit', onOpenProductCodeModal);
+formCart.addEventListener('submit', onOpenProductCodeModal);
 btnAddTolist.addEventListener('click', onAddProductToList);
 
 //add product code form
@@ -518,16 +576,6 @@ vendorAddClick.addEventListener('click', onVendorAddClicked);
 
 
 //****PAYMENT SECTION****/
-
-const formPayment = document.getElementById('formPayment');
-const totalPrice = formPayment.querySelector('#totalPrice');
-const inputDiscount = formPayment.inputDiscount;
-const totalPayable = formPayment.querySelector('#totalPayable');
-const inputPaid = formPayment.inputPaid;
-const totalDue = formPayment.querySelector('#totalDue');
-const selectPaymentMethod = formPayment.selectPaymentMethod;
-const inputPurchaseDate = formPayment.inputPurchaseDate;
-const vendorError = formPayment.querySelector('#vendor-error');
 
 //functions
 //compare Validation

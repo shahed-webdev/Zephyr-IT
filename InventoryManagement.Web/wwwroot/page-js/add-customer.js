@@ -1,6 +1,5 @@
 ﻿//selectors
 const phoneContainer = document.getElementById("phone-wrapper");
-const btnSubmit = document.getElementById("btnSubmit");
 const customerForm = document.getElementById("customer-form");
 
 //functions
@@ -39,7 +38,7 @@ const checkPhoneIsExists = function (evt) {
             }
 
             btnEnabledDisable();
-        });
+        }).catch(err => console.log(err));
     }
 }
 
@@ -79,13 +78,14 @@ const togglePhoneElement = function (evt) {
         removeInputelement(evt);
 }
 
-const onFormSubmit = function () {
-    btnSubmit.disabled = true;
-    btnSubmit.innerText = "Please wait...";
+const onFormSubmit = function (evt) {
+    evt.preventDefault();
+    evt.target.btnSubmit.disabled = true;
+    evt.target.btnSubmit.innerText = "Please wait...";
 
     setTimeout(()=> {
-        btnSubmit.disabled = false;
-        btnSubmit.innerText = "Add Customer";
+        evt.target.btnSubmit.disabled = false;
+        evt.target.btnSubmit.innerText = "Add Customer";
     }, 3000);
 }
 
