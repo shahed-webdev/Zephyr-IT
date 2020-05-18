@@ -89,7 +89,7 @@ namespace InventoryManagement.Repository
 
                 response.IsSuccess = true;
                 response.Message = "Success";
-                response.Data = purchase.RegistrationId;
+                response.Data = purchase.PurchaseId;
             }
             catch (DbUpdateException e)
             {
