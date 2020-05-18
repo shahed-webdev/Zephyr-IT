@@ -35,7 +35,7 @@
             <div class="form-row">
                 <div class="col-lg-4">
                     <div class="md-form">
-                        <select id="ParentId" asp-items="ViewBag.ParentId" class="mdb-select" style="display: none" required>
+                        <select id="ParentId" asp-items="ViewBag.ParentId" class="mdb-select" required style="position: absolute; top: 1rem; left: 0px; height: 0px; width: 0px; opacity: 0; padding: 0px; pointer-events: none; display: inline!important;">
                             <option value="" disabled selected>Select Category</option>
                         </select>
                     </div>
@@ -82,10 +82,11 @@
                     </div>
                 </div>
             </div>
-
-            <button id="btnAddToList" type="button" class="btn btn-rounded btn-success"> add product to List<i class="fal fa-cart-arrow-down ml-1 text-white"></i></button>
         </form>
-    </section>
+        <div>
+            <button id="btnAddToList" type="button" class="btn btn-rounded btn-success"> add product to List<i class="fal fa-cart-arrow-down ml-1 text-white"></i></button>
+        </div>
+    </section>  
 
     <section class="card card-body mt-3">
         <div class="table-responsive">
@@ -175,7 +176,7 @@
 
                     <div class="mt-4 text-center">
                         <i id="vendor-error" class="mt-2 text-center red-text"></i>
-                        <button type="submit" id="btnPurchase" class="btn peach-gradient btn-rounded btn-block mt-0"><i class="fal fa-shopping-bag"></i> PURCHASE</button>
+                        <button type="submit" id="btnPurchase" class="btn peach-gradient btn-rounded btn-block mt-0">PURCHASE</button>
                     </div>
                 </form>
             </div>
@@ -201,7 +202,7 @@
                         <input id="inputProductCode" autocomplete="off" class="form-control" type="text" required />
                         <label for="inputProductCode">Product Code</label>
                         <i id="code-exist-error" class="text-danger"></i>
-                        <small class="d-block">Double click on code to remove</small>
+                        <small class="d-block">Click on code to remove</small>
                     </div>
                 </form>
                 
@@ -229,59 +230,6 @@
             // Material Select Initialization
             $('.mdb-select').materialSelect();
         });
-
-        ////Submit
-        //$("#btnPurchase").on("click", function (evt) {
-        //    const isValid = validation();
-        //    const that = $(this);
-        //    const vendorId = $("#vendorId").val();
-        //    const totalPrice = $("#totalPrice").text() | 0;
-        //    const discountAmount = $("#inputDiscount").val();
-        //    const paidAmount = parseNumber($("#inputPaid").val());
-        //    const date = $("#inputPurchaseDate").val();
-        //    const paymentMethod = $("#selectPaymentMethod").children("option:selected").val();
-        //    const vendorInfo = $("#vendor-info");
-
-
-        //    if (!vendorId) {
-        //        if (!vendorInfo.children().length) {
-        //            $("#vendor-info").append(`<li class="list-group-item list-group-item-danger"><i class="fas fa-exclamation-triangle mr-1 red-text"></i>Select/add Vendor for Purchase!</li>`);
-        //            return;
-        //        }
-
-        //        if (vendorInfo.children().length) return;
-        //    }
-
-        //    if ($("#payment-area em").length) return;
-
-
-        //    const data = {
-        //        VendorID: vendorId,
-        //        PurchaseTotalPrice: totalPrice,
-        //        PurchaseDiscountAmount: discountAmount,
-        //        PurchasePaidAmount: paidAmount,
-        //        PurchaseDate: date,
-        //        Payment_Situation: paymentMethod,
-        //        PurchaseCarts: cart
-        //    };
-
-
-        //    if (isValid && data.PurchaseTotalPrice > 0) {
-        //        $.ajax({
-        //            url: "/Purchase/PostPurchase",
-        //            data: JSON.stringify({ model: data }),
-        //            type: "POST",
-        //            contentType: "application/json; charset=utf-8",
-        //            beforeSend: function () { that.prop('disabled', true).val('Submitting..') },
-        //            success: function (id) {
-        //                localStorage.removeItem('cart');
-        //                window.location.href = `/Purchase/Receipt/${id}`;
-        //            },
-        //            error: function (error) { console.log(error) },
-        //            complete: function () { that.prop('disabled', false).val('Submit') }
-        //        });
-        //    }
-        //});
     </script>
 }
 

@@ -25,16 +25,7 @@
 
 <div id="main-page">
     <div id="institution-info" class="mb-4 text-center">
-        @{
-            var imgSrc = "";
-            var logo = Model.InstitutionInfo.InstitutionLogo;
-            imgSrc = logo != null ? $"data:image/gif;base64,{Convert.ToBase64String(logo)}" : "";
-        }
-
-        <h3 class="mb-2">
-            <img src="@imgSrc" class="rounded-circle" style="height: 35px; width: 35px" alt="" />
-            @Model.InstitutionInfo.InstitutionName
-        </h3>
+        <h3 class="mb-2">@Model.InstitutionInfo.InstitutionName</h3>
         <p><i class="fas fa-map-marker-alt mr-1"></i>@Model.InstitutionInfo.Address</p>
         <p><i class="fas fa-globe mr-1"></i>@Model.InstitutionInfo.Website, <i class="fas fa-at mr-1"></i>@Model.InstitutionInfo.Email</p>
         <p><i class="fas fa-phone mr-1"></i>@Model.InstitutionInfo.Phone</p>

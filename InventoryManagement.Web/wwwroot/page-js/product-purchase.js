@@ -12,6 +12,7 @@ const selectCategory = cartForm.querySelector("#ParentId");
 const tbody = document.getElementById("tbody");
 const modalInsetCode = $('#modalInsetCode');
 const showAddedCode = document.getElementById('showAddedCode');
+const btnAddTolist = document.getElementById('btnAddToList');
 const buzzAudio = document.getElementById('audio');
 
 
@@ -368,15 +369,15 @@ const matchExistingProductCode = function (stocks) {
 }
 
 //add product to list
-const onAddProductToList = function (evt)
+const onAddProductToList = function ()
 {
     const ParentId = cartForm.ParentId.value;
     const ProductName = cartForm.inputProductName.value;
-    const PurchasePrice = cartForm.inputPurchasePrice.value;
-    const SellingPrice = cartForm.inputSellingPrice.value;
+    const PurchasePrice = +cartForm.inputPurchasePrice.value;
+    const SellingPrice = +cartForm.inputSellingPrice.value;
 
-    if (!ParentId && !ProductName && !PurchasePrice && !SellingPrice) {
-        console.log('form value can not be empty');
+    if (!ParentId || !ProductName || !PurchasePrice || !SellingPrice) {
+        alert('Provide product info!');
         return;
     }
 
@@ -388,8 +389,6 @@ const onAddProductToList = function (evt)
         //check product code on server
         const serverCode = productCode.isExistServer(tempStorage.ProductStocks);
         serverCode.then(res => {
-            console.log(res)
-            
             if (res.length) {
                 //show product code on modal
                 showAddedProductCode();
@@ -426,11 +425,11 @@ const onAddProductToList = function (evt)
 
 //event listners
 cartForm.addEventListener('submit', onOpenProductCodeModal);
-cartForm.btnAddToList.addEventListener('click', onAddProductToList);
+btnAddTolist.addEventListener('click', onAddProductToList);
 
 //add product code form
 formAddCode.addEventListener('submit', onSubmitProductCode);
-showAddedCode.addEventListener('dblclick', onProductCodeClicked);
+showAddedCode.addEventListener('click', onProductCodeClicked);
 
 selectCategory.addEventListener('change', onCategoryChanged);
 tbody.addEventListener('click', ontableRowElementClicked);
@@ -596,6 +595,11 @@ const onPurchaseSubmitClicked = function (evt) {
     const valid = validation();
     if (!valid) return;
 
+    //disable button on submit
+    const btnSubmit = evt.target.btnPurchase;
+    btnSubmit.innerText = 'submitting..';
+    btnSubmit.disabled = true;
+
     const body = {
         VendorId: +hiddenVendorId.value,
         PurchaseTotalPrice: +totalPrice.textContent,
@@ -613,13 +617,24 @@ const onPurchaseSubmitClicked = function (evt) {
         data: body
     }
 
-    axios(options).then(response => {
-        console.log(response)
-        if (response.data.IsSuccess) {
-            //localstoreClear(); 
-            //location.href = `/Product/PurchaseReceipt/${response.data.Data}`;  
-        }
-    }).catch(error => console.log('error:', error.response));
+    axios(options)
+        .then(response => {
+            if (response.data.IsSuccess) {
+                localstoreClear();
+                location.href = `/Product/PurchaseReceipt/${response.data.Data}`;
+            }
+        })
+        .catch(error => {
+            console.log('error:', error.response);
+
+            if (error.response)
+                vendorError.textContent = error.response.Message;
+
+        })
+        .finally(() => {
+            btnSubmit.innerText = 'PURCHASE';
+            btnSubmit.disabled = false;
+        });
 }
 
 //event listner

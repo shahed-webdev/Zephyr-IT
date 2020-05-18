@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _db;

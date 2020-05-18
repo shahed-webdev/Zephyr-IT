@@ -2,10 +2,12 @@
 using System.Net;
 using System.Threading.Tasks;
 using InventoryManagement.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagement.Web.Controllers
 {
+    [Authorize]
     public class CustomerController : Controller
     {
         private readonly IUnitOfWork _db;

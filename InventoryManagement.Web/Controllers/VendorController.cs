@@ -1,10 +1,12 @@
 ﻿using InventoryManagement.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
 {
+    [Authorize]
     public class VendorController : Controller
     {
         private readonly IUnitOfWork _db;
