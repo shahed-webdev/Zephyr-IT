@@ -247,7 +247,7 @@ const showAddedProductCode = function () {
     if (stocks.length > 0) {
         stocks.forEach(stock => {
             let iCode = document.createElement('span');
-            iCode.classList.add('badge-pill', 'badge-success','code-span');
+            iCode.classList.add('badge-pill','badge-success','code-span');
             iCode.appendChild(document.createTextNode(stock.ProductCode));
 
             fragment.appendChild(iCode);
@@ -346,12 +346,25 @@ const onProductCodeClicked = function (evt) {
     tempStorage.ProductStocks = tempStorage.ProductStocks.filter(stock => stock.ProductCode !== code);
 
     productCode.updateStorage(code);
-
-    //show code on modal
-    showAddedProductCode();
+    
+    //remove code on modal
+    evt.target.remove();
 
     //save to local storage
     localStorage.setItem('temp-storage', JSON.stringify(tempStorage));
+}
+
+//match Existing Product code
+const matchExistingProductCode = function (stocks) {
+    const addedCode = showAddedCode.querySelectorAll('.code-span');
+    addedCode.forEach(added => {
+        stocks.forEach(stock => {
+            if (added.textContent === stock.ProductCode) {
+                added.classList.remove('badge-success');
+                added.classList.add('badge-danger');
+            }
+        })
+    });
 }
 
 //add product to list
@@ -376,8 +389,14 @@ const onAddProductToList = function (evt)
         const serverCode = productCode.isExistServer(tempStorage.ProductStocks);
         serverCode.then(res => {
             console.log(res)
-
-            if (res.length) return;
+            
+            if (res.length) {
+                //show product code on modal
+                showAddedProductCode();
+                matchExistingProductCode(res);
+                modalInsetCode.modal('show');
+                return;
+            }
 
             //add value to cart storage
             storage.push(tempStorage);
@@ -586,7 +605,6 @@ const onPurchaseSubmitClicked = function (evt) {
         PurchaseDate: new Date(inputPurchaseDate.value),
         Products: storage
     }
-    console.log(body)
 
     const url = '/Product/Purchase';
     const options = {
@@ -596,10 +614,10 @@ const onPurchaseSubmitClicked = function (evt) {
     }
 
     axios(options).then(response => {
-        console.log(response.data);
+        console.log(response)
         if (response.data.IsSuccess) {
-            localstoreClear(); 
-            location.href = `/Product/PurchaseReceipt/${response.data.Data}`;  
+            //localstoreClear(); 
+            //location.href = `/Product/PurchaseReceipt/${response.data.Data}`;  
         }
     }).catch(error => console.log('error:', error.response));
 }

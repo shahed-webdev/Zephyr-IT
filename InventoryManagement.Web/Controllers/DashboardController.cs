@@ -58,7 +58,7 @@ namespace InventoryManagement.Web.Controllers
                 _db.SaveChanges();
             }
 
-            return RedirectToAction($"Index", $"Dashboard", new { Message = "Store information Updated" });
+            return RedirectToAction("Index");
         }
 
         //Login Info

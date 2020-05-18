@@ -18,18 +18,23 @@
             <div class="card card-body">
                 <h4 class="page-header my-3 text-center">Store Info</h4>
                 <form asp-action="StoreInfo">
-                    <div class="md-form">
-                        <input asp-for="InstitutionName" class="form-control" />
-                        <label for="InstitutionName">Institution Name</label>
-                        <span asp-validation-for="InstitutionName"></span>
+                    <input type="hidden" name="InstitutionId" value="@Model.InstitutionId" />
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="md-form">
+                                <input asp-for="InstitutionName" class="form-control" />
+                                <label for="InstitutionName">Institution Name</label>
+                                <span asp-validation-for="InstitutionName"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="md-form">
+                                <input asp-for="Address" class="form-control" />
+                                <label for="Address">Address</label>
+                                <span asp-validation-for="Address"></span>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="md-form">
-                        <input asp-for="Address" class="form-control" />
-                        <label for="Address">Address</label>
-                        <span asp-validation-for="Address"></span>
-                    </div>
-
                     <div class="form-row">
                         <div class="col-md-5">
                             <div class="md-form">
@@ -45,6 +50,36 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="md-form">
+                                <input asp-for="Website" class="form-control" />
+                                <label for="Phone">Website</label>
+                                <span asp-validation-for="Website"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="md-form form-sm mb-0">
+                                <input type="hidden" id="Logo" name="InstitutionLogo" />
+                                <div class="file-field">
+                                    <div class="btn btn-outline-warning btn-rounded btn-sm float-left">
+                                        <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose logo</span>
+                                        <input type="file" id="upload" value="Choose a Logo" onchange="clearLogo(this)">
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path validate" type="text" placeholder="Upload your logo" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="w-50 m-auto text-center">
+                                <div id="upload-demo" style="display:none;"></div>
+                                <img id="prevLogo" alt="" />
+                                <a id="doneButton" class="btn-floating btn-lg btn-black" style="display:none;"><i class="fas fa-crop-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="md-form">
                         <input type="submit" value="Save" class="btn peach-gradient" />
                     </div>
@@ -57,4 +92,68 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />  
+
+    <script>
+        let opt = {
+            viewport: { width: 150, height: 150 },
+            boundary: { width: 180, height: 180 },
+            showZoomer: false,
+            enableResize: true,
+            enableOrientation: true
+        };
+
+        let $cropContainer = $('#upload-demo');
+        let $uploadCrop = $cropContainer.croppie(opt);
+        const $photo = $('#Logo');
+        const $preview = $('#prevLogo');
+        const $btnDone = $('#doneButton');
+
+        $('input[type="file"]').change(function (e) {
+            const $this = $(e.target);
+            const $fileField = $this.closest('.file-field');
+            const $pathInput = $fileField.find('input.file-path');
+            const fileNames = [];
+
+            fileNames.push(e.target.files[0].name);
+
+            $pathInput.val(fileNames.join(', '));
+            $pathInput.trigger('change');
+        });
+
+        $('#upload').on('change', function () {
+            readFile(this);
+        });
+
+        $btnDone.on('click', function () {
+            $uploadCrop.croppie('result', { type: 'base64' }).then(function (res) {
+                $photo.val(res.split(',')[1]);
+                $cropContainer.hide();
+                $btnDone.hide();
+                $preview.attr('src', res).addClass('img-thumbnail rounded-circle');;
+            });
+        });
+
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $uploadCrop.croppie('bind', { url: e.target.result });
+
+                    $photo.val('');
+                    $cropContainer.show();
+                    $btnDone.show();
+                    $preview.attr('src', '').removeClass('img-thumbnail rounded-circle');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function clearLogo(ctrl) {
+            if ($(ctrl).val() === "") {
+                $cropContainer.croppie('destroy');
+                $uploadCrop = $cropContainer.croppie(opt);
+            }
+        }
+    </script>
 }
