@@ -108,6 +108,8 @@ namespace InventoryManagement.Repository
                 .Include(p => p.Vendor)
                 .Include(p => p.Registration)
                 .Include(p => p.Product)
+                .ThenInclude(pd => pd.ProductCatalog)
+                .Include(p => p.Product)
                 .ThenInclude(pd => pd.ProductStock)
                 .Include(p => p.PurchasePaymentList)
                 .ThenInclude(p => p.PurchasePayment)
