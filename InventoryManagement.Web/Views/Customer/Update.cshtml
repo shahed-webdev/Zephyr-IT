@@ -33,7 +33,7 @@
                 <input id="customerId" type="hidden" name="CustomerId" value="@Model.CustomerId">
 
                 <div class="md-form mb-5">
-                    <input asp-for="CustomerName" class="form-control" />
+                    <input asp-for="CustomerName" class="form-control" required />
                     <label asp-for="CustomerName">Name</label>
                 </div>
                 <div id="phone-wrapper">
@@ -67,11 +67,11 @@
                             <input type="hidden" id="Photo" name="Photo" />
                             <div class="file-field">
                                 <div class="btn btn-outline-warning btn-rounded btn-sm float-left">
-                                    <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose Photo</span>
+                                    <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose</span>
                                     <input type="file" id="upload" value="Choose a Photo" onchange="clearImage(this)">
                                 </div>
                                 <div class="file-path-wrapper">
-                                    <input class="file-path validate" type="text" placeholder="Upload your file" />
+                                    <input class="file-path validate" type="text" placeholder="Upload photo" />
                                 </div>
                             </div>
                         </div>
@@ -96,7 +96,7 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/page-js/update-customer.js"></script>
+    <script src="~/page-js/customer-update.js"></script>
 
     <script>
         let opt = {

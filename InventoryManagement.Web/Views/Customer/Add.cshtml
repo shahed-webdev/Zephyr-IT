@@ -69,7 +69,7 @@
                                 <div class="file-field">
                                     <div class="btn btn-outline-warning btn-rounded btn-sm float-left">
                                         <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose</span>
-                                        <input type="file" id="upload" value="Choose" onchange="clearImage(this)">
+                                        <input type="file" id="upload" value="Choose a Photo" onchange="clearFile(this)">
                                     </div>
                                     <div class="file-path-wrapper">
                                         <input class="file-path validate" type="text" placeholder="Upload photo" />
@@ -79,7 +79,7 @@
 
                             <div class="w-50 m-auto text-center">
                                 <div id="upload-demo" style="display:none;"></div>
-                                <img id="prevImage" alt="" />
+                                <img id="prevImg" alt="" />
                                 <a id="doneButton" class="btn-floating btn-lg btn-black" style="display:none;"><i class="fas fa-crop-alt"></i></a>
                             </div>
                         </div>
@@ -96,8 +96,6 @@
 </div>
 
 @section Scripts {
-    <script src="~/page-js/add-customer.js"></script>
-
     <script>
         let opt = {
             viewport: { width: 150, height: 150 },
@@ -110,7 +108,7 @@
         let $cropContainer = $('#upload-demo');
         let $uploadCrop = $cropContainer.croppie(opt);
         const $photo = $('#Photo');
-        const $preview = $('#prevImage');
+        const $preview = $('#prevImg');
         const $btnDone = $('#doneButton');
 
         $('input[type="file"]').change(function (e) {
@@ -154,12 +152,14 @@
             }
         }
 
-        function clearImage(ctrl) {
+        function clearFile(ctrl) {
             if ($(ctrl).val() === "") {
                 $cropContainer.croppie('destroy');
                 $uploadCrop = $cropContainer.croppie(opt);
             }
         }
     </script>
+
+    <script src="~/page-js/customer-add.js"></script>
 }
 

@@ -8,7 +8,7 @@
     {
         <div class="phone-container">
             <div class="md-form m-0 flex-grow-1">
-                <input id="phone-@index" value="@item.Phone" name="PhoneNumbers[@index].Phone" type="number" required class="form-control valid-check" minlength="11" />
+                <input id="phone-@index" value="@item.Phone" name="PhoneNumbers[@index].Phone" type="number" required class="form-control valid-check" />
                 <label for="phone-@index">Phone Number @(item.IsPrimary == true ? "(Primary)" : "")</label>
                 <input type="hidden" value="@item.CustomerPhoneId" name="PhoneNumbers[@index].CustomerPhoneId">
 

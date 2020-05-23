@@ -1,0 +1,80 @@
+﻿@*@model IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>
+@{
+    ViewBag.Title = "Page Role";
+    Layout = "~/Views/Shared/_AdminLayoutPage.cshtml";
+}
+
+@section Styles{
+    <style>
+        .delete { color: #CC0000; font-size: 13px; cursor: pointer }
+        .error-color td { color: #CC0000; }
+        .used-error { font-size: 0.8rem; color: red; }
+    </style>
+}
+
+<div class="container">
+    <div class="card card-body">
+        <div class="row">
+            <div class="col justify-content-center align-self-center">
+                <a href="/Basic/PageLink">Page Link >></a>
+                <h3>Page Roles</h3>
+            </div>
+            <div class="col text-right">
+                <a href="/Basic/CreateRole" class="btn-floating btn-success">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+
+        <table id="DataTable" class="table table-sm table-bordered">
+            <thead>
+                <tr>
+                    <th>Role Name</th>
+                    <th style="width:50px">Delete</th>
+                </tr>
+            </thead>
+            <tbody id="table-row">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-left">@item.Name</td>
+                        <td><a class="delete fas fa-trash-alt" data-name="@item.Name" href="/Basic/DeleteRole"></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(function () {
+            //Delete click
+            $(".delete").on("click", function (evt) {
+                evt.preventDefault();
+
+                var btnDelete = $(this);
+                var row = $(this).closest("tr");
+                var url = $(this).attr('href');
+                var roleName = $(this).data("name");
+
+                $('#table-row em').remove();
+                $('#table-row tr').removeClass("error-color");
+
+                if (!url) return;
+
+                if (confirm("Are you sure you want to delete?")) {
+                    $.post(url, { roleName }, function (response) {
+                        if (response !== 'True') {
+                            row.addClass("error-color").after('<em class="used-error">This role already used!</em>');
+                            btnDelete.removeAttr("href");
+                            return;
+                        }
+                        row.hide();
+                    });
+                }
+            });
+        });
+    </script>
+}*@
