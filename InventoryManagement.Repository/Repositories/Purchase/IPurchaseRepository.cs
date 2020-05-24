@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Data;
+using JqueryDataTables.LoopsIT;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Repository
@@ -8,5 +9,6 @@ namespace InventoryManagement.Repository
         Task<int> GetNewSnAsync();
         Task<DbResponse<int>> AddCustomAsync(PurchaseViewModel model, IUnitOfWork db);
         Task<PurchaseReceiptViewModel> PurchaseReceiptAsync(int id, IUnitOfWork db);
+        Task<DataResult<PurchaseRecordViewModel>> RecordsAsync(DataRequest request);
     }
 }

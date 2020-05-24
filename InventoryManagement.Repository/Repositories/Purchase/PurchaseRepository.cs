@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Data;
+using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -158,6 +159,11 @@ namespace InventoryManagement.Repository
                 }).FirstOrDefaultAsync(p => p.PurchaseId == id);
 
             return purchaseReceipt;
+        }
+
+        public Task<DataResult<PurchaseRecordViewModel>> RecordsAsync(DataRequest request)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

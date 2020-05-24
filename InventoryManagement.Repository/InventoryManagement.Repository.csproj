@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InventoryManagement.Data\InventoryManagement.Data.csproj" />
+    <ProjectReference Include="..\JqueryDataTables.LoopsIT\JqueryDataTables.LoopsIT.csproj" />
   </ItemGroup>
 
 </Project>

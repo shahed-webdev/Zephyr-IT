@@ -22,8 +22,6 @@ namespace InventoryManagement.Repository
         public ICollection<ProductViewModel> Products { get; set; }
     }
 
-
-
     public class PurchaseReceiptViewModel
     {
         public PurchaseReceiptViewModel()
@@ -43,5 +41,18 @@ namespace InventoryManagement.Repository
         public ICollection<PurchasePaymentListViewModel> Payments { get; set; }
         public VendorViewModel VendorInfo { get; set; }
         public string SoildBy { get; set; }
+    }
+
+    public class PurchaseRecordViewModel
+    {
+        public int PurchaseId { get; set; }
+        public int VendorId { get; set; }
+        public string VendorCompanyName { get; set; }
+        public int PurchaseSn { get; set; }
+        public double PurchaseAmount { get; set; }
+        public double PurchasePaidAmount { get; set; }
+        public double PurchaseDiscountAmount { get; set; }
+        public double PurchaseDueAmount { get; set; }
+        public DateTime PurchaseDate { get; set; }
     }
 }
