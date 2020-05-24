@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using InventoryManagement.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using InventoryManagement.Data;
 
 namespace InventoryManagement.Repository
 {
@@ -12,9 +12,24 @@ namespace InventoryManagement.Repository
 
         }
 
-        public ICollection<PageLinkCategory> GetCategoryWithLink()
+        public ICollection<PageLinkCategoryViewModel> GetCategoryWithLink()
         {
-            return Context.PageLinkCategory.Include(p => p.PageLink).OrderBy(p => p.Sn).ToList();
+            return Context.PageLinkCategory.Include(p => p.PageLink).OrderBy(p => p.Sn).Select(c => new PageLinkCategoryViewModel
+            {
+                LinkCategoryId = c.LinkCategoryId,
+                Category = c.Category,
+                PageLinks = c.PageLink.Select(p => new PageLinkViewModel
+                {
+                    LinkId = p.LinkId,
+                    LinkCategoryId = p.LinkCategoryId,
+                    RoleId = p.RoleId,
+                    Controller = p.Controller,
+                    Action = p.Action,
+                    Title = p.Title,
+                    IconClass = p.IconClass,
+                    Sn = p.Sn
+                }).ToList()
+            }).ToList();
         }
 
         public PageLink LinkRoleUpdate(int linkId, string roleId)

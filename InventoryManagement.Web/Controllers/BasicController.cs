@@ -1,105 +1,108 @@
-﻿using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using InventoryManagement.Repository;
+﻿using InventoryManagement.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
+using Newtonsoft.Json;
+using System.Linq;
+using System.Threading.Tasks;
 namespace InventoryManagement.Web.Controllers
 {
-    //[Authorize]
-    //public class BasicController : Controller
-    //{
-    //    private readonly IUnitOfWork _db;
+    [Authorize]
+    public class BasicController : Controller
+    {
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IUnitOfWork _db;
+        public BasicController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IUnitOfWork db, RoleManager<IdentityRole> roleManager)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _db = db;
+            _roleManager = roleManager;
 
-    //    private readonly RoleManager<IdentityRole> _roleManager;
-    //    public BasicController()
-    //    {
-    //        _db = new UnitOfWork(new DataContext());
-    //        var context = new ApplicationDbContext();
-    //        var roleStore = new RoleStore<IdentityRole>(context);
-    //        _roleManager = new RoleManager<IdentityRole>(roleStore);
-    //    }
-
-
-    //    //Side Menu
-    //    [Authorize(Roles = "Admin, Sub-Admin")]
-    //    public string GetSideMenu()
-    //    {
-    //        var data = _db.PageLinks.GetSideMenuByUser(User.Identity.Name);
-    //        return JsonConvert.SerializeObject(data);
-    //    }
+        }
 
 
-    //    /******PAGE ACCESS ROLE********/
-    //    public ActionResult PageRole()
-    //    {
-    //        var roles = _roleManager.Roles.ToList();
-    //        return View(roles);
-    //    }
+        //Side Menu
+        [Authorize(Roles = "admin, sub-admin")]
+        public string GetSideMenu()
+        {
+            var data = _db.PageLinks.GetSideMenuByUser(User.Identity.Name);
+            return JsonConvert.SerializeObject(data);
+        }
 
-    //    //GET
-    //    public ActionResult CreateRole()
-    //    {
-    //        var role = new IdentityRole();
-    //        return View(role);
-    //    }
 
-    //    [HttpPost]
-    //    public ActionResult CreateRole(IdentityRole role)
-    //    {
-    //        if (role.Name == null) return View();
-    //        if (_roleManager.RoleExists(role.Name)) return View();
-    //        _roleManager.Create(role);
+        /******PAGE ACCESS ROLE********/
+        public ActionResult PageRole()
+        {
+            var roles = _roleManager.Roles.ToList();
+            return View(roles);
+        }
 
-    //        return RedirectToAction("PageRole");
-    //    }
+        //GET
+        public ActionResult CreateRole()
+        {
+            var role = new IdentityRole();
+            return View(role);
+        }
 
-    //    public bool DeleteRole(string roleName)
-    //    {
-    //        if (roleName == null) return false;
+        [HttpPost]
+        public async Task<ActionResult> CreateRole(IdentityRole role)
+        {
+            if (role.Name == null) return View();
+            if (await _roleManager.RoleExistsAsync(role.Name).ConfigureAwait(false)) return View();
+            await _roleManager.CreateAsync(role).ConfigureAwait(false);
 
-    //        var role = _roleManager.FindByName(roleName);
-    //        if (role.Users.Count > 0) return false;
+            return RedirectToAction("PageRole");
+        }
 
-    //        var r = _roleManager.Delete(role);
-    //        return r.Succeeded;
-    //    }
+        public async Task<bool> DeleteRole(string roleName)
+        {
+            if (roleName == null) return false;
 
-    //    // Page Links
-    //    public ActionResult PageLink()
-    //    {
-    //        ViewBag.roleList = _roleManager.Roles.Select(r => new RoleDDL { RoleId = r.Id, Role = r.Name }).ToList();
+            var role = await _roleManager.FindByNameAsync(roleName).ConfigureAwait(false);
+            var userInRole = await _userManager.GetUsersInRoleAsync(roleName).ConfigureAwait(false);
+            if (userInRole.Count > 0) return false;
 
-    //        var model = _db.PageLinkCategorys.GetCategoryWithLink();
-    //        return View(model);
-    //    }
+            var r = await _roleManager.DeleteAsync(role).ConfigureAwait(false);
+            return r.Succeeded;
+        }
 
-    //    public ActionResult CreateLinks()
-    //    {
-    //        ViewBag.roleList = _roleManager.Roles.Select(r => new RoleDDL { RoleId = r.Id, Role = r.Name }).ToList();
-    //        ViewBag.Category = _db.PageLinkCategorys.ddl();
-    //        return View();
-    //    }
+        // Page Links
+        public ActionResult PageLink()
+        {
+            ViewBag.roleList = _roleManager.Roles.Select(r => new RoleDDL { RoleId = r.Id, Role = r.Name }).ToList();
 
-    //    [HttpPost]
-    //    public ActionResult CreateLinks(PageLink model)
-    //    {
-    //        if (!ModelState.IsValid) return View();
+            var model = _db.PageLinkCategories.GetCategoryWithLink();
+            return View(model);
+        }
 
-    //        _db.PageLinks.Add(model);
-    //        _db.SaveChanges();
+        public ActionResult CreateLinks()
+        {
+            ViewBag.roleList = _roleManager.Roles.Select(r => new RoleDDL { RoleId = r.Id, Role = r.Name }).ToList();
+            ViewBag.Category = _db.PageLinkCategories.ddl();
+            return View();
+        }
 
-    //        return RedirectToAction("PageLink");
-    //    }
+        [HttpPost]
+        public ActionResult CreateLinks(PageLinkViewModel model)
+        {
+            if (!ModelState.IsValid) return View();
 
-    //    public bool PageLinkUpdate(int linkId, string roleId)
-    //    {
-    //        var linkage = _db.PageLinkCategorys.LinkRoleUpdate(linkId, roleId);
-    //        _db.PageLinks.Update(linkage);
-    //        var r = _db.SaveChanges();
+            _db.PageLinks.AddCustom(model);
+            _db.SaveChanges();
 
-    //        return r > 0;
-    //    }
-    //}
+            return RedirectToAction("PageLink");
+        }
+
+        public bool PageLinkUpdate(int linkId, string roleId)
+        {
+            var linkage = _db.PageLinkCategories.LinkRoleUpdate(linkId, roleId);
+            _db.PageLinks.Update(linkage);
+            var r = _db.SaveChanges();
+
+            return r > 0;
+        }
+    }
 }

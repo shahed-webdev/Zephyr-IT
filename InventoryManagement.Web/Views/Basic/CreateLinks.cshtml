@@ -1,62 +1,62 @@
-﻿@*@using InventoryManagement.Repository
-@model PageLinkVM
+﻿@using InventoryManagement.Repository
+@model PageLinkViewModel
 
 @{
     ViewData["Title"] = "Create Links";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-    <div class="container">
-        <div class="card card-body">
-            <h3 class="mb-3">Create Links</h3>
+<div class="container">
+    <div class="card card-body">
+        <h3 class="mb-3">Create Links</h3>
 
-            <form asp-action="CreateLinks">
-                <div class="form-group">
-                    <label>Link Category</label>
-                    @Html.DropDownList("LinkCategoryID", new SelectList(ViewBag.Category, "value", "label"), new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.LinkCategoryID, "", new { @class = "text-danger" })
-                </div>
+        <form asp-action="CreateLinks">
+            <div class="form-group">
+                <label>Link Category</label>
+                @Html.DropDownList("LinkCategoryID", new SelectList(ViewBag.Category, "value", "label"), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.LinkCategoryId, "", new { @class = "text-danger" })
+            </div>
 
-                <div class="form-group">
-                    <label>Role</label>
-                    @Html.DropDownList("RoleId", new SelectList(ViewBag.roleList, "RoleId", "Role"), new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger" })
-                </div>
+            <div class="form-group">
+                <label>Role</label>
+                @Html.DropDownList("RoleId", new SelectList(ViewBag.roleList, "RoleId", "Role"), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger" })
+            </div>
 
-                <div class="form-group">
-                    <label>Controller</label>
-                    @Html.EditorFor(model => model.Controller, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Controller, "", new { @class = "text-danger" })
-                </div>
+            <div class="form-group">
+                <label>Controller</label>
+                @Html.EditorFor(model => model.Controller, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Controller, "", new { @class = "text-danger" })
+            </div>
 
-                <div class="form-group">
-                    <label>Action</label>
-                    @Html.EditorFor(model => model.Action, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Action, "", new { @class = "text-danger" })
-                </div>
+            <div class="form-group">
+                <label>Action</label>
+                @Html.EditorFor(model => model.Action, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Action, "", new { @class = "text-danger" })
+            </div>
 
-                <div class="form-group">
-                    <label>Title</label>
-                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-                </div>
+            <div class="form-group">
+                <label>Title</label>
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
 
-                <div class="form-group">
-                    <label>Icon Class</label>
-                    @Html.EditorFor(model => model.IconClass, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.IconClass, "", new { @class = "text-danger" })
-                </div>
+            <div class="form-group">
+                <label>Icon Class</label>
+                @Html.EditorFor(model => model.IconClass, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IconClass, "", new { @class = "text-danger" })
+            </div>
 
-                <div class="form-group">
-                    <label>SN</label>
-                    @Html.EditorFor(model => model.SN, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.SN, "", new { @class = "text-danger" })
-                </div>
+            <div class="form-group">
+                <label>SN</label>
+                @Html.EditorFor(model => model.Sn, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Sn, "", new { @class = "text-danger" })
+            </div>
 
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-default" />
-                </div>
-            </form>
-            @Html.ActionLink("Back to List", "PageLink")
-        </div>      
-    </div>*@  
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+        @Html.ActionLink("Back to List", "PageLink")
+    </div>
+</div>  
