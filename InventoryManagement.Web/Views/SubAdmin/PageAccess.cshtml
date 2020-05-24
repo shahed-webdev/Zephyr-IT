@@ -15,20 +15,25 @@
 <div class="container">
     <div class="card card-body">
         <h4 class="page-header mb-3">Page Access</h4>
-        <select id="sub-admin" class="form-control" asp-items="ViewBag.SubAdmins">
-            <option value="">SELECT</option>
-        </select>
-        <div id="table-container"></div>
 
-        <input id="btnAssign" value="Assign" type="button" class="btn peach-gradient btn-rounded" />
-        <div id="SuccessMessage" class="alert alert-success mt-2" style="display: none;">Assign Successfully!</div>
-    </div>
+        <form id="formAssign">
+            <select id="selectSubAdmin" class="form-control" asp-items="ViewBag.SubAdmins" required>
+                <option value="">SELECT</option>
+            </select>
+
+            <div id="table-container"></div>
+
+            <input id="btnAssign" value="Assign" type="submit" class="btn peach-gradient btn-rounded" />
+            <div id="SuccessMessage" class="alert alert-success mt-2" style="display: none;">Assign Successfully!</div>
+        </form>
+    </div>    
 </div>
 
 
 @section Scripts {
+    <script src="~/page-js/subAdmin-page-access.js"></script>
     <script>
-        $('#sub-admin').change(function () {
+        $('#selectSubAdmin').change(function () {
             const regId = $(this).val();
             const url = "@Url.Action("GetLinks", "SubAdmin")";
             var tableContainer = $("#table-container");

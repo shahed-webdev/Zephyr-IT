@@ -20,37 +20,37 @@ namespace InventoryManagement.Web.Controllers
             _signInManager = signInManager;
             _db = db;
             _roleManager = roleManager;
-
         }
 
 
-        //Side Menu
+        //GET: Side Menu
         [Authorize(Roles = "admin, sub-admin")]
-        public string GetSideMenu()
+        public IActionResult GetSideMenu()
         {
             var data = _db.PageLinks.GetSideMenuByUser(User.Identity.Name);
-            return JsonConvert.SerializeObject(data);
+            return Json(data);
         }
 
 
         /******PAGE ACCESS ROLE********/
-        public ActionResult PageRole()
+        public IActionResult PageRole()
         {
             var roles = _roleManager.Roles.ToList();
             return View(roles);
         }
 
         //GET
-        public ActionResult CreateRole()
+        public IActionResult CreateRole()
         {
             var role = new IdentityRole();
             return View(role);
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateRole(IdentityRole role)
+        public async Task<IActionResult> CreateRole(IdentityRole role)
         {
             if (role.Name == null) return View();
+
             if (await _roleManager.RoleExistsAsync(role.Name).ConfigureAwait(false)) return View();
             await _roleManager.CreateAsync(role).ConfigureAwait(false);
 
@@ -70,7 +70,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         // Page Links
-        public ActionResult PageLink()
+        public IActionResult PageLink()
         {
             ViewBag.roleList = _roleManager.Roles.Select(r => new RoleDDL { RoleId = r.Id, Role = r.Name }).ToList();
 
@@ -78,17 +78,18 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
-        public ActionResult CreateLinks()
+        public IActionResult CreateLinks()
         {
             ViewBag.roleList = _roleManager.Roles.Select(r => new RoleDDL { RoleId = r.Id, Role = r.Name }).ToList();
             ViewBag.Category = _db.PageLinkCategories.ddl();
+
             return View();
         }
 
         [HttpPost]
-        public ActionResult CreateLinks(PageLinkViewModel model)
+        public IActionResult CreateLinks(PageLinkViewModel model)
         {
-            if (!ModelState.IsValid) return View();
+            if (!ModelState.IsValid) return View(model);
 
             _db.PageLinks.AddCustom(model);
             _db.SaveChanges();

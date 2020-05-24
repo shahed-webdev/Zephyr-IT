@@ -2,33 +2,29 @@
 @using InventoryManagement.Repository
 @model IEnumerable<PageLinkCategoryViewModel>
 
-@{ ViewBag.Title = "Page Link";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml"; }
+@{  
+    ViewData["Title"] = "Page Links";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
 
 @section Styles {
     <style>
-        .updated td {
-            color: #00ca51
-        }
-
-            .updated td select {
-                border-color: #00ca51;
-                color: #00ca51
-            }
-    </style>
+        .updated td { color: #00ca51 }
+        .updated td select { border-color: #00ca51; color: #00ca51 }
+    </style>      
 }
 
 
 <div class="m-3">
     <a href="/Basic/PageRole">Page Role >></a>
     <a href="/Basic/CreateLinks">Create Links >></a>
-    <h3 class="mb-3">Page Link</h3>
 
+    <h3 class="mb-3 page-header">Page Links</h3>
 
     @foreach (var Category in Model)
     {
         <h4 class="mb-1">@Category.Category</h4>
-        <table class="DataTable table table-sm table-bordered nowrap">
+        <table class="data-table table-sm table-bordered nowrap">
             <thead>
                 <tr>
                     <th>

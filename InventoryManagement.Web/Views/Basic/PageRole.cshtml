@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<IdentityRole>
 @{
-    ViewBag.Title = "Page Role";
+    ViewData["Title"] = "Roles";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <table id="DataTable" class="table table-sm table-bordered">
+        <table id="data-table" class="table table-sm table-bordered">
             <thead>
                 <tr>
                     <th>Role Name</th>
@@ -38,7 +38,7 @@
                 {
                     <tr>
                         <td class="text-left">@item.Name</td>
-                        <td><a class="delete fas fa-trash-alt" data-name="@item.Name" href="/Basic/DeleteRole"></a></td>
+                        <td class="text-center"><a class="delete fas fa-trash-alt" data-name="@item.Name" href="/Basic/DeleteRole"></a></td>
                     </tr>
                 }
             </tbody>

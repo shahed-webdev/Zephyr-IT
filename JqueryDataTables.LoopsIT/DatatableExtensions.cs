@@ -10,10 +10,8 @@ namespace JqueryDataTables.LoopsIT
         public static DataResult<T> ToDataResult<T>(this IQueryable<T> query, DataRequest request) where T : class
         {
 
-            var result = new DataResult<T>
-            {
-                draw = request.draw
-            };
+            var result = new DataResult<T> { draw = request.draw };
+           
             try
             {
                 result.recordsTotal = result.recordsFiltered = query.Count();
@@ -28,6 +26,7 @@ namespace JqueryDataTables.LoopsIT
                 {
                     Expression<Func<T, bool>> exp = null;
                     var listExp = new List<FilterDefinition>();
+
                     foreach (var item in request.columns.Where(a => a.searchable))
                     {
                         ParameterExpression param = Expression.Parameter(typeof(T), "t");
@@ -35,6 +34,8 @@ namespace JqueryDataTables.LoopsIT
                         var operand = member.Type == typeof(string) ? Operand.Contains : Operand.Equal;
                         listExp.Add(new FilterDefinition { Operand = operand, Field = item.data, Value = request.search.value });
                     }
+
+
                     exp = ExpressionBuilder.GetExpression<T>(listExp);
                     if (exp != null) query = query.Where(exp);
                 }
@@ -64,6 +65,7 @@ namespace JqueryDataTables.LoopsIT
                             }
                         }
                     }
+
                     query = query.Skip(request.start).Take(request.length);
                 }
 
@@ -79,10 +81,8 @@ namespace JqueryDataTables.LoopsIT
         public static CustomDataResult<T> ToDataResultCustom<T>(this IQueryable<T> query, CustomDataRequest request) where T : class
         {
 
-            var result = new CustomDataResult<T>
-            {
-                draw = request.draw
-            };
+            var result = new CustomDataResult<T> { draw = request.draw };
+           
             try
             {
                 result.recordsTotal = result.recordsFiltered = query.Count();
@@ -97,6 +97,7 @@ namespace JqueryDataTables.LoopsIT
                 {
                     Expression<Func<T, bool>> exp = null;
                     var listExp = new List<FilterDefinition>();
+
                     foreach (var item in request.columns.Where(a => a.searchable))
                     {
                         ParameterExpression param = Expression.Parameter(typeof(T), "t");
@@ -104,6 +105,7 @@ namespace JqueryDataTables.LoopsIT
                         var operand = member.Type == typeof(string) ? Operand.Contains : Operand.Equal;
                         listExp.Add(new FilterDefinition { Operand = operand, Field = item.data, Value = request.search.value });
                     }
+
                     exp = ExpressionBuilder.GetExpression<T>(listExp);
                     if (exp != null) query = query.Where(exp);
                 }
@@ -113,7 +115,7 @@ namespace JqueryDataTables.LoopsIT
                     result.recordsFiltered = query.Count();
                 }
 
-                //------GrandTotal of request column---------------------------------------
+                //Grand Total of request column
                 if (!string.IsNullOrEmpty(request.GrandTotalProperty))
                 {
                     result.GrandTotal = query.SumCreate(request.GrandTotalProperty);
@@ -139,6 +141,7 @@ namespace JqueryDataTables.LoopsIT
                             }
                         }
                     }
+
                     query = query.Skip(request.start).Take(request.length);
                 }
 
@@ -151,15 +154,15 @@ namespace JqueryDataTables.LoopsIT
                 return result;
             }
         }
+
         private static Expression<Func<T, bool>> GetExpression<T>(Operand operand, string field, string value)
         {
-            return ExpressionBuilder
-                .GetExpression<T>(new FilterDefinition
-                {
-                    Operand = operand,
-                    Field = field,
-                    Value = value
-                });
+            return ExpressionBuilder.GetExpression<T>(new FilterDefinition
+            {
+                Operand = operand,
+                Field = field,
+                Value = value
+            });
         }
 
         private static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> query, string memberName)
@@ -176,14 +179,13 @@ namespace JqueryDataTables.LoopsIT
         {
             var typeParams = new ParameterExpression[] { Expression.Parameter(typeof(T), "") };
             var pi = typeof(T).GetProperty(memberName);
+
             return (IOrderedQueryable<T>)query.Provider.CreateQuery(
-                Expression.Call(
-                    typeof(Queryable),
-                    direction,
-                    new Type[] { typeof(T), pi.PropertyType },
-                    query.Expression,
-                    Expression.Lambda(Expression.Property(typeParams[0], pi), typeParams))
-            );
+                Expression.Call(typeof(Queryable),
+                direction,
+                new Type[] { typeof(T), pi.PropertyType },
+                query.Expression,
+                Expression.Lambda(Expression.Property(typeParams[0], pi), typeParams)));
         }
 
 
