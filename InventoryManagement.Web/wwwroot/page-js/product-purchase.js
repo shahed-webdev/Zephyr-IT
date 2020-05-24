@@ -241,14 +241,15 @@ const removeProduct = function (row, SN) {
     //remove product from storage
     storage = storage.filter(item => item.SN !== SN);
 
+    //re-serial SN
+    storage = storage.map((item, i) => ({ ...item, SN : i+1 }));
+
     //save to local storage
     localStorage.setItem('cart-storage', JSON.stringify(storage));
 
-    //remove the row
-    row.remove();
-
-    //re calculate total amount
-    appendTotalPrice();
+    //show product on table
+    tbody.innerHTML = '';
+    showCartedProduct();
 }
 
 //clear textbox field
@@ -292,6 +293,10 @@ const createCodeSpan = function (newCode) {
 //show product code on popup
 const showAddedProductCode = function () {
     showAddedCode.innerHTML = '';
+
+    if (codeExistError.innerText)
+        codeExistError.innerText = '';
+
     if (!tempStorage) return;
 
     const stocks = tempStorage.ProductStocks;
@@ -440,9 +445,16 @@ const onAddProductToList = function ()
         const serverCode = productCode.isExistServer(tempStorage.ProductStocks);
         serverCode.then(res => {
             if (res.length) {
+                //play buzzer
+                buzzAudio.play();
+
                 //show product code on modal
                 showAddedProductCode();
+
+                //show matched code
                 matchExistingProductCode(res);
+               
+                //show modal
                 modalInsetCode.modal('show');
                 return;
             }

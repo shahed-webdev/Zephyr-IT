@@ -1,0 +1,87 @@
+﻿
+@*@using InventoryManagement.Repository
+@model IEnumerable<PageCategoryVM>
+
+@{ ViewBag.Title = "Page Link";
+                Layout = "~/Views/Shared/_AdminLayoutPage.cshtml"; }
+
+@section Styles {
+    <style>
+        .updated td { color: #00ca51 }
+        .updated td select { border-color: #00ca51; color: #00ca51 }
+    </style>
+}
+
+
+<div class="m-3">
+    <a href="/Basic/PageRole">Page Role >></a>
+    <a href="/Basic/CreateLinks">Create Links >></a>
+    <h3 class="mb-3">Page Link</h3>
+
+
+    @foreach (var Category in Model)
+    {
+<h4 class="mb-1">@Category.Category</h4>
+<table class="DataTable table table-sm table-bordered nowrap">
+    <thead>
+        <tr>
+            <th>
+                SN
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Controller
+            </th>
+            <th>
+                Action
+            </th>
+            <th style="width: 200px">
+                Role
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Category.PageLink)
+        {
+<tr>
+    <td>
+        @item.SN
+    </td>
+    <td>
+        @item.Title
+    </td>
+    <td>
+        @item.Controller
+    </td>
+    <td>
+        @item.Action
+    </td>
+    <td>
+        @Html.HiddenFor(m => item.LinkID, new { @class = "linkId" })
+        @Html.DropDownList("RoleId", new SelectList(ViewBag.roleList, "RoleId", "Role", item.RoleId), htmlAttributes: new { @class = "form-control role" })
+    </td>
+</tr>
+        }
+    </tbody>
+</table>              
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $('.role').change(function () {
+            const roleId = $(this).val();
+            const linkId = $(this).closest("tr").find(".linkId").val();
+            const url = "@Url.Action("PagelinkUpdate", "Basic")";
+            var row = $(this).closest("tr");
+
+            $.post(url, { linkId, roleId}, function (response) {
+                if (response) {
+                    row.addClass("updated");
+                };
+            });
+        });
+    </script>
+}*@

@@ -70,7 +70,8 @@ const checkDuplicatePhone = function (evt) {
 
                 valid = true;
                 return;
-            } else {
+            }
+            else {
                 if (errorIndex !== -1) isError.splice(errorIndex, 1);
             }
         });
@@ -121,6 +122,7 @@ const togglePhoneElement = function (evt) {
 }
 
 const onFormSubmit = function () {
+    evt.preventDefault();
     btnSubmit.disabled = true;
     btnSubmit.innerText = "Please wait...";
 

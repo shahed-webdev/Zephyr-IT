@@ -7,10 +7,10 @@ let elementIndex = 1;
 const isError = [];
 
 const btnEnabledDisable = function () {
-    btnSubmit.disabled = isError.length === 0 ? false : true;
+    btnSubmit.disabled = isError.length ? true : false;
 }
 
-const checkPhoneIsExists = function (evt) {
+const checkPhoneIsExists = function (evt) {    
     const phoneInput = evt.target.classList.contains("valid-check");
     if (!phoneInput) return;
 
