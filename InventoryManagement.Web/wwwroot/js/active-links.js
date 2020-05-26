@@ -115,8 +115,16 @@ let linkData = [{
             "Action": "Purchase",
             "Title": "Purchase",
             "IconClass": null
-        }]
-    }]
+            },
+            {
+                "LinkID": 6,
+                "SN": 1,
+                "Controller": "Product",
+                "Action": "PurchaseRecords",
+                "Title": "Purchase Records",
+                "IconClass": null
+            }]
+    }];
 
 //selectors
 const menuItem = document.getElementById("menuItem");
@@ -179,4 +187,4 @@ function setNavigation() {
 if (document.readyState === 'loading')
     document.addEventListener('DOMContentLoaded', setNavigation);
 else
-    setNavigation()
+    setNavigation();

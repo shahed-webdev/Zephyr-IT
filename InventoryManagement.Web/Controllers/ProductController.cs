@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Repository;
+using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -91,7 +92,7 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> Purchase([FromBody] PurchaseViewModel model)
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
-            
+
             if (!ModelState.IsValid) UnprocessableEntity(ModelState);
 
             var response = await _db.Purchases.AddCustomAsync(model, _db).ConfigureAwait(false);
@@ -113,10 +114,21 @@ namespace InventoryManagement.Web.Controllers
         {
             if (id == null) return RedirectToAction("Purchase");
 
-            var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault(),_db).ConfigureAwait(false);
+            var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
 
 
             return View(model);
+        }
+
+        [Authorize(Roles = "admin, PurchaseRecords")]
+        public ActionResult PurchaseRecords()
+        {
+            return View();
+        }
+        public JsonResult PurchaseRecordsData(DataRequest request)
+        {
+            var data = _db.Purchases.Records(request);
+            return Json(data);
         }
     }
 }

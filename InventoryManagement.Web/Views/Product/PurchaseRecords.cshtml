@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewData["Title"] = "Purchase Invoices";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card card-body m-md-3">
+    <h3 class="mb-3">Purchase Invoice</h3>
+
+    <table id="DataTable" class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>#Invoice</th>
+                <th>Vendor</th>
+                <th>Amount</th>
+                <th>Paid</th>
+                <th>Due</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+
+@section scripts
+{
+    <script>
+        $(function () {
+            dataTable.getData();
+        });
+
+        //get data
+        var dataTable = {
+            table: null,
+            init: function () {
+                dataTable.table = $("#DataTable").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>><"row"<"col-sm-12"<tr>>><"row"<"col-sm-5"i><"col-sm-7"p>>',
+                    buttons: dataTable.button,
+                    ajax: {
+                        url: "/Product/PurchaseRecordsData",
+                        type: "POST"
+                    },
+                    columns:
+                        [
+                            {
+                                data: "PurchaseSn", "render": function (data, type, row, meta) {
+                                    return `<a class="blue-text" href="/Product/PurchaseReceipt/${row.PurchaseId}">${data}</a>`;
+                                }
+                            },
+                            { data: "VendorCompanyName" },
+                            { data: "PurchaseAmount", "render": dataTable.addSign },
+                            { data: "PurchasePaidAmount", "render": dataTable.addSign },
+                            { data: "PurchaseDueAmount", "render": dataTable.addSign },
+                            { data: "PurchaseDate", "render": function (data) { return moment(data).format('DD MMM YYYY') } }
+                        ],
+                    columnDefs: [
+                        { 'searchable': false, 'targets': [0,2,3, 4, 5] },
+                        { 'className': "text-right", "targets": [2, 3, 4] },
+                        { 'className': "text-left", "targets": [1] }
+                    ]
+                });
+            },
+            getData: function () {
+                dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
+            },
+            addSign: function (data) { return `${data}/-` },
+            button: {
+                buttons: [{
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i> Print',
+                    title: '',
+                    exportOptions: {
+                        //columns: [0,1] //Column value those print
+                    },
+                    customize: function (win) {
+                        $(win.document.body).prepend(`
+                                <nav class="mb-3 navbar aqua-gradient">
+                                  <h4 class="white-text m-0">
+                                    <img src="http://bismillahgraphic.com/CSS/images/logo.png" style="height: 40px;" alt="">Bismillah Graphic
+                                  </h4>
+                                </nav>
+                                <h3 class="h3-responsive">${$('h3').text()}</h3>`);
+                    },
+                    autoPrint: true
+                }],
+                dom: {
+                    button: {
+                        className: 'btn purple-gradient btn-rounded btn-sm my-0'
+                    }
+                }
+            }
+        }</script>
+}
+
+
