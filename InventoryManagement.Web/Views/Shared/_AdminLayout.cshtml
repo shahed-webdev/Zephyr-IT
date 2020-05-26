@@ -39,24 +39,7 @@
 
     <div id="sidedrawer" class="d-print-none z-depth-1">
         <Partial Name="_AdminLoginPartial" />
-        <ul id="menuItem">
-            @*<li>
-                    <strong><span class="fas fa-user-tie"></span> Sub-Admin <i class="fas fa-caret-right"></i></strong>
-                    <ul class="sub-menu">
-                        <li><a class="links" href="/Account/Register">Signup Sub-admin</a></li>
-                        <li><a class="links" href="/SubAdmin/Index">Sub-admins</a></li>
-                        <li><a class="links" href="/SubAdmin/PageAccess">Page Access</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <strong><span class="fas fa-shopping-cart"></span> Product <i class="fas fa-caret-right"></i></strong>
-                    <ul class="sub-menu"><li><a class="links" href="/ProductCategories/IndexView">Categories</a></li><li><a class="links" href="/Products/Index">Products</a></li></ul>
-                </li>
-                <li>
-                    <strong><span class="fas fa-chart-pie"></span> Expense <i class="fas fa-caret-right"></i></strong>
-                    <ul class="sub-menu"><li><a class="links" href="/ExpenseCategories/Index">Categories</a></li><li><a class="links" href="/Expenses/Index">Expenses</a></li></ul>
-                </li>*@
-        </ul>
+        <ul id="menuItem"></ul>
     </div>
 
     <main id="content-wrapper" style="min-height:750px">
@@ -101,10 +84,10 @@
     <!--customDateFormat-->
     <script src="~/js/customDateFormat.js"></script>
     <!--Sidebar-->
-    <script src="//cdn.muicss.com/mui-latest/js/mui.min.js"></script>
-    <script src="~/js/side-menu-link.js"></script>
-    <!-- active-links -->
-    <script src="~/js/active-links.js"></script>
+    <script src="https://cdn.muicss.com/mui-latest/js/mui.min.js"></script>
+    <!-- menu-links -->
+    <script src="~/js/menu-links.js"></script>
+    <script src="~/js/sidedrawer-show-hide.js"></script>
 
     @RenderSection("Scripts", required: false)
 

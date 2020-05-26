@@ -19,8 +19,10 @@ namespace JqueryDataTables.LoopsIT
             if (filter == null) return null;
 
             ParameterExpression param = Expression.Parameter(typeof(T), "t");
+
             var exp = GetExpression<T>(param, filter);
             if (exp == null) return null;
+
             return Expression.Lambda<Func<T, bool>>(exp, param);
         }
 
@@ -29,6 +31,7 @@ namespace JqueryDataTables.LoopsIT
             MemberExpression member = Expression.Property(param, filter.Field);
             var cType = ConvertDynamic(Type.GetTypeCode(member.Type), filter.Value);
             if (cType == null) return null;
+
             ConstantExpression constant = Expression.Constant(cType);
 
             switch (filter.Operand)
@@ -127,13 +130,9 @@ namespace JqueryDataTables.LoopsIT
                 if (expin != null)
                 {
                     if (exp == null)
-                    {
                         exp = expin;
-                    }
                     else
-                    {
                         exp = Expression.Or(exp, expin);
-                    }
                 }
             }
 
@@ -147,6 +146,7 @@ namespace JqueryDataTables.LoopsIT
         public string Value { get; set; }
         public Operand Operand { get; set; }
     }
+
     public enum Operand
     {
         Equal,

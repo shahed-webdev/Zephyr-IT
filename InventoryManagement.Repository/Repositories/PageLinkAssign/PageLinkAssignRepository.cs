@@ -17,6 +17,7 @@ namespace InventoryManagement.Repository
                 LinkId = l.LinkId,
                 RegistrationId = regId
             }).ToList();
+
             var pDelete = Context.PageLinkAssign.Where(p => p.RegistrationId == regId).ToList();
             Context.PageLinkAssign.RemoveRange(pDelete);
             Context.PageLinkAssign.AddRange(pAssigns);
@@ -25,14 +26,13 @@ namespace InventoryManagement.Repository
 
         public ICollection<PageCategoryVM> SubAdminLinks(int regId)
         {
-
             var userDll = (from c in Context.PageLinkCategory
                            select new PageCategoryVM
                            {
                                Category = c.Category,
                                Links = (from l in Context.PageLink
                                         join r in Context.Roles
-                                            on l.RoleId equals r.Id
+                                        on l.RoleId equals r.Id
                                         where l.LinkCategoryId == c.LinkCategoryId
                                         select new PageLinkVM
                                         {
