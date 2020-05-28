@@ -118,5 +118,11 @@ namespace InventoryManagement.Web.Controllers
 
             return View(model);
         }
+
+        //selling
+        public IActionResult Selling()
+        {
+            return View();
+        }
     }
 }

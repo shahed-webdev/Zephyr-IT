@@ -6,18 +6,20 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+    <div class="container">
+        <div class="row">
+            <div class="col justify-content-center align-self-center">
+                <h4 class="page-header">Vendor List</h4>
+            </div>
+            <div class="col text-right">
+                <a id="CreateClick" data-url="/Vendor/Create" class="btn-floating peach-gradient" title="Add New" data-toggle="modal">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </div>    
 
 <div class="card card-body m-md-3">
-    <div class="row">
-        <div class="col justify-content-center align-self-center">
-            <h4 class="page-header">Vendor List</h4>
-        </div>
-        <div class="col text-right">
-            <a id="CreateClick" data-url="/Vendor/Create" class="btn-floating peach-gradient" title="Add New" data-toggle="modal">
-                <i class="fa fa-plus" aria-hidden="true"></i>
-            </a>
-        </div>
-    </div>
 
     <table id="data-table" class="table table-sm table-bordered">
         <thead>

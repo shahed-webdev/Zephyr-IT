@@ -34,14 +34,7 @@ let linkData = [{
     "SN": 7,
     "Category": "Customer",
     "IconClass": "fas fa-user",
-    "links": [{
-        "LinkID": 4,
-        "SN": 1,
-        "Controller": "Customer",
-        "Action": "Add",
-        "Title": "Add Customer",
-        "IconClass": null
-    },
+    "links": [
     {
         "LinkID": 6,
         "SN": 2,
@@ -115,8 +108,17 @@ let linkData = [{
             "Action": "Purchase",
             "Title": "Purchase",
             "IconClass": null
-        }]
-    }]
+            },
+            {
+                "LinkID": 7,
+                "SN": 1,
+                "Controller": "Product",
+                "Action": "Selling",
+                "Title": "Selling",
+                "IconClass": null
+            }]
+    }   
+]
 
 //selectors
 const menuItem = document.getElementById("menuItem")

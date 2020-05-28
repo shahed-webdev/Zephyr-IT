@@ -5,31 +5,33 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="card card-body m-md-3">
-    <h4 class="page-header mb-3">Sub-Admins</h4>
+    <div class="container">
+        <h4 class="page-header mb-3">Sub-Admins</h4>
 
-    <div class="table-responsive">
-        <table id="data-table" class="table table-sm table-bordered nowrap">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Username</th>
-                    <th>Mobile</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>               
-                @foreach (var item in Model)
-                {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.UserName</td>
-                    <td>@item.Phone</td>
-                    <td>@item.Email</td>
-                </tr>
-                }
-            </tbody>     
-        </table>
+        <div class="card card-body">
+            <div class="table-responsive">
+                <table id="data-table" class="table table-sm table-bordered nowrap">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.UserName</td>
+                                <td>@item.Phone</td>
+                                <td>@item.Email</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-</div>
-
+    

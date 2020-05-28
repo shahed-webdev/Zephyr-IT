@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewData["Title"] = "Selling";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+    <div class="container">
+        <h4 class="mb-3 page-header d-print-none">Selling</h4>
+
+        <div class="card card-body mb-3 d-print-none">
+            <form id="formCode">
+                <div class="form-row">
+                    <div class="col-lg-4">
+                        <div class="md-form">
+                            <input id="inputBarCode" autocomplete="off" type="text" class="form-control" required />
+                            <label for="inputBarCode">Product barcode</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+@section Scripts{
+    <script src="~/js/onscan.min.js"></script>
+    <script>
+        //selectors
+        const formCode = document.getElementById('formCode')
+        const inputBarCode = formCode.inputBarCode
+
+        //scan code
+        onScan.attachTo(document, {
+            suffixKeyCodes: [13],
+            reactToPaste: true, 
+            onScan: (sCode, iQty) => { 
+                inputBarCode.value = sCode
+                inputBarCode.nextElementSibling.classList.add('active')
+            }
+        })
+
+        //form submit
+        formCode.addEventListener('submit', evt => {
+            evt.preventDefault()
+
+            console.log('form submitted')
+        })
+    </script>    
+}
