@@ -10,9 +10,11 @@ namespace JqueryDataTables.LoopsIT
         public static DataResult<T> ToDataResult<T>(this IQueryable<T> query, DataRequest request) where T : class
         {
 
-            var result = new DataResult<T> { draw = request.draw };
-           
-            try
+            var result = new DataResult<T>
+            {
+                draw = request.draw
+            };
+           // try
             {
                 result.recordsTotal = result.recordsFiltered = query.Count();
 
@@ -72,11 +74,11 @@ namespace JqueryDataTables.LoopsIT
                 result.data = query.ToList();
                 return result;
             }
-            catch
-            {
-                result.data = new List<T>();
-                return result;
-            }
+            //catch
+            //{
+            //    result.data = new List<T>();
+            //    return result;
+            //}
         }
         public static CustomDataResult<T> ToDataResultCustom<T>(this IQueryable<T> query, CustomDataRequest request) where T : class
         {

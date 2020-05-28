@@ -110,15 +110,14 @@ let linkData = [{
             "IconClass": null
             },
             {
-                "LinkID": 7,
+                "LinkID": 6,
                 "SN": 1,
                 "Controller": "Product",
-                "Action": "Selling",
-                "Title": "Selling",
+                "Action": "PurchaseRecords",
+                "Title": "Purchase Records",
                 "IconClass": null
             }]
-    }   
-]
+    }];
 
 //selectors
 const menuItem = document.getElementById("menuItem")
