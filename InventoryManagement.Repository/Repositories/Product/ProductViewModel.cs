@@ -18,4 +18,16 @@ namespace InventoryManagement.Repository
         public double SellingPrice { get; set; }
         public ICollection<ProductStockViewModel> ProductStocks { get; set; }
     }
+
+    public class ProductSellViewModel
+    {
+        public int ProductId { get; set; }
+        public string ProductCode { get; set; }
+        public int ProductCatalogId { get; set; }
+        public string ProductCatalogName { get; set; }
+        public string ProductName { get; set; }
+        public string Description { get; set; }
+        public string Warranty { get; set; }
+        public double SellingPrice { get; set; }
+    }
 }
