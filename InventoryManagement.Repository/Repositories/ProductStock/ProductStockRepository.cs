@@ -26,5 +26,20 @@ namespace InventoryManagement.Repository
             }).ToListAsync();
         }
 
+        public Task<ProductSellViewModel> FindforSellAsync(string code)
+        {
+            var product = Context.ProductStock.Include(s => s.Product).Where(s => s.ProductCode == code && !s.IsSold)
+                .Select(s => new ProductSellViewModel
+                {
+                    ProductId = s.ProductId,
+                    ProductCatalogId = s.Product.ProductCatalogId,
+                    ProductCode = s.ProductCode,
+                    ProductName = s.Product.ProductName,
+                    Description = s.Product.Description,
+                    Warranty = s.Product.Warranty,
+                    SellingPrice = s.Product.SellingPrice
+                });
+            return product.FirstOrDefaultAsync();
+        }
     }
 }
