@@ -125,6 +125,15 @@ namespace InventoryManagement.Web.Controllers
             return View();
         }
 
+        //call from xios
+        public async Task<IActionResult> FindProductByCode(string code)
+        {
+            var data = await _db.ProductStocks.FindforSellAsync(code).ConfigureAwait(false);
+            if (data != null) data.ProductCatalogName = _db.ProductCatalogs.CatalogNameNode(data.ProductCatalogId);
+            
+            return Json(data);
+        }
+
 
         //Purchase Records
         [Authorize(Roles = "admin, PurchaseRecords")]
@@ -136,13 +145,6 @@ namespace InventoryManagement.Web.Controllers
         public IActionResult PurchaseRecordsData(DataRequest request)
         {
             var data = _db.Purchases.Records(request);
-            return Json(data);
-        }
-
-        public async Task<JsonResult> SellingStockProduct(string code)
-        {
-            var data = await _db.ProductStocks.FindforSellAsync(code).ConfigureAwait(false);
-            if (data != null) data.ProductCatalogName = _db.ProductCatalogs.CatalogNameNode(data.ProductCatalogId);
             return Json(data);
         }
     }

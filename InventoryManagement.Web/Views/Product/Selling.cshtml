@@ -6,6 +6,7 @@
 
 @section Styles{ 
 <style>
+    .remove { cursor:pointer}
     #formPayment { padding: 15px 0; color: #4f4f4f; }
     #formPayment ul { list-style-type: none; padding: 0;}
     #formPayment ul li strong{ font-weight:500;}
@@ -20,13 +21,15 @@
             <div class="card card-body mb-3">
                 <form id="formCode">
                     <div class="d-flex justify-content-between align-items-center">
-                        <div class="md-form mt-0 mb-0 flex-1 mr-5">
+                        <div class="md-form mt-0 mb-0 flex-1">
                             <input id="inputBarCode" autocomplete="off" type="text" class="form-control" required />
                             <label for="inputBarCode">Product barcode</label>
                         </div>
-                        <div class="text-right text-muted">3 items</div>
+
+                        <button id="btnFind" type="submit" class="btn btn-sm btn-dark mr-5">find</button>
+                        <div class="text-right text-muted"><span id="productCount">0</span> items</div>
                     </div>
-                </form>
+                </form> 
             </div>
             <div class="card card-body">
                 <table class="table">
@@ -35,38 +38,10 @@
                             <th>PRODUCT</th>
                             <th>QUANTITY</th>
                             <th>PRICE</th>
-                            <th class="text-right">REMOVE</th>
+                            <th style="width:80px">REMOVE</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <span class="text-dark">Motherboard Motherboard Motherboard</span>
-                                <p class="text-muted small mb-0">Intel Motherboard</p>
-                            </td>
-                            <td>1</td>
-                            <td>500</td>
-                            <td class="text-right"><i class="fal fa-times"></i></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a class="title text-dark">Motherboard</a>
-                                <p class="text-muted small mb-0">Intel</p>
-                            </td>
-                            <td>1</td>
-                            <td>500</td>
-                            <td class="text-right"><i class="fal fa-times"></i></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a class="title text-dark">Motherboard</a>
-                                <p class="text-muted small mb-0">Intel</p>
-                            </td>
-                            <td>1</td>
-                            <td>500</td>
-                            <td class="text-right"><i class="fal fa-times"></i></td>
-                        </tr>
-                    </tbody>
+                    <tbody id="t-body"></tbody>
                 </table>
             </div>
         </div>
@@ -76,7 +51,7 @@
                 <form id="formPayment">
                     <ul>
                         <li class="d-flex justify-content-between align-items-center">
-                            <strong>TOTAL AMOUNT</strong>
+                            <strong>Total Amount</strong>
                             <strong>৳<span id="totalPrice">100</span></strong>
                         </li>
                         <li class="md-form">
@@ -84,7 +59,7 @@
                             <label for="inputDiscount">Discount</label>
                         </li>
                         <li class="d-flex justify-content-between align-items-center text-success">
-                            <strong>GRAND TOTAL</strong>
+                            <strong>Grand Total</strong>
                             <strong>৳<span id="totalPayable">100</span></strong>
                         </li>
                         <li class="md-form">
@@ -92,7 +67,7 @@
                             <label for="inputPaid">Paid Amount</label>
                         </li>
                         <li class="d-flex justify-content-between align-items-center text-danger">
-                            <strong>TOTAL DUE</strong>
+                            <strong>Total Due</strong>
                             <strong>৳<span id="totalDue">100</span></strong>
                         </li>
                         <li class="md-form">
@@ -108,9 +83,12 @@
                             <input id="inputPurchaseDate" type="text" class="form-control datepicker" />
                             <label id="label-date" for="inputPurchaseDate">Purchase Date</label>
                         </li>
-                        <li class="md-form mt-4">
-                            <input id="inputCustomer" type="text" class="form-control" />
-                            <label for="inputCustomer">Find Customer</label>
+                        <li class="d-flex justify-content-between align-items-center">
+                            <div class="md-form mt-4 flex-1">
+                                <input id="inputCustomer" type="text" class="form-control" />
+                                <label for="inputCustomer">Find Customer</label>
+                            </div>
+                            <a href="/Customer/Add" target="_blank" class="btn-floating btn-sm blue-gradient"><i class="fas fa-plus" aria-hidden="true"></i></a>
                         </li>
                     </ul>
 
@@ -126,5 +104,5 @@
 
 @section Scripts{
     <script src="~/js/onscan.min.js"></script>
-    <script src="~/page-js/product-selling.js?v=1"></script>
+    <script src="~/page-js/product-selling.js?v=1.1"></script>
 }
