@@ -102,21 +102,29 @@ let linkData = [{
             "IconClass": null
         },
         {
+            "LinkID": 9,
+            "SN": 1,
+            "Controller": "Product",
+            "Action": "Selling",
+            "Title": "Selling",
+            "IconClass": null
+        },
+        {
             "LinkID": 6,
             "SN": 1,
             "Controller": "Product",
             "Action": "Purchase",
             "Title": "Purchase",
             "IconClass": null
-            },
-            {
-                "LinkID": 6,
-                "SN": 1,
-                "Controller": "Product",
-                "Action": "PurchaseRecords",
-                "Title": "Purchase Records",
-                "IconClass": null
-            }]
+        },
+        {
+            "LinkID": 6,
+            "SN": 1,
+            "Controller": "Product",
+            "Action": "PurchaseRecords",
+            "Title": "Purchase Records",
+            "IconClass": null
+        }]
     }];
 
 //selectors

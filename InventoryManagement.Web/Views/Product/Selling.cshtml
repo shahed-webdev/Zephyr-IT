@@ -4,23 +4,127 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+@section Styles {
+    <style>
 
-    <div class="container">
-        <h4 class="mb-3 page-header d-print-none">Selling</h4>
+ .img-sm {
+     width: 80px;
+     height: 80px
+ }
 
-        <div class="card card-body mb-3 d-print-none">
-            <form id="formCode">
-                <div class="form-row">
-                    <div class="col-lg-4">
-                        <div class="md-form">
-                            <input id="inputBarCode" autocomplete="off" type="text" class="form-control" required />
-                            <label for="inputBarCode">Product barcode</label>
-                        </div>
-                    </div>
+ .itemside .info {
+     padding-left: 15px;
+     padding-right: 7px
+ }
+
+ .table-shopping-cart .price-wrap {
+     line-height: 1.2
+ }
+
+ .table-shopping-cart .price {
+     font-weight: bold;
+     margin-right: 5px;
+     display: block
+ }
+
+
+ 
+
+@*@media(max-width:767px) {
+    .cart {
+        padding: 4vh;
+        border-bottom-left-radius: unset;
+        border-top-right-radius: 1rem
+    }
+}*@
+
+
+@*@media(max-width:767px) {
+    .summary {
+        border-top-right-radius: unset;
+        border-bottom-left-radius: 1rem
+    }
+}*@
+
+.title b { font-size: 1.5rem }
+    </style>
+}
+
+<div class="container">
+    <h4 class="mb-3 page-header d-print-none">Selling</h4>
+
+    @*<form id="formCode">
+        <div class="form-row">
+            <div class="col-lg-6">
+                <div class="md-form mt-0">
+                    <input id="inputBarCode" autocomplete="off" type="text" class="form-control" required />
+                    <label for="inputBarCode">Product barcode</label>
                 </div>
-            </form>
+            </div>
+        </div>
+    </form>*@
+
+    <div class="row">
+        <div class="col-md-8 cart">
+            <div class="card card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="md-form mt-0 flex-1 mr-5">
+                        <input id="inputBarCode" autocomplete="off" type="text" class="form-control" required />
+                        <label for="inputBarCode">Product barcode</label>
+                    </div>
+                    <div class="text-right text-muted">3 items</div>
+                </div>
+
+                <table class="table table-shopping-cart">
+                    <thead class="text-muted">
+                        <tr class="small text-uppercase">
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th class="text-right">Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <a class="title text-dark">Motherboard</a>
+                                <p class="text-muted small mb-0">Intel</p>
+                            </td>
+                            <td>1</td>
+                            <td>500</td>
+                            <td class="text-right"><i class="fal fa-times"></i></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a class="title text-dark">Motherboard</a>
+                                <p class="text-muted small mb-0">Intel</p>
+                            </td>
+                            <td>1</td>
+                            <td>500</td>
+                            <td class="text-right"><i class="fal fa-times"></i></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a class="title text-dark">Motherboard</a>
+                                <p class="text-muted small mb-0">Intel</p>
+                            </td>
+                            <td>1</td>
+                            <td>500</td>
+                            <td class="text-right"><i class="fal fa-times"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-body">
+                <h5><b>Summary</b></h5> <hr>
+            </div>
         </div>
     </div>
+
+</div>
 
 @section Scripts{
     <script src="~/js/onscan.min.js"></script>
@@ -32,8 +136,8 @@
         //scan code
         onScan.attachTo(document, {
             suffixKeyCodes: [13],
-            reactToPaste: true, 
-            onScan: (sCode, iQty) => { 
+            reactToPaste: true,
+            onScan: (sCode, iQty) => {
                 inputBarCode.value = sCode
                 inputBarCode.nextElementSibling.classList.add('active')
             }
@@ -45,5 +149,5 @@
 
             console.log('form submitted')
         })
-    </script>    
+    </script>
 }
