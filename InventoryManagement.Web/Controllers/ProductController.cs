@@ -87,7 +87,6 @@ namespace InventoryManagement.Web.Controllers
             return View();
         }
 
-        //POST: Purchase
         [HttpPost]
         public async Task<IActionResult> Purchase([FromBody] PurchaseViewModel model)
         {
@@ -120,12 +119,21 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "admin, PurchaseRecords")]
-        public ActionResult PurchaseRecords()
+       //Selling
+        public IActionResult Selling()
         {
             return View();
         }
-        public JsonResult PurchaseRecordsData(DataRequest request)
+
+
+        //Purchase Records
+        [Authorize(Roles = "admin, PurchaseRecords")]
+        public IActionResult PurchaseRecords()
+        {
+            return View();
+        }
+
+        public IActionResult PurchaseRecordsData(DataRequest request)
         {
             var data = _db.Purchases.Records(request);
             return Json(data);
