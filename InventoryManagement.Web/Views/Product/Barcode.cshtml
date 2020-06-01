@@ -51,11 +51,11 @@
 </div>
 
 @section Scripts{
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.0/JsBarcode.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/barcodes/JsBarcode.ean-upc.min.js"></script>
     <script>
         const getRandom = function () {
-            const rand = (Math.random() * 100);
-            return Math.floor(Date.now() + rand);
+            const rand = (Math.random() * 99);
+            return Math.floor(rand + Date.now()).toString().slice(1);
         }
 
         const generateBarcode = function (evt) {
@@ -81,6 +81,7 @@
 
             const canvas = document.querySelectorAll('.barcode');
             const options = {
+                format: "EAN13",
                 height: inputHeight,
                 width: inputBarWidth,
                 fontSize: inputFontSize,

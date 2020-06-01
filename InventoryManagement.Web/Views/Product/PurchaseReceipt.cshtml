@@ -78,17 +78,13 @@
                         <td>@item.ProductCatalogName</td>
                         <td>@item.ProductName</td>
                         <td>@item.PurchasePrice</td>
+                        <td>@item.ProductStocks.Count</td>
                         <td>
-                            @item.ProductStocks.Count
-                        </td>
-                        <td>
-                            <ul class="list-group">
-                                @foreach (var stock in item.ProductStocks)
-                                {
-                                    <li>@stock.ProductCode</li>
-                                }
-                            </ul>
-                        </td>
+                            @foreach (var stock in item.ProductStocks)
+                            {
+                                <span>@stock.ProductCode,</span>
+                            }
+                        </td> 
                         <td>@item.Warranty</td>
                         <td>@item.Description</td>
                     </tr>
