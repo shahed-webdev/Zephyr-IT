@@ -52,14 +52,14 @@ namespace InventoryManagement.Web.Controllers
                 return UnprocessableEntity(response.Message);
         }
 
-        //GET: Catalog Type
+        //GET: catalog Type
         public async Task<IActionResult> CatalogType()
         {
             var response = await _db.ProductCatalogTypes.ToListAsync();
             return Json(response);
         }
 
-        //POST: Catalog type
+        //POST: catalog type
         [HttpPost]
         public async Task<IActionResult> CatalogType([FromBody] ProductCatalogTypeViewModel model)
         {
@@ -119,13 +119,13 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
-       //Selling
+       //selling
         public IActionResult Selling()
         {
             return View();
         }
 
-        //call from xios
+        //call from axios
         public async Task<IActionResult> FindProductByCode(string code)
         {
             var data = await _db.ProductStocks.FindforSellAsync(code).ConfigureAwait(false);
@@ -135,7 +135,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
-        //Purchase Records
+        //purchase Records
         [Authorize(Roles = "admin, PurchaseRecords")]
         public IActionResult PurchaseRecords()
         {

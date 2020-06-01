@@ -24,9 +24,13 @@
                         <div class="md-form mt-0 mb-0 flex-1">
                             <input id="inputBarCode" autocomplete="off" type="text" class="form-control" required />
                             <label for="inputBarCode">Product barcode</label>
+                            <span id="codeExistError" class="field-validation-error"></span>
                         </div>
 
-                        <button id="btnFind" type="submit" class="btn btn-sm btn-dark mr-5">find</button>
+                        <button id="btnFind" type="submit" class="btn btn-sm btn-dark mr-5">
+                            <i class="far fa-search text-white"></i>
+                            <i class="fas fa-circle-notch fa-spin" style="display:none"></i>
+                        </button>
                         <div class="text-right text-muted"><span id="productCount">0</span> items</div>
                     </div>
                 </form> 
@@ -36,7 +40,7 @@
                     <thead class="text-muted">
                         <tr>
                             <th>PRODUCT</th>
-                            <th>QUANTITY</th>
+                            <th>CODE</th>
                             <th>PRICE</th>
                             <th style="width:80px">REMOVE</th>
                         </tr>
@@ -52,7 +56,7 @@
                     <ul>
                         <li class="d-flex justify-content-between align-items-center">
                             <strong>Total Amount</strong>
-                            <strong>৳<span id="totalPrice">100</span></strong>
+                            <strong>৳<span id="totalPrice">0</span></strong>
                         </li>
                         <li class="md-form">
                             <input id="inputDiscount" type="number" min="0" class="form-control">
@@ -60,7 +64,7 @@
                         </li>
                         <li class="d-flex justify-content-between align-items-center text-success">
                             <strong>Grand Total</strong>
-                            <strong>৳<span id="totalPayable">100</span></strong>
+                            <strong>৳<span id="totalPayable">0</span></strong>
                         </li>
                         <li class="md-form">
                             <input id="inputPaid" type="number" min="0" class="form-control">
@@ -68,7 +72,7 @@
                         </li>
                         <li class="d-flex justify-content-between align-items-center text-danger">
                             <strong>Total Due</strong>
-                            <strong>৳<span id="totalDue">100</span></strong>
+                            <strong>৳<span id="totalDue">0</span></strong>
                         </li>
                         <li class="md-form">
                             <select id="selectPaymentMethod" class="mdb-select" style="position: absolute; top: 1rem; left: 0px; height: 0px; width: 0px; opacity: 0; padding: 0px; pointer-events: none; display: inline!important;">
@@ -80,8 +84,8 @@
                             </select>
                         </li>
                         <li class="md-form mt-5">
-                            <input id="inputPurchaseDate" type="text" class="form-control datepicker" />
-                            <label id="label-date" for="inputPurchaseDate">Purchase Date</label>
+                            <input id="inputSellingDate" type="text" class="form-control datepicker" />
+                            <label id="label-date" for="inputSellingDate">Selling Date</label>
                         </li>
                         <li class="d-flex justify-content-between align-items-center">
                             <div class="md-form mt-4 flex-1">
@@ -93,8 +97,8 @@
                     </ul>
 
                     <div class="mt-4 text-center">
-                        <i id="vendor-error" class="mt-2 text-center red-text"></i>
-                        <button type="submit" id="btnPurchase" class="btn peach-gradient btn-rounded btn-block mt-0">SELL PRODUCT</button>
+                        <i id="customer-error" class="mt-2 text-center red-text"></i>
+                        <button type="submit" id="btnSelling" class="btn peach-gradient btn-rounded btn-block mt-0">SELL PRODUCT</button>
                     </div>
                 </form>
             </div>
