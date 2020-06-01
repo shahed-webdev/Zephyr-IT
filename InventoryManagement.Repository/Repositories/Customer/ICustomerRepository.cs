@@ -1,8 +1,6 @@
-﻿using System;
+﻿using InventoryManagement.Data;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using InventoryManagement.Data;
 
 namespace InventoryManagement.Repository
 {
@@ -11,7 +9,7 @@ namespace InventoryManagement.Repository
         ICollection<CustomerListViewModel> ListCustom();
         Task<bool> IsPhoneNumberExistAsync(string number, int id = 0);
         CustomerAddUpdateViewModel FindCustom(int id);
-
         void CustomUpdate(CustomerAddUpdateViewModel model);
+        Task<ICollection<CustomerListViewModel>> SearchAsync(string key);
     }
 }

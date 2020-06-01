@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using InventoryManagement.Repository;
+﻿using InventoryManagement.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
 {
@@ -25,20 +25,21 @@ namespace InventoryManagement.Web.Controllers
         //GET:// List of customer
         public IActionResult List()
         {
-           var list = _db.Customers.ListCustom();
+            var list = _db.Customers.ListCustom();
             return View(list);
         }
 
         //GET:// add customer
-        public IActionResult Add()
+        public IActionResult Add(string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
 
         //POST:// Add customer
         [HttpPost]
-        public async Task<IActionResult> Add(CustomerAddUpdateViewModel model)
+        public async Task<IActionResult> Add(CustomerAddUpdateViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
             var phone = model.PhoneNumbers.FirstOrDefault().Phone;
@@ -48,6 +49,11 @@ namespace InventoryManagement.Web.Controllers
 
             _db.Customers.AddCustom(model);
             await _db.SaveChangesAsync().ConfigureAwait(false);
+
+            if (returnUrl != string.Empty)
+            {
+                // _db.Customers.;
+            }
 
             return RedirectToAction("List");
 
@@ -72,7 +78,7 @@ namespace InventoryManagement.Web.Controllers
         {
             if (!ModelState.IsValid) return View(model);
             var phone = model.PhoneNumbers.FirstOrDefault()?.Phone;
-            var checkPhone = await _db.Customers.IsPhoneNumberExistAsync(phone,model.CustomerId).ConfigureAwait(false);
+            var checkPhone = await _db.Customers.IsPhoneNumberExistAsync(phone, model.CustomerId).ConfigureAwait(false);
 
 
             if (checkPhone == false)
