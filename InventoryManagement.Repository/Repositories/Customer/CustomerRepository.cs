@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InventoryManagement.Data;
+﻿using InventoryManagement.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace InventoryManagement.Repository
 {
@@ -17,13 +15,13 @@ namespace InventoryManagement.Repository
 
         public ICollection<CustomerListViewModel> ListCustom()
         {
-            var cList =  Context.Customer.Select(c => new CustomerListViewModel
+            var cList = Context.Customer.Select(c => new CustomerListViewModel
             {
                 CustomerId = c.CustomerId,
                 OrganizationName = c.OrganizationName,
                 CustomerName = c.CustomerName,
-                CustomerAddress =c.CustomerAddress,
-                PhonePrimary = c.CustomerPhone.FirstOrDefault(p=> p.IsPrimary == true).Phone, 
+                CustomerAddress = c.CustomerAddress,
+                PhonePrimary = c.CustomerPhone.FirstOrDefault(p => p.IsPrimary == true).Phone,
                 Due = c.Due,
                 SignUpDate = c.InsertDate
             });
@@ -46,7 +44,7 @@ namespace InventoryManagement.Repository
                 CustomerId = c.CustomerId,
                 OrganizationName = c.OrganizationName,
                 CustomerName = c.CustomerName,
-                CustomerAddress = c.CustomerAddress, 
+                CustomerAddress = c.CustomerAddress,
                 Description = c.Description,
                 Photo = c.Photo,
                 PhoneNumbers = c.CustomerPhone.Select(p => new CustomerPhoneViewModel
@@ -58,12 +56,12 @@ namespace InventoryManagement.Repository
 
             });
 
-            return customerList.FirstOrDefault(c=> c.CustomerId == id);
+            return customerList.FirstOrDefault(c => c.CustomerId == id);
         }
 
         public void CustomUpdate(CustomerAddUpdateViewModel model)
         {
-            var customer =Find(model.CustomerId);
+            var customer = Find(model.CustomerId);
             if (model.Photo != null && model.Photo.Length > 0)
                 customer.Photo = model.Photo;
 
@@ -91,6 +89,21 @@ namespace InventoryManagement.Repository
             Context.CustomerPhone.AddRange(newPhones);
         }
 
+        public async Task<ICollection<CustomerListViewModel>> SearchAsync(string key)
+        {
+            return await Context.Customer.Where(c => c.CustomerName.Contains(key) || c.CustomerPhone.Select(p => p.Phone).Contains(key) || c.OrganizationName.Contains(key)).Select(c =>
+                  new CustomerListViewModel
+                  {
+                      CustomerId = c.CustomerId,
+                      OrganizationName = c.OrganizationName,
+                      CustomerName = c.CustomerName,
+                      CustomerAddress = c.CustomerAddress,
+                      PhonePrimary = c.CustomerPhone.FirstOrDefault(p => p.IsPrimary.GetValueOrDefault()).Phone,
+                      Due = c.Due,
+                      SignUpDate = c.InsertDate
+                  }).Take(5).ToListAsync().ConfigureAwait(false);
+        }
+
 
         public void AddCustom(CustomerAddUpdateViewModel model)
         {
@@ -98,7 +111,7 @@ namespace InventoryManagement.Repository
             {
                 OrganizationName = model.OrganizationName,
                 CustomerName = model.CustomerName,
-                CustomerAddress = model.CustomerAddress, 
+                CustomerAddress = model.CustomerAddress,
                 Description = model.Description,
                 CustomerPhone = model.PhoneNumbers.Select(p => new CustomerPhone
                 {
