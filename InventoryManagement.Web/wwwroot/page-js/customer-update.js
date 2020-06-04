@@ -51,11 +51,11 @@ const checkPhoneIsExists = function (evt) {
 const checkDuplicatePhone = function (evt) {
     let valid = false;
     const self = evt.target;
-    const others = document.querySelectorAll(`.valid-check`);
+    const others = document.querySelectorAll('.valid-check');
     if (others.length === 1) return;
 
     if (self.value.length > 10) {
-        let element = '<span class="field-validation-error">Duplicate phone number not allow!</span>';
+        const element = '<span class="field-validation-error">Duplicate phone number not allow!</span>';
         const id = `d-${self.id}`;
         const errorIndex = isError.indexOf(id);
 

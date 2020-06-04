@@ -106,41 +106,41 @@ onScan.attachTo(document, {
 
 // create table rows
 const createTableRow = function (item) {
-    let tr = document.createElement("tr");
+    const tr = document.createElement("tr");
     tr.setAttribute('data-code', item.ProductCode);
 
     //column 1
-    let span = document.createElement('span');
+    const span = document.createElement('span');
     span.classList.add('text-dark');
     span.appendChild(document.createTextNode(item.ProductName));
 
-    let p = document.createElement('p');
+    const p = document.createElement('p');
     p.classList.add('text-muted', 'small', 'mb-0');
     p.appendChild(document.createTextNode(item.ProductCatalogName));
 
-    let td1 = tr.insertCell(0);
+    const td1 = tr.insertCell(0);
     td1.appendChild(span);
     td1.appendChild(p);
 
     if (item.Warranty) {
-        let warranty = document.createElement('span');
+        const warranty = document.createElement('span');
         warranty.classList.add('light-blue-text', 'small');
         warranty.textContent = `Warranty: ${item.Warranty}`;
         td1.appendChild(warranty);
     }
 
     //column 2
-    let td2 = tr.insertCell(1);
+    const td2 = tr.insertCell(1);
     td2.appendChild(document.createTextNode(item.ProductCode));
 
     //column 3
-    let td3 = tr.insertCell(2);
+    const td3 = tr.insertCell(2);
     td3.appendChild(document.createTextNode(item.SellingPrice));
 
     //column 4
-    let i = document.createElement('i');
+    const i = document.createElement('i');
     i.classList.add('fal', 'fa-times', 'remove');
-    let td4 = tr.insertCell(3);
+    const td4 = tr.insertCell(3);
     td4.classList.add('text-center');
     td4.appendChild(i);
 

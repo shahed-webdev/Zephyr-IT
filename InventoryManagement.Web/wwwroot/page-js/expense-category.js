@@ -12,7 +12,7 @@ const isObject = function (value) {
 }
 
 const createLink = function (type, item) {
-    let link = document.createElement("a");
+    const link = document.createElement("a");
 
     if (type === "edit") {
         link.href = `/ExpenseCategories/Edit/${item.ExpenseCategoryId}`;
@@ -28,38 +28,37 @@ const createLink = function (type, item) {
 }
 
 const createTableRow = function (item) {
-    let tr = document.createElement("tr");
+    const tr = document.createElement("tr");
     tr.setAttribute('data-id', item.ExpenseCategoryId);
 
     //column 1
-    let td1 = tr.insertCell(0);
-    let textNode = document.createTextNode(item.CategoryName);
+    const td1 = tr.insertCell(0);
+    const textNode = document.createTextNode(item.CategoryName);
     td1.appendChild(textNode);
 
     //column 2
-    let td2 = tr.insertCell(1);
+    const td2 = tr.insertCell(1);
     td2.appendChild(createLink('edit', item));
 
     //column 3
-    let td3 = tr.insertCell(2);
+    const td3 = tr.insertCell(2);
     td3.appendChild(createLink('delete', item));
 
     return tr;
 }
 
 const displayCategory = function (data) {
-    if (!data.length)
-        tableBody.innerHTML = "<tr><td colspan='3'>No record found!</td></tr>";
-    else
-        tableBody.innerHTML = '';
+    if (!data.length) {
+        tableBody.innerHTML = "<tr class='first-row'><td colspan='3'>No record found!</td></tr>";
+        return
+    }
 
-    let fragment = document.createDocumentFragment();
-
+    const fragment = document.createDocumentFragment();
     data.forEach(item => {
-        const tr = createTableRow(item);
-        fragment.appendChild(tr);
+        fragment.appendChild(createTableRow(item));
     });
 
+    tableBody.innerHTML = '';
     tableBody.appendChild(fragment);
 }
 
@@ -139,14 +138,17 @@ function onCreateSuccess(data) {
 
     //append new row
     const tr = createTableRow(data);
+    const fRow = tableBody.querySelectorAll('tr')[0]
     tableBody.appendChild(tr);
 }
 
 
-
-//event listners
+//event listeners
 tableBody.addEventListener("click", onEditDeleteClicked);
 btnCreate.addEventListener('click', onCreateClicked);
 
 //call function
 getData();
+
+const fRow = tableBody.querySelectorAll('tr')
+console.log(fRow)

@@ -39,11 +39,11 @@ const buzzAudio = document.getElementById('audio');
 
 //selectors object
 const productFormSelectors = function(){
-    let productName = formCart.inputProductName;
-    let purchasePrice = formCart.inputPurchasePrice;
-    let sellingPrice = formCart.inputSellingPrice;
-    let warranty = formCart.inputWarranty;
-    let description = formCart.inputDescription;
+    const productName = formCart.inputProductName;
+    const purchasePrice = formCart.inputPurchasePrice;
+    const sellingPrice = formCart.inputSellingPrice;
+    const warranty = formCart.inputWarranty;
+    const description = formCart.inputDescription;
 
     return [productName, purchasePrice, sellingPrice, warranty, description];
 }
@@ -174,40 +174,40 @@ const appendTotalPrice = function () {
 
 //create table rows
 const createTableRow = function (item) {
-    let tr = document.createElement("tr");
+    const tr = document.createElement("tr");
     tr.setAttribute('data-sn', item.SN);
 
     //column 1
-    let td1 = tr.insertCell(0);
+    const td1 = tr.insertCell(0);
     td1.appendChild(document.createTextNode(item.Category));
 
     //column 2
-    let td2 = tr.insertCell(1);
+    const td2 = tr.insertCell(1);
     td2.appendChild(document.createTextNode(item.ProductName));
     td2.setAttribute('title', item.Description);
 
     //column 3
-    let td3 = tr.insertCell(2);
+    const td3 = tr.insertCell(2);
     td3.appendChild(document.createTextNode(item.PurchasePrice));
 
     //column 4
-    let td4 = tr.insertCell(3);
+    const td4 = tr.insertCell(3);
     td4.appendChild(document.createTextNode(item.SellingPrice));
 
     //column 5
-    let td5 = tr.insertCell(4);
+    const td5 = tr.insertCell(4);
     td5.appendChild(document.createTextNode(item.Warranty));
 
     //column 6
-    let td6 = tr.insertCell(5);
-    let strong = document.createElement('strong');
+    const td6 = tr.insertCell(5);
+    const strong = document.createElement('strong');
     strong.appendChild(document.createTextNode(item.ProductStocks.length));
     strong.classList.add('badge-pill', 'badge-success', 'stock');
     td6.appendChild(strong);
 
     //column 6
-    let td7 = tr.insertCell(6);
-    let removeIcon = document.createElement('i');
+    const td7 = tr.insertCell(6);
+    const removeIcon = document.createElement('i');
     removeIcon.classList.add('fal', 'fa-trash-alt', 'remove');
     td7.appendChild(removeIcon);
     td7.classList.add('text-center');
@@ -283,7 +283,7 @@ const ontableRowElementClicked = function (evt) {
 
 //create product code span on modal
 const createCodeSpan = function (newCode) {
-    let iCode = document.createElement('span');
+    const iCode = document.createElement('span');
     iCode.classList.add('badge-pill', 'badge-success', 'code-span');
     iCode.appendChild(document.createTextNode(newCode));
 
