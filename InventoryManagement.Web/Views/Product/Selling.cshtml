@@ -94,9 +94,10 @@
                                 <input id="inputCustomer" type="text" class="form-control" />
                                 <label for="inputCustomer">Find Customer</label>
                             </div>
+                            <input id="hiddenCustomerId" type="hidden" />
                             <a href="/Customer/Add?returnUrl=Selling" target="_blank" class="btn-floating btn-sm blue-gradient"><i class="fas fa-plus" aria-hidden="true"></i></a>
                         </li>
-                    </ul>
+                    </ul>  
 
                     <div class="mt-4 text-center">
                         <i id="customer-error" class="mt-2 text-center red-text"></i>
@@ -110,5 +111,5 @@
 
 @section Scripts{
     <script src="~/js/onscan.min.js"></script>
-    <script src="~/page-js/product-selling.js?v=1.1"></script>
+    <script src="~/page-js/product-selling.js?v=1.2"></script>
 }

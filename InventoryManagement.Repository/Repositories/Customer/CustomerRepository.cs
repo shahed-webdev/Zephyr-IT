@@ -23,6 +23,7 @@ namespace InventoryManagement.Repository
                 CustomerAddress = c.CustomerAddress,
                 PhonePrimary = c.CustomerPhone.FirstOrDefault(p => p.IsPrimary == true).Phone,
                 Due = c.Due,
+                DueLimit = c.DueLimit,
                 SignUpDate = c.InsertDate
             });
 
@@ -69,6 +70,7 @@ namespace InventoryManagement.Repository
             customer.CustomerName = model.CustomerName;
             customer.OrganizationName = model.OrganizationName;
             customer.Description = model.Description;
+            customer.DueLimit = model.DueLimit;
             Update(customer);
 
             foreach (var item in model.PhoneNumbers.Where(p => p.CustomerPhoneId != 0))
@@ -100,6 +102,7 @@ namespace InventoryManagement.Repository
                       CustomerAddress = c.CustomerAddress,
                       PhonePrimary = c.CustomerPhone.FirstOrDefault(p => p.IsPrimary.GetValueOrDefault()).Phone,
                       Due = c.Due,
+                      DueLimit = c.DueLimit,
                       SignUpDate = c.InsertDate
                   }).Take(5).ToListAsync().ConfigureAwait(false);
         }
@@ -113,6 +116,7 @@ namespace InventoryManagement.Repository
                 CustomerName = model.CustomerName,
                 CustomerAddress = model.CustomerAddress,
                 Description = model.Description,
+                DueLimit = model.DueLimit,
                 CustomerPhone = model.PhoneNumbers.Select(p => new CustomerPhone
                 {
                     Phone = p.Phone,

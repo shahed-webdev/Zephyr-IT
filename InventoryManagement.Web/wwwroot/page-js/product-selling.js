@@ -371,4 +371,31 @@ const onPurchaseSubmitClicked = function (evt) {
 inputDiscount.addEventListener('input', onInputDiscount);
 inputPaid.addEventListener('input', onInputPaid);
 
+
+
 //****CUSTOMER****//
+const inputCustomer = formPayment.inputCustomer
+const hiddenCustomerId = formPayment.hiddenCustomerId
+
+//customer autocomplete
+$('#inputCustomer').typeahead({
+    minLength: 1,
+    displayText: function (item) {
+        return `${item.CustomerName}`;
+    },
+    afterSelect: function (item) {
+        this.$element[0].value = item.CustomerName
+    },
+    source: function (request, result) {
+        $.ajax({
+            url: "/Product/FindCustomerAsync",
+            data: { prefix: request },
+            success: function (response) { result(response); }
+        });
+    },
+    updater: function (item) {
+        //appendVendorInfo(item);
+        console.log(item)
+        return item;
+    }
+});

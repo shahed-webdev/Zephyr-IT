@@ -50,13 +50,7 @@ namespace InventoryManagement.Web.Controllers
             _db.Customers.AddCustom(model);
             await _db.SaveChangesAsync().ConfigureAwait(false);
 
-            //if (returnUrl != string.Empty)
-            //{
-            //    // _db.Customers.;
-            //}
-
             return RedirectToAction("List");
-
         }
 
 
@@ -79,7 +73,6 @@ namespace InventoryManagement.Web.Controllers
             if (!ModelState.IsValid) return View(model);
             var phone = model.PhoneNumbers.FirstOrDefault()?.Phone;
             var checkPhone = await _db.Customers.IsPhoneNumberExistAsync(phone, model.CustomerId).ConfigureAwait(false);
-
 
             if (checkPhone == false)
             {
