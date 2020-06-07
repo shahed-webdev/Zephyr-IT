@@ -122,7 +122,6 @@ const togglePhoneElement = function (evt) {
 }
 
 const onFormSubmit = function () {
-    evt.preventDefault();
     btnSubmit.disabled = true;
     btnSubmit.innerText = "Please wait...";
 

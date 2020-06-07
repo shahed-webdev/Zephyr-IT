@@ -119,7 +119,7 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
-       //selling
+        //selling
         public IActionResult Selling()
         {
             return View();
@@ -130,10 +130,15 @@ namespace InventoryManagement.Web.Controllers
         {
             var data = await _db.ProductStocks.FindforSellAsync(code).ConfigureAwait(false);
             if (data != null) data.ProductCatalogName = _db.ProductCatalogs.CatalogNameNode(data.ProductCatalogId);
-            
+
             return Json(data);
         }
 
+        public async Task<IActionResult> FindCustomerAsync(string prefix)
+        {
+            var data = await _db.Customers.SearchAsync(prefix).ConfigureAwait(false);
+            return Json(data);
+        }
 
         //purchase Records
         [Authorize(Roles = "admin, PurchaseRecords")]

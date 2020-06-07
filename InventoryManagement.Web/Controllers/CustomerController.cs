@@ -30,16 +30,16 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET:// add customer
-        public IActionResult Add(string returnUrl)
+        public IActionResult Add()
         {
-            ViewBag.ReturnUrl = returnUrl;
+            //ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
 
         //POST:// Add customer
         [HttpPost]
-        public async Task<IActionResult> Add(CustomerAddUpdateViewModel model, string returnUrl)
+        public async Task<IActionResult> Add(CustomerAddUpdateViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
             var phone = model.PhoneNumbers.FirstOrDefault().Phone;
@@ -50,10 +50,10 @@ namespace InventoryManagement.Web.Controllers
             _db.Customers.AddCustom(model);
             await _db.SaveChangesAsync().ConfigureAwait(false);
 
-            if (returnUrl != string.Empty)
-            {
-                // _db.Customers.;
-            }
+            //if (returnUrl != string.Empty)
+            //{
+            //    // _db.Customers.;
+            //}
 
             return RedirectToAction("List");
 
