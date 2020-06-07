@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-    <div class="container">
+    <div class="m-3">
         <div class="row">
             <div class="col justify-content-center align-self-center">
                 <h4 class="page-header mb-0">Expense</h4>
@@ -15,32 +15,32 @@
                 </a>
             </div>
         </div>
-    </div>
 
-    <div class="m-3 card card-body">
-        <div class="table-responsive">
-            <table id="data-table" class="table table-sm table-bordered">
-                <thead>
-                    <tr>
-                        <th>Amount</th>
-                        <th>Expense&nbsp;For</th>
-                        <th>Payment&nbsp;Method</th>
-                        <th>Expense&nbsp;Date</th>
-                        <th style="width:30px">Delete</th>
-                    </tr>
-                </thead>
-                <tbody id="table-body">
-                    <tr><td colspan='5'>Loading...</td></tr>
-                </tbody>
-            </table>
+        <div class="card card-body">
+            <div class="table-responsive">
+                <table id="data-table" class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Amount</th>
+                            <th>Expense&nbsp;For</th>
+                            <th>Payment&nbsp;Method</th>
+                            <th>Expense&nbsp;Date</th>
+                            <th style="width:30px">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <tr><td colspan='5'>Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+    </div>  
 
-    <!-- Insert Modal -->
-    <div class="modal fade" id="InsertModal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+        <!-- Insert Modal -->
+        <div class="modal fade" id="InsertModal" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
 
-@section Scripts {
-    <partial name="_UnobtrusiveAjaxPartial" />
-    <script src="~/page-js/expense.js"></script>
-}
+        @section Scripts {
+            <partial name="_UnobtrusiveAjaxPartial" />
+            <script src="~/page-js/expense.js"></script>
+        }
