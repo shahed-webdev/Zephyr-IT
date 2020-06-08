@@ -32,7 +32,6 @@ namespace InventoryManagement.Web.Controllers
         //GET:// add customer
         public IActionResult Add()
         {
-            //ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -50,13 +49,7 @@ namespace InventoryManagement.Web.Controllers
             _db.Customers.AddCustom(model);
             await _db.SaveChangesAsync().ConfigureAwait(false);
 
-            //if (returnUrl != string.Empty)
-            //{
-            //    // _db.Customers.;
-            //}
-
             return RedirectToAction("List");
-
         }
 
 
@@ -64,9 +57,7 @@ namespace InventoryManagement.Web.Controllers
         public IActionResult Update(int? id)
         {
             if (!id.HasValue) return BadRequest(HttpStatusCode.BadRequest);
-
             var model = _db.Customers.FindCustom(id.GetValueOrDefault());
-
             if (model == null) return NotFound();
 
             return View(model);
@@ -79,7 +70,6 @@ namespace InventoryManagement.Web.Controllers
             if (!ModelState.IsValid) return View(model);
             var phone = model.PhoneNumbers.FirstOrDefault()?.Phone;
             var checkPhone = await _db.Customers.IsPhoneNumberExistAsync(phone, model.CustomerId).ConfigureAwait(false);
-
 
             if (checkPhone == false)
             {

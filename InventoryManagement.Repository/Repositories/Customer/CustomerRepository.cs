@@ -1,5 +1,6 @@
 ﻿using InventoryManagement.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace InventoryManagement.Repository
                 CustomerAddress = c.CustomerAddress,
                 PhonePrimary = c.CustomerPhone.FirstOrDefault(p => p.IsPrimary == true).Phone,
                 Due = c.Due,
+                DueLimit = c.DueLimit,
                 SignUpDate = c.InsertDate
             });
 
@@ -45,6 +47,7 @@ namespace InventoryManagement.Repository
                 CustomerName = c.CustomerName,
                 CustomerAddress = c.CustomerAddress,
                 Description = c.Description,
+                DueLimit = c.DueLimit,
                 Photo = c.Photo,
                 PhoneNumbers = c.CustomerPhone.Select(p => new CustomerPhoneViewModel
                 {
@@ -68,6 +71,7 @@ namespace InventoryManagement.Repository
             customer.CustomerName = model.CustomerName;
             customer.OrganizationName = model.OrganizationName;
             customer.Description = model.Description;
+            customer.DueLimit = model.DueLimit;
             Update(customer);
 
             foreach (var item in model.PhoneNumbers.Where(p => p.CustomerPhoneId != 0))
@@ -99,8 +103,9 @@ namespace InventoryManagement.Repository
                       OrganizationName = c.OrganizationName,
                       CustomerName = c.CustomerName,
                       CustomerAddress = c.CustomerAddress,
-                      PhonePrimary = c.CustomerPhone.FirstOrDefault(p => p.IsPrimary.GetValueOrDefault()).Phone,
+                      PhonePrimary ="" ,//c.CustomerPhone.FirstOrDefault(p => p.IsPrimary.GetValueOrDefault()).Phone,
                       Due = c.Due,
+                      DueLimit = c.DueLimit,
                       SignUpDate = c.InsertDate
                   }).Take(5).ToListAsync().ConfigureAwait(false);
         }
@@ -114,6 +119,7 @@ namespace InventoryManagement.Repository
                 CustomerName = model.CustomerName,
                 CustomerAddress = model.CustomerAddress,
                 Description = model.Description,
+                DueLimit = model.DueLimit,
                 CustomerPhone = model.PhoneNumbers.Select(p => new CustomerPhone
                 {
                     Phone = p.Phone,
@@ -123,7 +129,6 @@ namespace InventoryManagement.Repository
 
             if (model.Photo != null && model.Photo.Length > 0)
                 customer.Photo = model.Photo;
-
 
             Add(customer);
         }

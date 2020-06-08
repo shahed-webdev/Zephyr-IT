@@ -17,6 +17,7 @@ namespace InventoryManagement.Repository
         public string CustomerName { get; set; }
         public string CustomerAddress { get; set; }
         public string Description { get; set; }
+        public double DueLimit { get; set; }
         public byte[] Photo { get; set; }
         [Required]
         public ICollection<CustomerPhoneViewModel> PhoneNumbers { get; set; }
@@ -38,6 +39,7 @@ namespace InventoryManagement.Repository
         public string CustomerAddress { get; set; }
         public string PhonePrimary { get; set; }
         public double Due { get; set; }
+        public double DueLimit { get; set; }
         public DateTime SignUpDate { get; set; }
     }
 }

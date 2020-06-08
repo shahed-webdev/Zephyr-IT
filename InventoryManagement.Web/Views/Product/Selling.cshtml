@@ -4,33 +4,19 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-@section Styles{
-    <style>
-        .remove {
-            cursor: pointer
-        }
+@section Styles{ 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-autocomplete/1.0.7/jquery.auto-complete.min.css" />
+<style>
+    .remove { cursor:pointer}
+    .remove:hover {color:#ff0000}
 
-            .remove:hover {
-                color: #ff0000
-            }
-
-        #formPayment {
-            padding: 15px 0;
-            color: #4f4f4f;
-        }
-
-            #formPayment ul {
-                list-style-type: none;
-                padding: 0;
-            }
-
-                #formPayment ul li strong {
-                    font-weight: 500;
-                }
-    </style>
+    #formPayment { padding: 15px 0; color: #4f4f4f; }
+    #formPayment ul { list-style-type: none; padding: 0;}
+    #formPayment ul li strong{ font-weight:500;}
+</style>
 }
 
-<div class="container">
+<div class="m-3">
     <h4 class="mb-3 page-header d-print-none">Selling</h4>
 
     <div class="row">
@@ -106,12 +92,13 @@
                         </li>
                         <li class="d-flex justify-content-between align-items-center">
                             <div class="md-form mt-4 flex-1">
-                                <input id="inputCustomer" type="text" class="form-control" />
+                                <input id="inputCustomer" type="text" class="form-control" autocomplete="off"/>
                                 <label for="inputCustomer">Find Customer</label>
                             </div>
-                            <a href="/Customer/Add" target="_blank" class="btn-floating btn-sm blue-gradient"><i class="fas fa-plus" aria-hidden="true"></i></a>
+                            <input id="hiddenCustomerId" type="hidden" />
+                            <a href="/Customer/Add?returnUrl=Selling" target="_blank" class="btn-floating btn-sm blue-gradient"><i class="fas fa-plus" aria-hidden="true"></i></a>
                         </li>
-                    </ul>
+                    </ul>  
 
                     <div class="mt-4 text-center">
                         <i id="customer-error" class="mt-2 text-center red-text"></i>
@@ -124,6 +111,7 @@
 </div>
 
 @section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-autocomplete/1.0.7/jquery.auto-complete.min.js"></script>
     <script src="~/js/onscan.min.js"></script>
-    <script src="~/page-js/product-selling.js?v=1.1"></script>
+    <script src="~/page-js/product-selling.js?v=.2"></script>
 }

@@ -9,28 +9,11 @@
 
 @section Styles{
     <style>
-        .phone-container {
-            display: flex;
-            margin: 1.5rem 0;
-            align-items: center;
-        }
-
-            .phone-container .add-element {
-                margin-left: -23px;
-                padding-bottom: 10px;
-            }
-
-            .phone-container .btn-floating.btn-sm {
-                width: 22px;
-                height: 22px;
-            }
-
-                .phone-container .btn-floating.btn-sm i {
-                    font-size: .70rem;
-                    line-height: 2px;
-                    pointer-events: none
-                }
-    </style>
+        .phone-container { display: flex; margin: 1.5rem 0; align-items: center; }
+        .phone-container .add-element { margin-left: -23px; padding-bottom: 10px; }
+        .phone-container .btn-floating.btn-sm { width: 22px; height: 22px; }
+        .phone-container .btn-floating.btn-sm i { font-size: .70rem; line-height: 2px; pointer-events: none }
+    </style>   
 }
 
 <div class="container mt-3">
@@ -73,14 +56,20 @@
                         </div>
                     </div>
 
+                    <div class="md-form mb-5">
+                        <input id="Description" name="Description" type="text" class="form-control" />
+                        <label for="Description">Description</label>
+                    </div>
+
                     <div class="form-row">
-                        <div class="col-lg-7">
+                        <div class="col-lg-5">
                             <div class="md-form mb-5">
-                                <input id="Description" name="Description" type="text" class="form-control" />
-                                <label for="Description">Description</label>
+                                <input id="DueLimit" name="DueLimit" type="number" class="form-control" />
+                                <label for="DueLimit">Due Limit</label>
                             </div>
                         </div>
-                        <div class="col-lg-5">
+
+                        <div class="col-lg-7">
                             <div class="md-form form-sm mb-0">
                                 <input type="hidden" id="Photo" name="Photo" />
                                 <div class="file-field">
