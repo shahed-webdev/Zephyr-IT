@@ -1,6 +1,5 @@
 ﻿using InventoryManagement.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -91,7 +90,9 @@ namespace InventoryManagement.Repository
 
         public async Task<ICollection<CustomerListViewModel>> SearchAsync(string key)
         {
-            return await Context.Customer.Where(c => c.CustomerName.Contains(key) || c.CustomerPhone.Select(p => p.Phone).Contains(key) || c.OrganizationName.Contains(key)).Select(c =>
+            return await Context.Customer.Include(c => c.CustomerPhone)
+                .Where(c => c.CustomerName.Contains(key) || c.CustomerPhone.Any(p => p.Phone.Contains(key)) || c.OrganizationName.Contains(key))
+                .Select(c =>
                   new CustomerListViewModel
                   {
                       CustomerId = c.CustomerId,

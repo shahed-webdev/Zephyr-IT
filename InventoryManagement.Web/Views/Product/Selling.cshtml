@@ -4,15 +4,30 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-@section Styles{ 
-<style>
-    .remove { cursor:pointer}
-    .remove:hover {color:#ff0000}
+@section Styles{
+    <style>
+        .remove {
+            cursor: pointer
+        }
 
-    #formPayment { padding: 15px 0; color: #4f4f4f; }
-    #formPayment ul { list-style-type: none; padding: 0;}
-    #formPayment ul li strong{ font-weight:500;}
-</style>
+            .remove:hover {
+                color: #ff0000
+            }
+
+        #formPayment {
+            padding: 15px 0;
+            color: #4f4f4f;
+        }
+
+            #formPayment ul {
+                list-style-type: none;
+                padding: 0;
+            }
+
+                #formPayment ul li strong {
+                    font-weight: 500;
+                }
+    </style>
 }
 
 <div class="container">
@@ -35,7 +50,7 @@
                         </button>
                         <div class="text-right text-muted"><span id="productCount">0</span> items</div>
                     </div>
-                </form> 
+                </form>
             </div>
             <div class="card card-body">
                 <table class="table">
@@ -94,7 +109,7 @@
                                 <input id="inputCustomer" type="text" class="form-control" />
                                 <label for="inputCustomer">Find Customer</label>
                             </div>
-                            <a href="/Customer/Add?returnUrl=Selling" target="_blank" class="btn-floating btn-sm blue-gradient"><i class="fas fa-plus" aria-hidden="true"></i></a>
+                            <a href="/Customer/Add" target="_blank" class="btn-floating btn-sm blue-gradient"><i class="fas fa-plus" aria-hidden="true"></i></a>
                         </li>
                     </ul>
 

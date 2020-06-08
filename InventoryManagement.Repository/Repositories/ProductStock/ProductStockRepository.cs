@@ -26,6 +26,14 @@ namespace InventoryManagement.Repository
             }).ToListAsync();
         }
 
+        public Task<string[]> IsStockOutAsync(string[] codes)
+        {
+            return Context.ProductStock
+                .Where(s => codes.Contains(s.ProductCode) && s.IsSold)
+                .Select(s => s.ProductCode)
+                .ToArrayAsync();
+        }
+
         public Task<ProductSellViewModel> FindforSellAsync(string code)
         {
             var product = Context.ProductStock.Include(s => s.Product).Where(s => s.ProductCode == code && !s.IsSold)
@@ -40,6 +48,11 @@ namespace InventoryManagement.Repository
                     SellingPrice = s.Product.SellingPrice
                 });
             return product.FirstOrDefaultAsync();
+        }
+
+        public Task<List<ProductStock>> SellingStockFromCodesAsync(string[] codes)
+        {
+            return Context.ProductStock.Include(s => s.Product).Where(s => codes.Contains(s.ProductCode)).ToListAsync();
         }
     }
 }
