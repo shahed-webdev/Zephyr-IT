@@ -388,9 +388,10 @@ $('#inputCustomer').typeahead({
     },
     source: function (request, result) {
         $.ajax({
-            url: "/Product/FindCustomerAsync",
+            url: "/Product/FindCustomers",
             data: { prefix: request },
-            success: function (response) { result(response); }
+            success: function (response) { result(response); },
+            error: function (err) { console.log(err)}
         });
     },
     updater: function (item) {

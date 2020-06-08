@@ -134,7 +134,7 @@ namespace InventoryManagement.Web.Controllers
             return Json(data);
         }
 
-        public async Task<IActionResult> FindCustomerAsync(string prefix)
+        public async Task<IActionResult> FindCustomers(string prefix)
         {
             var data = await _db.Customers.SearchAsync(prefix).ConfigureAwait(false);
             return Json(data);
