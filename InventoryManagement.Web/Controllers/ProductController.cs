@@ -125,6 +125,31 @@ namespace InventoryManagement.Web.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult Selling([FromBody] ProductSellViewModel model)
+        {
+            //model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+
+            //if (!ModelState.IsValid) UnprocessableEntity(ModelState);
+
+            //var response = await _db.Purchases.AddCustomAsync(model, _db).ConfigureAwait(false);
+
+            //if (response.IsSuccess)
+            //    return Ok(response);
+            //else
+            //    return UnprocessableEntity(response);
+
+            return View();
+        }
+
+        //selling receipt
+        public async Task<IActionResult> SellingReceipt(int? id)
+        {
+            if (id == null) return RedirectToAction("Selling");
+            var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
+            return View(model);
+        }
+
         //call from axios
         public async Task<IActionResult> FindProductByCode(string code)
         {

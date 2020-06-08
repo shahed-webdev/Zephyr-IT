@@ -94,14 +94,14 @@ namespace InventoryManagement.Repository
 
         public async Task<ICollection<CustomerListViewModel>> SearchAsync(string key)
         {
-            return await Context.Customer.Where(c => c.CustomerName.Contains(key) || c.CustomerPhone.Select(p => p.Phone).Contains(key) || c.OrganizationName.Contains(key)).Select(c =>
+            return await Context.Customer.Include(c=> c.CustomerPhone).Where(c => c.CustomerName.Contains(key) || c.CustomerPhone.Select(p => p.Phone).Contains(key) || c.OrganizationName.Contains(key)).Select(c =>
                   new CustomerListViewModel
                   {
                       CustomerId = c.CustomerId,
                       OrganizationName = c.OrganizationName,
                       CustomerName = c.CustomerName,
                       CustomerAddress = c.CustomerAddress,
-                      PhonePrimary = c.CustomerPhone.FirstOrDefault(p => p.IsPrimary.GetValueOrDefault()).Phone,
+                      PhonePrimary ="" ,//c.CustomerPhone.FirstOrDefault(p => p.IsPrimary.GetValueOrDefault()).Phone,
                       Due = c.Due,
                       DueLimit = c.DueLimit,
                       SignUpDate = c.InsertDate
@@ -127,7 +127,6 @@ namespace InventoryManagement.Repository
 
             if (model.Photo != null && model.Photo.Length > 0)
                 customer.Photo = model.Photo;
-
 
             Add(customer);
         }

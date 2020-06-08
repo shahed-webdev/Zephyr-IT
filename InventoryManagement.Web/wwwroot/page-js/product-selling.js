@@ -391,7 +391,7 @@ $('#inputCustomer').typeahead({
             url: "/Product/FindCustomers",
             data: { prefix: request },
             success: function (response) { result(response); },
-            error: function (err) { console.log(err)}
+            error: function (err) { console.log(err) }
         });
     },
     updater: function (item) {

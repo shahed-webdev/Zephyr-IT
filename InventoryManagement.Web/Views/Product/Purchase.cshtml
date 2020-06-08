@@ -7,67 +7,19 @@
 
 @section Styles{
     <style>
-        #showAddedCode .code-span {
-            display: inline-block;
-            margin: 5px;
-            cursor: pointer
-        }
-
-            #showAddedCode .code-span:hover::after {
-                content: 'x';
-                padding-left: 2px;
-                font-size: 16px;
-            }
-
-        #payment-area li strong {
-            font-size: 17px;
-        }
-
-        #inputDiscount, #inputPaid, #inputPurchaseDate {
-            display: inline-block;
-            border-radius: 50px;
-            text-align: right;
-            color: #000;
-        }
-
-        .list-group-item {
-            padding: .75rem 0;
-        }
-
-        .has-error {
-            border: 2px solid #ff0000
-        }
-
-        .remove {
-            color: #ff0707;
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-        .stock {
-            padding: .18rem .5rem;
-        }
-
-        #product-code-body span > i {
-            font-size: .8rem
-        }
-
-        #vendor-info li {
-            font-size: 17px;
-            line-height: 2.5;
-        }
-
-            #vendor-info li:first-child {
-                border-top: 0
-            }
-
-            #vendor-info li:last-child {
-                border-bottom: 0
-            }
-
-        #vendor-info i {
-            color: #8a8383
-        }
+        #showAddedCode .code-span { display: inline-block; margin: 5px; cursor: pointer }
+        #showAddedCode .code-span:hover::after { content: 'x'; padding-left: 2px; font-size: 16px; }
+        #payment-area li strong { font-size: 17px; }
+        #inputDiscount, #inputPaid, #inputPurchaseDate { display: inline-block; border-radius: 50px; text-align: right; color: #000; }
+        .list-group-item { padding: .75rem 0; }
+        .has-error { border: 2px solid #ff0000 }
+        .remove { color: #ff0707; cursor: pointer; font-size: 15px; }
+        .stock { padding: .18rem .5rem; }
+        #product-code-body span > i { font-size: .8rem }
+        #vendor-info li { font-size: 17px; line-height: 2.5; }
+        #vendor-info li:first-child { border-top: 0 }
+        #vendor-info li:last-child { border-bottom: 0 }
+        #vendor-info i { color: #8a8383 }
     </style>
 }
 
@@ -155,80 +107,84 @@
         </div>
     </section>
 
-    <section class="card card-body my-4">
+    <section class="my-4">
         <div class="row">
-            <div class="col-lg-6 mb-4">
-                <div class="d-flex">
-                    <div class="flex-grow-1">
-                        <div class="md-form">
-                            <input placeholder="Find Vendor" type="text" id="inputFindVendor" class="form-control" autocomplete="off" />
+            <div class="col-lg-6 mb-3">
+                <div class="card card-body">
+                    <div class="d-flex">
+                        <div class="flex-grow-1">
+                            <div class="md-form">
+                                <input placeholder="Find Vendor" type="text" id="inputFindVendor" class="form-control" autocomplete="off" />
+                            </div>
+                        </div>
+
+                        <div>
+                            <a id="vendorAddClick" data-url="/Vendor/Create" class="btn btn-floating amber accent-4 mt-3" title="Add New" data-toggle="modal">
+                                <i class="fal fa-user-plus ml-1"></i>
+                            </a>
                         </div>
                     </div>
-
-                    <div>
-                        <a id="vendorAddClick" data-url="/Vendor/Create" class="btn btn-floating amber accent-4 mt-3" title="Add New" data-toggle="modal">
-                            <i class="fal fa-user-plus ml-1"></i>
-                        </a>
-                    </div>
+                    <ul id="vendor-info" class="list-group list-group-flush"></ul>
+                    <input type="hidden" id="vendorId" />
                 </div>
-                <ul id="vendor-info" class="list-group list-group-flush"></ul>
-                <input type="hidden" id="vendorId" />
             </div>
 
             <div class="col-lg-6">
-                <form id="formPayment">
-                    <ul class="list-group list-group-flush" id="payment-area">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <strong>Total Purchase Price</strong>
-                            <strong>৳<span id="totalPrice"></span></strong>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <strong>Discount</strong>
-                            <div class="flex-1 ml-3">
-                                <input placeholder="Discount" id="inputDiscount" type="number" min="0" class="form-control" />
-                            </div>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center green-text">
-                            <strong>Total Payable</strong>
-                            <strong>৳<span id="totalPayable"></span></strong>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <strong>Total Paid</strong>
-                            <div class="flex-1 ml-3">
-                                <input placeholder="Paid Amount" id="inputPaid" type="number" min="0" class="form-control" />
-                            </div>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center orange-text">
-                            <strong>Total Due</strong>
-                            <strong>৳<span id="totalDue"></span></strong>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <strong>Payment Method</strong>
-                            <div class="flex-1 ml-3">
-                                <select id="selectPaymentMethod" class="mdb-select" style="position: absolute; top: 1rem; left: 0px; height: 0px; width: 0px; opacity: 0; padding: 0px; pointer-events: none; display: inline!important;">
-                                    <option value="" selected>[ SELECT ]</option>
-                                    <option>Cash</option>
-                                    <option>Bank</option>
-                                    <option>Cheque</option>
-                                    <option>bkash</option>
-                                </select>
-                            </div>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <strong>Purchase Date</strong>
-                            <div class="flex-1 ml-3">
-                                <input placeholder="Purchase Date" id="inputPurchaseDate" type="text" class="form-control datepicker text-center" />
-                            </div>
-                        </li>
-                    </ul>
+                <div class="card card-body">
+                    <form id="formPayment">
+                        <ul class="list-group list-group-flush" id="payment-area">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <strong>Total Purchase Price</strong>
+                                <strong>৳<span id="totalPrice"></span></strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <strong>Discount</strong>
+                                <div class="flex-1 ml-3">
+                                    <input placeholder="Discount" id="inputDiscount" type="number" min="0" class="form-control" />
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center green-text">
+                                <strong>Total Payable</strong>
+                                <strong>৳<span id="totalPayable"></span></strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <strong>Total Paid</strong>
+                                <div class="flex-1 ml-3">
+                                    <input placeholder="Paid Amount" id="inputPaid" type="number" min="0" class="form-control" />
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center orange-text">
+                                <strong>Total Due</strong>
+                                <strong>৳<span id="totalDue"></span></strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <strong>Payment Method</strong>
+                                <div class="flex-1 ml-3">
+                                    <select id="selectPaymentMethod" class="mdb-select" style="position: absolute; top: 1rem; left: 0px; height: 0px; width: 0px; opacity: 0; padding: 0px; pointer-events: none; display: inline!important;">
+                                        <option value="" selected>[ SELECT ]</option>
+                                        <option>Cash</option>
+                                        <option>Bank</option>
+                                        <option>Cheque</option>
+                                        <option>bkash</option>
+                                    </select>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <strong>Purchase Date</strong>
+                                <div class="flex-1 ml-3">
+                                    <input placeholder="Purchase Date" id="inputPurchaseDate" type="text" class="form-control datepicker text-center" />
+                                </div>
+                            </li>
+                        </ul>
 
-                    <div class="mt-4 text-center">
-                        <i id="vendor-error" class="mt-2 text-center red-text"></i>
-                        <button type="submit" id="btnPurchase" class="btn peach-gradient btn-rounded btn-block mt-0">PURCHASE</button>
-                    </div>
-                </form>
+                        <div class="mt-4 text-center">
+                            <i id="vendor-error" class="mt-2 text-center red-text"></i>
+                            <button type="submit" id="btnPurchase" class="btn peach-gradient btn-rounded btn-block mt-0">PURCHASE</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
+            </div>
     </section>
 </div>
 
@@ -269,6 +225,6 @@
 
 @section Scripts {
     <partial name="_UnobtrusiveAjaxPartial" />
-    <script src="~/page-js/product-purchase.js"></script>
+    <script src="~/page-js/product-purchase.js?v=1"></script>
 }
 

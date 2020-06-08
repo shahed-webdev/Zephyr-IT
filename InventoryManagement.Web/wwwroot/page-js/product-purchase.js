@@ -574,7 +574,8 @@ $('#inputFindVendor').typeahead({
         $.ajax({
             url: "/Product/FindVendor",
             data: { prefix: request },
-            success: function (response) { result(response); }
+            success: function (response) { result(response); },
+            error: function (err) { console.log(err) }
         });
     },
     updater: function (item) {

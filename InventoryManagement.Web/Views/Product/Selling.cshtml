@@ -5,6 +5,7 @@
 }
 
 @section Styles{ 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-autocomplete/1.0.7/jquery.auto-complete.min.css" />
 <style>
     .remove { cursor:pointer}
     .remove:hover {color:#ff0000}
@@ -91,7 +92,7 @@
                         </li>
                         <li class="d-flex justify-content-between align-items-center">
                             <div class="md-form mt-4 flex-1">
-                                <input id="inputCustomer" type="text" class="form-control" />
+                                <input id="inputCustomer" type="text" class="form-control" autocomplete="off"/>
                                 <label for="inputCustomer">Find Customer</label>
                             </div>
                             <input id="hiddenCustomerId" type="hidden" />
@@ -110,6 +111,7 @@
 </div>
 
 @section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-autocomplete/1.0.7/jquery.auto-complete.min.js"></script>
     <script src="~/js/onscan.min.js"></script>
-    <script src="~/page-js/product-selling.js?v=1.3"></script>
+    <script src="~/page-js/product-selling.js?v=.2"></script>
 }
