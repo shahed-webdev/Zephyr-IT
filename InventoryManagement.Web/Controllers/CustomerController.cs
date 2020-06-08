@@ -32,7 +32,6 @@ namespace InventoryManagement.Web.Controllers
         //GET:// add customer
         public IActionResult Add()
         {
-            //ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -58,9 +57,7 @@ namespace InventoryManagement.Web.Controllers
         public IActionResult Update(int? id)
         {
             if (!id.HasValue) return BadRequest(HttpStatusCode.BadRequest);
-
             var model = _db.Customers.FindCustom(id.GetValueOrDefault());
-
             if (model == null) return NotFound();
 
             return View(model);

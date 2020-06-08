@@ -47,6 +47,7 @@ namespace InventoryManagement.Repository
                 CustomerName = c.CustomerName,
                 CustomerAddress = c.CustomerAddress,
                 Description = c.Description,
+                DueLimit = c.DueLimit,
                 Photo = c.Photo,
                 PhoneNumbers = c.CustomerPhone.Select(p => new CustomerPhoneViewModel
                 {
