@@ -96,8 +96,6 @@ namespace InventoryManagement.Repository
             }
 
             return response;
-
-            return response;
         }
 
         public Task<SellingReceiptViewModel> PurchaseReceiptAsync(int id, IUnitOfWork db)

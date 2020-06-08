@@ -126,18 +126,18 @@ namespace InventoryManagement.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Selling([FromBody] ProductSellViewModel model)
+        public async Task<IActionResult> Selling([FromBody] SellingViewModel model)
         {
-            //model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+            model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
 
-            //if (!ModelState.IsValid) UnprocessableEntity(ModelState);
+            if (!ModelState.IsValid) UnprocessableEntity(ModelState);
 
-            //var response = await _db.Purchases.AddCustomAsync(model, _db).ConfigureAwait(false);
+            var response = await _db.Selling.AddCustomAsync(model, _db).ConfigureAwait(false);
 
-            //if (response.IsSuccess)
-            //    return Ok(response);
-            //else
-            //    return UnprocessableEntity(response);
+            if (response.IsSuccess)
+                return Ok(response);
+            else
+                return UnprocessableEntity(response);
 
             return View();
         }
