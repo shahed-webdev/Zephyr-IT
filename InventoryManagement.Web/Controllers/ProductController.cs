@@ -144,7 +144,7 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> SellingReceipt(int? id)
         {
             if (id == null) return RedirectToAction("Selling");
-            var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
+            var model = await _db.Selling.SellingReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
             return View(model);
         }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace InventoryManagement.Repository
 {
@@ -41,5 +40,14 @@ namespace InventoryManagement.Repository
         public double Due { get; set; }
         public double DueLimit { get; set; }
         public DateTime SignUpDate { get; set; }
+    }
+
+    public class CustomerReceiptViewModel
+    {
+        public int CustomerId { get; set; }
+        public string OrganizationName { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerAddress { get; set; }
+        public string CustomerPhone { get; set; }
     }
 }

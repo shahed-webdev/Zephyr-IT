@@ -98,9 +98,56 @@ namespace InventoryManagement.Repository
             return response;
         }
 
-        public Task<SellingReceiptViewModel> PurchaseReceiptAsync(int id, IUnitOfWork db)
+        public Task<SellingReceiptViewModel> SellingReceiptAsync(int id, IUnitOfWork db)
         {
-            throw new System.NotImplementedException();
+            var sellingReceipt = Context.Selling
+              .Include(s => s.Customer)
+              .ThenInclude(c => c.CustomerPhone)
+              .Include(s => s.Registration)
+              .Include(s => s.SellingList)
+              .ThenInclude(ps => ps.ProductStock)
+              .ThenInclude(p => p.Product)
+              .Include(s => s.SellingPaymentList)
+              .ThenInclude(sp => sp.SellingPayment)
+              .Select(s => new SellingReceiptViewModel
+              {
+                  SellingSn = s.SellingSn,
+                  SellingId = s.SellingId,
+                  SellingTotalPrice = s.SellingTotalPrice,
+                  SellingDiscountAmount = s.SellingDiscountAmount,
+                  SellingPaidAmount = s.SellingPaidAmount,
+                  SellingDueAmount = s.SellingDueAmount,
+                  SellingDate = s.SellingDate,
+                  Products = s.SellingList.Select(pd => new ProductSellViewModel
+                  {
+                      ProductId = pd.ProductStock.Product.ProductId,
+                      ProductCatalogId = pd.ProductStock.Product.ProductCatalogId,
+                      ProductCatalogName = db.ProductCatalogs.CatalogNameNode(pd.ProductStock.Product.ProductCatalogId),
+                      ProductName = pd.ProductStock.Product.ProductName,
+                      Description = pd.ProductStock.Product.Description,
+                      Warranty = pd.ProductStock.Product.Warranty,
+                      SellingPrice = pd.SellingPrice,
+                      ProductCode = pd.ProductStock.ProductCode
+                  }).ToList(),
+                  Payments = s.SellingPaymentList.Select(pp => new SellingPaymentViewModel
+                  {
+                      PaymentMethod = pp.SellingPayment.PaymentMethod,
+                      PaidAmount = pp.SellingPaidAmount,
+                      PaidDate = pp.SellingPayment.PaidDate
+                  }).ToList(),
+                  CustomerInfo = new CustomerReceiptViewModel
+                  {
+                      CustomerId = s.Customer.CustomerId,
+                      OrganizationName = s.Customer.OrganizationName,
+                      CustomerName = s.Customer.CustomerName,
+                      CustomerAddress = s.Customer.CustomerAddress,
+                      CustomerPhone = s.Customer.CustomerPhone.FirstOrDefault().Phone
+                  },
+                  InstitutionInfo = db.Institutions.FindCustom(),
+                  SoildBy = s.Registration.Name
+              }).FirstOrDefaultAsync(s => s.SellingId == id);
+
+            return sellingReceipt;
         }
 
         public DataResult<SellingRecordViewModel> Records(DataRequest request)

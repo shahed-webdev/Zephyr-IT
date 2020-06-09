@@ -8,7 +8,7 @@ namespace InventoryManagement.Repository
     {
         Task<int> GetNewSnAsync();
         Task<DbResponse<int>> AddCustomAsync(SellingViewModel model, IUnitOfWork db);
-        Task<SellingReceiptViewModel> PurchaseReceiptAsync(int id, IUnitOfWork db);
+        Task<SellingReceiptViewModel> SellingReceiptAsync(int id, IUnitOfWork db);
         DataResult<SellingRecordViewModel> Records(DataRequest request);
     }
 }
