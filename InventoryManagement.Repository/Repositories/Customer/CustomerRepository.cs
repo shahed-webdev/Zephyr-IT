@@ -103,7 +103,7 @@ namespace InventoryManagement.Repository
                       OrganizationName = c.OrganizationName,
                       CustomerName = c.CustomerName,
                       CustomerAddress = c.CustomerAddress,
-                      PhonePrimary ="" ,//c.CustomerPhone.FirstOrDefault(p => p.IsPrimary.GetValueOrDefault()).Phone,
+                      PhonePrimary = c.CustomerPhone.FirstOrDefault(p=>p.Phone.Contains(key)).Phone,
                       Due = c.Due,
                       DueLimit = c.DueLimit,
                       SignUpDate = c.InsertDate

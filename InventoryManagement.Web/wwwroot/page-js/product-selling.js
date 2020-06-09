@@ -1,8 +1,4 @@
 ﻿
-// date picker
-$('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'))
-document.getElementById('label-date').classList.add('active')
-
  // material select initialization
 $('.mdb-select').materialSelect()
 
@@ -32,9 +28,10 @@ const totalPayable = formPayment.querySelector('#totalPayable')
 const inputPaid = formPayment.inputPaid
 const totalDue = formPayment.querySelector('#totalDue')
 const selectPaymentMethod = formPayment.selectPaymentMethod
-const inputPurchaseDate = formPayment.inputPurchaseDate
-const customerError = formPayment.querySelector('#customer-error')
 
+//customer
+const hiddenCustomerId = formPayment.hiddenCustomerId
+const customerError = formPayment.querySelector('#customer-error')
 
 // get set storage object
 const storage = {
@@ -300,46 +297,49 @@ const onInputPaid = function () {
     totalDue.innerText = isValid ? due.toFixed() : payable;
 }
 
+//reset customer Id
+hiddenCustomerId.value = '';
+
 //validation info
 const validation = function () {
-    let isValid = true;
+    customerError.innerText = ''
 
-    if (!hiddenVendorId.value) {
-        isValid = false;
-        vendorInfo.innerHTML = '<li class="list-group-item list-group-item-danger text-center"><i class="fas fa-exclamation-triangle mr-1 red-text"></i>Select or add Vendor for Purchase!</li>';
+    if (!hiddenCustomerId.value) {
+        customerError.innerText = 'Select or add customer!';
+        return false;
     }
 
-    if (!storage.length)
-        isValid = false;
+    if (!cart.products.length) {
+        customerError.innerText = 'Add product to sell!';
+        return false;
+    }
 
-    vendorError.textContent = storage.length ? '' : 'Add product to purchase!';
-
-    return isValid;
+    return true;
 }
 
 //submit on server
-const onPurchaseSubmitClicked = function (evt) {
+const onSellSubmitClicked = function (evt) {
     evt.preventDefault();
 
     const valid = validation();
     if (!valid) return;
-
+    return
     //disable button on submit
-    const btnSubmit = evt.target.btnPurchase;
+    const btnSubmit = evt.target.btnSelling;
     btnSubmit.innerText = 'submitting..';
     btnSubmit.disabled = true;
 
     const body = {
-        VendorId: +hiddenVendorId.value,
+        CustomerId: +hiddenVendorId.value,
         PurchaseTotalPrice: +totalPrice.textContent,
         PurchaseDiscountAmount: +inputDiscount.value | 0,
         PurchasePaidAmount: +inputPaid.value | 0,
         PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
-        PurchaseDate: new Date(inputPurchaseDate.value),
+        PurchaseDate: new Date(),
         Products: storage
     }
 
-    const url = '/Product/Purchase';
+    const url = '/Product/Selling';
     const options = {
         method: 'post',
         url: url,
@@ -350,7 +350,7 @@ const onPurchaseSubmitClicked = function (evt) {
         .then(response => {
             if (response.data.IsSuccess) {
                 localstoreClear();
-                location.href = `/Product/PurchaseReceipt/${response.data.Data}`;
+                location.href = `/Product/SellingReceipt/${response.data.Data}`;
             }
         })
         .catch(error => {
@@ -358,30 +358,27 @@ const onPurchaseSubmitClicked = function (evt) {
 
             if (error.response)
                 vendorError.textContent = error.response.Message;
-
         })
         .finally(() => {
-            btnSubmit.innerText = 'PURCHASE';
+            btnSubmit.innerText = 'Sell Product';
             btnSubmit.disabled = false;
         });
 }
 
 //event listner
-//formPayment.addEventListener('submit', onPurchaseSubmitClicked);
+formPayment.addEventListener('submit', onSellSubmitClicked);
 inputDiscount.addEventListener('input', onInputDiscount);
 inputPaid.addEventListener('input', onInputPaid);
 
-
+//const prevDue = +formPayment.querySelector('#prevDue').textContent
+//const dueLimit = +formPayment.querySelector('#dueLimit').textContent
 
 //****CUSTOMER****//
-const inputCustomer = formPayment.inputCustomer
-const hiddenCustomerId = formPayment.hiddenCustomerId
-
 //customer autocomplete
 $('#inputCustomer').typeahead({
     minLength: 1,
     displayText: function (item) {
-        return `${item.CustomerName}`;
+        return `${item.CustomerName} ${item.PhonePrimary ? item.PhonePrimary:''} ${item.OrganizationName ? item.OrganizationName: ''}`;
     },
     afterSelect: function (item) {
         this.$element[0].value = item.CustomerName
@@ -395,8 +392,17 @@ $('#inputCustomer').typeahead({
         });
     },
     updater: function (item) {
-        //appendVendorInfo(item);
-        console.log(item)
+        appendInfo(item);
+        hiddenCustomerId.value = item.CustomerId;
         return item;
     }
 });
+
+function appendInfo(item) {
+    let html = `<span class="badge badge-pill badge-success">${item.CustomerName}</span>
+        <span class="badge badge-pill badge-danger">Previous Due: ৳<span id="prevDue">${item.Due}</span></span>
+        <span class="badge badge-pill badge-info">Due Limit: ৳<span id="dueLimit">${item.DueLimit}</span></span>`
+
+    document.getElementById('customerInfo').innerHTML = html;
+}
+

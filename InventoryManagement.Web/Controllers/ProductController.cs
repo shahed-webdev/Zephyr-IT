@@ -138,8 +138,6 @@ namespace InventoryManagement.Web.Controllers
                 return Ok(response);
             else
                 return UnprocessableEntity(response);
-
-            return View();
         }
 
         //selling receipt
