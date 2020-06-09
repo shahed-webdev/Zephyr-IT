@@ -304,14 +304,18 @@ hiddenCustomerId.value = '';
 const validation = function () {
     customerError.innerText = ''
 
+    if (!cart.codes.length) {
+        customerError.innerText = 'Add product to sell!';
+        return false;
+    }
+
     if (!hiddenCustomerId.value) {
         customerError.innerText = 'Select or add customer!';
         return false;
     }
 
-    if (!cart.products.length) {
-        customerError.innerText = 'Add product to sell!';
-        return false;
+    if (!checkDueLimit()) {
+        return false
     }
 
     return true;
@@ -323,20 +327,20 @@ const onSellSubmitClicked = function (evt) {
 
     const valid = validation();
     if (!valid) return;
-    return
+
     //disable button on submit
     const btnSubmit = evt.target.btnSelling;
     btnSubmit.innerText = 'submitting..';
     btnSubmit.disabled = true;
 
     const body = {
-        CustomerId: +hiddenVendorId.value,
-        PurchaseTotalPrice: +totalPrice.textContent,
-        PurchaseDiscountAmount: +inputDiscount.value | 0,
-        PurchasePaidAmount: +inputPaid.value | 0,
+        CustomerId: +hiddenCustomerId.value,
+        SellingTotalPrice: +totalPrice.textContent,
+        SellingDiscountAmount: +inputDiscount.value | 0,
+        SellingPaidAmount: +inputPaid.value | 0,
         PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
-        PurchaseDate: new Date(),
-        Products: storage
+        SellingDate: new Date(),
+        ProductCodes: cart.codes
     }
 
     const url = '/Product/Selling';
@@ -354,10 +358,12 @@ const onSellSubmitClicked = function (evt) {
             }
         })
         .catch(error => {
-            console.log('error:', error.response);
-
             if (error.response)
-                vendorError.textContent = error.response.Message;
+                customerError.textContent = error.response.data.Message
+            else if (error.request)
+                console.log(error.request);
+            else
+                console.log('Error', error.message);
         })
         .finally(() => {
             btnSubmit.innerText = 'Sell Product';
@@ -370,15 +376,12 @@ formPayment.addEventListener('submit', onSellSubmitClicked);
 inputDiscount.addEventListener('input', onInputDiscount);
 inputPaid.addEventListener('input', onInputPaid);
 
-//const prevDue = +formPayment.querySelector('#prevDue').textContent
-//const dueLimit = +formPayment.querySelector('#dueLimit').textContent
-
 //****CUSTOMER****//
 //customer autocomplete
 $('#inputCustomer').typeahead({
     minLength: 1,
     displayText: function (item) {
-        return `${item.CustomerName} ${item.PhonePrimary ? item.PhonePrimary:''} ${item.OrganizationName ? item.OrganizationName: ''}`;
+        return `${item.CustomerName} ${item.PhonePrimary ? item.PhonePrimary: ''} ${item.OrganizationName ? item.OrganizationName: ''}`;
     },
     afterSelect: function (item) {
         this.$element[0].value = item.CustomerName
@@ -394,6 +397,8 @@ $('#inputCustomer').typeahead({
     updater: function (item) {
         appendInfo(item);
         hiddenCustomerId.value = item.CustomerId;
+        customerError.innerText = ''
+        checkDueLimit()
         return item;
     }
 });
@@ -406,3 +411,23 @@ function appendInfo(item) {
     document.getElementById('customerInfo').innerHTML = html;
 }
 
+//check customer due limit
+function checkDueLimit() {
+    const prevDue = +formPayment.querySelector('#prevDue').textContent || 0
+    const currnetDue = +totalDue.textContent
+    const dueLimit = +formPayment.querySelector('#dueLimit').textContent || 0
+
+    const due = prevDue + currnetDue;
+
+    if (due > dueLimit) {
+        customerError.innerText = 'Current due greater than due limit!';
+        return false
+    }
+
+    return true  
+}
+
+//remove localstore
+function localstoreClear() {
+    localStorage.removeItem('selling-cart');
+}

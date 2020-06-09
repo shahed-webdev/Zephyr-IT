@@ -419,8 +419,7 @@ const matchExistingProductCode = function (stocks) {
 }
 
 //add product to list
-const onAddProductToList = function ()
-{
+const onAddProductToList = function (){
     const ParentId = formCart.ParentId.value;
     const ProductName = formCart.inputProductName.value;
     const PurchasePrice = +formCart.inputPurchasePrice.value;
@@ -628,19 +627,18 @@ const onInputPaid = function () {
 
 //validation info
 const validation = function () {
-    let isValid = true;
+    vendorError.textContent = ''
 
     if (!hiddenVendorId.value) {
-        isValid = false;
         vendorInfo.innerHTML = '<li class="list-group-item list-group-item-danger text-center"><i class="fas fa-exclamation-triangle mr-1 red-text"></i>Select or add Vendor for Purchase!</li>';
+        return false;
     }
 
-    if (!storage.length)
-        isValid = false;
-
-    vendorError.textContent = storage.length ? '' : 'Add product to purchase!';
-
-    return isValid;
+    if (!storage.length) {
+        vendorError.textContent = 'Add product to purchase!';
+        return false;
+    }
+    return true;
 }
 
 //remove localstore
