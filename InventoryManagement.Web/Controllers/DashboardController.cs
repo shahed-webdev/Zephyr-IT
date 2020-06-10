@@ -58,7 +58,6 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //Login Info
-        [Authorize(Roles = "admin, sub-admin")]
         public string GetUserLoggedInInfo()
         {
             var admin = _db.Registrations.GetAdminBasic(User.Identity.Name);

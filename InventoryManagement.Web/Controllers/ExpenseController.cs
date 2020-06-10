@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
 {
-    [Authorize(Roles = "admin, Expanse")]
+    [Authorize(Roles = "admin, expanse")]
     public class ExpensesController : Controller
     {
         private readonly IUnitOfWork _db;
@@ -55,14 +55,12 @@ namespace InventoryManagement.Web.Controllers
             return PartialView("_Create", model);
         }
 
-
         // POST: Delete/5
         public int Delete(int id)
         {
             _db.Expenses.RemoveCustom(id);
             return _db.SaveChanges();
         }
-
 
         protected override void Dispose(bool disposing)
         {

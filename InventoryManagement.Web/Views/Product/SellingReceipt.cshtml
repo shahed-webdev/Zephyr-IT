@@ -1,6 +1,122 @@
-﻿@{
+﻿@using InventoryManagement.Repository
+@model SellingReceiptViewModel
+@{
     ViewData["Title"] = "Selling Receipt";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Selling receipt</h1>
+@section Styles{
+    <link href="~/css/selling-receipt.css?v=1" rel="stylesheet" />
+}
+
+<div class="container">
+    <section class="my-4 d-print-none">
+        <div class="d-flex justify-content-between">
+            <a class="btn btn-success btn-rounded" href="/Product/Selling"><i class="fal fa-cart-plus mr-1"></i>Selling</a>
+            <div>
+                <button class="btn btn-elegant btn-rounded" onclick="print()"><i class="fal fa-print mr-1"></i>Print</button>
+            </div>
+        </div>
+    </section>
+
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="td-size text-right"><strong>Name</strong></td>
+                <td class="td-val-size">@Model.CustomerInfo.CustomerName</td>
+                <td class="td-size text-right"><strong>Bill No</strong></td>
+                <td class="td-val-size">@Model.SellingSn</td>
+            </tr>
+            <tr>
+                <td class="text-right"><strong>Address</strong></td>
+                <td>@Model.CustomerInfo.CustomerAddress</td>
+                <td class="text-right"><strong>Date</strong></td>
+                <td>@Model.SellingDate.ToString("d MMM yyyy")</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="text-right"><strong>Cell</strong></td>
+                <td>@Model.CustomerInfo.CustomerPhone</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="product-tb table table-sm table-bordered mt-4">
+        <thead>
+            <tr>
+                <th><strong>SL.</strong></th>
+                <th><strong>Code</strong></th>
+                <th><strong>Name</strong></th>
+                <th><strong>Description</strong></th>
+                <th><strong>Warranty</strong></th>
+                <th><strong>Price</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var index = 1;
+                foreach (var item in Model.Products)
+                {
+                    <tr>
+                        <td class="text-center">@index</td>
+                        <td class="text-center">@item.ProductCode</td>
+                        <td>@item.ProductName</td>
+                        <td>@item.Description</td>
+                        <td>@item.Warranty</td>
+                        <td class="text-right">৳@item.SellingPrice</td>
+                    </tr>
+
+                    index++;
+                }
+            }
+            <tr>
+                <td colspan="5" class="text-center">
+                    <span id="amount-word"></span>
+                </td>
+                <td class="text-right">
+                    <h5>Discount:<strong>৳@Model.SellingDiscountAmount</strong> </h5>
+                    <h5>Total Amount:<strong>৳@Model.SellingTotalPrice</strong> </h5>
+                    <h5>Paid Amount:<strong>৳@Model.SellingPaidAmount</strong> </h5>
+                    <h5>Due Amount:<strong>৳@Model.SellingDueAmount</strong> </h5>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    @if (Model.Payments.Count > 0)
+    {
+        <h4 class="m-0">Paid Record</h4>
+        <table class="product-tb table table-sm table-bordered mt-4">
+            <thead>
+                <tr>
+                    <th><strong>Paid Amount</strong></th>
+                    <th><strong>Payment Method</strong></th>
+                    <th><strong>Paid Date</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var item in Model.Payments)
+                    {
+                        <tr>
+                            <td class="text-center">@item.PaidAmount</td>
+                            <td>@item.PaymentMethod</td>
+                            <td>@item.PaidDate.ToString("d MMM yyyy")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@section scripts{
+    <script src="~/js/amount-in-word.js"></script>
+    <script>
+        $(function() {
+            $("#amount-word").text(`Taka (in word): ${number2text(@Model.SellingTotalPrice).toLowerCase()}`);
+        });
+    </script>
+}

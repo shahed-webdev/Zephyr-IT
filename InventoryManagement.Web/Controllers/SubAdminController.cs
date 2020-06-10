@@ -24,26 +24,24 @@ namespace InventoryManagement.Web.Controllers
             _logger = logger;
             _db = db;
         }
-        [Authorize(Roles = "admin,SubAdmin_List")]
+
+        [Authorize(Roles = "admin, sub-admin-list")]
         public IActionResult List()
         {
             var model = _db.Registrations.GetSubAdminList();
             return View(model);
         }
 
-        //
         // GET: /SignUp
-        [Authorize(Roles = "admin, sub-admin")]
+        [Authorize(Roles = "admin, sub-admin-signup")]
         public IActionResult SignUp()
         {
             return View();
         }
 
-        //
         // POST: /SignUp
+        [Authorize(Roles = "admin, sub-admin-signup")]
         [HttpPost]
-        [Authorize(Roles = "admin, sub-admin")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignUp(RegisterViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -83,7 +81,8 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "admin,SubAdmin_PageAccess")]
+        //page access
+        [Authorize(Roles = "admin, sub-admin-page-access")]
         public IActionResult PageAccess()
         {
             ViewBag.SubAdmins = new SelectList(_db.Registrations.SubAdmins(), "value", "label");
@@ -97,6 +96,7 @@ namespace InventoryManagement.Web.Controllers
             return Json(model);
         }
 
+        [HttpPost]
         public async Task<bool> PostLinks(int regId, ICollection<PageAssignVM> links)
         {
             try
@@ -108,7 +108,7 @@ namespace InventoryManagement.Web.Controllers
                 var user = await _userManager.FindByNameAsync(userName).ConfigureAwait(false);
                 var roleList = links.Select(l => l.RoleName).ToList();
 
-                roleList.Add("Sub-Admin");
+                roleList.Add("sub-admin");
 
                 var userRoles = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
                 await _userManager.RemoveFromRolesAsync(user, userRoles.ToArray()).ConfigureAwait(false);

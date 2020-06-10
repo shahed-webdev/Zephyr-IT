@@ -1,27 +1,28 @@
 ﻿
 @{
-    ViewData["Title"] = "Purchase Invoices";
+    ViewData["Title"] = "Selling Invoice";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-    <div class="m-md-3">
-        <h4 class="mb-3 page-header">Purchase Invoice</h4>
-        <div class="card card-body">
+<div class="m-md-3">
+    <h4 class="mb-3 page-header">Selling Invoice</h4>
+    <div class="card card-body">
 
-            <table id="data-table" class="table table-sm table-bordered">
-                <thead>
-                    <tr>
-                        <th>#Invoice</th>
-                        <th>Vendor</th>
-                        <th>Amount</th>
-                        <th>Paid</th>
-                        <th>Due</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
+        <table id="data-table" class="table table-sm table-bordered">
+            <thead>
+                <tr>
+                    <th>#Invoice</th>
+                    <th>Customer Name</th>
+                    <th>Amount</th>
+                    <th>Paid</th>
+                    <th>Discount</th>
+                    <th>Due</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+        </table>
     </div>
+</div>
 
 @section scripts{
     <script>
@@ -39,21 +40,22 @@
                     dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>><"row"<"col-sm-12"<tr>>><"row"<"col-sm-5"i><"col-sm-7"p>>',
                     buttons: dataTable.button,
                     ajax: {
-                        url: "/Product/PurchaseRecordsData",
+                        url: "/Product/SellingRecordsData",
                         type: "POST"
                     },
                     columns:
                         [
                             {
-                                data: "PurchaseSn", "render": function (data, type, row, meta) {
-                                    return `<a class="blue-text" href="/Product/PurchaseReceipt/${row.PurchaseId}">${data}</a>`;
+                                data: "SellingSn", "render": function (data, type, row, meta) {
+                                    return `<a class="blue-text" href="/Product/SellingReceipt/${row.SellingId}">${data}</a>`;
                                 }
                             },
-                            { data: "VendorCompanyName" },
-                            { data: "PurchaseAmount", "render": dataTable.addSign },
-                            { data: "PurchasePaidAmount", "render": dataTable.addSign },
-                            { data: "PurchaseDueAmount", "render": dataTable.addSign },
-                            { data: "PurchaseDate", "render": function (data) { return moment(data).format('DD MMM YYYY') } }
+                            { data: "CustomerName" },
+                            { data: "SellingAmount", "render": dataTable.addSign },
+                            { data: "SellingPaidAmount", "render": dataTable.addSign },
+                            { data: "SellingDiscountAmount", "render": dataTable.addSign },
+                            { data: "SellingDueAmount", "render": dataTable.addSign },
+                            { data: "SellingDate", "render": function (data) { return moment(data).format('DD MMM YYYY') } }
                         ],
                     columnDefs: [
                         { 'searchable': false, 'targets': [2,3,4,5] },

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin, customer-list")]
     public class CustomerController : Controller
     {
         private readonly IUnitOfWork _db;
@@ -16,13 +16,14 @@ namespace InventoryManagement.Web.Controllers
             _db = db;
         }
 
-        //GET:// MobileIsAvailable
+        //GET:// Mobile Is Available(ajax)
         public async Task<bool> CheckMobileIsAvailable(string mobile, int Id = 0)
         {
             return await _db.Customers.IsPhoneNumberExistAsync(mobile, Id).ConfigureAwait(false);
         }
 
         //GET:// List of customer
+        
         public IActionResult List()
         {
             var list = _db.Customers.ListCustom();
@@ -34,7 +35,6 @@ namespace InventoryManagement.Web.Controllers
         {
             return View();
         }
-
 
         //POST:// Add customer
         [HttpPost]
@@ -51,7 +51,6 @@ namespace InventoryManagement.Web.Controllers
 
             return RedirectToAction("List");
         }
-
 
         //GET:// Update customer
         public IActionResult Update(int? id)

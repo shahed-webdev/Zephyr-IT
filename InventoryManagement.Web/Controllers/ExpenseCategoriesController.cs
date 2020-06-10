@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagement.Web.Controllers
 {
-    [Authorize(Roles = "admin, ExpenseCategory")]
+    [Authorize(Roles = "admin, expense-category")]
     public class ExpenseCategoriesController : Controller
     {
         private readonly IUnitOfWork _db;
@@ -25,7 +25,6 @@ namespace InventoryManagement.Web.Controllers
         {
             return View();
         }
-
 
         //GET: Call from ajax
         public IActionResult IndexData()
@@ -59,7 +58,6 @@ namespace InventoryManagement.Web.Controllers
             return PartialView("_Create", model);
         }
 
-
         // GET: Edit/5
         public IActionResult Edit(int? id)
         {
@@ -91,7 +89,6 @@ namespace InventoryManagement.Web.Controllers
 
             return PartialView("_Edit", model);
         }
-
 
         // POST: Delete/5
         public int Delete(int id)

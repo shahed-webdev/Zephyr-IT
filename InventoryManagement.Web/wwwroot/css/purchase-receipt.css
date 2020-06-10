@@ -20,7 +20,7 @@ body { background-color: #fff; color: black }
 #main-page table tr td:nth-child(5) { text-align: right; }
 #main-page table tr td:nth-child(6) { text-align: right; }*/
 #main-page table h5 { font-weight: 400; font-size: 16px }
-#amount-word { text-transform: lowercase; font-style: italic; font-size: 14px }
+#amount-word { font-style: italic; font-size: 14px }
 
 /*.p-footer { position: absolute; bottom: 0; width: 100%; border-top: 1px solid #333; padding-top: 5px; }*/
 

@@ -17,6 +17,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         // GET: List
+        [Authorize(Roles = "admin, vendor-list")]
         public async Task<IActionResult> List()
         {
             var model = await _db.Vendors.ToListCustomAsync();
@@ -25,12 +26,14 @@ namespace InventoryManagement.Web.Controllers
 
 
         // GET: Vendors/Create
+        [Authorize(Roles = "admin, vendor")]
         public IActionResult Create()
         {
             return PartialView("_Create");
         }
 
         // POST: Vendors/Create
+        [Authorize(Roles = "admin, vendor")]
         [HttpPost]
         public async Task<IActionResult> Create(VendorViewModel model)
         {
@@ -51,6 +54,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         // GET: Vendors/Edit/5
+        [Authorize(Roles = "admin, vendor")]
         public ActionResult Edit(int? id)
         {
             if (id == null) return BadRequest(HttpStatusCode.BadRequest);
@@ -62,6 +66,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         // POST: Vendors/Edit/5
+        [Authorize(Roles = "admin, vendor")]
         [HttpPost]
         public async Task<IActionResult> Edit(VendorViewModel model)
         {
@@ -79,6 +84,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         // POST: Delete/5
+        [Authorize(Roles = "admin, vendor")]
         public int Delete(int id)
         {
             if (!_db.Vendors.RemoveCustom(id)) return -1;

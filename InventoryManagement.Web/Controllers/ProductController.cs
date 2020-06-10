@@ -19,12 +19,14 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET: Barcode
+        [Authorize(Roles = "admin, barcode")]
         public IActionResult Barcode()
         {
             return View();
         }
 
         //GET: Catalog list
+        [Authorize(Roles = "admin, category-list")]
         public IActionResult CatalogList()
         {
             var model = _db.ProductCatalogs.ListCustom();
@@ -32,6 +34,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET: Catalog
+        [Authorize(Roles = "admin, category-list")]
         public IActionResult Catalog()
         {
             ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
@@ -39,6 +42,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //POST: Catalog
+        [Authorize(Roles = "admin, category-list")]
         [HttpPost]
         public async Task<IActionResult> Catalog(ProductCatalogViewModel model)
         {
@@ -81,12 +85,15 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET: Purchase
+        [Authorize(Roles = "admin, purchase")]
         public IActionResult Purchase()
         {
             ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
             return View();
         }
 
+        //POST: Purchase
+        [Authorize(Roles = "admin, purchase")]
         [HttpPost]
         public async Task<IActionResult> Purchase([FromBody] PurchaseViewModel model)
         {
@@ -120,11 +127,13 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //selling
+        [Authorize(Roles = "admin, selling")]
         public IActionResult Selling()
         {
             return View();
         }
 
+        [Authorize(Roles = "admin, selling")]
         [HttpPost]
         public async Task<IActionResult> Selling([FromBody] SellingViewModel model)
         {
@@ -163,30 +172,31 @@ namespace InventoryManagement.Web.Controllers
             return Json(data);
         }
 
-        //purchase Records
-        [Authorize(Roles = "admin, PurchaseRecords")]
-        public IActionResult PurchaseRecords()
-        {
-            return View();
-        }
-
-        //request from datatable
-        public IActionResult PurchaseRecordsData(DataRequest request)
-        {
-            var data = _db.Purchases.Records(request);
-            return Json(data);
-        }
-
-
+        //selling record
+        [Authorize(Roles = "admin, selling-record")]
         public IActionResult SellingRecords()
         {
             return View();
         }
 
-        //request from datatable
+        //request from datatable(ajax)
         public IActionResult SellingRecordsData(DataRequest request)
         {
             var data = _db.Selling.Records(request);
+            return Json(data);
+        }
+
+        //purchase Records
+        [Authorize(Roles = "admin, purchase-record")]
+        public IActionResult PurchaseRecords()
+        {
+            return View();
+        }
+
+        //request from datatable(ajax)
+        public IActionResult PurchaseRecordsData(DataRequest request)
+        {
+            var data = _db.Purchases.Records(request);
             return Json(data);
         }
     }
