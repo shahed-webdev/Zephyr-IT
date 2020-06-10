@@ -176,5 +176,18 @@ namespace InventoryManagement.Web.Controllers
             var data = _db.Purchases.Records(request);
             return Json(data);
         }
+
+
+        public IActionResult SellingRecords()
+        {
+            return View();
+        }
+
+        //request from datatable
+        public IActionResult SellingRecordsData(DataRequest request)
+        {
+            var data = _db.Selling.Records(request);
+            return Json(data);
+        }
     }
 }

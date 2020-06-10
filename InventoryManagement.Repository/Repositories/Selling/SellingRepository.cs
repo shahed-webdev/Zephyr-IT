@@ -152,7 +152,19 @@ namespace InventoryManagement.Repository
 
         public DataResult<SellingRecordViewModel> Records(DataRequest request)
         {
-            throw new System.NotImplementedException();
+            var r = Context.Selling.Include(s => s.Customer).Select(s => new SellingRecordViewModel
+            {
+                SellingId = s.SellingId,
+                CustomerId = s.CustomerId,
+                CustomerName = s.Customer.CustomerName,
+                SellingSn = s.SellingSn,
+                SellingAmount = s.SellingTotalPrice,
+                SellingPaidAmount = s.SellingPaidAmount,
+                SellingDiscountAmount = s.SellingDiscountAmount,
+                SellingDueAmount = s.SellingDueAmount,
+                SellingDate = s.SellingDate
+            });
+            return r.ToDataResult(request);
         }
     }
 }

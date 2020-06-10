@@ -39,6 +39,14 @@ namespace InventoryManagement.Repository
 
     public class SellingRecordViewModel
     {
-
+        public int SellingId { get; set; }
+        public int CustomerId { get; set; }
+        public int SellingSn { get; set; }
+        public string CustomerName { get; set; }
+        public double SellingAmount { get; set; }
+        public double SellingPaidAmount { get; set; }
+        public double SellingDiscountAmount { get; set; }
+        public double SellingDueAmount { get; set; }
+        public DateTime SellingDate { get; set; }
     }
 }
