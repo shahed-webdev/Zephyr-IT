@@ -27,7 +27,7 @@ body { background-color: #fff; color: black }
 
 #main-page table ul li { list-style: none; text-align: left; }
 
-@page { margin: 2.5rem 0 }
+@page { margin: 3rem}
 @media print {
     #header { display: none !important }
     table td, table th { font-size: .8rem; }
