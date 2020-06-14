@@ -18,6 +18,35 @@ namespace InventoryManagement.Web.Controllers
             _db = db;
         }
 
+        //Add products info
+        [Authorize(Roles = "admin, add-product")]
+        public IActionResult AddProduct()
+        {
+            ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
+            return View();
+        }
+
+        //POST: Product
+        [HttpPost]
+        public IActionResult AddProduct(ProductCatalogViewModel model)
+        {
+            return View();
+        }
+
+        //get product from ajax by categoryId
+        public IActionResult GetProduct(int categoryId)
+        {
+            return View();
+        }
+
+        //delete product
+        [HttpPost]
+        public IActionResult DeleteProduct(int Id)
+        {
+            return View();
+        }
+
+
         //GET: Barcode
         [Authorize(Roles = "admin, barcode")]
         public IActionResult Barcode()
@@ -46,14 +75,16 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Catalog(ProductCatalogViewModel model)
         {
-            if (!ModelState.IsValid) return UnprocessableEntity(ModelState);
+            ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
+            if (!ModelState.IsValid) return View(model);
 
             var response = await _db.ProductCatalogs.AddCustomAsync(model).ConfigureAwait(false);
 
             if (response.IsSuccess)
                 return RedirectToAction("CatalogList");
-            else
-                return UnprocessableEntity(response.Message);
+
+            ModelState.AddModelError("CatalogName", response.Message);
+            return View(model);
         }
 
         //GET: catalog Type

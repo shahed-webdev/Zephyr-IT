@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewData["Title"] = "Add Product Info";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+    <div class="m-md-3">
+        <h4 class="mb-3 page-header">Add Product Info</h4>
+
+        <section class="card card-body">
+            <form id="formProduct">
+                <div class="form-row">
+                    <div class="col-lg-3">
+                        <div class="md-form">
+                            <select id="ParentId" asp-items="ViewBag.ParentId" class="mdb-select" required style="position: absolute; top: 1rem; left: 0px; height: 0px; width: 0px; opacity: 0; padding: 0px; pointer-events: none; display: inline!important;">
+                                <option value="" selected>Select Category</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <div class="md-form">
+                            <input id="inputProductName" class="form-control" type="text" required />
+                            <label for="inputProductName">Product Name</label>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <div class="md-form">
+                            <input id="inputWarranty" class="form-control" type="text" />
+                            <label for="inputWarranty">Warranty</label>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <div class="md-form">
+                            <input id="inputDescription" class="form-control" type="text" />
+                            <label for="inputDescription">Description</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <input type="submit" value="Add Product" class="btn btn-grey" />
+                </div>
+            </form>          
+        </section>
+
+        <section class="card card-body mt-3">
+            <table class="table table-bordered table-sm">
+                <thead>
+                    <tr>
+                        <th><strong>Product Name</strong></th>
+                        <th><strong>Warranty</strong></th>
+                        <th><strong>Description</strong></th>
+                    </tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+            </table>
+        </section>
+    </div>
+
+@section Scripts{ 
+<script>
+    // Material Select Initialization
+    $('.mdb-select').materialSelect();
+
+    //selectors
+    const parentId = document.getElementById('ParentId')
+    const tbody = document.getElementById('tbody')
+
+    //functions
+    const onCategoryChanged = function () {
+        let ParentId = this.value
+        if (!ParentId) return
+
+        console.log(ParentId)
+    }
+
+    //event 
+    parentId.addEventListener('change', onCategoryChanged)
+</script>
+}
