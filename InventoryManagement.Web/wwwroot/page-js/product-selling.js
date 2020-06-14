@@ -236,7 +236,7 @@ const appendTotalPrice = function () {
 }
 
 
-// event listners
+// event on product code listners
 formCode.addEventListener('submit', evt => {
     evt.preventDefault()
     const url = '/Product/FindProductByCode'
@@ -281,6 +281,9 @@ const onInputDiscount = function () {
 
     if (inputPaid.value)
         inputPaid.value = '';
+
+    //check due limit 
+    checkDueLimit();
 }
 
 //input paid amount
@@ -295,6 +298,9 @@ const onInputPaid = function () {
     this.setAttribute('max', payable);
 
     totalDue.innerText = isValid ? due.toFixed() : payable;
+
+    //check due limit 
+    checkDueLimit();
 }
 
 //reset customer Id
@@ -305,12 +311,12 @@ const validation = function () {
     customerError.innerText = ''
 
     if (!cart.codes.length) {
-        customerError.innerText = 'Add product to sell!';
+        customerError.innerText = 'Add product to sell!'
         return false;
     }
 
     if (!hiddenCustomerId.value) {
-        customerError.innerText = 'Select or add customer!';
+        customerError.innerText = 'Select or add customer!'
         return false;
     }
 
@@ -419,11 +425,11 @@ function checkDueLimit() {
 
     const due = prevDue + currnetDue;
 
+    customerError.innerText = ''
     if (due > dueLimit) {
         customerError.innerText = 'Current due greater than due limit!';
         return false
     }
-
     return true  
 }
 

@@ -29,7 +29,7 @@
                         <th>Mobile&nbsp;(Primary)</th>
                         <th>Org.&nbsp;Name</th>
                         <th>Address</th>
-                        <th>Signup&nbsp;Date</th>
+                        <th>Description</th>
                         <th>Edit</th>
                     </tr>
                 </thead>
@@ -41,7 +41,7 @@
                             <td>@item.PhonePrimary</td>
                             <td>@item.OrganizationName</td>
                             <td>@item.CustomerAddress</td>
-                            <td>@item.SignUpDate.ToString("dd MMM yyyy")</td>
+                            <td>@item.Description</td>
                             <td><a class="fas fa-edit" href="/Customer/Update/@item.CustomerId"></a></td>
                         </tr>
                     }

@@ -24,6 +24,7 @@ namespace InventoryManagement.Repository
                 PhonePrimary = c.CustomerPhone.FirstOrDefault(p => p.IsPrimary == true).Phone,
                 Due = c.Due,
                 DueLimit = c.DueLimit,
+                Description = c.Description,
                 SignUpDate = c.InsertDate
             });
 

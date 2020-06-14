@@ -39,6 +39,7 @@ namespace InventoryManagement.Repository
         public string PhonePrimary { get; set; }
         public double Due { get; set; }
         public double DueLimit { get; set; }
+        public string Description { get; set; }
         public DateTime SignUpDate { get; set; }
     }
 
