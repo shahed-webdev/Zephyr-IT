@@ -3,10 +3,7 @@
 $('.mdb-select').materialSelect()
 
 // global storage
-let cart = {
-    products: [],
-    codes:[]
-}
+let cartProducts = []
 
 
 //*****SELECTORS*****/
@@ -42,49 +39,46 @@ const storage = {
             return
         }
 
-        console.log(product)
-        let unique = true;
-        cart.products.forEach(item => {
-            if (item.ProductCode === product.ProductCode) {
-                unique = false
-                return
-            }
-        })
-
-        if (unique) {
+        const found = cartProducts.some(el => el.ProductCatalogId === product.ProductCatalogId && el.ProductName === product.ProductName);
+        if (!found) {
             //save to global object
-            cart.products.push(product)
-            cart.codes.push(product.ProductCode)
-
-            //append data to table
-            tbody.appendChild(createTableRow(product))
-
-            //show added items count
-            this.countProduct()
-
-            //append price
-            appendTotalPrice()
+            product.codes = [product.ProductCode]
+            cartProducts.push(product)
         }
         else {
-            codeExistError.textContent = `"${inputBarCode.value}" code already added!`
+            const index = cartProducts.findIndex(item => item.ProductCatalogId === product.ProductCatalogId)
+            const codes = cartProducts[index].codes
+            const unique = codes.some(code => code !== product.ProductCode)
+
+            if (unique) {
+                codes.push(product.ProductCode)
+            }
+            else {
+                codeExistError.textContent = `"${inputBarCode.value}" code already added!`
+            }
         }
 
         //clear input
         inputBarCode.value = ''
+
         //save to local-storage
         this.setData()
+
+        //show table data
+        tbody.innerHTML =''
+        showProducts()
     },
     setData: function () {
-        localStorage.setItem('selling-cart', JSON.stringify(cart))
+        localStorage.setItem('selling-cart', JSON.stringify(cartProducts))
     },
     getData: function () {
         const store = localStorage.getItem('selling-cart')
         if (!store) return
 
-        cart = JSON.parse(store)
+        cartProducts = JSON.parse(store)
     },
     countProduct: function () {
-        productCount.textContent = cart.codes.length
+        productCount.textContent = cartProducts.length
     }
 }
 
@@ -101,10 +95,28 @@ onScan.attachTo(document, {
     }
 })
 
+//create code span
+const createCodeSpan = function (code) {
+    let span = document.createElement('span')
+    span.appendChild(document.createTextNode(code))
+
+    return span
+}
+
+//append code
+const appendCode = function (codes) {
+    const fragment = document.createDocumentFragment()
+    codes.forEach(code => {
+        fragment.appendChild(createCodeSpan(code))
+    })
+
+    return fragment
+}
+
 // create table rows
 const createTableRow = function (item) {
     const tr = document.createElement("tr");
-    tr.setAttribute('data-code', item.ProductCode);
+    tr.setAttribute('data-id', item.ProductCatalogId);
 
     //column 1
     const span = document.createElement('span');
@@ -128,7 +140,8 @@ const createTableRow = function (item) {
 
     //column 2
     const td2 = tr.insertCell(1);
-    td2.appendChild(document.createTextNode(item.ProductCode));
+    td2.classList.add('codeSpan');
+    td2.appendChild(appendCode(item.codes))
 
     //column 3
     const td3 = tr.insertCell(2);
@@ -148,7 +161,7 @@ const createTableRow = function (item) {
 const showProducts = function () {
     const fragment = document.createDocumentFragment()
 
-    cart.products.forEach(item => {
+    cartProducts.forEach(item => {
         fragment.appendChild(createTableRow(item))
     })
 
@@ -159,7 +172,6 @@ const showProducts = function () {
 
     //sub price
     appendTotalPrice()
-
 }
 
 // click remove or stock
@@ -167,13 +179,13 @@ const onRemoveClicked = function (evt) {
     const element = evt.target;
     const removeClicked = element.classList.contains('remove');
     const row = element.parentElement.parentElement;
-    const code = row.getAttribute('data-code');
+    const id = +row.getAttribute('data-id');
 
     if (!removeClicked) return
 
     //remove product from storage
-    cart.products = cart.products.filter(item => item.ProductCode !== code);
-    cart.codes = cart.codes.filter(item => item !== code);
+    cartProducts = cartProducts.filter(item => item.ProductCatalogId !== id);
+    //cart.codes = cart.codes.filter(item => item !== code);
 
 
     //save to local storage
@@ -212,7 +224,7 @@ const clearMDBdropDownList = function (mainSelector) {
 
 //calculate purchase Total
 const purchaseTotalPrice = function () {
-    return cart.products.map(item => item.SellingPrice).reduce((prev, cur) => prev + cur, 0);
+    return cartProducts.map(item => item.SellingPrice).reduce((prev, cur) => prev + cur, 0);
 }
 
 //append total price to DOM
