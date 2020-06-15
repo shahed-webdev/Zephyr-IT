@@ -37,7 +37,7 @@ namespace InventoryManagement.Web.Controllers
             if (!isExist)
                 return RedirectToAction("AddProduct");
 
-            ModelState.AddModelError("ProductName", "Already Exist");
+            ModelState.AddModelError("ProductName", "Product Name Already Exist");
             return View(model);
         }
 
@@ -45,7 +45,7 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> GetProductAsync(int categoryId)
         {
             var productList = await _db.Products.FindByCategoryAsync(categoryId, _db);
-            return View();
+            return Json(productList);
         }
 
         //delete product

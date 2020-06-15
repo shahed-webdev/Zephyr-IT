@@ -15,6 +15,7 @@ const codeExistError = formCode.querySelector('#codeExistError')
 const btnFind = formCode.btnFind
 
 // product table
+const formTable = document.getElementById('formTable')
 const tbody = document.getElementById('t-body')
 
 //payment selectors
@@ -43,6 +44,7 @@ const storage = {
         if (!found) {
             //save to global object
             product.codes = [product.ProductCode]
+            product.sellingFixedValue = product.SellingPrice
             cartProducts.push(product)
         }
         else {
@@ -95,82 +97,43 @@ onScan.attachTo(document, {
     }
 })
 
-//create code span
-const createCodeSpan = function (code) {
-    let span = document.createElement('span')
-    span.appendChild(document.createTextNode(code))
-
-    return span
-}
-
 //append code
 const appendCode = function (codes) {
-    const fragment = document.createDocumentFragment()
-    codes.forEach(code => {
-        fragment.appendChild(createCodeSpan(code))
-    })
-
-    return fragment
+   let html = ''
+    codes.forEach(code => html += `<span>${code}</span>`)
+    return html
 }
 
 // create table rows
 const createTableRow = function (item) {
-    const tr = document.createElement("tr");
-    tr.setAttribute('data-id', item.ProductCatalogId);
+    const description = item.Description && `${item.Description},`
 
-    //column 1
-    const span = document.createElement('span');
-    span.classList.add('text-dark');
-    span.appendChild(document.createTextNode(item.ProductName));
-
-    const p = document.createElement('p');
-    p.classList.add('text-muted', 'small', 'mb-0');
-    p.appendChild(document.createTextNode(item.ProductCatalogName));
-
-    const td1 = tr.insertCell(0);
-    td1.appendChild(span);
-    td1.appendChild(p);
-
-    if (item.Warranty) {
-        const warranty = document.createElement('span');
-        warranty.classList.add('light-blue-text', 'small');
-        warranty.textContent = `Warranty: ${item.Warranty}`;
-        td1.appendChild(warranty);
-    }
-
-    //column 2
-    const td2 = tr.insertCell(1);
-    td2.classList.add('codeSpan');
-    td2.appendChild(appendCode(item.codes))
-
-    //column 3
-    const td3 = tr.insertCell(2);
-    td3.appendChild(document.createTextNode(item.SellingPrice));
-
-    //column 4
-    const i = document.createElement('i');
-    i.classList.add('fal', 'fa-times', 'remove');
-    const td4 = tr.insertCell(3);
-    td4.classList.add('text-center');
-    td4.appendChild(i);
-
-    return tr;
+    return `<tr data-id="${item.ProductCatalogId}">
+                <td>${item.ProductCatalogName}</td>
+                <td>
+                    ${item.ProductName},
+                    ${description}
+                    <span class="codeSpan">${appendCode(item.codes)}</span>
+                </td>
+                <td>${item.Warranty}</td>
+                <td>${item.codes.length}</td>
+                <td><input type="number" required class="form-control inputUnitPrice" step="0.01" min="${item.sellingFixedValue}" max="${item.SellingPrice}" value="${item.SellingPrice}" /></td>
+                <td>${item.SellingPrice * item.codes.length}</td>
+                <td class="text-center"><i class="fal fa-times remove"></i></td>
+            </tr>`
 }
 
 // create Table on load
 const showProducts = function () {
-    const fragment = document.createDocumentFragment()
+    let table = ''
+    cartProducts.forEach(item => table += createTableRow(item))
 
-    cartProducts.forEach(item => {
-        fragment.appendChild(createTableRow(item))
-    })
-
-    tbody.appendChild(fragment)
+    tbody.innerHTML = table
 
     //show added items count
     storage.countProduct()
 
-    //sub price
+    //append price
     appendTotalPrice()
 }
 
@@ -224,7 +187,7 @@ const clearMDBdropDownList = function (mainSelector) {
 
 //calculate purchase Total
 const purchaseTotalPrice = function () {
-    return cartProducts.map(item => item.SellingPrice).reduce((prev, cur) => prev + cur, 0);
+    return cartProducts.map(item => item.SellingPrice * item.codes.length).reduce((prev, cur) => prev + cur, 0);
 }
 
 //append total price to DOM
@@ -247,8 +210,37 @@ const appendTotalPrice = function () {
     }
 }
 
+//selling price change
+const onInputUnitPrice = function (evt) {
+    const input = evt.target
+    const onInput = input.classList.contains('inputUnitPrice')
+    if (onInput) {
+        const val = +input.value
+       const min = +input.getAttribute('min')
+        input.setAttribute('max', (val+1).toString())
 
-// event on product code listners
+        if (min > val) return
+
+        const id = +input.parentElement.parentElement.getAttribute('data-id')
+        const index = cartProducts.findIndex(item => item.ProductCatalogId === id)
+        cartProducts[index].SellingPrice = +input.value
+
+        const qty = +input.parentElement.previousElementSibling.innerText
+        input.parentElement.nextElementSibling.innerText = val * qty
+
+        //save to local-storage
+        storage.setData()
+
+        //append price
+        appendTotalPrice()
+    }
+}
+
+//selling price click
+formTable.addEventListener('input', onInputUnitPrice)
+
+
+// onProduct code submit
 formCode.addEventListener('submit', evt => {
     evt.preventDefault()
     const url = '/Product/FindProductByCode'
@@ -262,7 +254,7 @@ formCode.addEventListener('submit', evt => {
         .finally(() => loading(btnFind, false))
 })
 
-// remove click
+// remove product click
 tbody.addEventListener('click', onRemoveClicked)
 
 
@@ -322,7 +314,7 @@ hiddenCustomerId.value = '';
 const validation = function () {
     customerError.innerText = ''
 
-    if (!cart.codes.length) {
+    if (!cartProducts.length) {
         customerError.innerText = 'Add product to sell!'
         return false;
     }
@@ -339,17 +331,26 @@ const validation = function () {
     return true;
 }
 
+const onCheckFormValid = function (evt) {
+    evt.preventDefault()
+    formTable.btnProduct.click()
+}
+
 //submit on server
 const onSellSubmitClicked = function (evt) {
-    evt.preventDefault();
+    evt.preventDefault()
 
-    const valid = validation();
-    if (!valid) return;
+    const valid = validation()
+    if (!valid) return
 
     //disable button on submit
-    const btnSubmit = evt.target.btnSelling;
-    btnSubmit.innerText = 'submitting..';
-    btnSubmit.disabled = true;
+    const btnSubmit = formPayment.btnSelling
+    btnSubmit.innerText = 'submitting..'
+    btnSubmit.disabled = true
+
+    console.log('submit form')
+    return
+
 
     const body = {
         CustomerId: +hiddenCustomerId.value,
@@ -361,7 +362,7 @@ const onSellSubmitClicked = function (evt) {
         ProductCodes: cart.codes
     }
 
-    const url = '/Product/Selling';
+    const url = '/Product/Selling'
     const options = {
         method: 'post',
         url: url,
@@ -371,28 +372,29 @@ const onSellSubmitClicked = function (evt) {
     axios(options)
         .then(response => {
             if (response.data.IsSuccess) {
-                localstoreClear();
-                location.href = `/Product/SellingReceipt/${response.data.Data}`;
+                localstoreClear()
+                location.href = `/Product/SellingReceipt/${response.data.Data}`
             }
         })
         .catch(error => {
             if (error.response)
                 customerError.textContent = error.response.data.Message
             else if (error.request)
-                console.log(error.request);
+                console.log(error.request)
             else
-                console.log('Error', error.message);
+                console.log('Error', error.message)
         })
         .finally(() => {
-            btnSubmit.innerText = 'Sell Product';
-            btnSubmit.disabled = false;
+            btnSubmit.innerText = 'Sell Product'
+            btnSubmit.disabled = false
         });
 }
 
 //event listner
-formPayment.addEventListener('submit', onSellSubmitClicked);
-inputDiscount.addEventListener('input', onInputDiscount);
-inputPaid.addEventListener('input', onInputPaid);
+formPayment.addEventListener('submit', onCheckFormValid)
+formTable.addEventListener('submit', onSellSubmitClicked)
+inputDiscount.addEventListener('input', onInputDiscount)
+inputPaid.addEventListener('input', onInputPaid)
 
 //****CUSTOMER****//
 //customer autocomplete
@@ -419,7 +421,7 @@ $('#inputCustomer').typeahead({
         checkDueLimit()
         return item;
     }
-});
+})
 
 function appendInfo(item) {
     let html = `<span class="badge badge-pill badge-success">${item.CustomerName}</span>
