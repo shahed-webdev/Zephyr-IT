@@ -50,19 +50,20 @@ namespace InventoryManagement.Repository
                 PurchaseDiscountAmount = model.PurchaseDiscountAmount,
                 PurchasePaidAmount = model.PurchasePaidAmount,
                 PurchaseDate = model.PurchaseDate,
-                Product = model.Products.Select(p => new Product
-                {
-                    ProductCatalogId = p.ProductCatalogId,
-                    ProductName = p.ProductName,
-                    Description = p.Description,
-                    Warranty = p.Warranty,
-                    PurchasePrice = p.PurchasePrice,
-                    SellingPrice = p.SellingPrice,
-                    ProductStock = p.ProductStocks.Select(s => new ProductStock
-                    {
-                        ProductCode = s.ProductCode
-                    }).ToList()
-                }).ToList(),
+                //PurchaseList = 
+                //Product = model.Products.Select(p => new Product
+                //{
+                //    ProductCatalogId = p.ProductCatalogId,
+                //    ProductName = p.ProductName,
+                //    Description = p.Description,
+                //    Warranty = p.Warranty,
+                //    PurchasePrice = p.PurchasePrice,
+                //    SellingPrice = p.SellingPrice,
+                //    ProductStock = p.ProductStocks.Select(s => new ProductStock
+                //    {
+                //        ProductCode = s.ProductCode
+                //    }).ToList()
+                //}).ToList(),
                 PurchasePaymentList = model.PurchasePaidAmount > 0 ?
                     new List<PurchasePaymentList>
                     {
@@ -108,9 +109,11 @@ namespace InventoryManagement.Repository
             var purchaseReceipt = Context.Purchase
                 .Include(p => p.Vendor)
                 .Include(p => p.Registration)
-                .Include(p => p.Product)
+                .Include(p => p.PurchaseList)
+                .ThenInclude(pl => pl.Product)
                 .ThenInclude(pd => pd.ProductCatalog)
-                .Include(p => p.Product)
+                .Include(p => p.PurchaseList)
+                .ThenInclude(pl => pl.Product)
                 .ThenInclude(pd => pd.ProductStock)
                 .Include(p => p.PurchasePaymentList)
                 .ThenInclude(p => p.PurchasePayment)
@@ -123,16 +126,16 @@ namespace InventoryManagement.Repository
                     PurchasePaidAmount = p.PurchasePaidAmount,
                     PurchaseDueAmount = p.PurchaseDueAmount,
                     PurchaseDate = p.PurchaseDate,
-                    Products = p.Product.Select(pd => new ProductViewModel
+                    Products = p.PurchaseList.Select(pd => new ProductViewModel
                     {
                         ProductId = pd.ProductId,
-                        ProductCatalogId = pd.ProductCatalogId,
-                        ProductCatalogName = db.ProductCatalogs.CatalogNameNode(pd.ProductCatalogId),
-                        ProductName = pd.ProductName,
-                        Description = pd.Description,
-                        Warranty = pd.Warranty,
+                        ProductCatalogId = pd.Product.ProductCatalogId,
+                        ProductCatalogName = db.ProductCatalogs.CatalogNameNode(pd.Product.ProductCatalogId),
+                        ProductName = pd.Product.ProductName,
+                        Description = pd.Product.Description,
+                        Warranty = pd.Product.Warranty,
                         PurchasePrice = pd.PurchasePrice,
-                        SellingPrice = pd.SellingPrice,
+                        SellingPrice = pd.Product.SellingPrice,
                         ProductStocks = pd.ProductStock.Select(s => new ProductStockViewModel
                         {
                             ProductCode = s.ProductCode

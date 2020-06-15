@@ -15,6 +15,8 @@
     <Compile Remove="Migrations\20200429015711_AddCustomerPhoneTable.Designer.cs" />
     <Compile Remove="Migrations\20200429021013_test.cs" />
     <Compile Remove="Migrations\20200429021013_test.Designer.cs" />
+    <Compile Remove="Migrations\20200615054436_Delete_PurchaseAdjustment.cs" />
+    <Compile Remove="Migrations\20200615054436_Delete_PurchaseAdjustment.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

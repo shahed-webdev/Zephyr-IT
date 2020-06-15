@@ -22,7 +22,7 @@ namespace InventoryManagement.Data
         public virtual DbSet<ProductCatalogType> ProductCatalogType { get; set; }
         public virtual DbSet<ProductStock> ProductStock { get; set; }
         public virtual DbSet<Purchase> Purchase { get; set; }
-        public virtual DbSet<PurchaseAdjustment> PurchaseAdjustment { get; set; }
+        public virtual DbSet<PurchaseList> PurchaseList { get; set; }
         public virtual DbSet<PurchasePayment> PurchasePayment { get; set; }
         public virtual DbSet<PurchasePaymentList> PurchasePaymentList { get; set; }
         public virtual DbSet<Registration> Registration { get; set; }
@@ -51,7 +51,7 @@ namespace InventoryManagement.Data
             builder.ApplyConfiguration(new ProductCatalogTypeConfiguration());
             builder.ApplyConfiguration(new ProductStockConfiguration());
             builder.ApplyConfiguration(new PurchaseConfiguration());
-            builder.ApplyConfiguration(new PurchaseAdjustmentConfiguration());
+            builder.ApplyConfiguration(new PurchaseListConfiguration());
             builder.ApplyConfiguration(new PurchasePaymentConfiguration());
             builder.ApplyConfiguration(new PurchasePaymentListConfiguration());
             builder.ApplyConfiguration(new RegistrationConfiguration());
@@ -65,12 +65,12 @@ namespace InventoryManagement.Data
             builder.ApplyConfiguration(new ServiceListConfiguration());
             builder.ApplyConfiguration(new ServicePaymentListConfiguration());
             builder.ApplyConfiguration(new VendorConfiguration());
-            
+
 
             base.OnModelCreating(builder);
             builder.SeedInsitutionData();
-            builder.SeedAdminData(); 
-           //builder.SeedSubAdminLinkData();
+            builder.SeedAdminData();
+            //builder.SeedSubAdminLinkData();
         }
     }
 }

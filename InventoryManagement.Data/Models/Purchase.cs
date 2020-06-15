@@ -7,8 +7,7 @@ namespace InventoryManagement.Data
     {
         public Purchase()
         {
-            Product = new HashSet<Product>();
-            PurchaseAdjustment = new HashSet<PurchaseAdjustment>();
+            PurchaseList = new HashSet<PurchaseList>();
             PurchasePaymentList = new HashSet<PurchasePaymentList>();
         }
 
@@ -28,8 +27,7 @@ namespace InventoryManagement.Data
 
         public virtual Registration Registration { get; set; }
         public virtual Vendor Vendor { get; set; }
-        public virtual ICollection<Product> Product { get; set; }
-        public virtual ICollection<PurchaseAdjustment> PurchaseAdjustment { get; set; }
+        public virtual ICollection<PurchaseList> PurchaseList { get; set; }
         public virtual ICollection<PurchasePaymentList> PurchasePaymentList { get; set; }
     }
 }

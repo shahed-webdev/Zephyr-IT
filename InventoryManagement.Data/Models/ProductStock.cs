@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace InventoryManagement.Data
 {
@@ -15,7 +14,6 @@ namespace InventoryManagement.Data
         public string ProductCode { get; set; }
         public int ProductId { get; set; }
         public bool IsSold { get; set; }
-
         public virtual Product Product { get; set; }
         public virtual ICollection<SellingAdjustment> SellingAdjustment { get; set; }
         public virtual ICollection<SellingList> SellingList { get; set; }
