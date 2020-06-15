@@ -42,7 +42,7 @@ const storage = {
             return
         }
 
-        console.log(cart.products)
+        console.log(product)
         let unique = true;
         cart.products.forEach(item => {
             if (item.ProductCode === product.ProductCode) {

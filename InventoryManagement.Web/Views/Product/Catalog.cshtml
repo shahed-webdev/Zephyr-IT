@@ -31,6 +31,7 @@
                     <div class="md-form mt-4">
                         <input asp-for="CatalogName" class="form-control" required />
                         <label for="CatalogName">Category Name</label>
+                        <span asp-validation-for="CatalogName"></span>
                     </div>
 
                     <button id="btnSubmit" class="btn peach-gradient btn-rounded my-4" type="submit">Submit</button>
