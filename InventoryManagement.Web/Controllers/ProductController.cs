@@ -28,14 +28,23 @@ namespace InventoryManagement.Web.Controllers
 
         //POST: Product
         [HttpPost]
-        public IActionResult AddProduct(ProductCatalogViewModel model)
+        public async Task<IActionResult> AddProduct(ProductShowViewModel model)
         {
-            return View();
+            if (!ModelState.IsValid) return View(model);
+
+            var isExist = await _db.Products.IsExistAsync(model.ProductName, model.ProductCatalogId).ConfigureAwait(false);
+
+            if (!isExist)
+                return RedirectToAction("AddProduct");
+
+            ModelState.AddModelError("ProductName", "Already Exist");
+            return View(model);
         }
 
         //get product from ajax by categoryId
-        public IActionResult GetProduct(int categoryId)
+        public async Task<IActionResult> GetProductAsync(int categoryId)
         {
+            var productList = await _db.Products.FindByCategoryAsync(categoryId, _db);
             return View();
         }
 

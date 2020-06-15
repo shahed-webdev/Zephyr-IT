@@ -9,6 +9,7 @@ namespace InventoryManagement.Repository
         IPageLinkRepository PageLinks { get; }
         IPageLinkCategoryRepository PageLinkCategories { get; }
         IPageLinkAssignRepository PageLinkAssigns { get; }
+        IProductRepository Products { get; }
         IProductCatalogRepository ProductCatalogs { get; }
         IProductCatalogTypeRepository ProductCatalogTypes { get; }
         IProductStockRepository ProductStocks { get; }
