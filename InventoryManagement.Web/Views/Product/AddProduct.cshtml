@@ -12,7 +12,7 @@
                 <div class="form-row">
                     <div class="col-lg-3">
                         <div class="md-form">
-                            <select id="ParentId" asp-items="ViewBag.ParentId" class="mdb-select" required style="position: absolute; top: 1rem; left: 0px; height: 0px; width: 0px; opacity: 0; padding: 0px; pointer-events: none; display: inline!important;">
+                            <select id="ParentId" asp-items="ViewBag.ParentId" class="mdb-select" required>
                                 <option value="" selected>Select Category</option>
                             </select>
                         </div>
@@ -42,7 +42,7 @@
                 <div class="text-right">
                     <input type="submit" value="Add Product" class="btn btn-grey" />
                 </div>
-            </form>          
+            </form>
         </section>
 
         <section class="card card-body mt-3">
@@ -57,18 +57,18 @@
                 <tbody id="tbody"></tbody>
             </table>
         </section>
-    </div>
+    </div>  
 
 @section Scripts{ 
 <script>
     // Material Select Initialization
     $('.mdb-select').materialSelect();
 
-    //selectors
+    // selectors
     const parentId = document.getElementById('ParentId')
     const tbody = document.getElementById('tbody')
 
-    //functions
+    // functions
     const onCategoryChanged = function () {
         let ParentId = this.value
         if (!ParentId) return
@@ -76,7 +76,7 @@
         console.log(ParentId)
     }
 
-    //event 
+    // event 
     parentId.addEventListener('change', onCategoryChanged)
 </script>
 }
