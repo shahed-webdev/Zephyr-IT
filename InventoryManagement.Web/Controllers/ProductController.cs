@@ -35,13 +35,18 @@ namespace InventoryManagement.Web.Controllers
             var isExist = await _db.Products.IsExistAsync(model.ProductName, model.ProductCatalogId).ConfigureAwait(false);
 
             if (!isExist)
+            {
+                _db.Products.AddCustom(model);
+                await _db.SaveChangesAsync();
                 return RedirectToAction("AddProduct");
+            }
 
             ModelState.AddModelError("ProductName", "Product Name Already Exist");
             return View(model);
         }
 
         //get product from ajax by categoryId
+        [HttpGet]
         public async Task<IActionResult> GetProductAsync(int categoryId)
         {
             var productList = await _db.Products.FindByCategoryAsync(categoryId, _db);

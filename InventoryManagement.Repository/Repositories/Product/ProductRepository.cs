@@ -41,7 +41,6 @@ namespace InventoryManagement.Repository
             {
                 ProductId = p.ProductId,
                 ProductCatalogId = p.ProductCatalogId,
-                ProductCatalogName = db.ProductCatalogs.CatalogNameNode(p.ProductCatalogId),
                 ProductName = p.ProductName,
                 Description = p.Description,
                 Warranty = p.Warranty

@@ -1,82 +1,93 @@
-﻿
+﻿@using InventoryManagement.Repository
+@model ProductShowViewModel
 @{
     ViewData["Title"] = "Add Product Info";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-    <div class="m-md-3">
-        <h4 class="mb-3 page-header">Add Product Info</h4>
+<div class="m-md-3">
+    <h4 class="mb-3 page-header">Add Product Info</h4>
 
-        <section class="card card-body">
-            <form id="formProduct">
-                <div class="form-row">
-                    <div class="col-lg-3">
-                        <div class="md-form">
-                            <select id="ParentId" asp-items="ViewBag.ParentId" class="mdb-select" required>
-                                <option value="" selected>Select Category</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3">
-                        <div class="md-form">
-                            <input id="inputProductName" class="form-control" type="text" required />
-                            <label for="inputProductName">Product Name</label>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3">
-                        <div class="md-form">
-                            <input id="inputWarranty" class="form-control" type="text" />
-                            <label for="inputWarranty">Warranty</label>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3">
-                        <div class="md-form">
-                            <input id="inputDescription" class="form-control" type="text" />
-                            <label for="inputDescription">Description</label>
-                        </div>
+    <section class="card card-body">
+        <form id="formProduct" asp-action="AddProduct">
+            <div class="form-row">
+                <div class="col-lg-3">
+                    <div class="md-form">
+                        <select name="ProductCatalogId" id="ParentId" asp-items="ViewBag.ParentId" class="mdb-select" required>
+                            <option value="" selected>Select Category</option>
+                        </select>
                     </div>
                 </div>
-                <div class="text-right">
-                    <input type="submit" value="Add Product" class="btn btn-grey" />
+
+                <div class="col-lg-3">
+                    <div class="md-form">
+                        <input id="inputProductName" name="ProductName" class="form-control" type="text" required />
+                        <label for="inputProductName">Product Name</label>
+                    </div>
                 </div>
-            </form>
-        </section>
 
-        <section class="card card-body mt-3">
-            <table class="table table-bordered table-sm">
-                <thead>
-                    <tr>
-                        <th><strong>Product Name</strong></th>
-                        <th><strong>Warranty</strong></th>
-                        <th><strong>Description</strong></th>
-                    </tr>
-                </thead>
-                <tbody id="tbody"></tbody>
-            </table>
-        </section>
-    </div>  
+                <div class="col-lg-3">
+                    <div class="md-form">
+                        <input id="inputWarranty" name="Warranty" class="form-control" type="text" />
+                        <label for="inputWarranty">Warranty</label>
+                    </div>
+                </div>
 
-@section Scripts{ 
-<script>
-    // Material Select Initialization
-    $('.mdb-select').materialSelect();
+                <div class="col-lg-3">
+                    <div class="md-form">
+                        <input id="inputDescription" name="Description" class="form-control" type="text" />
+                        <label for="inputDescription">Description</label>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right">
+                <input type="submit" value="Add Product" class="btn btn-grey" />
+            </div>
+        </form>
+    </section>
 
-    // selectors
-    const parentId = document.getElementById('ParentId')
-    const tbody = document.getElementById('tbody')
+    <section class="card card-body mt-3">
+        <table class="table table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th><strong>Product Name</strong></th>
+                    <th><strong>Warranty</strong></th>
+                    <th><strong>Description</strong></th>
+                </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+        </table>
+    </section>
+</div>
 
-    // functions
-    const onCategoryChanged = function () {
-        let ParentId = this.value
-        if (!ParentId) return
+@section Scripts{
+    <script>
+        // Material Select Initialization
+        $('.mdb-select').materialSelect();
 
-        console.log(ParentId)
-    }
+        // selectors
+        const parentId = document.getElementById('ParentId')
+        const tbody = document.getElementById('tbody')
 
-    // event 
-    parentId.addEventListener('change', onCategoryChanged)
-</script>
+        // functions
+        const onCategoryChanged = function () {
+            let categoryId = +this.value
+            if (!categoryId) return
+
+            const url = '/Product/GetProductAsync'
+            //const parameter = { method: 'get', params: { categoryId } };
+            //const request = axios.get(url, parameter);
+
+            //request.then(response => {
+            //    console.log(response)
+            //}).catch(err => console.log(err));
+
+            $.get(url, { categoryId }, (response) => {
+                console.log(response)
+            })
+        }
+
+        // event
+        parentId.addEventListener('change', onCategoryChanged)
+    </script>
 }
