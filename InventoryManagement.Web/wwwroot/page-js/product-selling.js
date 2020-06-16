@@ -100,7 +100,7 @@ onScan.attachTo(document, {
 //append code
 const appendCode = function (codes) {
    let html = ''
-    codes.forEach(code => html += `<span>${code}</span>`)
+    codes.forEach(code => html += `<span class="code">${code}</span>`)
     return html
 }
 
@@ -217,7 +217,7 @@ const onInputUnitPrice = function (evt) {
     if (onInput) {
         const val = +input.value
        const min = +input.getAttribute('min')
-        input.setAttribute('max', (val+1).toString())
+        input.setAttribute('max', input.value)
 
         if (min > val) return
 
