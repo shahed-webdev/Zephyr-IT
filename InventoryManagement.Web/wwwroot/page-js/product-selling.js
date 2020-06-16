@@ -39,6 +39,7 @@ const storage = {
             codeExistError.textContent = `"${inputBarCode.value}" Not found!`
             return
         }
+       
 
         const found = cartProducts.some(el => el.ProductCatalogId === product.ProductCatalogId && el.ProductName === product.ProductName);
         if (!found) {
@@ -50,9 +51,8 @@ const storage = {
         else {
             const index = cartProducts.findIndex(item => item.ProductCatalogId === product.ProductCatalogId)
             const codes = cartProducts[index].codes
-            const unique = codes.some(code => code !== product.ProductCode)
 
-            if (unique) {
+            if (codes.indexOf(product.ProductCode) === -1) {
                 codes.push(product.ProductCode)
             }
             else {
@@ -347,10 +347,6 @@ const onSellSubmitClicked = function (evt) {
     const btnSubmit = formPayment.btnSelling
     btnSubmit.innerText = 'submitting..'
     btnSubmit.disabled = true
-
-    console.log('submit form')
-    return
-
 
     const body = {
         CustomerId: +hiddenCustomerId.value,

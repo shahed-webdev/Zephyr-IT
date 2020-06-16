@@ -26,13 +26,10 @@ namespace InventoryManagement.Repository
 
         public Task<bool> IsExistAsync(string name, int categoryId, int updateId = 0)
         {
-
             var product = Context.Product.Where(p => p.ProductCatalogId == categoryId && p.ProductName == name);
 
             if (updateId != 0) product.Where(p => p.ProductId != updateId);
-
             return product.AnyAsync();
-
         }
 
         public Task<List<ProductShowViewModel>> FindByCategoryAsync(int categoryId, IUnitOfWork db)

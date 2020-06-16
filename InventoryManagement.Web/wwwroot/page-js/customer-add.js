@@ -1,5 +1,4 @@
-﻿import { number } from "prop-types";
-
+﻿
 //selectors
 const phoneContainer = document.getElementById("phone-wrapper");
 const customerForm = document.getElementById("customer-form");

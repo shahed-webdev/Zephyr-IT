@@ -8,6 +8,5 @@ namespace InventoryManagement.Repository
     {
         Task<bool> IsExistAsync(string name, int categoryId, int updateId = 0);
         Task<List<ProductShowViewModel>> FindByCategoryAsync(int categoryId, IUnitOfWork db);
-
     }
 }
