@@ -69,18 +69,15 @@
         const parentId = document.getElementById('ParentId')
         const tbody = document.getElementById('tbody')
 
-
-        const url = '/Product/GetProductAsync'
-        const param = { params: { categoryId: 2} };
-
-        axios.get(url, param)
-            .then(res => console.log(res.data))
-            .catch(err => console.log(err))
-
         // functions
         const onCategoryChanged = function () {
             let categoryId = +this.value
             if (!categoryId) return
+
+            const url = '/Product/GetProductByCategory'
+            const param = { params: { categoryId: categoryId} };
+
+            axios.get(url, param).then(res=> console.log(res.data))
         }
 
         // event

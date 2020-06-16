@@ -46,7 +46,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //get product from ajax by categoryId
-        public async Task<IActionResult> GetProductAsync(int categoryId)
+        public async Task<IActionResult> GetProductByCategory(int categoryId)
         {
             var productList = await _db.Products.FindByCategoryAsync(categoryId, _db);
             return Json(productList);
