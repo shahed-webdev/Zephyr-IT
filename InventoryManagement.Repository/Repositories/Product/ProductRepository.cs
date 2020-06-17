@@ -43,5 +43,12 @@ namespace InventoryManagement.Repository
                 Warranty = p.Warranty
             }).ToListAsync();
         }
+
+        public bool RemoveCustom(int id)
+        {
+            if (Context.ProductStock.Any(e => e.ProductId == id)) return false;
+            Remove(Find(id));
+            return true;
+        }
     }
 }

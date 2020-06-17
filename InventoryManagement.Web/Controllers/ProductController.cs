@@ -53,9 +53,10 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //delete product
-        public IActionResult DeleteProduct(int id)
+        public int DeleteProduct(int id)
         {
-            return Content(id.ToString());
+            if (!_db.Products.RemoveCustom(id)) return -1;
+            return _db.SaveChanges();
         }
 
 
