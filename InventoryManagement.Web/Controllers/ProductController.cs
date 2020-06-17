@@ -53,10 +53,9 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //delete product
-        [HttpPost]
-        public IActionResult DeleteProduct(int Id)
+        public IActionResult DeleteProduct(int id)
         {
-            return View();
+            return Content(id.ToString());
         }
 
 

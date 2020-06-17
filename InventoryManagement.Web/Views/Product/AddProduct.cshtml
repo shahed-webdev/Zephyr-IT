@@ -4,6 +4,12 @@
     ViewData["Title"] = "Add Product Info";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+@section styles{
+   <style>
+       .remove { cursor:pointer}
+       .remove:hover { color:#ff0000}
+   </style>
+}
 
 <div class="m-md-3">
     <h4 class="mb-3 page-header">Add Product Info</h4>
@@ -21,8 +27,9 @@
 
                 <div class="col-lg-3">
                     <div class="md-form">
-                        <input id="inputProductName" name="ProductName" class="form-control" type="text" required />
-                        <label for="inputProductName">Product Name</label>
+                        <input asp-for="ProductName" class="form-control" required />
+                        <label for="ProductName">Product Name</label>
+                        <span asp-validation-for="ProductName"></span>
                     </div>
                 </div>
 
@@ -47,12 +54,13 @@
     </section>
 
     <section class="card card-body mt-3">
-        <table class="table table-bordered table-sm">
+        <table class="data-table table table-bordered table-sm">
             <thead>
                 <tr>
                     <th><strong>Product Name</strong></th>
                     <th><strong>Warranty</strong></th>
                     <th><strong>Description</strong></th>
+                    <th><strong>Remove</strong></th>
                 </tr>
             </thead>
             <tbody id="tbody"></tbody>
@@ -75,12 +83,46 @@
             if (!categoryId) return
 
             const url = '/Product/GetProductByCategory'
-            const param = { params: { categoryId: categoryId} };
+            const param = { params: { categoryId } };
 
-            axios.get(url, param).then(res=> console.log(res.data))
+            axios.get(url, param)
+                .then(res => {
+                    tbody.innerHTML = ''
+                    let html = ''
+                    res.data.forEach(item => {
+                        html += `<tr>
+                    <td class="text-left">${item.ProductName}</td>
+                    <td>${item.Warranty}</td>
+                    <td class="text-left">${item.Description}</td>
+                    <td style="width:50px; text-align:center"><i class="fa fa-times remove" id="${item.ProductId}"></i></td>
+                    </tr>`
+                    })
+
+                    tbody.innerHTML = html
+                })
+                .catch(err => console.log(err))
         }
+
+        //remove
+        const onRemoveClicked = function (e) {
+            const clicked = e.target.classList.contains('remove')
+            if (clicked) {
+                const id = e.target.id
+                const url = '/Product/DeleteProduct'
+                const param = { params: { id } };
+
+                axios.get(url, param)
+                    .then(res => {
+                        console.log(res.data)
+                    })
+                    .catch(err => console.log(err))
+            }
+        }
+
+
 
         // event
         parentId.addEventListener('change', onCategoryChanged)
+        tbody.addEventListener('click', onRemoveClicked)
     </script>
 }
