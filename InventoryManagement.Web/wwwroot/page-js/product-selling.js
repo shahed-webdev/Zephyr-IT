@@ -40,7 +40,6 @@ const storage = {
             return
         }
        
-
         const found = cartProducts.some(el => el.ProductCatalogId === product.ProductCatalogId && el.ProductName === product.ProductName);
         if (!found) {
             //save to global object
@@ -137,19 +136,40 @@ const showProducts = function () {
     appendTotalPrice()
 }
 
+//remove product code
+const removeProductCode = function (code) {
+    const id = +code.parentElement.parentElement.parentElement.getAttribute('data-id')
+    const pCode = code.textContent
+
+    const index = cartProducts.findIndex(item => item.ProductCatalogId === id)
+    const codes = cartProducts[index].codes
+    const pIndex = codes.indexOf(pCode)
+
+    if (codes.length > 1) {
+        codes.splice(pIndex, 1)
+
+        //save to local-storage
+        storage.setData()
+
+        //remove code element
+        code.remove()
+    }
+}
+
 // click remove or stock
 const onRemoveClicked = function (evt) {
     const element = evt.target;
     const removeClicked = element.classList.contains('remove');
+    const codeClicked = element.classList.contains('code');
     const row = element.parentElement.parentElement;
     const id = +row.getAttribute('data-id');
+
+    if (codeClicked) removeProductCode(element)
 
     if (!removeClicked) return
 
     //remove product from storage
     cartProducts = cartProducts.filter(item => item.ProductCatalogId !== id);
-    //cart.codes = cart.codes.filter(item => item !== code);
-
 
     //save to local storage
     storage.setData() 

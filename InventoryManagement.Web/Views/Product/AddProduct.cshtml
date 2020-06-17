@@ -113,7 +113,11 @@
 
                 axios.get(url, param)
                     .then(res => {
-                        console.log(res.data)
+                        if (res.data !== -1) {
+                            e.target.parentElement.parentElement.remove()
+                        } else {
+                            alert('this product already used!')
+                        }
                     })
                     .catch(err => console.log(err))
             }

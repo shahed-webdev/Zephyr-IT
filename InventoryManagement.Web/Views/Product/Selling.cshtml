@@ -14,6 +14,8 @@
 
         table tbody tr .codeSpan span { margin-right:5px;}
         table tbody tr .codeSpan span:not(:last-child):after { content: ',' }
+        table tbody tr .codeSpan span:hover{ cursor: pointer; color:#ff0000}
+        table tbody tr .codeSpan span:hover::after {content:'x';}
         .inputUnitPrice { max-width:90px; text-align:center}
     </style>  
 }
@@ -119,5 +121,5 @@
 
 @section Scripts{
     <script src="~/js/onscan.min.js"></script>
-    <script src="~/page-js/product-selling.js?v=.12"></script>
+    <script src="~/page-js/product-selling.js?v=.0"></script>
 }
