@@ -54,6 +54,7 @@
     </section>
 
     <section class="card card-body mt-3">
+        <h4 id="categoryName"></h4>
         <table class="data-table table table-bordered table-sm">
             <thead>
                 <tr>
@@ -78,16 +79,12 @@
         const tbody = document.getElementById('tbody')
 
         // functions
-        const onCategoryChanged = function () {
-            let categoryId = +this.value
-            if (!categoryId) return
-
+        const getProductsInfo = function (categoryId = 0) {
             const url = '/Product/GetProductByCategory'
             const param = { params: { categoryId } };
 
             axios.get(url, param)
                 .then(res => {
-                    tbody.innerHTML = ''
                     let html = ''
                     res.data.forEach(item => {
                         html += `<tr>
@@ -98,9 +95,21 @@
                     </tr>`
                     })
 
+                    tbody.innerHTML = ''
                     tbody.innerHTML = html
                 })
                 .catch(err => console.log(err))
+        }
+
+        //on change dropdown
+        const onCategoryChanged = function () {
+            let categoryId = +this.value
+            if (!categoryId) return
+
+            const categoryName = document.getElementById('categoryName')
+            categoryName.textContent = this.options[this.selectedIndex].text;
+
+            getProductsInfo(categoryId)
         }
 
         //remove
@@ -123,7 +132,8 @@
             }
         }
 
-
+        // call function
+        getProductsInfo()
 
         // event
         parentId.addEventListener('change', onCategoryChanged)
