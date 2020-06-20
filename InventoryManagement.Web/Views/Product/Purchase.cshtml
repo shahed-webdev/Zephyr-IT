@@ -31,16 +31,17 @@
             <div class="form-row">
                 <div class="col-lg-4">
                     <div class="md-form">
-                        <select id="ParentId" asp-items="ViewBag.ParentId" class="mdb-select" required style="position: absolute; top: 1rem; left: 0px; height: 0px; width: 0px; opacity: 0; padding: 0px; pointer-events: none; display: inline!important;">
-                            <option value="" selected>Select Category</option>
+                        <select id="ParentId" asp-items="ViewBag.ParentId" class="mdb-select" required>
+                            <option value="" disabled selected>Select Category</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="col-lg-4">
                     <div class="md-form">
-                        <input id="inputProductName" class="form-control" type="text" required />
-                        <label for="inputProductName">Product Name</label>
+                        <select id="selectProductId" class="mdb-select product-select" required>
+                            <option value="" disabled selected>Product Name</option>
+                        </select>
                     </div>
                 </div>
 
@@ -85,7 +86,7 @@
                 <i class="fal fa-cart-arrow-down text-white"></i>
                 <i class="fas fa-circle-notch fa-spin" style="display:none"></i>
             </button>
-        </div>  
+        </div>
     </section>
 
     <section class="card card-body mt-3">
@@ -225,6 +226,6 @@
 
 @section Scripts {
     <partial name="_UnobtrusiveAjaxPartial" />
-    <script src="~/page-js/product-purchase.js"></script>
+    <script src="~/page-js/product-purchase.js?v=.6"></script>
 }
 

@@ -81,7 +81,7 @@
         // functions
         const getProductsInfo = function (categoryId = 0) {
             const url = '/Product/GetProductByCategory'
-            const param = { params: { categoryId } };
+            const param = { params: { categoryId: categoryId } };
 
             axios.get(url, param)
                 .then(res => {

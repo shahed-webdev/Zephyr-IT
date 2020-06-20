@@ -52,6 +52,13 @@ namespace InventoryManagement.Web.Controllers
             return Json(productList);
         }
 
+        //get product info from ajax by productId
+        public async Task<IActionResult> GetProductInfo(int productId)
+        {
+            var productList = await _db.Products.FindByIdAsync(productId);
+            return Json(productList);
+        }
+
         //delete product
         public int DeleteProduct(int id)
         {

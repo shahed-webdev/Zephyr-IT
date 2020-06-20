@@ -2,8 +2,9 @@
 //date picker
  $('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'));
 
- // Material Select Initialization
+// Material Select Initialization
 $('.mdb-select').materialSelect();
+
 
 //global store
 let storage = [];
@@ -12,8 +13,9 @@ let codeStorage = [];
 
 //selectors
 //product info form
-const formCart = document.getElementById("cart-form");
-const selectCategory = formCart.querySelector("#ParentId");
+const formCart = document.getElementById("cart-form")
+const selectCategory = formCart.ParentId
+const selectProductId = formCart.selectProductId
 
 //payment selectors
 const formPayment = document.getElementById('formPayment');
@@ -36,17 +38,6 @@ const showAddedCode = document.getElementById('showAddedCode');
 const btnAddTolist = document.getElementById('btnAddToList');
 const buzzAudio = document.getElementById('audio');
 
-
-//selectors object
-const productFormSelectors = function(){
-    const productName = formCart.inputProductName;
-    const purchasePrice = formCart.inputPurchasePrice;
-    const sellingPrice = formCart.inputSellingPrice;
-    const warranty = formCart.inputWarranty;
-    const description = formCart.inputDescription;
-
-    return [productName, purchasePrice, sellingPrice, warranty, description];
-}
 
 //****Global product Code Storage****//
 const productCode = {
@@ -115,35 +106,6 @@ const clearMDBdropDownList = function (mainSelector) {
             return;
         }
     });
-}
-
-//append un-added data to form
-const setTempDataToForm = function () {
-    getTempStorage();
-
-    if (!tempStorage) return;
-
-    formCart.ParentId.value = tempStorage.ProductCatalogId;
-    const elements = { ...productFormSelectors() };
-
-    elements['0'].value = tempStorage.ProductName
-    elements['0'].nextElementSibling.classList.add('active');
-
-    elements['1'].value = tempStorage.PurchasePrice
-    elements['1'].nextElementSibling.classList.add('active');
-
-    elements['2'].value = tempStorage.SellingPrice
-    elements['2'].nextElementSibling.classList.add('active');
-
-    if (tempStorage.Warranty) {
-        elements['3'].value = tempStorage.Warranty
-        elements['3'].nextElementSibling.classList.add('active');
-    }
-
-    if (tempStorage.Description) {
-        elements['4'].value = tempStorage.Description
-        elements['4'].nextElementSibling.classList.add('active');
-    }
 }
 
 //calculate purchase Total
@@ -252,22 +214,74 @@ const removeProduct = function (row, SN) {
     showCartedProduct();
 }
 
-//clear textbox field
-const clearTextinput = function () {
-    const elements = productFormSelectors();
-    elements.forEach(element => {
-        if (element.value) {
-            element.value = '';
-            element.nextElementSibling.classList.remove('active');
-        }
-    });
-}
-
 //category drodown change
 const onCategoryChanged = function () {
-    //clear bind text field
-    clearTextinput();
+    const categoryId = +this.value
+    if (!categoryId) return
+
+    const url = '/Product/GetProductByCategory'
+    const parameter = { params: { categoryId } }
+
+    axios.get(url, parameter)
+        .then(res => {
+            if (res.data.length) {
+                const fragment = document.createDocumentFragment()
+                let option1 = document.createElement("option");
+                option1.value = ""
+                option1.text = "Product Name"
+                option1.setAttribute("disabled", "disabled")
+                option1.setAttribute("selected", true)
+                fragment.appendChild(option1)
+
+                res.data.forEach(item => {
+                    let option = document.createElement("option");
+                    option.value = item.ProductId
+                    option.text = item.ProductName
+                    fragment.appendChild(option)
+                })
+
+                $('.product-select').materialSelect("destroy");
+
+                selectProductId.innerHTML = ''
+                selectProductId.appendChild(fragment)
+
+                // Material Select Initialization
+                $('.product-select').materialSelect();
+            }
+        })
 }
+
+//product drodown change
+const onProductChanged = function () {
+    const productId = +this.value
+    if (!productId) return
+
+    const url = '/Product/GetProductInfo'
+    const parameter = { params: { productId } }
+
+    const purchasePrice = formCart.inputPurchasePrice;
+    const sellingPrice = formCart.inputSellingPrice;
+    const warranty = formCart.inputWarranty;
+    const description = formCart.inputDescription;
+
+    purchasePrice.value = ''
+    sellingPrice.value = ''
+    warranty.value = ''
+    description.value = ''
+
+    axios.get(url, parameter)
+        .then(res => {
+            sellingPrice.value = res.data.SellingPrice
+            sellingPrice.nextElementSibling.classList.add('active')
+
+            warranty.value = res.data.Warranty
+            warranty.nextElementSibling.classList.add('active')
+
+            description.value = res.data.Description
+            description.nextElementSibling.classList.add('active')
+        })
+}
+
 
 
 //click remove or stock
@@ -312,7 +326,7 @@ const showAddedProductCode = function () {
 const setProductTempObject = function (element) {
     const SN = tbody.querySelectorAll('tr').length + 1;
     const ParentId = element.ParentId;
-    const ProductName = element.inputProductName.value;
+    const ProductId = element.selectProductId;
     const PurchasePrice = +element.inputPurchasePrice.value;
     const SellingPrice = +element.inputSellingPrice.value;
     const Warranty = element.inputWarranty.value;
@@ -323,7 +337,8 @@ const setProductTempObject = function (element) {
             SN,
             ProductCatalogId: +ParentId.value,
             Category: ParentId.options[ParentId.selectedIndex].text,
-            ProductName,
+            ProductId: +ProductId.value,
+            ProductName: ProductId.options[ProductId.selectedIndex].text,
             PurchasePrice,
             SellingPrice,
             Warranty,
@@ -334,7 +349,8 @@ const setProductTempObject = function (element) {
     else {
         tempStorage.ProductCatalogId = +ParentId.value;
         tempStorage.Category = ParentId.options[ParentId.selectedIndex].text;
-        tempStorage.ProductName = ProductName;
+        tempStorage.ProductId = +ProductId.value;
+        tempStorage.ProductName = ProductId.options[ProductId.selectedIndex].text;
         tempStorage.PurchasePrice = PurchasePrice;
         tempStorage.SellingPrice = SellingPrice;
         tempStorage.Warranty = Warranty;
@@ -421,12 +437,11 @@ const matchExistingProductCode = function (stocks) {
 //add product to list
 const onAddProductToList = function (){
     const ParentId = formCart.ParentId.value;
-    const ProductName = formCart.inputProductName.value;
+    const ProductId = formCart.selectProductId.value;
     const PurchasePrice = +formCart.inputPurchasePrice.value;
     const SellingPrice = +formCart.inputSellingPrice.value;
 
-
-    if (!ParentId || !ProductName || !PurchasePrice || !SellingPrice) {
+    if (!ParentId || !ProductId || !PurchasePrice || !SellingPrice) {
         alert('Provide product info!');
         return;
     }
@@ -501,11 +516,11 @@ formAddCode.addEventListener('submit', onSubmitProductCode);
 showAddedCode.addEventListener('click', onProductCodeClicked);
 
 selectCategory.addEventListener('change', onCategoryChanged);
+selectProductId.addEventListener('change', onProductChanged);
 tbody.addEventListener('click', ontableRowElementClicked);
 
 //call function
 showCartedProduct();
-setTempDataToForm();
 productCode.getStorage();
 
 
