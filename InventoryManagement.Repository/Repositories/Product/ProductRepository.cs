@@ -45,11 +45,12 @@ namespace InventoryManagement.Repository
                 });
             if (categoryId != 0)
             {
-                products.Where(p => p.ProductCatalogId == categoryId).Take(20);
+             return  products.Where(p => p.ProductCatalogId == categoryId).ToListAsync();
             }
-
-            return products.ToListAsync();
-
+            else
+            {
+                return products.Take(20).ToListAsync();
+            }
         }
 
         public bool RemoveCustom(int id)
