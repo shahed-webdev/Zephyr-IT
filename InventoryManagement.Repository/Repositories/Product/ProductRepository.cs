@@ -32,16 +32,24 @@ namespace InventoryManagement.Repository
             return product.AnyAsync();
         }
 
-        public Task<List<ProductShowViewModel>> FindByCategoryAsync(int categoryId, IUnitOfWork db)
+        public Task<List<ProductShowViewModel>> FindByCategoryAsync(int categoryId = 0)
         {
-            return Context.Product.Where(p => p.ProductCatalogId == categoryId).Select(p => new ProductShowViewModel
+            var products = Context.Product.Select(p =>
+                new ProductShowViewModel
+                {
+                    ProductId = p.ProductId,
+                    ProductCatalogId = p.ProductCatalogId,
+                    ProductName = p.ProductName,
+                    Description = p.Description,
+                    Warranty = p.Warranty
+                });
+            if (categoryId != 0)
             {
-                ProductId = p.ProductId,
-                ProductCatalogId = p.ProductCatalogId,
-                ProductName = p.ProductName,
-                Description = p.Description,
-                Warranty = p.Warranty
-            }).ToListAsync();
+                products.Where(p => p.ProductCatalogId == categoryId).Take(20);
+            }
+
+            return products.ToListAsync();
+
         }
 
         public bool RemoveCustom(int id)
