@@ -41,11 +41,12 @@ namespace InventoryManagement.Repository
                     ProductCatalogId = p.ProductCatalogId,
                     ProductName = p.ProductName,
                     Description = p.Description,
-                    Warranty = p.Warranty
+                    Warranty = p.Warranty,
+                    SellingPrice = p.SellingPrice
                 });
             if (categoryId != 0)
             {
-             return  products.Where(p => p.ProductCatalogId == categoryId).ToListAsync();
+                return products.Where(p => p.ProductCatalogId == categoryId).ToListAsync();
             }
             else
             {
@@ -58,6 +59,22 @@ namespace InventoryManagement.Repository
             if (Context.ProductStock.Any(e => e.ProductId == id)) return false;
             Remove(Find(id));
             return true;
+        }
+
+        public Task<ProductShowViewModel> FindByIdAsync(int ProductId)
+        {
+            var product = Context.Product.Where(p => p.ProductId == ProductId).Select(p =>
+                 new ProductShowViewModel
+                 {
+                     ProductId = p.ProductId,
+                     ProductCatalogId = p.ProductCatalogId,
+                     ProductName = p.ProductName,
+                     Description = p.Description,
+                     Warranty = p.Warranty,
+                     SellingPrice = p.SellingPrice
+                 });
+
+            return product.FirstOrDefaultAsync();
         }
     }
 }
