@@ -17,6 +17,12 @@ const formCart = document.getElementById("cart-form")
 const selectCategory = formCart.ParentId
 const selectProductId = formCart.selectProductId
 
+const inputPurchasePrice = formCart.inputPurchasePrice;
+const inputSellingPrice = formCart.inputSellingPrice;
+const inputWarranty = formCart.inputWarranty;
+const inputDescription = formCart.inputDescription;
+const productError = document.querySelector("#product-error")
+
 //payment selectors
 const formPayment = document.getElementById('formPayment');
 const totalPrice = formPayment.querySelector('#totalPrice');
@@ -214,6 +220,21 @@ const removeProduct = function (row, SN) {
     showCartedProduct();
 }
 
+//empty text input
+const clearInput = function () {
+    inputPurchasePrice.value = ''
+    inputPurchasePrice.nextElementSibling.classList.remove('active')
+
+    inputSellingPrice.value = ''
+    inputSellingPrice.nextElementSibling.classList.remove('active')
+
+    inputWarranty.value = ''
+    inputWarranty.nextElementSibling.classList.remove('active')
+
+    inputDescription.value = ''
+    inputDescription.nextElementSibling.classList.remove('active')
+}
+
 //category drodown change
 const onCategoryChanged = function () {
     const categoryId = +this.value
@@ -259,29 +280,18 @@ const onProductChanged = function () {
     const url = '/Product/GetProductInfo'
     const parameter = { params: { productId } }
 
-    const purchasePrice = formCart.inputPurchasePrice;
-    const sellingPrice = formCart.inputSellingPrice;
-    const warranty = formCart.inputWarranty;
-    const description = formCart.inputDescription;
-
-    purchasePrice.value = ''
-    sellingPrice.value = ''
-    warranty.value = ''
-    description.value = ''
-
     axios.get(url, parameter)
         .then(res => {
-            sellingPrice.value = res.data.SellingPrice
-            sellingPrice.nextElementSibling.classList.add('active')
+            inputSellingPrice.value = res.data.SellingPrice
+            inputSellingPrice.nextElementSibling.classList.add('active')
 
-            warranty.value = res.data.Warranty
-            warranty.nextElementSibling.classList.add('active')
+            inputWarranty.value = res.data.Warranty
+            inputWarranty.nextElementSibling.classList.add('active')
 
-            description.value = res.data.Description
-            description.nextElementSibling.classList.add('active')
+            inputDescription.value = res.data.Description
+            inputDescription.nextElementSibling.classList.add('active')
         })
 }
-
 
 
 //click remove or stock
@@ -332,7 +342,7 @@ const setProductTempObject = function (element) {
     const Warranty = element.inputWarranty.value;
     const Description = element.inputDescription.value;
 
-    if (!tempStorage) {
+    if (tempStorage === null) {
         tempStorage = {
             SN,
             ProductCatalogId: +ParentId.value,
@@ -363,15 +373,31 @@ const setProductTempObject = function (element) {
 //open product code modal submit
 const onOpenProductCodeModal = function (form) {
     form.preventDefault();
+    productError.textContent =''
 
     //save the last value of input
+    getTempStorage()
+
     setProductTempObject(form.target);
+
+    const ProductId = +formCart.selectProductId.value;
+
+    //check product already added
+    let isAdded = false
+    storage.forEach(product => {
+        if (product.ProductId === ProductId) {
+            isAdded = true
+            return
+        }
+    })
+
+    if (isAdded) {
+        productError.textContent = 'This product already added!'
+        return
+    }
 
     //show product code on modal
     showAddedProductCode();
-
-    //auto focus code input
-    document.getElementById('inputProductCode').focus();
 
     //open modal popup
     modalInsetCode.modal('show');
@@ -435,15 +461,17 @@ const matchExistingProductCode = function (stocks) {
 }
 
 //add product to list
-const onAddProductToList = function (){
-    const ParentId = formCart.ParentId.value;
-    const ProductId = formCart.selectProductId.value;
-    const PurchasePrice = +formCart.inputPurchasePrice.value;
-    const SellingPrice = +formCart.inputSellingPrice.value;
+const onAddProductToList = function () {
+    productError.textContent = ''
+
+    const ParentId = selectCategory.value;
+    const ProductId = +selectProductId.value;
+    const PurchasePrice = +inputPurchasePrice.value;
+    const SellingPrice = +inputSellingPrice.value;
 
     if (!ParentId || !ProductId || !PurchasePrice || !SellingPrice) {
-        alert('Provide product info!');
-        return;
+        productError.textContent='Provide product info!'
+        return
     }
 
     //set the last value of input
@@ -463,13 +491,10 @@ const onAddProductToList = function (){
                 buzzAudio.play();
 
                 //show product code on modal
-                showAddedProductCode();
+               // showAddedProductCode();
 
                 //show matched code
                 matchExistingProductCode(res);
-               
-                //show modal
-                modalInsetCode.modal('show');
                 return;
             }
 
@@ -490,19 +515,16 @@ const onAddProductToList = function (){
             localStorage.removeItem('temp-storage');
 
             //clear the text input
-            clearTextinput();
+            clearInput()
 
-            //clear cart-form select
-            clearMDBdropDownList(formCart);
+            //hide modal
+            modalInsetCode.modal('hide');
 
         }).finally(() => {
             this.children[0].style.display = "inline-block";
             this.children[1].style.display = "none";
             this.disabled = false;
         });
-    }
-    else {
-        modalInsetCode.modal('show');
     }
 }
 

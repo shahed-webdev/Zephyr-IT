@@ -73,20 +73,14 @@
                         <label for="inputDescription">Description</label>
                     </div>
                 </div>
-                <div class="col-lg-2">
-                    <div class="md-form text-right pt-1">
+                <div class="col-lg-2 text-right">
+                    <div class="md-form pt-1">
                         <button type="submit" class="btn btn-sm btn-blue-grey btn-rounded"><i class="far fa-qrcode pr-2"></i>Add Code</button>
                     </div>
-                </div>
+                    <label id="product-error" class="red-text d-block"></label>
+                </div>  
             </div>
         </form>
-        <div>
-            <button id="btnAddToList" type="button" class="btn btn-rounded btn-success">
-                add product to List
-                <i class="fal fa-cart-arrow-down text-white"></i>
-                <i class="fas fa-circle-notch fa-spin" style="display:none"></i>
-            </button>
-        </div>
     </section>
 
     <section class="card card-body mt-3">
@@ -213,6 +207,14 @@
 
                 <div id="showAddedCode"></div>
             </div>
+
+            <div class="modal-footer justify-content-center">
+                <button id="btnAddToList" type="button" class="btn btn-rounded btn-success">
+                    add product to List
+                    <i class="fal fa-cart-arrow-down text-white"></i>
+                    <i class="fas fa-circle-notch fa-spin" style="display:none"></i>
+                </button>
+            </div>  
         </div>
     </div>
 </div>
@@ -226,6 +228,6 @@
 
 @section Scripts {
     <partial name="_UnobtrusiveAjaxPartial" />
-    <script src="~/page-js/product-purchase.js?v=.6"></script>
+    <script src="~/page-js/product-purchase.js?v=1.8"></script>
 }
 
