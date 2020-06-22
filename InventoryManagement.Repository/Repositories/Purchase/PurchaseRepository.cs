@@ -50,6 +50,7 @@ namespace InventoryManagement.Repository
                 PurchaseTotalPrice = model.PurchaseTotalPrice,
                 PurchaseDiscountAmount = model.PurchaseDiscountAmount,
                 PurchasePaidAmount = model.PurchasePaidAmount,
+                MemoNumber = model.MemoNumber,
                 PurchaseDate = model.PurchaseDate,
                 PurchaseList = model.Products.Select(p => new PurchaseList
                 {
@@ -140,6 +141,7 @@ namespace InventoryManagement.Repository
                     PurchasePaidAmount = p.PurchasePaidAmount,
                     PurchaseDueAmount = p.PurchaseDueAmount,
                     PurchaseDate = p.PurchaseDate,
+                    MemoNumber = p.MemoNumber,
                     Products = p.PurchaseList.Select(pd => new ProductViewModel
                     {
                         ProductId = pd.ProductId,

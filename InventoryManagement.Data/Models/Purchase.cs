@@ -22,6 +22,8 @@ namespace InventoryManagement.Data
         public double PurchaseReturnAmount { get; set; }
         public double PurchaseDueAmount { get; set; }
         public string PurchasePaymentStatus { get; set; }
+        public string MemoNumber { get; set; }
+
         public DateTime PurchaseDate { get; set; }
         public DateTime InsertDate { get; set; }
 

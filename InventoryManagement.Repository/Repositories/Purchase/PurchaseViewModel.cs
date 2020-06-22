@@ -17,6 +17,7 @@ namespace InventoryManagement.Repository
         public double PurchaseDiscountAmount { get; set; }
         public double PurchasePaidAmount { get; set; }
         public string PaymentMethod { get; set; }
+        public string MemoNumber { get; set; }
         public DateTime PurchaseDate { get; set; }
         public ICollection<ProductPurchaseViewModel> Products { get; set; }
     }
@@ -35,6 +36,7 @@ namespace InventoryManagement.Repository
         public double PurchaseDiscountAmount { get; set; }
         public double PurchasePaidAmount { get; set; }
         public double PurchaseDueAmount { get; set; }
+        public string MemoNumber { get; set; }
         public DateTime PurchaseDate { get; set; }
         public ICollection<ProductViewModel> Products { get; set; }
         public ICollection<PurchasePaymentListViewModel> Payments { get; set; }
