@@ -2,6 +2,7 @@
 using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -50,20 +51,19 @@ namespace InventoryManagement.Repository
                 PurchaseDiscountAmount = model.PurchaseDiscountAmount,
                 PurchasePaidAmount = model.PurchasePaidAmount,
                 PurchaseDate = model.PurchaseDate,
-                //PurchaseList = 
-                //Product = model.Products.Select(p => new Product
-                //{
-                //    ProductCatalogId = p.ProductCatalogId,
-                //    ProductName = p.ProductName,
-                //    Description = p.Description,
-                //    Warranty = p.Warranty,
-                //    PurchasePrice = p.PurchasePrice,
-                //    SellingPrice = p.SellingPrice,
-                //    ProductStock = p.ProductStocks.Select(s => new ProductStock
-                //    {
-                //        ProductCode = s.ProductCode
-                //    }).ToList()
-                //}).ToList(),
+                PurchaseList = model.Products.Select(p => new PurchaseList
+                {
+                    ProductId = p.ProductId,
+                    Description = p.Description,
+                    Warranty = p.Warranty,
+                    PurchasePrice = p.PurchasePrice,
+                    SellingPrice = p.SellingPrice,
+                    ProductStock = p.ProductStocks.Select(s => new ProductStock
+                    {
+                        ProductId = p.ProductId,
+                        ProductCode = s.ProductCode
+                    }).ToList()
+                }).ToList(),
                 PurchasePaymentList = model.PurchasePaidAmount > 0 ?
                     new List<PurchasePaymentList>
                     {
@@ -85,6 +85,20 @@ namespace InventoryManagement.Repository
             };
 
             await Context.Purchase.AddAsync(purchase).ConfigureAwait(false);
+
+
+            //Update Product Info
+            foreach (var item in model.Products)
+            {
+                var product = Context.Product.Find(item.ProductId);
+                product.ProductId = item.ProductId;
+                product.Description = item.Description;
+                product.Warranty = item.Warranty;
+                product.SellingPrice = item.SellingPrice;
+                Context.Product.Update(product);
+            }
+
+
             try
             {
                 await Context.SaveChangesAsync().ConfigureAwait(false);
@@ -132,10 +146,10 @@ namespace InventoryManagement.Repository
                         ProductCatalogId = pd.Product.ProductCatalogId,
                         ProductCatalogName = db.ProductCatalogs.CatalogNameNode(pd.Product.ProductCatalogId),
                         ProductName = pd.Product.ProductName,
-                        Description = pd.Product.Description,
-                        Warranty = pd.Product.Warranty,
+                        Description = pd.Description,
+                        Warranty = pd.Warranty,
                         PurchasePrice = pd.PurchasePrice,
-                        SellingPrice = pd.Product.SellingPrice,
+                        SellingPrice = pd.SellingPrice,
                         ProductStocks = pd.ProductStock.Select(s => new ProductStockViewModel
                         {
                             ProductCode = s.ProductCode

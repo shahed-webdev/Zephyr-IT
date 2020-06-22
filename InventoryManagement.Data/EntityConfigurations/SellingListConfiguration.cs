@@ -7,19 +7,17 @@ namespace InventoryManagement.Data
     {
         public void Configure(EntityTypeBuilder<SellingList> entity)
         {
+            entity.Property(e => e.Warranty).HasMaxLength(128);
+            entity.Property(e => e.Description).HasMaxLength(500);
+            entity.Property(e => e.SellingPrice).HasDefaultValueSql("0");
 
-                entity.HasOne(d => d.ProductStock)
-                    .WithMany(p => p.SellingList)
-                    .HasForeignKey(d => d.ProductStockId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SellingList_ProductStock");
 
-                entity.HasOne(d => d.Selling)
-                    .WithMany(p => p.SellingList)
-                    .HasForeignKey(d => d.SellingId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SellingList_Selling");
-           
+            entity.HasOne(d => d.Selling)
+                .WithMany(p => p.SellingList)
+                .HasForeignKey(d => d.SellingId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SellingList_Selling");
+
         }
     }
 }

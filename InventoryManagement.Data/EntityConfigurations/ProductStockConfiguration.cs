@@ -17,6 +17,18 @@ namespace InventoryManagement.Data
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ProductStock_Product");
+
+            entity.HasOne(d => d.SellingList)
+                .WithMany(p => p.ProductStock)
+                .HasForeignKey(d => d.SellingListId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ProductStock_SellingList");
+
+            entity.HasOne(d => d.PurchaseList)
+                .WithMany(p => p.ProductStock)
+                .HasForeignKey(d => d.PurchaseListId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ProductStock_PurchaseList");
         }
     }
 }

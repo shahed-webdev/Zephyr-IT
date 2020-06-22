@@ -4,14 +4,16 @@ using InventoryManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200621014618_Add_Column_PurchaseListAndSellingList")]
+    partial class Add_Column_PurchaseListAndSellingList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -454,10 +456,7 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PurchaseListId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SellingListId")
+                    b.Property<int?>("PurchaseListId")
                         .HasColumnType("int");
 
                     b.HasKey("ProductStockId");
@@ -465,8 +464,6 @@ namespace InventoryManagement.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.HasIndex("PurchaseListId");
-
-                    b.HasIndex("SellingListId");
 
                     b.ToTable("ProductStock");
                 });
@@ -545,8 +542,7 @@ namespace InventoryManagement.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -555,14 +551,10 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<double>("PurchasePrice")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("float")
-                        .HasDefaultValueSql("0");
+                        .HasColumnType("float");
 
                     b.Property<double>("SellingPrice")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("float")
-                        .HasDefaultValueSql("0");
+                        .HasColumnType("float");
 
                     b.Property<string>("Warranty")
                         .HasColumnType("nvarchar(128)")
@@ -851,19 +843,16 @@ namespace InventoryManagement.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("ProductStockId")
                         .HasColumnType("int");
 
                     b.Property<int>("SellingId")
                         .HasColumnType("int");
 
                     b.Property<double>("SellingPrice")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("float")
-                        .HasDefaultValueSql("0");
+                        .HasColumnType("float");
 
                     b.Property<string>("Warranty")
                         .HasColumnType("nvarchar(128)")
@@ -871,7 +860,7 @@ namespace InventoryManagement.Data.Migrations
 
                     b.HasKey("SellingListId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductStockId");
 
                     b.HasIndex("SellingId");
 
@@ -1497,17 +1486,9 @@ namespace InventoryManagement.Data.Migrations
                         .HasConstraintName("FK_ProductStock_Product")
                         .IsRequired();
 
-                    b.HasOne("InventoryManagement.Data.PurchaseList", "PurchaseList")
+                    b.HasOne("InventoryManagement.Data.PurchaseList", null)
                         .WithMany("ProductStock")
-                        .HasForeignKey("PurchaseListId")
-                        .HasConstraintName("FK_ProductStock_PurchaseList")
-                        .IsRequired();
-
-                    b.HasOne("InventoryManagement.Data.SellingList", "SellingList")
-                        .WithMany("ProductStock")
-                        .HasForeignKey("SellingListId")
-                        .HasConstraintName("FK_ProductStock_SellingList")
-                        .IsRequired();
+                        .HasForeignKey("PurchaseListId");
                 });
 
             modelBuilder.Entity("InventoryManagement.Data.Purchase", b =>
@@ -1616,10 +1597,10 @@ namespace InventoryManagement.Data.Migrations
 
             modelBuilder.Entity("InventoryManagement.Data.SellingList", b =>
                 {
-                    b.HasOne("InventoryManagement.Data.Product", "Product")
+                    b.HasOne("InventoryManagement.Data.ProductStock", "ProductStock")
                         .WithMany("SellingList")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ProductStockId")
+                        .HasConstraintName("FK_SellingList_ProductStock")
                         .IsRequired();
 
                     b.HasOne("InventoryManagement.Data.Selling", "Selling")

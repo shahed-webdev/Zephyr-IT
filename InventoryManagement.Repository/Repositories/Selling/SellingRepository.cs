@@ -49,12 +49,17 @@ namespace InventoryManagement.Repository
                 SellingDiscountPercentage = model.SellingDiscountAmount,
                 SellingPaidAmount = model.SellingPaidAmount,
                 SellingDate = model.SellingDate,
-                SellingList = sellingStock.Select(s => new SellingList
+                SellingList = model.ProductList.Select(l => new SellingList
                 {
-
-                    ProductStockId = s.ProductStockId,
-                    SellingPrice = s.Product.SellingPrice,
-
+                    ProductId = l.ProductId,
+                    SellingPrice = l.SellingPrice,
+                    Description = l.Description,
+                    Warranty = l.Warranty,
+                    ProductStock = sellingStock.Where(s => s.ProductId == l.ProductId).Select(s =>
+                    {
+                        s.IsSold = true;
+                        return s;
+                    }).ToList()
                 }).ToList(),
                 SellingPaymentList = model.SellingPaidAmount > 0 ?
                     new List<SellingPaymentList>
@@ -80,8 +85,8 @@ namespace InventoryManagement.Repository
             await Context.Selling.AddAsync(selling).ConfigureAwait(false);
             try
             {
-                sellingStock.ForEach(s => s.IsSold = true);
-                Context.ProductStock.UpdateRange(sellingStock);
+                //sellingStock.ForEach(s => s.IsSold = true);
+                //Context.ProductStock.UpdateRange(sellingStock);
 
                 await Context.SaveChangesAsync().ConfigureAwait(false);
 
@@ -120,14 +125,14 @@ namespace InventoryManagement.Repository
                   SellingDate = s.SellingDate,
                   Products = s.SellingList.Select(pd => new ProductSellViewModel
                   {
-                      ProductId = pd.ProductStock.Product.ProductId,
-                      ProductCatalogId = pd.ProductStock.Product.ProductCatalogId,
-                      ProductCatalogName = db.ProductCatalogs.CatalogNameNode(pd.ProductStock.Product.ProductCatalogId),
-                      ProductName = pd.ProductStock.Product.ProductName,
-                      Description = pd.ProductStock.Product.Description,
-                      Warranty = pd.ProductStock.Product.Warranty,
+                      ProductId = pd.Product.ProductId,
+                      ProductCatalogId = pd.Product.ProductCatalogId,
+                      ProductCatalogName = db.ProductCatalogs.CatalogNameNode(pd.Product.ProductCatalogId),
+                      ProductName = pd.Product.ProductName,
+                      Description = pd.Product.Description,
+                      Warranty = pd.Product.Warranty,
                       SellingPrice = pd.SellingPrice,
-                      ProductCode = pd.ProductStock.ProductCode
+                      // ProductCode = pd.ProductStock.ProductCode
                   }).ToList(),
                   Payments = s.SellingPaymentList.Select(pp => new SellingPaymentViewModel
                   {

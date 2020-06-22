@@ -5,6 +5,10 @@ namespace InventoryManagement.Repository
 {
     public class SellingViewModel
     {
+        public SellingViewModel()
+        {
+            ProductList = new HashSet<SellingProductListViewModel>();
+        }
         public int SellingId { get; set; }
         public int RegistrationId { get; set; }
         public int CustomerId { get; set; }
@@ -14,6 +18,15 @@ namespace InventoryManagement.Repository
         public string PaymentMethod { get; set; }
         public DateTime SellingDate { get; set; }
         public string[] ProductCodes { get; set; }
+        public ICollection<SellingProductListViewModel> ProductList { get; set; }
+    }
+
+    public class SellingProductListViewModel
+    {
+        public int ProductId { get; set; }
+        public double SellingPrice { get; set; }
+        public string Description { get; set; }
+        public string Warranty { get; set; }
     }
 
     public class SellingReceiptViewModel
@@ -36,6 +49,8 @@ namespace InventoryManagement.Repository
         public CustomerReceiptViewModel CustomerInfo { get; set; }
         public string SoildBy { get; set; }
     }
+
+
 
     public class SellingRecordViewModel
     {

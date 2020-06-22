@@ -34,7 +34,7 @@ namespace InventoryManagement.Repository
 
         public Task<List<ProductShowViewModel>> FindByCategoryAsync(int categoryId = 0)
         {
-            var products = Context.Product.Select(p =>
+            var products = Context.Product.Include(p=> p.ProductStock).Select(p =>
                 new ProductShowViewModel
                 {
                     ProductId = p.ProductId,
@@ -42,7 +42,8 @@ namespace InventoryManagement.Repository
                     ProductName = p.ProductName,
                     Description = p.Description,
                     Warranty = p.Warranty,
-                    SellingPrice = p.SellingPrice
+                    SellingPrice = p.SellingPrice,
+                    Stock = p.ProductStock.Count(s => !s.IsSold)
                 });
             if (categoryId != 0)
             {

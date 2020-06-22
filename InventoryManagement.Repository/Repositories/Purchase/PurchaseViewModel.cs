@@ -7,7 +7,7 @@ namespace InventoryManagement.Repository
     {
         public PurchaseViewModel()
         {
-            this.Products = new HashSet<ProductViewModel>();
+            this.Products = new HashSet<ProductPurchaseViewModel>();
         }
 
         public int PurchaseId { get; set; }
@@ -17,9 +17,8 @@ namespace InventoryManagement.Repository
         public double PurchaseDiscountAmount { get; set; }
         public double PurchasePaidAmount { get; set; }
         public string PaymentMethod { get; set; }
-
         public DateTime PurchaseDate { get; set; }
-        public ICollection<ProductViewModel> Products { get; set; }
+        public ICollection<ProductPurchaseViewModel> Products { get; set; }
     }
 
     public class PurchaseReceiptViewModel

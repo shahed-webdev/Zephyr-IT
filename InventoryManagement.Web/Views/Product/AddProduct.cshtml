@@ -5,10 +5,15 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 @section styles{
-   <style>
-       .remove { cursor:pointer}
-       .remove:hover { color:#ff0000}
-   </style>
+    <style>
+        .remove {
+            cursor: pointer
+        }
+
+            .remove:hover {
+                color: #ff0000
+            }
+    </style>
 }
 
 <div class="m-md-3">
@@ -59,6 +64,7 @@
             <thead>
                 <tr>
                     <th><strong>Product Name</strong></th>
+                    <th><strong>Stock</strong></th>
                     <th><strong>Warranty</strong></th>
                     <th><strong>Description</strong></th>
                     <th><strong>Remove</strong></th>
@@ -88,11 +94,12 @@
                     let html = ''
                     res.data.forEach(item => {
                         html += `<tr>
-                    <td class="text-left">${item.ProductName}</td>
-                    <td>${item.Warranty}</td>
-                    <td class="text-left">${item.Description}</td>
-                    <td style="width:50px; text-align:center"><i class="fa fa-times remove" id="${item.ProductId}"></i></td>
-                    </tr>`
+                        <td class="text-left">${item.ProductName}</td>
+                        <td class="text-left">${item.Stock}</td>
+                        <td>${item.Warranty}</td>
+                        <td class="text-left">${item.Description}</td>
+                        <td style="width:50px; text-align:center"><i class="fa fa-times remove" id="${item.ProductId}"></i></td>
+                        </tr>`
                     })
 
                     tbody.innerHTML = ''

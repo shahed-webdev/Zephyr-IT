@@ -11,6 +11,9 @@ namespace InventoryManagement.Data
         public int PurchaseListId { get; set; }
         public int PurchaseId { get; set; }
         public int ProductId { get; set; }
+        public string Description { get; set; }
+        public string Warranty { get; set; }
+        public double SellingPrice { get; set; }
         public double PurchasePrice { get; set; }
         public virtual Purchase Purchase { get; set; }
         public virtual Product Product { get; set; }
