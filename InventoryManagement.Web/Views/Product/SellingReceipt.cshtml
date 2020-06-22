@@ -42,14 +42,15 @@
         </tbody>
     </table>
 
-    <table class="product-tb table table-sm table-bordered mt-4">
+    <table class="product-tb table table-sm table-bordered mt-5">
         <thead>
             <tr>
                 <th><strong>SL.</strong></th>
-                <th><strong>Code</strong></th>
-                <th><strong>Name</strong></th>
+                <th><strong>Product</strong></th>
                 <th><strong>Description</strong></th>
                 <th><strong>Warranty</strong></th>
+                <th><strong>Qty.</strong></th>
+                <th><strong>U.Price</strong></th>
                 <th><strong>Price</strong></th>
             </tr>
         </thead>
@@ -60,25 +61,29 @@
                 {
                     <tr>
                         <td class="text-center">@index</td>
-                        <td class="text-center">@item.ProductCode</td>
-                        <td>@item.ProductName</td>
-                        <td>@item.Description</td>
-                        <td>@item.Warranty</td>
+                        <td class="text-center">@item.ProductCatalogName</td>
+                        <td>@item.ProductName, @item.Description, @string.Join(",",item.ProductCodes)</td>
+                        <td class="text-center">@item.Warranty</td>
+                        <td class="text-center">@item.ProductCodes.Length</td>
                         <td class="text-right">৳@item.SellingPrice</td>
+                        <td class="text-right">৳@(item.SellingPrice*item.ProductCodes.Length)</td>
                     </tr>
 
                     index++;
                 }
             }
             <tr>
-                <td colspan="5" class="text-center">
+                <td colspan="6" class="text-center">
                     <span id="amount-word"></span>
                 </td>
                 <td class="text-right">
+                    @if (Model.SellingDiscountAmount > 0)
+                    {
                     <h5>Discount:<strong>৳@Model.SellingDiscountAmount</strong> </h5>
-                    <h5>Total Amount:<strong>৳@Model.SellingTotalPrice</strong> </h5>
-                    <h5>Paid Amount:<strong>৳@Model.SellingPaidAmount</strong> </h5>
-                    <h5>Due Amount:<strong>৳@Model.SellingDueAmount</strong> </h5>
+                    }
+                    <h5>Total Taka:<strong>৳@Model.SellingTotalPrice</strong> </h5>
+                    <h5>Cash Paid:<strong>৳@Model.SellingPaidAmount</strong> </h5>
+                    <h5>Due:<strong>৳@Model.SellingDueAmount</strong> </h5>
                 </td>
             </tr>
         </tbody>

@@ -37,10 +37,11 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.CustomerName</td>
+                            <td class="text-left">@item.CustomerName</td>
                             <td>@item.PhonePrimary</td>
-                            <td>@item.OrganizationName</td>
-                            <td>@item.CustomerAddress</td>
+                            <td class="text-left">@item.OrganizationName</td>
+                            <td class="text-left">@item.CustomerAddress</td>
+                            <td class="text-left">@item.Description</td>
                             <td><a class="fas fa-edit" href="/Customer/Update/@item.CustomerId"></a></td>
                         </tr>
                     }

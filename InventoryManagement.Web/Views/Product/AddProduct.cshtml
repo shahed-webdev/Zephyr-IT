@@ -6,14 +6,9 @@
 }
 @section styles{
     <style>
-        .remove {
-            cursor: pointer
-        }
-
-            .remove:hover {
-                color: #ff0000
-            }
-    </style>
+        .remove { cursor: pointer }
+        .remove:hover { color: #ff0000 }
+    </style>  
 }
 
 <div class="m-md-3">
@@ -95,7 +90,7 @@
                     res.data.forEach(item => {
                         html += `<tr>
                         <td class="text-left">${item.ProductName}</td>
-                        <td class="text-left">${item.Stock}</td>
+                        <td>${item.Stock}</td>
                         <td>${item.Warranty}</td>
                         <td class="text-left">${item.Description}</td>
                         <td style="width:50px; text-align:center"><i class="fa fa-times remove" id="${item.ProductId}"></i></td>
