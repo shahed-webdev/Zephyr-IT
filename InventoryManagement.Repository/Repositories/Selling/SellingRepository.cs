@@ -85,9 +85,6 @@ namespace InventoryManagement.Repository
             await Context.Selling.AddAsync(selling).ConfigureAwait(false);
             try
             {
-                //sellingStock.ForEach(s => s.IsSold = true);
-                //Context.ProductStock.UpdateRange(sellingStock);
-
                 await Context.SaveChangesAsync().ConfigureAwait(false);
 
                 response.IsSuccess = true;
@@ -123,7 +120,7 @@ namespace InventoryManagement.Repository
                   SellingPaidAmount = s.SellingPaidAmount,
                   SellingDueAmount = s.SellingDueAmount,
                   SellingDate = s.SellingDate,
-                  Products = s.SellingList.Select(pd => new ProductSellViewModel
+                  Products = s.SellingList.Select(pd => new SellingReceiptProductViewModel
                   {
                       ProductId = pd.Product.ProductId,
                       ProductCatalogId = pd.Product.ProductCatalogId,
@@ -132,7 +129,7 @@ namespace InventoryManagement.Repository
                       Description = pd.Product.Description,
                       Warranty = pd.Product.Warranty,
                       SellingPrice = pd.SellingPrice,
-                      // ProductCode = pd.ProductStock.ProductCode
+                      ProductCodes = pd.ProductStock.Select(ss => ss.ProductCode).ToArray()
                   }).ToList(),
                   Payments = s.SellingPaymentList.Select(pp => new SellingPaymentViewModel
                   {

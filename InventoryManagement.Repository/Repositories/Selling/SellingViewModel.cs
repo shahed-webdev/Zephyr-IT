@@ -29,11 +29,23 @@ namespace InventoryManagement.Repository
         public string Warranty { get; set; }
     }
 
+    public class SellingReceiptProductViewModel
+    {
+        public int ProductId { get; set; }
+        public int ProductCatalogId { get; set; }
+        public string ProductCatalogName { get; set; }
+        public string ProductName { get; set; }
+        public double SellingPrice { get; set; }
+        public string Description { get; set; }
+        public string Warranty { get; set; }
+        public string[] ProductCodes { get; set; }
+    }
+
     public class SellingReceiptViewModel
     {
         public SellingReceiptViewModel()
         {
-            this.Products = new HashSet<ProductSellViewModel>();
+            this.Products = new HashSet<SellingReceiptProductViewModel>();
             this.Payments = new HashSet<SellingPaymentViewModel>();
         }
         public InstitutionVM InstitutionInfo { get; set; }
@@ -44,7 +56,7 @@ namespace InventoryManagement.Repository
         public double SellingPaidAmount { get; set; }
         public double SellingDueAmount { get; set; }
         public DateTime SellingDate { get; set; }
-        public ICollection<ProductSellViewModel> Products { get; set; }
+        public ICollection<SellingReceiptProductViewModel> Products { get; set; }
         public ICollection<SellingPaymentViewModel> Payments { get; set; }
         public CustomerReceiptViewModel CustomerInfo { get; set; }
         public string SoildBy { get; set; }
