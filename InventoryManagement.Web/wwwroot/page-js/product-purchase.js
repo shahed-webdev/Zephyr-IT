@@ -280,16 +280,27 @@ const onProductChanged = function () {
     const url = '/Product/GetProductInfo'
     const parameter = { params: { productId } }
 
+    //clear input value
+    clearInput()
+
     axios.get(url, parameter)
         .then(res => {
-            inputSellingPrice.value = res.data.SellingPrice
-            inputSellingPrice.nextElementSibling.classList.add('active')
+            const { SellingPrice, Warranty, Description } = res.data
 
-            inputWarranty.value = res.data.Warranty
-            inputWarranty.nextElementSibling.classList.add('active')
+            if (SellingPrice) {
+                inputSellingPrice.value = SellingPrice
+                inputSellingPrice.nextElementSibling.classList.add('active')
+            }
 
-            inputDescription.value = res.data.Description
-            inputDescription.nextElementSibling.classList.add('active')
+            if (Warranty) {
+                inputWarranty.value = Warranty
+                inputWarranty.nextElementSibling.classList.add('active')
+            }
+
+            if (Description) {
+                inputDescription.value = Description
+                inputDescription.nextElementSibling.classList.add('active')
+            }
         })
 }
 
@@ -375,9 +386,10 @@ const onOpenProductCodeModal = function (form) {
     form.preventDefault();
     productError.textContent =''
 
-    //save the last value of input
+    //get temp obj
     getTempStorage()
 
+    //save the last value of input
     setProductTempObject(form.target);
 
     const ProductId = +formCart.selectProductId.value;

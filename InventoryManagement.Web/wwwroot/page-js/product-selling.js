@@ -368,6 +368,17 @@ const onSellSubmitClicked = function (evt) {
     btnSubmit.innerText = 'submitting..'
     btnSubmit.disabled = true
 
+    const productCodes = []
+    const productList = []
+
+    cartProducts.forEach(product => {
+        const { ProductId, SellingPrice, Description, Warranty, codes} = product
+        productCodes.push(...codes)
+        productList.push({ ProductId, SellingPrice, Description, Warranty})
+    })
+
+    if (!productCodes.length) return
+
     const body = {
         CustomerId: +hiddenCustomerId.value,
         SellingTotalPrice: +totalPrice.textContent,
@@ -375,7 +386,8 @@ const onSellSubmitClicked = function (evt) {
         SellingPaidAmount: +inputPaid.value | 0,
         PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
         SellingDate: new Date(),
-        ProductCodes: cart.codes
+        ProductCodes: productCodes,
+        ProductList: productList
     }
 
     const url = '/Product/Selling'
@@ -449,6 +461,9 @@ function appendInfo(item) {
 
 //check customer due limit
 function checkDueLimit() {
+    const infoContainer = formPayment.querySelector('#customerInfo')
+    if (!infoContainer.innerHTML) return
+
     const prevDue = +formPayment.querySelector('#prevDue').textContent || 0
     const currnetDue = +totalDue.textContent
     const dueLimit = +formPayment.querySelector('#dueLimit').textContent || 0
