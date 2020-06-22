@@ -12,7 +12,7 @@ namespace InventoryManagement.Data
         public int ProductStockId { get; set; }
         public string ProductCode { get; set; }
         public int ProductId { get; set; }
-        public int SellingListId { get; set; }
+        public int? SellingListId { get; set; }
         public int PurchaseListId { get; set; }
         public bool IsSold { get; set; }
         public virtual Product Product { get; set; }

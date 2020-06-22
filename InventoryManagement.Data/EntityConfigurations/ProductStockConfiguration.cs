@@ -11,7 +11,6 @@ namespace InventoryManagement.Data
             entity.Property(e => e.ProductCode)
                 .IsRequired()
                 .HasMaxLength(128);
-
             entity.HasOne(d => d.Product)
                 .WithMany(p => p.ProductStock)
                 .HasForeignKey(d => d.ProductId)
