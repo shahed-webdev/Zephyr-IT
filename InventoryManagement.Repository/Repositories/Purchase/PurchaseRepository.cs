@@ -192,7 +192,8 @@ namespace InventoryManagement.Repository
                 PurchasePaidAmount = p.PurchasePaidAmount,
                 PurchaseDiscountAmount = p.PurchaseDiscountAmount,
                 PurchaseDueAmount = p.PurchaseDueAmount,
-                PurchaseDate = p.PurchaseDate
+                PurchaseDate = p.PurchaseDate,
+                MemoNumber = p.MemoNumber
             });
             return r.ToDataResult(request);
         }

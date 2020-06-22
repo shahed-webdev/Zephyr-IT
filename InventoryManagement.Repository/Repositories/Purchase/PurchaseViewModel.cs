@@ -54,6 +54,7 @@ namespace InventoryManagement.Repository
         public double PurchasePaidAmount { get; set; }
         public double PurchaseDiscountAmount { get; set; }
         public double PurchaseDueAmount { get; set; }
+        public string MemoNumber { get; set; }
         public DateTime PurchaseDate { get; set; }
     }
 }
