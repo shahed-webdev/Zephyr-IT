@@ -6,13 +6,13 @@
 }
 
 @section Styles{
-    <link href="~/css/selling-receipt.css?v=1" rel="stylesheet" />
+    <link href="~/css/selling-receipt.css" rel="stylesheet" />
 }
 
 <div class="container">
     <section class="my-4 d-print-none">
         <div class="d-flex justify-content-between">
-            <a class="btn btn-success btn-rounded" href="/Product/Selling"><i class="fal fa-cart-plus mr-1"></i>Selling</a>
+            <a class="btn btn-success btn-rounded" href="/Selling/Selling"><i class="fal fa-cart-plus mr-1"></i>Selling</a>
             <div>
                 <button class="btn btn-elegant btn-rounded" onclick="print()"><i class="fal fa-print mr-1"></i>Print</button>
             </div>
@@ -62,7 +62,7 @@
                     <tr>
                         <td class="text-center">@index</td>
                         <td class="text-center">@item.ProductCatalogName</td>
-                        <td>@item.ProductName, @item.Description, @string.Join(",",item.ProductCodes)</td>
+                        <td>@item.ProductName, @item.Description, @string.Join(",", item.ProductCodes)</td>
                         <td class="text-center">@item.Warranty</td>
                         <td class="text-center">@item.ProductCodes.Length</td>
                         <td class="text-right">৳@item.SellingPrice</td>
@@ -79,7 +79,7 @@
                 <td class="text-right">
                     @if (Model.SellingDiscountAmount > 0)
                     {
-                    <h5>Discount:<strong>৳@Model.SellingDiscountAmount</strong> </h5>
+                        <h5>Discount:<strong>৳@Model.SellingDiscountAmount</strong> </h5>
                     }
                     <h5>Total Taka:<strong>৳@Model.SellingTotalPrice</strong> </h5>
                     <h5>Cash Paid:<strong>৳@Model.SellingPaidAmount</strong> </h5>
@@ -89,39 +89,44 @@
         </tbody>
     </table>
 
+    <div class="paid-record row">
+        <div class="col">
+            <fieldset class="border p-2">
+                <legend>Paid Record</legend>
+                @if (Model.Payments.Count > 0)
+                {
 
-    @if (Model.Payments.Count > 0)
-    {
-        <h4 class="m-0">Paid Record</h4>
-        <table class="product-tb table table-sm table-bordered mt-4">
-            <thead>
-                <tr>
-                    <th><strong>Paid Amount</strong></th>
-                    <th><strong>Payment Method</strong></th>
-                    <th><strong>Paid Date</strong></th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
                     foreach (var item in Model.Payments)
                     {
-                        <tr>
-                            <td class="text-center">@item.PaidAmount</td>
-                            <td>@item.PaymentMethod</td>
-                            <td>@item.PaidDate.ToString("d MMM yyyy")</td>
-                        </tr>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>৳@item.PaidAmount/- <small class="text-muted">@item.PaymentMethod</small></span>
+                                <small class="text-muted">@item.PaidDate.ToString("d MMM yyyy")</small>
+                            </li>
+                        </ul>
+
                     }
                 }
-            </tbody>
-        </table>
-    }
+            </fieldset>
+        </div>
+
+        <div class="col">
+            <fieldset class="border p-2">
+                <legend>Note</legend>
+                <small>
+                    No warranty will be applicable in case of burning or physical damage. Warranty will
+                    also be void if warranty sitcker is removed. Sold products are non-refundable.
+                </small>
+            </fieldset>
+        </div>
+    </div>
 </div>
 
-@section scripts{
-    <script src="~/js/amount-in-word.js"></script>
-    <script>
+    @section scripts{
+        <script src="~/js/amount-in-word.js"></script>
+        <script>
         $(function() {
             $("#amount-word").text(`Taka (in word): ${number2text(@Model.SellingTotalPrice).toLowerCase()}`);
         });
-    </script>
-}
+        </script>
+    }

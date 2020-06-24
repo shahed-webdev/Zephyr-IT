@@ -13,9 +13,9 @@
 <section class="my-4 d-print-none">
     <div class="card">
         <div class="card-body d-flex justify-content-between">
-            <a class="btn btn-success btn-rounded" href="/Product/DueCollection/@Model.PurchaseId"><i class="fas fa-money-bill-alt mr-1"></i>Pay Due</a>
+            <a class="btn btn-success btn-rounded" href="/Purchase/DueCollection/@Model.PurchaseId"><i class="fas fa-money-bill-alt mr-1"></i>Pay Due</a>
             <div>
-                <a class="btn btn-elegant btn-rounded" href="/Product/Purchase"><i class="fas fa-shopping-cart mr-1"></i>Purchase</a>
+                <a class="btn btn-elegant btn-rounded" href="/Purchase/Purchase"><i class="fas fa-shopping-cart mr-1"></i>Purchase</a>
                 <button class="btn btn-amber btn-rounded" onclick="print()"><i class="fas fa-print mr-1"></i>Print</button>
             </div>
         </div>
@@ -33,10 +33,10 @@
 
     <div class="row mb-4 receipt-date">
         <div class="col pt-3">
-            RECEIPT# @Model.PurchaseSn
+            Memo Number# @Model.MemoNumber
         </div>
         <div class="col text-center">
-            <h5>INVOICE</h5>
+            <h5>INVOICE - @Model.PurchaseSn</h5>
         </div>
         <div class="col text-right col pt-3">
             Purchase Date: @Model.PurchaseDate.ToString("d MMM yyyy")
@@ -79,10 +79,10 @@
                         <td>@item.ProductName</td>
                         <td>@item.PurchasePrice</td>
                         <td>@item.ProductStocks.Count</td>
-                        <td>
+                        <td class="codeSpan">
                             @foreach (var stock in item.ProductStocks)
                             {
-                                <span>@stock.ProductCode,</span>
+                                <span>@stock.ProductCode</span>
                             }
                         </td> 
                         <td>@item.Warranty</td>

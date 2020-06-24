@@ -10,7 +10,7 @@
         #showAddedCode .code-span { display: inline-block; margin: 5px; cursor: pointer }
         #showAddedCode .code-span:hover::after { content: 'x'; padding-left: 2px; font-size: 16px; }
         #payment-area li strong { font-size: 17px; }
-        #inputDiscount, #inputPaid, #inputPurchaseDate { display: inline-block; border-radius: 50px; text-align: right; color: #000; }
+        #inputDiscount, #inputPaid, #inputPurchaseDate, #inputMemoNumber { display: inline-block; border-radius: 50px; text-align: right; color: #000; }
         .list-group-item { padding: .75rem 0; }
         .has-error { border: 2px solid #ff0000 }
         .remove { color: #ff0707; cursor: pointer; font-size: 15px; }
@@ -167,7 +167,7 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <strong>Memo Number</strong>
                                 <div class="flex-1 ml-3">
-                                    <input placeholder="Memo Number" id="inputMemoNumber" type="text" class="form-control" required/>
+                                    <input placeholder="Memo Number" id="inputMemoNumber" type="text" class="form-control text-left" required/>
                                 </div>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -234,6 +234,6 @@
 
 @section Scripts {
     <partial name="_UnobtrusiveAjaxPartial" />
-    <script src="~/page-js/product-purchase.js"></script>
+    <script src="~/page-js/product-purchase.js?v=1.2"></script>
 }
 

@@ -263,7 +263,7 @@ formTable.addEventListener('input', onInputUnitPrice)
 // onProduct code submit
 formCode.addEventListener('submit', evt => {
     evt.preventDefault()
-    const url = '/Product/FindProductByCode'
+    const url = '/Selling/FindProductByCode'
     const param = { params: { code: inputBarCode.value } };
 
     loading(btnFind,true)
@@ -390,7 +390,7 @@ const onSellSubmitClicked = function (evt) {
         ProductList: productList
     }
 
-    const url = '/Product/Selling'
+    const url = '/Selling/Selling'
     const options = {
         method: 'post',
         url: url,
@@ -401,7 +401,7 @@ const onSellSubmitClicked = function (evt) {
         .then(response => {
             if (response.data.IsSuccess) {
                 localstoreClear()
-                location.href = `/Product/SellingReceipt/${response.data.Data}`
+                location.href = `/Selling/SellingReceipt/${response.data.Data}`
             }
         })
         .catch(error => {
@@ -436,7 +436,7 @@ $('#inputCustomer').typeahead({
     },
     source: function (request, result) {
         $.ajax({
-            url: "/Product/FindCustomers",
+            url: "/Selling/FindCustomers",
             data: { prefix: request },
             success: function (response) { result(response); },
             error: function (err) { console.log(err) }

@@ -31,6 +31,7 @@ const totalPayable = formPayment.querySelector('#totalPayable');
 const inputPaid = formPayment.inputPaid;
 const totalDue = formPayment.querySelector('#totalDue');
 const selectPaymentMethod = formPayment.selectPaymentMethod;
+const inputMemoNumber = formPayment.inputMemoNumber;
 const inputPurchaseDate = formPayment.inputPurchaseDate;
 const vendorError = formPayment.querySelector('#vendor-error');
 
@@ -48,7 +49,7 @@ const buzzAudio = document.getElementById('audio');
 //****Global product Code Storage****//
 const productCode = {
     isExistServer: function (codeArray) {
-        const url = '/Product/PurchaseCodeIsExist';
+        const url = '/Purchase/PurchaseCodeIsExist';
         const options = {
             method: 'post',
             url: url,
@@ -502,9 +503,6 @@ const onAddProductToList = function () {
                 //play buzzer
                 buzzAudio.play();
 
-                //show product code on modal
-               // showAddedProductCode();
-
                 //show matched code
                 matchExistingProductCode(res);
                 return;
@@ -620,7 +618,7 @@ $('#inputFindVendor').typeahead({
     },
     source: function (request, result) {
         $.ajax({
-            url: "/Product/FindVendor",
+            url: "/Purchase/FindVendor",
             data: { prefix: request },
             success: function (response) { result(response); },
             error: function (err) { console.log(err) }
@@ -714,11 +712,12 @@ const onPurchaseSubmitClicked = function (evt) {
         PurchaseDiscountAmount: +inputDiscount.value | 0,
         PurchasePaidAmount: +inputPaid.value | 0,
         PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
+        MemoNumber: inputMemoNumber.value,
         PurchaseDate: new Date(inputPurchaseDate.value),
         Products: storage
     }
 
-    const url = '/Product/Purchase';
+    const url = '/Purchase/Purchase';
     const options = {
         method: 'post',
         url: url,
@@ -729,7 +728,7 @@ const onPurchaseSubmitClicked = function (evt) {
         .then(response => {
             if (response.data.IsSuccess) {
                 localstoreClear();
-                location.href = `/Product/PurchaseReceipt/${response.data.Data}`;
+                location.href = `/Purchase/PurchaseReceipt/${response.data.Data}`;
             }
         })
         .catch(error => {

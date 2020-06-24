@@ -11,7 +11,7 @@
         <table id="data-table" class="table table-sm table-bordered">
             <thead>
                 <tr>
-                    <th>#Invoice</th>
+                    <th>#Bill No</th>
                     <th>Customer Name</th>
                     <th>Amount</th>
                     <th>Paid</th>
@@ -40,14 +40,14 @@
                     dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>><"row"<"col-sm-12"<tr>>><"row"<"col-sm-5"i><"col-sm-7"p>>',
                     buttons: dataTable.button,
                     ajax: {
-                        url: "/Product/SellingRecordsData",
+                        url: "/Selling/SellingRecordsData",
                         type: "POST"
                     },
                     columns:
                         [
                             {
                                 data: "SellingSn", "render": function (data, type, row, meta) {
-                                    return `<a class="blue-text" href="/Product/SellingReceipt/${row.SellingId}">${data}</a>`;
+                                    return `<a class="blue-text" href="/Selling/SellingReceipt/${row.SellingId}">${data}</a>`;
                                 }
                             },
                             { data: "CustomerName" },
