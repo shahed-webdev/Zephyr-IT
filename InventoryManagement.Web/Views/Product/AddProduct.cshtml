@@ -86,14 +86,17 @@
 
             axios.get(url, param)
                 .then(res => {
-                    let html = ''
+                    let html = '';
                     res.data.forEach(item => {
+                        const warranty = item.Warranty ? item.Warranty : ''
+                        const description = item.Description ? item.Description: ''
+
                         html += `<tr>
                         <td class="text-left">${item.ProductName}</td>
                         <td>${item.Stock}</td>
-                        <td>${item.Warranty}</td>
-                        <td class="text-left">${item.Description}</td>
-                        <td style="width:50px; text-align:center"><i class="fa fa-times remove" id="${item.ProductId}"></i></td>
+                        <td>${warranty}</td>
+                        <td class="text-left">${description}</td>
+                        <td style="width:50px; text-align:center"><i class="fa fa-times remove red-text" id="${item.ProductId}"></i></td>
                         </tr>`
                     })
 
@@ -105,8 +108,8 @@
 
         //on change dropdown
         const onCategoryChanged = function () {
-            let categoryId = +this.value
-            if (!categoryId) return
+            const categoryId = +this.value;
+            if (!categoryId) return;
 
             const categoryName = document.getElementById('categoryName')
             categoryName.textContent = this.options[this.selectedIndex].text;

@@ -74,7 +74,7 @@ const storage = {
     },
     getData: function () {
         const store = localStorage.getItem('selling-cart')
-        if (!store) return
+        if (!store) return;
 
         cartProducts = JSON.parse(store)
     },
@@ -153,6 +153,8 @@ const removeProductCode = function (code) {
 
         //remove code element
         code.remove()
+
+        showProducts()
     }
 }
 
@@ -166,7 +168,7 @@ const onRemoveClicked = function (evt) {
 
     if (codeClicked) removeProductCode(element)
 
-    if (!removeClicked) return
+    if (!removeClicked) return;
 
     //remove product from storage
     cartProducts = cartProducts.filter(item => item.ProductCatalogId !== id);
@@ -361,7 +363,7 @@ const onSellSubmitClicked = function (evt) {
     evt.preventDefault()
 
     const valid = validation()
-    if (!valid) return
+    if (!valid) return;
 
     //disable button on submit
     const btnSubmit = formPayment.btnSelling
@@ -418,7 +420,7 @@ const onSellSubmitClicked = function (evt) {
         });
 }
 
-//event listner
+//event listener
 formPayment.addEventListener('submit', onCheckFormValid)
 formTable.addEventListener('submit', onSellSubmitClicked)
 inputDiscount.addEventListener('input', onInputDiscount)
@@ -452,9 +454,9 @@ $('#inputCustomer').typeahead({
 })
 
 function appendInfo(item) {
-    let html = `<span class="badge badge-pill badge-success">${item.CustomerName}</span>
+    const html = `<span class="badge badge-pill badge-success">${item.CustomerName}</span>
         <span class="badge badge-pill badge-danger">Previous Due: ৳<span id="prevDue">${item.Due}</span></span>
-        <span class="badge badge-pill badge-info">Due Limit: ৳<span id="dueLimit">${item.DueLimit}</span></span>`
+        <span class="badge badge-pill badge-info">Due Limit: ৳<span id="dueLimit">${item.DueLimit}</span></span>`;
 
     document.getElementById('customerInfo').innerHTML = html;
 }
@@ -465,10 +467,10 @@ function checkDueLimit() {
     if (!infoContainer.innerHTML) return
 
     const prevDue = +formPayment.querySelector('#prevDue').textContent || 0
-    const currnetDue = +totalDue.textContent
+    const currentDue = +totalDue.textContent
     const dueLimit = +formPayment.querySelector('#dueLimit').textContent || 0
 
-    const due = prevDue + currnetDue;
+    const due = prevDue + currentDue;
 
     customerError.innerText = ''
     if (due > dueLimit) {
@@ -478,7 +480,7 @@ function checkDueLimit() {
     return true  
 }
 
-//remove localstore
+//remove localstorage
 function localstoreClear() {
     localStorage.removeItem('selling-cart');
 }
