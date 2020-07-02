@@ -9,5 +9,7 @@ namespace InventoryManagement.Repository
         ICollection<DDL> CatalogDll();
         string CatalogNameNode(int id);
         void DeleteCustom(int id);
+        ProductCatalogUpdateViewModel FindForUpdate(int id);
+        void UpdateCustom(ProductCatalogUpdateViewModel model);
     }
 }

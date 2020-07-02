@@ -102,6 +102,28 @@ namespace InventoryManagement.Repository
             Context.ProductCatalog.Remove(catalog);
         }
 
+        public ProductCatalogUpdateViewModel FindForUpdate(int id)
+        {
+            return Context.ProductCatalog.Select(c => new ProductCatalogUpdateViewModel
+            {
+                ProductCatalogId = c.ProductCatalogId,
+                CatalogName = c.CatalogName
+            }).FirstOrDefault(c => c.ProductCatalogId == id);
+
+
+        }
+
+        public void UpdateCustom(ProductCatalogUpdateViewModel model)
+        {
+            var catalog = Context.ProductCatalog.Find(model.ProductCatalogId);
+
+            if (!Context.ProductCatalog.Any(c =>
+                c.ParentId == catalog.ParentId && c.CatalogName == model.CatalogName &&
+                c.ProductCatalogId != model.ProductCatalogId)) throw new Exception("Name already exists");
+            catalog.CatalogName = model.CatalogName;
+            Context.ProductCatalog.Update(catalog);
+        }
+
         string CatalogDllFunction(ProductCatalog catalog, string cat)
         {
 

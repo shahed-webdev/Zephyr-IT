@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
@@ -149,9 +148,7 @@ namespace InventoryManagement.Web.Controllers
         //GET: catalog update
         public IActionResult CatalogUpdate(int? id)
         {
-            if (id == null) return BadRequest(HttpStatusCode.BadRequest);
-
-            var model = _db.ProductCatalogs.Find(id.GetValueOrDefault());
+            var model = _db.ProductCatalogs.FindForUpdate(id.GetValueOrDefault());
 
             if (model == null) return NotFound();
 
@@ -160,17 +157,20 @@ namespace InventoryManagement.Web.Controllers
 
         //POST: catalog update
         [HttpPost]
-        public async Task<IActionResult> CatalogUpdate(ProductCatalogViewModel model)
+        public IActionResult CatalogUpdate(ProductCatalogUpdateViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-
-            var response = await _db.ProductCatalogs.AddCustomAsync(model).ConfigureAwait(false);
-
-            if (response.IsSuccess)
+            try
+            {
+                _db.ProductCatalogs.UpdateCustom(model);
+                _db.SaveChanges();
                 return RedirectToAction("CatalogList");
-
-            ModelState.AddModelError("CatalogName", response.Message);
-            return View(model);
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("CatalogName", e.Message);
+                return View(model);
+            }
         }
 
         //GET: Find Product
