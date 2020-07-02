@@ -1,9 +1,7 @@
 ﻿using InventoryManagement.Repository;
-using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -84,9 +82,10 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //Delete Catalog
-        public int DeleteCatalog(int id)
+        public void DeleteCatalog(int id)
         {
-            return 1;
+            _db.ProductCatalogs.DeleteCustom(id);
+            _db.SaveChanges();
         }
 
         //GET: Catalog

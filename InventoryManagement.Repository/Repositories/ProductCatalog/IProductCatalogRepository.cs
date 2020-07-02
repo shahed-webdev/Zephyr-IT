@@ -8,5 +8,6 @@ namespace InventoryManagement.Repository
         IEnumerable<ProductCatalogShow> ListCustom();
         ICollection<DDL> CatalogDll();
         string CatalogNameNode(int id);
+        void DeleteCustom(int id);
     }
 }

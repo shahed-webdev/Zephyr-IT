@@ -93,6 +93,13 @@ namespace InventoryManagement.Repository
                    .FirstOrDefault();
         }
 
+        public void DeleteCustom(int id)
+        {
+            var catalog = Context.ProductCatalog.FirstOrDefault(c => c.ProductCatalogId == id && !c.InverseParent.Any());
+
+            if (catalog != null) Context.ProductCatalog.Remove(catalog);
+        }
+
         string CatalogDllFunction(ProductCatalog catalog, string cat)
         {
 
