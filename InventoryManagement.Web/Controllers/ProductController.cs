@@ -82,6 +82,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //Delete Catalog
+        [HttpPost]
         public void DeleteCatalog(int id)
         {
             _db.ProductCatalogs.DeleteCustom(id);
@@ -139,7 +140,6 @@ namespace InventoryManagement.Web.Controllers
         //GET: catalog update
         public IActionResult CatalogUpdate(int? id)
         {
-            ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
             if (id == null) return BadRequest(HttpStatusCode.BadRequest);
 
             var model = _db.ProductCatalogs.Find(id.GetValueOrDefault());
@@ -153,7 +153,6 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CatalogUpdate(ProductCatalogViewModel model)
         {
-            ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
             if (!ModelState.IsValid) return View(model);
 
             var response = await _db.ProductCatalogs.AddCustomAsync(model).ConfigureAwait(false);

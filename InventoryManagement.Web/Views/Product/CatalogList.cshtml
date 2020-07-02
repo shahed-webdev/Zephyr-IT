@@ -72,11 +72,12 @@
             const element = evt.target;
 
             if (element.classList.contains('delete')) {
-               console.log(element.getAttribute('data-id'),'delete')
+                const id = +element.getAttribute('data-id');
+                deleteCategory(id, element)
             }
 
             if (element.classList.contains('edit')) {
-                console.log(element.getAttribute('data-id'),'edit')
+                location.href = `/Product/CatalogUpdate/${element.getAttribute('data-id')}`;
             }
 
             if (element.classList.contains('rotate')) {
@@ -84,9 +85,22 @@
             }
         });
 
+
+        function deleteCategory(id, element) {
+            const url = '/Product/DeleteCatalog';
+            $.post(url, { id: id }, function(response) {
+                console.log(response)
+                element.parentElement.parentElement.remove();
+            });
+        }
+
         function toggleCategory(element) {
-            element.parentElement.parentElement.nextElementSibling.classList.toggle('show');
-            element.classList.toggle('down');
+            const isElement = element.parentElement.parentElement.nextElementSibling;
+
+            if (isElement) {
+                isElement.classList.toggle('show');
+                element.classList.toggle('down');
+            }
         }
     </script>
 }
