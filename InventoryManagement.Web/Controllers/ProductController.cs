@@ -168,7 +168,7 @@ namespace InventoryManagement.Web.Controllers
             }
             catch (Exception e)
             {
-                ModelState.AddModelError("CatalogName", "Already exist");
+                ModelState.AddModelError("CatalogName", e.Message);
                 return View(model);
             }
         }
