@@ -38,4 +38,11 @@ namespace InventoryManagement.Repository
         public IEnumerable<ProductCatalogShow> SubCatalog { get; set; }
     }
 
+
+    public class ProductCatalogUpdateViewModel
+    {
+        public int ProductCatalogId { get; set; }
+        public string CatalogName { get; set; }
+    }
+
 }
