@@ -38,6 +38,7 @@
             <ul class="list-group list-group-flush">
                 @foreach (var catalog in Model)
                 {
+                    var isNoCategory = !catalog.SubCatalog.Any();
 
                     <li class="list-group-item">
                         <div class="parentCategory d-flex justify-content-between mb-2">
@@ -46,17 +47,16 @@
                                 <strong><span class="far fa-folder-open ic-w mx-1"></span>@catalog.CatalogName</strong>
                             </div>
                             <div>
-                                <i data-id="@(catalog.SubCatalog == null ? catalog.ProductCatalogId : 0)" class="@(catalog.SubCatalog == null ? "delete" : "muted") fal fa-trash-alt mr-3"></i>
+                                <i data-id="@(isNoCategory ? catalog.ProductCatalogId : 0)" class="@(isNoCategory ? "delete" : "muted") fal fa-trash-alt mr-3"></i>
                                 <i data-id="@catalog.ProductCatalogId" class="edit fal fa-edit"></i>
                             </div>
                         </div>
-
-                        <ul class="nested mb-1">
-                            @if (catalog.SubCatalog != null)
-                            {
+                        @if (!isNoCategory)
+                        {
+                            <ul class="nested mb-1">
                                 <partial name="_SubCatalog" model="@catalog.SubCatalog"/>
-                            }
-                        </ul>
+                            </ul>
+                        }
                     </li>
                 }
            </ul>

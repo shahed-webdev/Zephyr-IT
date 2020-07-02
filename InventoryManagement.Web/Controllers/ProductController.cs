@@ -83,6 +83,12 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
+        //Delete Catalog
+        public int DeleteCatalog(int id)
+        {
+            return 1;
+        }
+
         //GET: Catalog
         [Authorize(Roles = "admin, category-list")]
         public IActionResult Catalog()
@@ -160,5 +166,10 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
+        //GET: Find Product
+        public IActionResult FindProduct()
+        {
+            return View();
+        }
     }
 }

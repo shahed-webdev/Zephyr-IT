@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "Find Product";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+    <div class="m-3">
+        <h4 class="mb-3 page-header d-print-none">Find Product</h4>
+
+        <div class="card card-body mb-3">
+            <form id="formCode">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="md-form mt-0 mb-0 flex-1">
+                        <input id="inputProductCode" autocomplete="off" type="text" class="form-control" required />
+                        <label for="inputProductCode">Product code</label>
+                        <span id="codeError" class="field-validation-error"></span>
+                    </div>
+
+                    <button id="btnFind" type="submit" class="btn btn-sm btn-dark">
+                        <i class="far fa-search text-white"></i>
+                        <i class="fas fa-circle-notch fa-spin" style="display:none"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>   
+
