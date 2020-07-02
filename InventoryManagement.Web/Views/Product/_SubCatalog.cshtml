@@ -7,10 +7,19 @@
 @foreach (var sub in Model)
 {
     <ul class="nested">
-        <li><i class="far fa-folder-open ic-w mr-1"></i>@sub.CatalogName</li>
+        <li class="childCategory d-flex justify-content-between">
+            <div>
+                <i class="far fa-folder-open ic-w mr-1"></i>@sub.CatalogName
+            </div>
+            <div>
+                <i data-id="@sub.ProductCatalogId" class="delete fal fa-trash-alt mr-3"></i>
+                <i data-id="@sub.ProductCatalogId" class="edit fal fa-edit"></i>
+            </div>
+        </li>
+
         @if (sub.SubCatalog != null)
         {
             <partial name="_SubCatalog" model="@sub.SubCatalog" />
         }
-    </ul>   
+    </ul>
 }

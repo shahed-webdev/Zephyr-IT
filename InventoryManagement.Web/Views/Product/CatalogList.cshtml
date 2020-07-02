@@ -5,7 +5,15 @@
     ViewData["Title"] = "Category";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+@section Styles{
+    <style>
+        .treeview i { cursor: pointer }
+        .treeview i.delete { color: #fb5959 } 
 
+        .parentCategory, .childCategory { transition: all .3s ease-in-out}
+        .parentCategory:hover, .childCategory:hover { background-color: #eee; border-radius: 3px }
+    </style>
+}
 
 <div class="container">
     <div class="row">
@@ -25,13 +33,25 @@
                 @foreach (var catalog in Model)
                 {
                     <li class="list-group-item">
-                        <i class="fas fa-angle-right rotate"></i>
-                        <span><i class="far fa-folder-open ic-w mx-1"></i>@catalog.CatalogName</span>
+                        <div class="parentCategory d-flex justify-content-between mb-2">
+                            <div>
+                                <i class="fas fa-angle-right rotate"></i>
+                                <strong><i class="far fa-folder-open ic-w mx-1"></i>@catalog.CatalogName</strong>
+                            </div>
+                            <div>
+                                @if (catalog.SubCatalog == null)
+                                {
+                                    <i data-id="@catalog.ProductCatalogId" class="delete fal fa-trash-alt mr-3"></i>
+                                }
+                                <i data-id="@catalog.ProductCatalogId" class="edit fal fa-edit"></i>
+                            </div>
+                        </div> 
 
                         @if (catalog.SubCatalog != null)
                         {
-                            <partial name="_SubCatalog" model="@catalog.SubCatalog" />
+                            <partial name="_SubCatalog" model="@catalog.SubCatalog"/>
                         }
+
                     </li>
 
                 }
@@ -39,3 +59,21 @@
         </div>
     </div>
 </div>  
+
+@section Scripts{
+    <script>
+        const list = document.querySelector('.list-group');
+
+        list.addEventListener('click', function(evt) {
+            const element = evt.target;
+
+            if (element.classList.contains('delete')) {
+               console.log(element.getAttribute('data-id'),'delete')
+            }
+
+            if (element.classList.contains('edit')) {
+                console.log(element.getAttribute('data-id'),'edit')
+            }
+        });
+    </script>
+}

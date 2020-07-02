@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
@@ -127,5 +128,37 @@ namespace InventoryManagement.Web.Controllers
             else
                 return UnprocessableEntity(response.Message);
         }
+
+
+
+        //GET: catalog update
+        public IActionResult CatalogUpdate(int? id)
+        {
+            ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
+            if (id == null) return BadRequest(HttpStatusCode.BadRequest);
+
+            var model = _db.ProductCatalogs.Find(id.GetValueOrDefault());
+
+            if (model == null) return NotFound();
+
+            return View();
+        }
+
+        //POST: catalog update
+        [HttpPost]
+        public async Task<IActionResult> CatalogUpdate(ProductCatalogViewModel model)
+        {
+            ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
+            if (!ModelState.IsValid) return View(model);
+
+            var response = await _db.ProductCatalogs.AddCustomAsync(model).ConfigureAwait(false);
+
+            if (response.IsSuccess)
+                return RedirectToAction("CatalogList");
+
+            ModelState.AddModelError("CatalogName", response.Message);
+            return View(model);
+        }
+
     }
 }
