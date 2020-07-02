@@ -117,7 +117,7 @@ namespace InventoryManagement.Repository
         {
             var catalog = Context.ProductCatalog.Find(model.ProductCatalogId);
 
-            if (!Context.ProductCatalog.Any(c =>
+            if (Context.ProductCatalog.Any(c =>
                 c.ParentId == catalog.ParentId && c.CatalogName == model.CatalogName &&
                 c.ProductCatalogId != model.ProductCatalogId)) throw new Exception("Name already exists");
             catalog.CatalogName = model.CatalogName;
