@@ -1,5 +1,6 @@
 ﻿using InventoryManagement.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -97,7 +98,8 @@ namespace InventoryManagement.Repository
         {
             var catalog = Context.ProductCatalog.FirstOrDefault(c => c.ProductCatalogId == id && !c.InverseParent.Any());
 
-            if (catalog != null) Context.ProductCatalog.Remove(catalog);
+            if (catalog != null) throw new Exception("Delete the sub-catalogs first");
+            Context.ProductCatalog.Remove(catalog);
         }
 
         string CatalogDllFunction(ProductCatalog catalog, string cat)
