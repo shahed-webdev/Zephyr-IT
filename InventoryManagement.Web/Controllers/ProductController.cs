@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -82,11 +83,19 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //Delete Catalog
-        [HttpPost]
-        public void DeleteCatalog(int id)
+        public bool DeleteCatalog(int id)
         {
-            _db.ProductCatalogs.DeleteCustom(id);
-            _db.SaveChanges();
+            try
+            {
+                _db.ProductCatalogs.DeleteCustom(id);
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
         }
 
         //GET: Catalog
