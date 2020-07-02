@@ -88,10 +88,13 @@
 
         function deleteCategory(id, element) {
             const url = '/Product/DeleteCatalog';
-            $.post(url, { id: id }, function(response) {
-                console.log(response)
-                element.parentElement.parentElement.remove();
-            });
+            axios.post(url, null, { params: { id: id } })
+                .then(function (response) {
+                    if (response)
+                        element.parentElement.parentElement.remove();
+                    else
+                        alert('Category already in used');
+            })
         }
 
         function toggleCategory(element) {

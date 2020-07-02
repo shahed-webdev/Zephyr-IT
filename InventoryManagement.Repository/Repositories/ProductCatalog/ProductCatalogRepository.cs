@@ -98,7 +98,7 @@ namespace InventoryManagement.Repository
         {
             var catalog = Context.ProductCatalog.FirstOrDefault(c => c.ProductCatalogId == id && !c.InverseParent.Any());
 
-            if (catalog != null) throw new Exception("Delete the sub-catalogs first");
+            if (catalog == null) throw new Exception("Delete the sub-catalogs first");
             Context.ProductCatalog.Remove(catalog);
         }
 

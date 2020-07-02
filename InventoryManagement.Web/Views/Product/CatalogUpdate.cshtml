@@ -10,14 +10,10 @@
         <div class="col-lg-8 mx-auto">
             <div class="card card-body p-4">
                 <h4 class="page-header mt-4 text-center">Update Category</h4>
-
                 <form asp-action="CatalogUpdate">
-                    <select name="ParentId" asp-items="ViewBag.ParentId" class="mdb-select md-form mb-5" style="display: none">
-                        <option value="" selected>Parent Category</option>
-                    </select>
-
+                    <input type="hidden" name="ProductCatalogId" value="@Model.ProductCatalogId"/>
                     <div class="md-form mt-4">
-                        <input asp-for="CatalogName" class="form-control" required />
+                        <input asp-for="CatalogName" class="form-control" required/>
                         <label for="CatalogName">Category Name</label>
                         <span asp-validation-for="CatalogName"></span>
                     </div>

@@ -91,7 +91,7 @@ namespace InventoryManagement.Web.Controllers
                 _db.SaveChanges();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -155,7 +155,7 @@ namespace InventoryManagement.Web.Controllers
 
             if (model == null) return NotFound();
 
-            return View();
+            return View(model);
         }
 
         //POST: catalog update
