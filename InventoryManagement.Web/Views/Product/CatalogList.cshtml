@@ -8,11 +8,17 @@
 @section Styles{
     <style>
         .treeview i { cursor: pointer }
-        .treeview i.delete { color: #fb5959 } 
+        .treeview i.delete { color: #fb5959 }
 
-        .parentCategory, .childCategory { transition: all .3s ease-in-out}
+        .parentCategory, .childCategory { transition: all .3s ease-in-out }
+        .parentCategory i.muted { color: #bfbfbf; pointer-events: none }
         .parentCategory:hover, .childCategory:hover { background-color: #eee; border-radius: 3px }
-    </style>
+
+        .nested { display: none }
+        .nested.show { display: block }
+
+        .down { content: "\f107"; font-family: 'Font Awesome 5 Pro' }
+    </style> 
 }
 
 <div class="container">
@@ -32,30 +38,28 @@
             <ul class="list-group list-group-flush">
                 @foreach (var catalog in Model)
                 {
+
                     <li class="list-group-item">
                         <div class="parentCategory d-flex justify-content-between mb-2">
                             <div>
-                                <i class="fas fa-angle-right rotate"></i>
-                                <strong><i class="far fa-folder-open ic-w mx-1"></i>@catalog.CatalogName</strong>
+                                <span class="fas fa-angle-right rotate"></span>
+                                <strong><span class="far fa-folder-open ic-w mx-1"></span>@catalog.CatalogName</strong>
                             </div>
                             <div>
-                                @if (catalog.SubCatalog == null)
-                                {
-                                    <i data-id="@catalog.ProductCatalogId" class="delete fal fa-trash-alt mr-3"></i>
-                                }
+                                <i data-id="@(catalog.SubCatalog == null ? catalog.ProductCatalogId : 0)" class="@(catalog.SubCatalog == null ? "delete" : "muted") fal fa-trash-alt mr-3"></i>
                                 <i data-id="@catalog.ProductCatalogId" class="edit fal fa-edit"></i>
                             </div>
-                        </div> 
+                        </div>
 
-                        @if (catalog.SubCatalog != null)
-                        {
-                            <partial name="_SubCatalog" model="@catalog.SubCatalog"/>
-                        }
-
+                        <ul class="nested mb-1">
+                            @if (catalog.SubCatalog != null)
+                            {
+                                <partial name="_SubCatalog" model="@catalog.SubCatalog"/>
+                            }
+                        </ul>
                     </li>
-
                 }
-            </ul>
+           </ul>
         </div>
     </div>
 </div>  
@@ -74,6 +78,15 @@
             if (element.classList.contains('edit')) {
                 console.log(element.getAttribute('data-id'),'edit')
             }
+
+            if (element.classList.contains('rotate')) {
+                toggleCategory(element)
+            }
         });
+
+        function toggleCategory(element) {
+            element.parentElement.parentElement.nextElementSibling.classList.toggle('show');
+            element.classList.toggle('down');
+        }
     </script>
 }
