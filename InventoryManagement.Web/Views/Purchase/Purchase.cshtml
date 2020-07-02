@@ -29,7 +29,7 @@
     <section class="card card-body">
         <form id="cart-form">
             <div class="form-row">
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <div class="md-form">
                         <select id="ParentId" asp-items="ViewBag.ParentId" class="mdb-select" required>
                             <option value="" disabled selected>Select Category</option>
@@ -37,7 +37,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <div class="md-form">
                         <select id="selectProductId" class="mdb-select product-select" required>
                             <option value="" disabled selected>Brand and Model</option>
@@ -45,21 +45,22 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <div class="md-form">
                         <input id="inputPurchasePrice" class="form-control" type="number" required />
                         <label for="inputPurchasePrice">Purchase Price</label>
                     </div>
                 </div>
-            </div>
 
-            <div class="form-row">
                 <div class="col-lg-3">
                     <div class="md-form">
                         <input id="inputSellingPrice" class="form-control" type="number" required />
                         <label for="inputSellingPrice">Selling Price</label>
                     </div>
                 </div>
+            </div>
+
+            <div class="form-row">
                 <div class="col-lg-3">
                     <div class="md-form">
                         <input id="inputWarranty" class="form-control" type="text" />
@@ -71,6 +72,12 @@
                     <div class="md-form">
                         <input id="inputDescription" class="form-control" type="text" />
                         <label for="inputDescription">Description</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="md-form">
+                        <input id="inputProductNote" class="form-control" type="text" />
+                        <label for="inputProductNote">Note</label>
                     </div>
                 </div>
                 <div class="col-lg-2 text-right">
@@ -234,6 +241,6 @@
 
 @section Scripts {
     <partial name="_UnobtrusiveAjaxPartial" />
-    <script src="~/page-js/product-purchase.js?v=1.2"></script>
+    <script src="~/page-js/product-purchase.js"></script>
 }
 

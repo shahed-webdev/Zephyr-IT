@@ -61,12 +61,12 @@ const productCode = {
     isExist: function (newCode) {
         if (!codeStorage.length) return false;
 
-        const codeExis = codeStorage.some(code => code === newCode);
-        codeExistError.innerText = codeExis ? `${newCode}: Already Added!` : '';
+        const codeExist = codeStorage.some(code => code === newCode);
+        codeExistError.innerText = codeExist ? `${newCode}: Already Added!` : '';
 
-        if (codeExis) buzzAudio.play();
+        if (codeExist) buzzAudio.play();
 
-        return codeExis;
+        return codeExist;
     },
     setStorage: function (code) {
         if (codeStorage.indexOf(code) === -1) {
@@ -149,11 +149,12 @@ const createTableRow = function (item) {
     //column 1
     const td1 = tr.insertCell(0);
     td1.appendChild(document.createTextNode(item.Category));
+    td1.setAttribute('title', item.Description);
 
     //column 2
     const td2 = tr.insertCell(1);
     td2.appendChild(document.createTextNode(item.ProductName));
-    td2.setAttribute('title', item.Description);
+    td2.setAttribute('title', item.ProductNote);
 
     //column 3
     const td3 = tr.insertCell(2);
@@ -234,12 +235,15 @@ const clearInput = function () {
 
     inputDescription.value = ''
     inputDescription.nextElementSibling.classList.remove('active')
+
+    inputProductNote.value = ''
+    inputProductNote.nextElementSibling.classList.remove('active')
 }
 
-//category drodown change
+//category dropdown change
 const onCategoryChanged = function () {
     const categoryId = +this.value
-    if (!categoryId) return
+    if (!categoryId) return;
 
     const url = '/Product/GetProductByCategory'
     const parameter = { params: { categoryId } }
@@ -273,7 +277,7 @@ const onCategoryChanged = function () {
         })
 }
 
-//product drodown change
+//product dropdown change
 const onProductChanged = function () {
     const productId = +this.value
     if (!productId) return
@@ -353,6 +357,7 @@ const setProductTempObject = function (element) {
     const SellingPrice = +element.inputSellingPrice.value;
     const Warranty = element.inputWarranty.value;
     const Description = element.inputDescription.value;
+    const ProductNote = element.inputProductNote.value;
 
     if (tempStorage === null) {
         tempStorage = {
@@ -365,6 +370,7 @@ const setProductTempObject = function (element) {
             SellingPrice,
             Warranty,
             Description,
+            ProductNote,
             ProductStocks: []
         }
     }
@@ -377,6 +383,7 @@ const setProductTempObject = function (element) {
         tempStorage.SellingPrice = SellingPrice;
         tempStorage.Warranty = Warranty;
         tempStorage.Description = Description;
+        tempStorage.ProductNote = ProductNote;
     }
 
     localStorage.setItem('temp-storage', JSON.stringify(tempStorage));
@@ -491,7 +498,7 @@ const onAddProductToList = function () {
     setProductTempObject(formCart);
 
     if (tempStorage.ProductStocks.length) {
-        //start loading spnner
+        //start loading spinner
         this.children[0].style.display = "none";
         this.children[1].style.display = "inline-block";
         this.disabled = true;

@@ -144,10 +144,11 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
-
         //GET: catalog update
         public IActionResult CatalogUpdate(int? id)
         {
+            if(id == null) return RedirectToAction("CatalogList");
+
             var model = _db.ProductCatalogs.FindForUpdate(id.GetValueOrDefault());
 
             if (model == null) return NotFound();

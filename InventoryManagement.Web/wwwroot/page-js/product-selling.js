@@ -106,12 +106,14 @@ const appendCode = function (codes) {
 // create table rows
 const createTableRow = function (item) {
     const description = item.Description && `${item.Description},`
+    const productNote = item.ProductNote && `${item.ProductNote},`
 
     return `<tr data-id="${item.ProductCatalogId}">
                 <td>${item.ProductCatalogName}</td>
                 <td>
                     ${item.ProductName},
                     ${description}
+                    ${productNote}
                     <span class="codeSpan">${appendCode(item.codes)}</span>
                 </td>
                 <td>${item.Warranty}</td>
@@ -125,7 +127,9 @@ const createTableRow = function (item) {
 // create Table on load
 const showProducts = function () {
     let table = ''
-    cartProducts.forEach(item => table += createTableRow(item))
+    cartProducts.forEach(item => {
+        table += createTableRow(item)
+    });
 
     tbody.innerHTML = table
 
