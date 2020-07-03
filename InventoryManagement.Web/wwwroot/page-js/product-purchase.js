@@ -252,7 +252,7 @@ const onCategoryChanged = function () {
         .then(res => {
             if (res.data.length) {
                 const fragment = document.createDocumentFragment()
-                let option1 = document.createElement("option");
+                const option1 = document.createElement("option");
                 option1.value = ""
                 option1.text = "Product Name"
                 option1.setAttribute("disabled", "disabled")
@@ -260,7 +260,7 @@ const onCategoryChanged = function () {
                 fragment.appendChild(option1)
 
                 res.data.forEach(item => {
-                    let option = document.createElement("option");
+                    const option = document.createElement("option");
                     option.value = item.ProductId
                     option.text = item.ProductName
                     fragment.appendChild(option)
@@ -278,9 +278,9 @@ const onCategoryChanged = function () {
 }
 
 //product dropdown change
-const onProductChanged = function () {
+const onProductChanged = function() {
     const productId = +this.value
-    if (!productId) return
+    if (!productId) return;
 
     const url = '/Product/GetProductInfo'
     const parameter = { params: { productId } }
@@ -288,25 +288,29 @@ const onProductChanged = function () {
     //clear input value
     clearInput()
 
-    axios.get(url, parameter)
-        .then(res => {
-            const { SellingPrice, Warranty, Description } = res.data
+    axios.get(url, parameter).then(res => {
+        const { SellingPrice, Warranty, Description, Note } = res.data
 
-            if (SellingPrice) {
-                inputSellingPrice.value = SellingPrice
-                inputSellingPrice.nextElementSibling.classList.add('active')
-            }
+        if (SellingPrice) {
+            inputSellingPrice.value = SellingPrice
+            inputSellingPrice.nextElementSibling.classList.add('active')
+        }
 
-            if (Warranty) {
-                inputWarranty.value = Warranty
-                inputWarranty.nextElementSibling.classList.add('active')
-            }
+        if (Warranty) {
+            inputWarranty.value = Warranty
+            inputWarranty.nextElementSibling.classList.add('active')
+        }
 
-            if (Description) {
-                inputDescription.value = Description
-                inputDescription.nextElementSibling.classList.add('active')
-            }
-        })
+        if (Description) {
+            inputDescription.value = Description
+            inputDescription.nextElementSibling.classList.add('active')
+        }
+
+        if (Note) {
+            inputNote.value = Note
+            inputNote.nextElementSibling.classList.add('active')
+        }
+    })
 }
 
 
@@ -585,15 +589,15 @@ const onVendorAddClicked = function () {
 }
 
 //append vendor info to DOM
-const appendVendorInfo = function (Data) {
-    hiddenVendorId.value = Data.VendorId;
+const appendVendorInfo = function (data) {
+    hiddenVendorId.value = data.VendorId;
     vendorInfo.innerHTML = '';
 
     const html = `
-        <li class="list-group-item"><i class="fas fa-building"></i> ${Data.VendorCompanyName}</li>
-        <li class="list-group-item"><i class="fas fa-user-tie"></i> ${Data.VendorName}</li>
-        <li class="list-group-item"><i class="fas fa-phone"></i> ${Data.VendorPhone}</li>
-        <li class="list-group-item"><i class="fas fa-map-marker-alt"></i> ${Data.VendorAddress}</li>`;
+        <li class="list-group-item"><i class="fas fa-building"></i> ${data.VendorCompanyName}</li>
+        <li class="list-group-item"><i class="fas fa-user-tie"></i> ${data.VendorName}</li>
+        <li class="list-group-item"><i class="fas fa-phone"></i> ${data.VendorPhone}</li>
+        <li class="list-group-item"><i class="fas fa-map-marker-alt"></i> ${data.VendorAddress}</li>`;
 
     vendorInfo.innerHTML= html;
 }
@@ -637,7 +641,7 @@ $('#inputFindVendor').typeahead({
     }
 });
 
-//event listner
+//event listener
 vendorAddClick.addEventListener('click', onVendorAddClicked);
 
 
@@ -695,7 +699,7 @@ const validation = function () {
     return true;
 }
 
-//remove localstore
+//remove localstorage
 const localstoreClear = function () {
     localStorage.removeItem('cart-storage');
     localStorage.removeItem('code-storage');
@@ -751,7 +755,7 @@ const onPurchaseSubmitClicked = function (evt) {
         });
 }
 
-//event listner
+//event listener
 formPayment.addEventListener('submit', onPurchaseSubmitClicked);
 inputDiscount.addEventListener('input', onInputDiscount);
 inputPaid.addEventListener('input', onInputPaid);

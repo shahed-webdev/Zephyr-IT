@@ -10,7 +10,7 @@ body { background-color: #fff; color: black }
 
 .paid-record fieldset legend { width: auto !important; padding: 0 8px; font-size: 16px; font-weight: bold; color: #443f3f; }
 
-@page { margin: 10rem 3rem 3rem 3rem }
+@page { margin: 2in .5in 0 .5in }
 @media print {
     #header { display: none !important }
     .table-bordered th,

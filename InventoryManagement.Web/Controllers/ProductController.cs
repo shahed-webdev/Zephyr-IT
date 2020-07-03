@@ -123,6 +123,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET: catalog Type
+        [Authorize(Roles = "admin, category-list")]
         public async Task<IActionResult> CatalogType()
         {
             var response = await _db.ProductCatalogTypes.ToListAsync();
@@ -145,6 +146,7 @@ namespace InventoryManagement.Web.Controllers
 
 
         //GET: catalog update
+        [Authorize(Roles = "admin, category-list")]
         public IActionResult CatalogUpdate(int? id)
         {
             if(id == null) return RedirectToAction("CatalogList");
@@ -175,6 +177,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET: Find Product
+        [Authorize(Roles = "admin, find-product")]
         public IActionResult FindProduct()
         {
             return View();

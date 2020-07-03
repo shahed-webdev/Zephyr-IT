@@ -1,4 +1,29 @@
 ﻿
+//show hide field
+function radioSelected(evt) {
+    const individual = document.querySelectorAll('.individual-field')
+    const corporate = document.querySelectorAll('.corporate-field')
+
+    if (evt.value === '1') {
+        individual.forEach(item => {
+            item.style.display = 'block';
+        })
+
+        corporate.forEach(item => {
+            item.style.display = 'none';
+        })
+    } else {
+        individual.forEach(item => {
+            item.style.display = 'none';
+        })
+
+        corporate.forEach(item => {
+            item.style.display = 'block';
+        })
+    }
+};
+
+
 //selectors
 const phoneContainer = document.getElementById("phone-wrapper");
 const customerForm = document.getElementById("customer-form");
@@ -43,7 +68,7 @@ const checkPhoneIsExists = function (evt) {
     }
 }
 
-const addInputelement = function () {
+const addInputElement = function () {
     const element = `<div class="phone-container">
                 <div class="md-form m-0 flex-grow-1">
                     <input id="phone-${elementIndex}" name="PhoneNumbers[${elementIndex}].Phone" required type="number" class="form-control valid-check" />
@@ -58,7 +83,7 @@ const addInputelement = function () {
     phoneContainer.insertAdjacentHTML('beforeend', element);
 }
 
-const removeInputelement = function (evt) {
+const removeInputElement = function (evt) {
     evt.target.parentElement.parentElement.remove();
     const id = evt.target.parentElement.previousElementSibling.children[0].id;
     const errorIndex = isError.indexOf(id);
@@ -73,10 +98,10 @@ const togglePhoneElement = function (evt) {
     const removeClicked = evt.target.classList.contains("remove");
 
     if (addClicked)
-        addInputelement(evt);
+        addInputElement(evt);
 
     if (removeClicked)
-        removeInputelement(evt);
+        removeInputElement(evt);
 }
 
 const onFormSubmit = function (evt) {

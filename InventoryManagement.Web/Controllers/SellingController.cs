@@ -42,8 +42,10 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> SellingReceipt(int? id)
         {
             if (id == null) return RedirectToAction("Selling");
+            
             var model = await _db.Selling.SellingReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
             if (model == null) return RedirectToAction("Selling");
+
             return View(model);
         }
 
@@ -69,7 +71,7 @@ namespace InventoryManagement.Web.Controllers
             return View();
         }
 
-        //request from datatable(ajax)
+        //request from data-table(ajax)
         public IActionResult SellingRecordsData(DataRequest request)
         {
             var data = _db.Selling.Records(request);
