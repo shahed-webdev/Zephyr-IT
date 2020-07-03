@@ -45,6 +45,7 @@ namespace InventoryManagement.Repository
                     ProductName = s.Product.ProductName,
                     Description = s.Product.Description,
                     Warranty = s.Product.Warranty,
+                    Note = s.Product.Note,
                     SellingPrice = s.Product.SellingPrice
                 });
             return product.FirstOrDefaultAsync();

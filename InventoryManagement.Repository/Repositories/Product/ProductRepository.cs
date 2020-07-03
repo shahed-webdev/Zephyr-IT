@@ -34,17 +34,18 @@ namespace InventoryManagement.Repository
 
         public Task<List<ProductShowViewModel>> FindByCategoryAsync(int categoryId = 0)
         {
-            var products = Context.Product.Include(p=> p.ProductStock).Select(p =>
-                new ProductShowViewModel
-                {
-                    ProductId = p.ProductId,
-                    ProductCatalogId = p.ProductCatalogId,
-                    ProductName = p.ProductName,
-                    Description = p.Description,
-                    Warranty = p.Warranty,
-                    SellingPrice = p.SellingPrice,
-                    Stock = p.ProductStock.Count(s => !s.IsSold)
-                });
+            var products = Context.Product.Include(p => p.ProductStock).Select(p =>
+                 new ProductShowViewModel
+                 {
+                     ProductId = p.ProductId,
+                     ProductCatalogId = p.ProductCatalogId,
+                     ProductName = p.ProductName,
+                     Description = p.Description,
+                     Warranty = p.Warranty,
+                     Note = p.Note,
+                     SellingPrice = p.SellingPrice,
+                     Stock = p.ProductStock.Count(s => !s.IsSold)
+                 });
             if (categoryId != 0)
             {
                 return products.Where(p => p.ProductCatalogId == categoryId).ToListAsync();
@@ -72,6 +73,7 @@ namespace InventoryManagement.Repository
                      ProductName = p.ProductName,
                      Description = p.Description,
                      Warranty = p.Warranty,
+                     Note = p.Note,
                      SellingPrice = p.SellingPrice
                  });
 
