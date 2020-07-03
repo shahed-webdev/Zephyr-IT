@@ -109,6 +109,7 @@ namespace InventoryManagement.Repository
               .Include(s => s.SellingList)
               .ThenInclude(ps => ps.ProductStock)
               .ThenInclude(p => p.Product)
+              .ThenInclude(pd => pd.ProductCatalog)
               .Include(s => s.SellingPaymentList)
               .ThenInclude(sp => sp.SellingPayment)
               .Select(s => new SellingReceiptViewModel
@@ -124,7 +125,7 @@ namespace InventoryManagement.Repository
                   {
                       ProductId = pd.Product.ProductId,
                       ProductCatalogId = pd.Product.ProductCatalogId,
-                      ProductCatalogName = db.ProductCatalogs.CatalogNameNode(pd.Product.ProductCatalogId),
+                      ProductCatalogName = pd.Product.ProductCatalog.CatalogName,
                       ProductName = pd.Product.ProductName,
                       Description = pd.Product.Description,
                       Warranty = pd.Product.Warranty,

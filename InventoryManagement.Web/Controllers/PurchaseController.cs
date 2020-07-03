@@ -61,6 +61,8 @@ namespace InventoryManagement.Web.Views
             if (id == null) return RedirectToAction("Purchase");
 
             var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
+
+            if (model == null) return RedirectToAction("Purchase");
             return View(model);
         }
 

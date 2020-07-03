@@ -18,6 +18,7 @@ namespace InventoryManagement.Data
         public string ProductName { get; set; }
         public string Description { get; set; }
         public string Warranty { get; set; }
+        public string Note { get; set; }
         public double SellingPrice { get; set; }
         public DateTime InsertDate { get; set; }
         public virtual ProductCatalog ProductCatalog { get; set; }

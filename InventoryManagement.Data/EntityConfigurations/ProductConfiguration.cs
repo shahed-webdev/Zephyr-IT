@@ -19,6 +19,7 @@ namespace InventoryManagement.Data
                 .HasMaxLength(128);
 
             entity.Property(e => e.Warranty).HasMaxLength(128);
+            entity.Property(e => e.Note).HasMaxLength(1000);
 
             entity.Property(e => e.SellingPrice).HasDefaultValueSql("0");
 

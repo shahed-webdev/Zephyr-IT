@@ -2,8 +2,6 @@
 using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
@@ -45,6 +43,7 @@ namespace InventoryManagement.Web.Controllers
         {
             if (id == null) return RedirectToAction("Selling");
             var model = await _db.Selling.SellingReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
+            if (model == null) return RedirectToAction("Selling");
             return View(model);
         }
 

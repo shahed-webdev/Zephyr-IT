@@ -57,6 +57,7 @@ namespace InventoryManagement.Repository
                     ProductId = p.ProductId,
                     Description = p.Description,
                     Warranty = p.Warranty,
+                    Note = p.Note,
                     PurchasePrice = p.PurchasePrice,
                     SellingPrice = p.SellingPrice,
                     ProductStock = p.ProductStocks.Select(s => new ProductStock
@@ -95,6 +96,7 @@ namespace InventoryManagement.Repository
                 product.ProductId = item.ProductId;
                 product.Description = item.Description;
                 product.Warranty = item.Warranty;
+                product.Note = item.Note;
                 product.SellingPrice = item.SellingPrice;
                 Context.Product.Update(product);
             }
@@ -146,7 +148,7 @@ namespace InventoryManagement.Repository
                     {
                         ProductId = pd.ProductId,
                         ProductCatalogId = pd.Product.ProductCatalogId,
-                        ProductCatalogName = db.ProductCatalogs.CatalogNameNode(pd.Product.ProductCatalogId),
+                        ProductCatalogName = pd.Product.ProductCatalog.CatalogName,
                         ProductName = pd.Product.ProductName,
                         Description = pd.Description,
                         Warranty = pd.Warranty,

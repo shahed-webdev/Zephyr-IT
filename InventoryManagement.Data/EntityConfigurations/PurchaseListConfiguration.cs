@@ -8,6 +8,7 @@ namespace InventoryManagement.Data
         public void Configure(EntityTypeBuilder<PurchaseList> entity)
         {
             entity.Property(e => e.Warranty).HasMaxLength(128);
+            entity.Property(e => e.Note).HasMaxLength(1000);
             entity.Property(e => e.Description).HasMaxLength(500);
             entity.Property(e => e.SellingPrice).HasDefaultValueSql("0");
             entity.Property(e => e.PurchasePrice).HasDefaultValueSql("0");
