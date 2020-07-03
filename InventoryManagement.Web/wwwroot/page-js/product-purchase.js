@@ -154,7 +154,7 @@ const createTableRow = function (item) {
     //column 2
     const td2 = tr.insertCell(1);
     td2.appendChild(document.createTextNode(item.ProductName));
-    td2.setAttribute('title', item.ProductNote);
+    td2.setAttribute('title', item.Note);
 
     //column 3
     const td3 = tr.insertCell(2);
@@ -236,8 +236,8 @@ const clearInput = function () {
     inputDescription.value = ''
     inputDescription.nextElementSibling.classList.remove('active')
 
-    inputProductNote.value = ''
-    inputProductNote.nextElementSibling.classList.remove('active')
+    inputNote.value = ''
+    inputNote.nextElementSibling.classList.remove('active')
 }
 
 //category dropdown change
@@ -357,7 +357,7 @@ const setProductTempObject = function (element) {
     const SellingPrice = +element.inputSellingPrice.value;
     const Warranty = element.inputWarranty.value;
     const Description = element.inputDescription.value;
-    const ProductNote = element.inputProductNote.value;
+    const Note = element.inputNote.value;
 
     if (tempStorage === null) {
         tempStorage = {
@@ -370,7 +370,7 @@ const setProductTempObject = function (element) {
             SellingPrice,
             Warranty,
             Description,
-            ProductNote,
+            Note,
             ProductStocks: []
         }
     }
@@ -383,7 +383,7 @@ const setProductTempObject = function (element) {
         tempStorage.SellingPrice = SellingPrice;
         tempStorage.Warranty = Warranty;
         tempStorage.Description = Description;
-        tempStorage.ProductNote = ProductNote;
+        tempStorage.Note = Note;
     }
 
     localStorage.setItem('temp-storage', JSON.stringify(tempStorage));

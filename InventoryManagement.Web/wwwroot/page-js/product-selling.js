@@ -106,14 +106,14 @@ const appendCode = function (codes) {
 // create table rows
 const createTableRow = function (item) {
     const description = item.Description && `${item.Description},`
-    const productNote = item.ProductNote && `${item.ProductNote},`
+    const note = item.Note && `${item.tNote},`
 
     return `<tr data-id="${item.ProductCatalogId}">
                 <td>${item.ProductCatalogName}</td>
                 <td>
                     ${item.ProductName},
                     ${description}
-                    ${productNote}
+                    ${note}
                     <span class="codeSpan">${appendCode(item.codes)}</span>
                 </td>
                 <td>${item.Warranty}</td>
