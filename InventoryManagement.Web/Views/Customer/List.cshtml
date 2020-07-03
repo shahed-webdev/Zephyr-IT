@@ -19,8 +19,19 @@
         </div>
     </div>
 
-
     <div class="card card-body">
+        <div class="mb-3">
+            <div class="custom-control custom-radio custom-control-inline">
+                <input id="radioIndividual" name="IsIndividual" value="1" checked type="radio" class="custom-control-input" onchange="radioSelected(this)">
+                <label class="custom-control-label" for="radioIndividual">Individual</label>
+            </div>
+
+            <div class="custom-control custom-radio custom-control-inline">
+                <input id="radioCorporate" name="IsIndividual" value="0" type="radio" class="custom-control-input" onchange="radioSelected(this)">
+                <label class="custom-control-label" for="radioCorporate">Corporate</label>
+            </div>
+        </div>
+
         <div class="table-responsive">
             <table id="data-table" class="table table-sm table-bordered">
                 <thead>
@@ -50,3 +61,11 @@
         </div>
     </div>
 </div>
+
+@section scripts{
+    <script>
+        $(function () {
+            $("#data-table").DataTable()
+        });
+    </script>
+}

@@ -32,58 +32,54 @@
             <form id="customer-form" asp-action="Update">
                 <input id="customerId" type="hidden" name="CustomerId" value="@Model.CustomerId">
 
+                <div id="phone-wrapper" class="mb-5">
+                    <partial name="_UpdatePhonePartial" model="@Model.PhoneNumbers" />
+                </div>
+
                 <div class="md-form mb-5">
                     <input asp-for="CustomerName" class="form-control" required />
                     <label asp-for="CustomerName">Name</label>
                 </div>
-                <div id="phone-wrapper">
-                    <partial name="_UpdatePhonePartial" model="@Model.PhoneNumbers" />
+
+
+                <div class="md-form mb-5">
+                    <input asp-for="OrganizationName" class="form-control" />
+                    <label asp-for="OrganizationName">Organization Name</label>
                 </div>
 
-                <div class="form-row">
-                    <div class="col-lg-5">
-                        <div class="md-form mb-5">
-                            <input asp-for="OrganizationName" class="form-control" />
-                            <label asp-for="OrganizationName">Organization Name</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-7">
-                        <div class="md-form mb-5">
-                            <input asp-for="CustomerAddress" class="form-control" />
-                            <label asp-for="CustomerAddress">Address</label>
-                        </div>
-                    </div>
+                <div class="md-form mb-5">
+                    <input asp-for="CustomerAddress" class="form-control" />
+                    <label asp-for="CustomerAddress">Address</label>
                 </div>
+
                 <div class="md-form mb-5">
                     <input asp-for="Description" class="form-control" />
                     <label asp-for="Description">Description</label>
                 </div>
-                <div class="form-row">
-                    <div class="col-lg-5">
-                        <div class="md-form mb-5">
-                            <input asp-for="DueLimit" type="number" class="form-control" />
-                            <label asp-for="DueLimit">Due Limit</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-7">
-                        <div class="md-form form-sm mb-0">
-                            <input type="hidden" id="Photo" name="Photo" />
-                            <div class="file-field">
-                                <div class="btn btn-outline-warning btn-rounded btn-sm float-left">
-                                    <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose</span>
-                                    <input type="file" id="upload" value="Choose a Photo" onchange="clearImage(this)">
-                                </div>
-                                <div class="file-path-wrapper">
-                                    <input class="file-path validate" type="text" placeholder="Upload photo" />
-                                </div>
+
+                <div class="md-form mb-5">
+                    <input asp-for="DueLimit" type="number" class="form-control" />
+                    <label asp-for="DueLimit">Due Limit</label>
+                </div>
+
+                <div>
+                    <div class="md-form form-sm mb-0">
+                        <input type="hidden" id="Photo" name="Photo" />
+                        <div class="file-field">
+                            <div class="btn btn-outline-warning btn-rounded btn-sm float-left">
+                                <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose</span>
+                                <input type="file" id="upload" value="Choose a Photo" onchange="clearImage(this)">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" placeholder="Upload photo" />
                             </div>
                         </div>
+                    </div>
 
-                        <div class="w-50 m-auto text-center">
-                            <div id="upload-demo" style="display:none;"></div>
-                            <img id="prevImage" alt="" />
-                            <a id="doneButton" class="btn-floating btn-lg btn-black" style="display:none;"><i class="fas fa-crop-alt"></i></a>
-                        </div>
+                    <div class="w-50 m-auto text-center">
+                        <div id="upload-demo" style="display:none;"></div>
+                        <img id="prevImage" alt="" />
+                        <a id="doneButton" class="btn-floating btn-lg btn-black" style="display:none;"><i class="fas fa-crop-alt"></i></a>
                     </div>
                 </div>
 
@@ -91,7 +87,7 @@
                     <button id="btnSubmit" class="btn peach-gradient btn-rounded my-4 waves-effect" type="submit">Update Customer</button>
                     <a asp-action="List">Back to List</a>
                 </div>
-            </form>
+            </form>     
             </div>
         </div>
     </div>
