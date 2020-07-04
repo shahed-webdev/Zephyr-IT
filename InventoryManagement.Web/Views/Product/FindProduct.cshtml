@@ -77,7 +77,7 @@
         // on Product code submit
         formCode.addEventListener('submit', evt => {
             evt.preventDefault()
-            const url = '/Selling/FindProductByCode'
+            const url = '/Product/FindProductDetailsByCode'
             const param = { params: { code: inputProductCode.value } };
 
             axios.get(url, param).then(res => {

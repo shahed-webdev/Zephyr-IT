@@ -149,7 +149,7 @@ namespace InventoryManagement.Web.Controllers
         [Authorize(Roles = "admin, category-list")]
         public IActionResult CatalogUpdate(int? id)
         {
-            if(id == null) return RedirectToAction("CatalogList");
+            if (id == null) return RedirectToAction("CatalogList");
 
             var model = _db.ProductCatalogs.FindForUpdate(id.GetValueOrDefault());
 
@@ -181,6 +181,13 @@ namespace InventoryManagement.Web.Controllers
         public IActionResult FindProduct()
         {
             return View();
+        }
+
+        //call from axios
+        public async Task<IActionResult> FindProductDetailsByCode(string code)
+        {
+            var data = await _db.ProductStocks.FindforDetailsAsync(code).ConfigureAwait(false);
+            return Json(data);
         }
     }
 }

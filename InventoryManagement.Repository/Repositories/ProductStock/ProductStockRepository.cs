@@ -51,6 +51,28 @@ namespace InventoryManagement.Repository
             return product.FirstOrDefaultAsync();
         }
 
+        public Task<ProductStockDetailsViewModel> FindforDetailsAsync(string code)
+        {
+            var product = Context.ProductStock
+                .Include(s => s.Product)
+                .ThenInclude(p => p.ProductCatalog)
+                .Include(s => s.PurchaseList)
+                .Where(s => s.ProductCode == code)
+                .Select(s => new ProductStockDetailsViewModel
+                {
+                    ProductId = s.ProductId,
+                    ProductCode = s.ProductCode,
+                    ProductName = s.Product.ProductName,
+                    Description = s.Product.Description,
+                    Warranty = s.Product.Warranty,
+                    Note = s.Product.Note,
+                    SellingPrice = s.Product.SellingPrice,
+                    ProductCatalogName = s.Product.ProductCatalog.CatalogName,
+                    PurchasePrice = s.PurchaseList.PurchasePrice
+                });
+            return product.FirstOrDefaultAsync();
+        }
+
         public Task<List<ProductStock>> SellingStockFromCodesAsync(string[] codes)
         {
             return Context.ProductStock.Include(s => s.Product).Where(s => codes.Contains(s.ProductCode)).ToListAsync();
