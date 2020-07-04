@@ -21,10 +21,6 @@ namespace InventoryManagement.Data
             entity.Property(e => e.InsertDate)
                 .HasColumnType("datetime")
                 .HasDefaultValueSql("(getdate())");
-            entity.Property(e => e.IsIndividual)
-                .HasColumnType("bit")
-                .HasDefaultValueSql("1");
-
             entity.Property(e => e.OrganizationName).HasMaxLength(128);
         }
     }
