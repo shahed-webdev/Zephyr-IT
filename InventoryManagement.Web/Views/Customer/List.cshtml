@@ -6,6 +6,11 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+@section Styles{
+    <style>
+        .corporate-field { display: none }
+    </style>
+}
 
 <div class="m-md-3">
     <div class="row">
@@ -22,12 +27,12 @@
     <div class="card card-body">
         <div class="mb-3">
             <div class="custom-control custom-radio custom-control-inline">
-                <input id="radioIndividual" name="IsIndividual" value="1" checked type="radio" class="custom-control-input" onchange="radioSelected(this)">
+                <input id="radioIndividual" name="IsIndividual" value="true" checked type="radio" class="custom-control-input" onchange="radioSelected(this)">
                 <label class="custom-control-label" for="radioIndividual">Individual</label>
             </div>
 
             <div class="custom-control custom-radio custom-control-inline">
-                <input id="radioCorporate" name="IsIndividual" value="0" type="radio" class="custom-control-input" onchange="radioSelected(this)">
+                <input id="radioCorporate" name="IsIndividual" value="false" type="radio" class="custom-control-input" onchange="radioSelected(this)">
                 <label class="custom-control-label" for="radioCorporate">Corporate</label>
             </div>
         </div>
@@ -36,9 +41,15 @@
             <table id="data-table" class="table table-sm table-bordered">
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>
+                            <span class="individual-field">Name</span>
+                            <span class="corporate-field">Concerned Person</span>
+                        </th>
                         <th>Mobile&nbsp;(Primary)</th>
-                        <th>Org.&nbsp;Name</th>
+                        <th>
+                            <span class="individual-field">Working Station</span>
+                            <span class="corporate-field">Corporate Name</span>
+                        </th>
                         <th>Address</th>
                         <th>Description</th>
                         <th>Edit</th>
@@ -64,8 +75,45 @@
 
 @section scripts{
     <script>
-        $(function () {
+        $(function() {
             $("#data-table").DataTable()
         });
+
+
+        //$('#example').DataTable({
+        //    "processing": true,
+        //    "serverSide": true,
+        //    "ajax": {
+        //        "url": "scripts/server_processing.php",
+        //        "data": function(d) {
+        //             d.custom = $('#myInput').val();
+        //        }
+        //    }
+        //});
+
+
+        //show hide field
+        function radioSelected(evt) {
+            const individual = document.querySelectorAll('.individual-field')
+            const corporate = document.querySelectorAll('.corporate-field')
+
+            if (evt.value === 'true') {
+                individual.forEach(item => {
+                    item.style.display = 'block';
+                })
+
+                corporate.forEach(item => {
+                    item.style.display = 'none';
+                })
+            } else {
+                individual.forEach(item => {
+                    item.style.display = 'none';
+                })
+
+                corporate.forEach(item => {
+                    item.style.display = 'block';
+                })
+            }
+        };
     </script>
 }

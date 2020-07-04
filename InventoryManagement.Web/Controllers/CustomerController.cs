@@ -79,5 +79,17 @@ namespace InventoryManagement.Web.Controllers
 
             return View(model);
         }
+
+        //GET:// Details
+        public IActionResult Details(int? id)
+        {
+            if (!id.HasValue) return RedirectToAction("List");
+
+            var model = _db.Customers.FindCustom(id.GetValueOrDefault());
+            if (model == null) return NotFound();
+
+            return View(model);
+        }
+
     }
 }
