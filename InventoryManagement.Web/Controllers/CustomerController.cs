@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
@@ -23,7 +22,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET:// List of customer
-        
+
         public IActionResult List()
         {
             var list = _db.Customers.ListCustom();
@@ -85,7 +84,7 @@ namespace InventoryManagement.Web.Controllers
         {
             if (!id.HasValue) return RedirectToAction("List");
 
-            var model = _db.Customers.FindCustom(id.GetValueOrDefault());
+            var model = _db.Customers.ProfileDetails(id.GetValueOrDefault());
             if (model == null) return NotFound();
 
             return View(model);

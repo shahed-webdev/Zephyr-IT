@@ -65,6 +65,46 @@ namespace InventoryManagement.Repository
             return customerList.FirstOrDefault(c => c.CustomerId == id);
         }
 
+        public CustomerProfileViewModel ProfileDetails(int id)
+        {
+            var customer = Context.Customer
+                .Include(c => c.Selling)
+                .Select(c => new CustomerProfileViewModel
+                {
+                    CustomerId = c.CustomerId,
+                    OrganizationName = c.OrganizationName,
+                    CustomerName = c.CustomerName,
+                    CustomerAddress = c.CustomerAddress,
+                    Description = c.Description,
+                    DueLimit = c.DueLimit,
+                    Photo = c.Photo,
+                    Designation = c.Designation,
+                    IsIndividual = c.IsIndividual,
+                    PhoneNumbers = c.CustomerPhone.Select(p => new CustomerPhoneViewModel
+                    {
+                        CustomerPhoneId = p.CustomerPhoneId,
+                        Phone = p.Phone,
+                        IsPrimary = p.IsPrimary
+                    }).ToList(),
+                    SellingRecords = c.Selling.Select(s => new CustomerSellingViewModel
+                    {
+                        SellingId = s.SellingId,
+                        SellingSn = s.SellingSn,
+                        SellingAmount = s.SellingTotalPrice,
+                        SellingPaidAmount = s.SellingPaidAmount,
+                        SellingDiscountAmount = s.SellingDiscountAmount,
+                        SellingDueAmount = s.SellingDueAmount,
+                        SellingDate = s.SellingDate
+                    }).ToList(),
+                    SignUpDate = c.InsertDate,
+                    SoldAmount = c.TotalAmount,
+                    DiscountAmount = c.TotalDiscount,
+                    DueAmount = c.Due,
+                    ReceivedAmount = c.Paid
+                });
+            return customer.FirstOrDefault(c => c.CustomerId == id);
+        }
+
         public void CustomUpdate(CustomerAddUpdateViewModel model)
         {
             var customer = Find(model.CustomerId);
