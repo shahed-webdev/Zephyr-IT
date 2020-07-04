@@ -33,7 +33,11 @@ namespace InventoryManagement.Web.Controllers
             var response = await _db.Selling.AddCustomAsync(model, _db).ConfigureAwait(false);
 
             if (response.IsSuccess)
+            {
+                _db.Customers.UpdatePaidDue(model.CustomerId);
+                await _db.SaveChangesAsync();
                 return Ok(response);
+            }
             else
                 return UnprocessableEntity(response);
         }
@@ -42,7 +46,7 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> SellingReceipt(int? id)
         {
             if (id == null) return RedirectToAction("Selling");
-            
+
             var model = await _db.Selling.SellingReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
             if (model == null) return RedirectToAction("Selling");
 

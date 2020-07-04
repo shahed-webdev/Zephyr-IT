@@ -90,6 +90,24 @@ namespace InventoryManagement.Repository
             };
         }
 
+        public void UpdatePaidDue(int id)
+        {
+            var vendor = Find(id);
+            var obj = Context.Purchase.Where(s => s.PurchaseId == vendor.VendorId).GroupBy(s => s.PurchaseId).Select(s =>
+                new
+                {
+                    TotalAmount = s.Sum(c => c.PurchaseTotalPrice),
+                    TotalDiscount = s.Sum(c => c.PurchaseDiscountAmount),
+                    Paid = s.Sum(c => c.PurchasePaidAmount)
+                }).FirstOrDefault();
+
+            vendor.TotalAmount = obj.TotalAmount;
+            vendor.TotalDiscount = obj.TotalDiscount;
+            vendor.Paid = obj.Paid;
+
+            Update(vendor);
+        }
+
         public bool RemoveCustom(int id)
         {
             //if (Context.Selling.Any(s => s.VendorID == id)) return false;

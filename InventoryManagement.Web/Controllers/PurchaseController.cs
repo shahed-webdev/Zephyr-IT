@@ -36,7 +36,10 @@ namespace InventoryManagement.Web.Views
             var response = await _db.Purchases.AddCustomAsync(model, _db).ConfigureAwait(false);
 
             if (response.IsSuccess)
+            {
+                _db.Vendors.UpdatePaidDue(model.PurchaseId);
                 return Ok(response);
+            }
             else
                 return UnprocessableEntity(response);
         }

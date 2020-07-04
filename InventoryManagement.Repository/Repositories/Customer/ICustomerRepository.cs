@@ -11,6 +11,7 @@ namespace InventoryManagement.Repository
         CustomerAddUpdateViewModel FindCustom(int id);
         CustomerProfileViewModel ProfileDetails(int id);
         void CustomUpdate(CustomerAddUpdateViewModel model);
+        void UpdatePaidDue(int id);
         Task<ICollection<CustomerListViewModel>> SearchAsync(string key);
     }
 }

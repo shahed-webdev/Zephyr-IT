@@ -138,6 +138,25 @@ namespace InventoryManagement.Repository
             Context.CustomerPhone.AddRange(newPhones);
         }
 
+        public void UpdatePaidDue(int id)
+        {
+            var customer = Find(id);
+
+            var obj = Context.Selling.Where(s => s.CustomerId == customer.CustomerId).GroupBy(s => s.CustomerId).Select(s =>
+                new
+                {
+                    TotalAmount = s.Sum(c => c.SellingTotalPrice),
+                    TotalDiscount = s.Sum(c => c.SellingDiscountAmount),
+                    Paid = s.Sum(c => c.SellingPaidAmount)
+                }).FirstOrDefault();
+
+            customer.TotalAmount = obj.TotalAmount;
+            customer.TotalDiscount = obj.TotalDiscount;
+            customer.Paid = obj.Paid;
+
+            Update(customer);
+        }
+
         public async Task<ICollection<CustomerListViewModel>> SearchAsync(string key)
         {
             return await Context.Customer.Include(c => c.CustomerPhone)

@@ -11,8 +11,8 @@ namespace InventoryManagement.Repository
         Vendor AddCustom(VendorViewModel model);
         void UpdateCustom(VendorViewModel model);
         VendorViewModel FindCustom(int? id);
-
-        public bool RemoveCustom(int id);
+        void UpdatePaidDue(int id);
+        bool RemoveCustom(int id);
     }
 
 }
