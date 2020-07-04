@@ -1,7 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InventoryManagement.Data
@@ -17,13 +14,16 @@ namespace InventoryManagement.Data
                 .HasMaxLength(128);
             entity.Property(e => e.Description)
                 .HasMaxLength(1000);
-
+            entity.Property(e => e.Designation)
+                .HasMaxLength(255);
             entity.Property(e => e.Due)
                 .HasComputedColumnSql("(([TotalAmount]+[ReturnAmount])-([TotalDiscount]+[Paid]))");
-
             entity.Property(e => e.InsertDate)
                 .HasColumnType("datetime")
                 .HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.IsIndividual)
+                .HasColumnType("bit")
+                .HasDefaultValueSql("1");
 
             entity.Property(e => e.OrganizationName).HasMaxLength(128);
         }

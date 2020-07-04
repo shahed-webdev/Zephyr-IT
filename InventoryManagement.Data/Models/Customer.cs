@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
 
 namespace InventoryManagement.Data
 {
@@ -27,7 +26,8 @@ namespace InventoryManagement.Data
         public double DueLimit { get; set; }
         public byte[] Photo { get; set; }
         public DateTime InsertDate { get; set; }
-        
+        public string Designation { get; set; }
+        public bool IsIndividual { get; set; }
 
         public virtual ICollection<Selling> Selling { get; set; }
         public virtual ICollection<SellingPayment> SellingPayment { get; set; }

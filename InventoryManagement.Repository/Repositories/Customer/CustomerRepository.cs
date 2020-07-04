@@ -1,6 +1,5 @@
 ﻿using InventoryManagement.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,6 +24,8 @@ namespace InventoryManagement.Repository
                 Due = c.Due,
                 DueLimit = c.DueLimit,
                 Description = c.Description,
+                Designation = c.Designation,
+                IsIndividual = c.IsIndividual,
                 SignUpDate = c.InsertDate
             });
 
@@ -50,6 +51,8 @@ namespace InventoryManagement.Repository
                 Description = c.Description,
                 DueLimit = c.DueLimit,
                 Photo = c.Photo,
+                Designation = c.Designation,
+                IsIndividual = c.IsIndividual,
                 PhoneNumbers = c.CustomerPhone.Select(p => new CustomerPhoneViewModel
                 {
                     CustomerPhoneId = p.CustomerPhoneId,
@@ -73,6 +76,8 @@ namespace InventoryManagement.Repository
             customer.OrganizationName = model.OrganizationName;
             customer.Description = model.Description;
             customer.DueLimit = model.DueLimit;
+            customer.Designation = model.Designation;
+            customer.IsIndividual = model.IsIndividual;
             Update(customer);
 
             foreach (var item in model.PhoneNumbers.Where(p => p.CustomerPhoneId != 0))
@@ -104,10 +109,13 @@ namespace InventoryManagement.Repository
                       OrganizationName = c.OrganizationName,
                       CustomerName = c.CustomerName,
                       CustomerAddress = c.CustomerAddress,
-                      PhonePrimary = c.CustomerPhone.FirstOrDefault(p=>p.Phone.Contains(key)).Phone,
+                      PhonePrimary = c.CustomerPhone.FirstOrDefault(p => p.Phone.Contains(key)).Phone,
                       Due = c.Due,
                       DueLimit = c.DueLimit,
-                      SignUpDate = c.InsertDate
+                      SignUpDate = c.InsertDate,
+                      Designation = c.Designation,
+                      IsIndividual = c.IsIndividual,
+                      Description = c.Description
                   }).Take(5).ToListAsync().ConfigureAwait(false);
         }
 
@@ -121,6 +129,8 @@ namespace InventoryManagement.Repository
                 CustomerAddress = model.CustomerAddress,
                 Description = model.Description,
                 DueLimit = model.DueLimit,
+                IsIndividual = model.IsIndividual,
+                Designation = model.Designation,
                 CustomerPhone = model.PhoneNumbers.Select(p => new CustomerPhone
                 {
                     Phone = p.Phone,
