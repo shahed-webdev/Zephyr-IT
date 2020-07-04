@@ -59,7 +59,9 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td class="text-left">@item.CustomerName</td>
+                            <td class="text-left">
+                                <a class="blue-text" href="/Customer/Details/@item.CustomerId">@item.CustomerName</a>
+                            </td>
                             <td>@item.PhonePrimary</td>
                             <td class="text-left">@item.OrganizationName</td>
                             <td class="text-left">@item.CustomerAddress</td>
