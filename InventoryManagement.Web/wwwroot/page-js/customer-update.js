@@ -1,4 +1,38 @@
-﻿//selectors
+﻿
+//show hide field
+const selected = document.querySelector('input[name="IsIndividual"]:checked').value;
+
+bindLabel(selected);
+
+function radioSelected(evt) {
+    bindLabel(evt.value);
+};
+
+function bindLabel(value) {
+    const individual = document.querySelectorAll('.individual-field')
+    const corporate = document.querySelectorAll('.corporate-field')
+
+    if (value === 'true') {
+        individual.forEach(item => {
+            item.style.display = 'block';
+        })
+
+        corporate.forEach(item => {
+            item.style.display = 'none';
+        })
+    } else {
+        individual.forEach(item => {
+            item.style.display = 'none';
+        })
+
+        corporate.forEach(item => {
+            item.style.display = 'block';
+        })
+    }
+}
+
+
+//selectors
 const phoneContainer = document.getElementById("phone-wrapper");
 const btnSubmit = document.getElementById("btnSubmit");
 const customerForm = document.getElementById("customer-form");

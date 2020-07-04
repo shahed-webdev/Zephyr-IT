@@ -4,7 +4,7 @@ function radioSelected(evt) {
     const individual = document.querySelectorAll('.individual-field')
     const corporate = document.querySelectorAll('.corporate-field')
 
-    if (evt.value === '1') {
+    if (evt.value === 'true') {
         individual.forEach(item => {
             item.style.display = 'block';
         })

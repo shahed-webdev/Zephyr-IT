@@ -31,6 +31,18 @@
 
             <form id="customer-form" asp-action="Update">
                 <input id="customerId" type="hidden" name="CustomerId" value="@Model.CustomerId">
+               
+                <div class="text-center mt-4">
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input id="radioIndividual" asp-for="IsIndividual" value="true" type="radio" class="custom-control-input" onchange="radioSelected(this)">
+                        <label class="custom-control-label" for="radioIndividual">Individual</label>
+                    </div>
+
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input id="radioCorporate" asp-for="IsIndividual" value="false" type="radio" class="custom-control-input" onchange="radioSelected(this)">
+                        <label class="custom-control-label" for="radioCorporate">Corporate</label>
+                    </div>
+                </div>
 
                 <div id="phone-wrapper" class="mb-5">
                     <partial name="_UpdatePhonePartial" model="@Model.PhoneNumbers" />
@@ -38,31 +50,39 @@
 
                 <div class="md-form mb-5">
                     <input asp-for="CustomerName" class="form-control" required />
-                    <label asp-for="CustomerName">Name</label>
+                    <label asp-for="CustomerName">
+                        <span class="individual-field">Name</span>
+                        <span class="corporate-field">Concerned Person</span>
+                    </label>
                 </div>
-
-
-                <div class="md-form mb-5">
-                    <input asp-for="OrganizationName" class="form-control" />
-                    <label asp-for="OrganizationName">Organization Name</label>
-                </div>
-
                 <div class="md-form mb-5">
                     <input asp-for="CustomerAddress" class="form-control" />
                     <label asp-for="CustomerAddress">Address</label>
                 </div>
-
                 <div class="md-form mb-5">
+                    <input asp-for="Designation" type="text" class="form-control" />
+                    <label for="Designation">
+                        <span class="individual-field">Occupation</span>
+                        <span class="corporate-field">Designation</span>
+                    </label>
+                </div>
+                <div class="md-form mb-5 individual-field">
                     <input asp-for="Description" class="form-control" />
                     <label asp-for="Description">Description</label>
                 </div>
-
+                <div class="md-form mb-5">
+                    <input asp-for="OrganizationName" class="form-control" />
+                    <label asp-for="OrganizationName">
+                        <span class="individual-field">Working Station</span>
+                        <span class="corporate-field">Corporate Name</span>
+                    </label>
+                </div>
                 <div class="md-form mb-5">
                     <input asp-for="DueLimit" type="number" class="form-control" />
                     <label asp-for="DueLimit">Due Limit</label>
                 </div>
 
-                <div>
+                <div class="individual-field">
                     <div class="md-form form-sm mb-0">
                         <input type="hidden" id="Photo" name="Photo" />
                         <div class="file-field">
@@ -95,7 +115,7 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/page-js/customer-update.js"></script>
+    <script src="~/page-js/customer-update.js?v=1"></script>
 
     <script>
         let opt = {

@@ -55,7 +55,7 @@ namespace InventoryManagement.Web.Controllers
         //GET:// Update customer
         public IActionResult Update(int? id)
         {
-            if (!id.HasValue) return BadRequest(HttpStatusCode.BadRequest);
+            if (!id.HasValue) return RedirectToAction("List");
             var model = _db.Customers.FindCustom(id.GetValueOrDefault());
             if (model == null) return NotFound();
 

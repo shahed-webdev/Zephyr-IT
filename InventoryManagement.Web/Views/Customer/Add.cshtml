@@ -22,18 +22,19 @@
     <div class="row">
         <div class="col-md-10 col-lg-9 mx-auto">
             <div class="card card-body p-4 px-5">
-
                 <form id="customer-form" asp-action="Add">
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
                     <h4 class="page-header mt-3 text-center">Add New Customer</h4>
 
                     <div class="text-center mt-4">
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input id="radioIndividual" name="IsIndividual" value="1" checked type="radio" class="custom-control-input" onchange="radioSelected(this)">
+                            <input id="radioIndividual" name="IsIndividual" value="true" checked type="radio" class="custom-control-input" onchange="radioSelected(this)">
                             <label class="custom-control-label" for="radioIndividual">Individual</label>
                         </div>
 
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input id="radioCorporate" name="IsIndividual" value="0" type="radio" class="custom-control-input" onchange="radioSelected(this)">
+                            <input id="radioCorporate" name="IsIndividual" value="false" type="radio" class="custom-control-input" onchange="radioSelected(this)">
                             <label class="custom-control-label" for="radioCorporate">Corporate</label>
                         </div>
                     </div>
@@ -63,6 +64,7 @@
                         <input id="CustomerAddress" name="CustomerAddress" type="text" class="form-control" />
                         <label for="CustomerAddress">Address</label>
                     </div>
+
                     <div class="md-form mb-5">
                         <input id="Designation" name="Designation" type="text" class="form-control" />
                         <label for="Designation">
@@ -71,17 +73,16 @@
                         </label>
                     </div>
 
-                    <div class="md-form mb-5 corporate-field">
+                    <div class="md-form mb-5 individual-field">
                         <input id="Description" name="Description" type="text" class="form-control" />
                         <label for="Description">Description</label>
                     </div>
-
 
                     <div class="md-form mb-5">
                         <input id="OrganizationName" name="OrganizationName" type="text" class="form-control" />
                         <label for="OrganizationName">
                             <span class="individual-field">Working Station</span>
-                            <span class="corporate-field">Organization Name</span>
+                            <span class="corporate-field">Corporate Name</span>
                         </label>
                     </div>
 
