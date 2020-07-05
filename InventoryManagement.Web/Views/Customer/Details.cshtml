@@ -10,11 +10,20 @@
     <style>
         .list-group li strong { color: #777 }
         .list-group li span { margin-left: 8px; color: #000; }
-    </style>
+    </style>  
 }
 
 <div class="m-md-3">
-    <h4 class="page-header mb-4">@Model.CustomerName</h4>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="page-header">@Model.CustomerName</h4>
+
+        <div class="md-form input-with-post-icon m-0">
+            <input id="inputCustomer" type="text" class="form-control" autocomplete="off" />
+            <i class="far fa-search input-prefix"></i>
+            <label for="inputCustomer">Find Customer</label>
+        </div>
+    </div>
+    
 
     <section class="mb-4">
         <div class="row">
@@ -76,9 +85,13 @@
                             <p class="small mb-0">@Model.Designation</p>
                         </div>
                     </li>
-                    <li class="list-group-item"><strong>Organization Name:</strong><span>@Model.OrganizationName</span></li>
-                    <li class="list-group-item"><strong>Customer Address:</strong><span>@Model.CustomerAddress</span></li>
-                    <li class="list-group-item"><strong>Description:</strong><span>@Model.Description</span></li>
+
+                    <li class="list-group-item"><strong>@(Model.IsIndividual ? "Working Station" : "Corporate Name"):</strong><span>@Model.OrganizationName</span></li>
+                    <li class="list-group-item"><strong>Address:</strong><span>@Model.CustomerAddress</span></li>
+                    @if (Model.IsIndividual)
+                    {
+                        <li class="list-group-item"><strong>Description:</strong><span>@Model.Description</span></li>
+                    }
                     <li class="list-group-item">
                         <strong>Phone:</strong>
                         @foreach (var item in Model.PhoneNumbers)
@@ -88,21 +101,21 @@
                     </li>
                     <li class="list-group-item"><strong>DueLimit:</strong><span>@Model.DueLimit</span></li>
                 </ul>
-            </div> 
+            </div>
 
             <div class="col-lg-7">
                 <div class="card">
                     <div class="card-body">
                         <table class="table table-hover">
                             <thead>
-                                <tr>
-                                    <th><strong>#Bill No</strong></th>
-                                    <th><strong>Amount</strong></th>
-                                    <th><strong>Discount</strong></th>
-                                    <th><strong>Paid</strong></th>
-                                    <th><strong>Due</strong></th>
-                                    <th><strong>Date</strong></th>
-                                </tr>
+                            <tr>
+                                <th><strong>#Bill No</strong></th>
+                                <th><strong>Amount</strong></th>
+                                <th><strong>Discount</strong></th>
+                                <th><strong>Paid</strong></th>
+                                <th><strong>Due</strong></th>
+                                <th><strong>Date</strong></th>
+                            </tr>
                             </thead>
                             <tbody>
                             @foreach (var item in Model.SellingRecords)
@@ -127,3 +140,29 @@
     </section>
 </div>
 
+@section Scripts{
+    <script>
+        //customer autocomplete
+        $('#inputCustomer').typeahead({
+            minLength: 1,
+            displayText: function(item) {
+                return `${item.CustomerName} ${item.PhonePrimary ? item.PhonePrimary : ''} ${item.OrganizationName ? item.OrganizationName : ''}`;
+            },
+            afterSelect: function(item) {
+                this.$element[0].value = item.CustomerName
+            },
+            source: function(request, result) {
+                $.ajax({
+                    url: "/Selling/FindCustomers",
+                    data: { prefix: request },
+                    success: function(response) { result(response); },
+                    error: function(err) { console.log(err) }
+                });
+            },
+            updater: function(item) {
+                location.href=`/Customer/Details/${item.CustomerId}`
+                return item;
+            }
+        })
+    </script>
+}

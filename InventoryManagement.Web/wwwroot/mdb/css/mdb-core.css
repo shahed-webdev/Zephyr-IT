@@ -2450,6 +2450,8 @@ body.scrollable { overflow-y: auto }
 .md-form .form-control:disabled, .md-form .form-control[readonly] { border-bottom: 1px solid #bdbdbd; background-color: transparent }
 .md-form .validate { margin-bottom: 2.5rem }
 .md-form label.active { font-size: .8rem; -webkit-transform: translateY(-140%); -ms-transform: translateY(-140%); transform: translateY(-140%) }
+.md-form .input-prefix { position: absolute; top: 50%; -webkit-transform: translateY(-50%); transform: translateY(-50%); -webkit-transition: color 0.2s; transition: color 0.2s; color: rgba(0,0,0,0.87); pointer-events: none; }
+.md-form.input-with-post-icon .input-prefix { right: 16px; left: initial; }
 .md-form .prefix { top: .25rem; font-size: 1.75rem }
 .md-form .prefix ~ input, .md-form .prefix ~ textarea { margin-left: 2.5rem; width: calc(100% - 2.5rem) }
 .md-form .prefix ~ label { margin-left: 2.5rem }
