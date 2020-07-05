@@ -46,7 +46,6 @@ namespace InventoryManagement.Repository
         public bool IsIndividual { get; set; }
         public DateTime SignUpDate { get; set; }
     }
-
     public class CustomerReceiptViewModel
     {
         public int CustomerId { get; set; }
@@ -55,7 +54,6 @@ namespace InventoryManagement.Repository
         public string CustomerAddress { get; set; }
         public string CustomerPhone { get; set; }
     }
-
     public class CustomerProfileViewModel
     {
         public CustomerProfileViewModel()
@@ -89,5 +87,12 @@ namespace InventoryManagement.Repository
         public double SellingDiscountAmount { get; set; }
         public double SellingDueAmount { get; set; }
         public DateTime SellingDate { get; set; }
+    }
+
+    public class CustomerDueViewModel
+    {
+        public int CustomerId { get; set; }
+        public string Name { get; set; }
+        public double Due { get; set; }
     }
 }
