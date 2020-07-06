@@ -406,7 +406,7 @@ const onSellSubmitClicked = function (evt) {
     axios(options)
         .then(response => {
             if (response.data.IsSuccess) {
-                localstoreClear()
+                localStoreClear()
                 location.href = `/Selling/SellingReceipt/${response.data.Data}`
             }
         })
@@ -468,11 +468,13 @@ function appendInfo(item) {
 //check customer due limit
 function checkDueLimit() {
     const infoContainer = formPayment.querySelector('#customerInfo')
-    if (!infoContainer.innerHTML) return
+    if (!infoContainer.innerHTML) return;
 
     const prevDue = +formPayment.querySelector('#prevDue').textContent || 0
     const currentDue = +totalDue.textContent
     const dueLimit = +formPayment.querySelector('#dueLimit').textContent || 0
+
+    if (dueLimit === 0) return true;
 
     const due = prevDue + currentDue;
 
@@ -481,10 +483,11 @@ function checkDueLimit() {
         customerError.innerText = 'Current due greater than due limit!';
         return false
     }
+
     return true  
 }
 
 //remove localstorage
-function localstoreClear() {
+function localStoreClear() {
     localStorage.removeItem('selling-cart');
 }

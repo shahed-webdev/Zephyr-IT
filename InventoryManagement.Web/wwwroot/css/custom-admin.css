@@ -49,17 +49,17 @@ input[type="number"] { -moz-appearance: textfield; }
 
 
 /*Printing*/
-@page { margin: 5px; }
+@page { size: auto !important; margin: 5px; }
 @media print {
-    body { min-width: 0 !important; background-color: #ffffff; padding:0 !important }
+    body { min-width: 0 !important; background-color: #fff; padding:0 !important }
     .btn-floating, footer { display: none !important }
  
     #header { margin-left:0; margin-bottom: 15px}
     .navbar { display: block}
     a.navbar-brand { text-decoration: none; font-size: 1.5rem; font-weight: bold; }
 
-    .container{ min-width: 0 !important; max-width: 100%;}
-    .container,.container-fluid, .card-body { padding: 0 !important; margin: 0; }
+    .container-fluid,.container { min-width: 0 !important; width: 100%; overflow: hidden !important}
+    .card-body { padding: 0 !important; }
 
     #content-wrapper { min-height: 0; padding: 0; margin-left: 0; overflow-x: auto !important }
     #content-wrapper h3 { font-size: 1.2rem; }

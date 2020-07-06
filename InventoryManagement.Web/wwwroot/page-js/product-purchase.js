@@ -149,12 +149,18 @@ const createTableRow = function (item) {
     //column 1
     const td1 = tr.insertCell(0);
     td1.appendChild(document.createTextNode(item.Category));
-    td1.setAttribute('title', item.Description);
+
+    const p = document.createElement('p');
+    p.textContent = item.Description;
+    td1.appendChild(p);
 
     //column 2
     const td2 = tr.insertCell(1);
     td2.appendChild(document.createTextNode(item.ProductName));
-    td2.setAttribute('title', item.Note);
+
+    const p2 = document.createElement('p');
+    p2.textContent = item.Note;
+    td2.appendChild(p2);
 
     //column 3
     const td3 = tr.insertCell(2);
@@ -700,7 +706,7 @@ const validation = function () {
 }
 
 //remove localstorage
-const localstoreClear = function () {
+const localStoreClear = function () {
     localStorage.removeItem('cart-storage');
     localStorage.removeItem('code-storage');
 }

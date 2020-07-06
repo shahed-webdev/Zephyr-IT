@@ -1,14 +1,15 @@
 ﻿
-body { background-color: #fff; color: black }
+body { background-color: #fff; color: black; }
 
+table td, table th { font-size: 1.05rem; }
 .table th { text-align: center}
-.product-tb h5 { font-weight: 400; font-size: 16px; }
+.product-tb h5 { font-weight: 400; font-size: 17px; }
 .product-tb h5 strong{ margin-left:5px}
 .td-size { width: 60px; }
 .td-val-size { width: 42%; }
-#amount-word { font-style: italic; font-size: 14px }
+#amount-word { font-style: italic; font-size: 15px }
 
-.paid-record fieldset legend { width: auto !important; padding: 0 8px; font-size: 16px; font-weight: bold; color: #443f3f; }
+.paid-record fieldset legend { width: auto !important; padding: 0 8px; margin-bottom: 0; font-size: 16px; font-weight: bold; color: #443f3f; }
 
 @page { margin: 2in .5in 0 .5in }
 @media print {
