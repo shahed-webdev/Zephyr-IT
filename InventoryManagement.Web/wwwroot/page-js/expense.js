@@ -32,7 +32,7 @@ const createTableRow = function (item) {
     td3.appendChild(textNode3);
     //column 4
     const td4 = tr.insertCell(3);
-    const textNode4 = document.createTextNode(moment(item.ExpanseDate).format('DD MMM YYYY'));
+    const textNode4 = document.createTextNode(moment(item.ExpenseDate).format('DD MMM YYYY'));
     td4.appendChild(textNode4);
     //column 5
     const td5 = tr.insertCell(4);
@@ -41,7 +41,8 @@ const createTableRow = function (item) {
     return tr;
 }
 
-const displayCategory = function (data) {
+const displayExpense = function (data) {
+    console.log(data)
     if (!data.length)
         tableBody.innerHTML = "<tr><td colspan='5'>No record found!</td></tr>";
     else
@@ -61,7 +62,7 @@ const getData = function () {
     const url = '/Expenses/IndexData';
     const request = axios.get(url);
 
-    request.then(response => displayCategory(response.data));
+    request.then(response => displayExpense(response.data));
 }
 
 const onDeleteClicked = function (evt) {
@@ -104,7 +105,7 @@ function onCreateSuccess(data) {
 
 
 
-//event listners
+//event listeners
 tableBody.addEventListener("click", onDeleteClicked);
 btnCreate.addEventListener('click', onCreateClicked);
 

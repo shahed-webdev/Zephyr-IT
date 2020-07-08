@@ -23,10 +23,16 @@ namespace InventoryManagement.Web.Controllers
 
         //GET:// List of customer
 
-        public IActionResult List(bool customerType = true)
+        public IActionResult List()
+        {
+            return View();
+        }
+
+        //For Data-table
+        public IActionResult CustomerList(bool customerType = true)
         {
             var list = _db.Customers.ListCustom(customerType);
-            return View(list);
+            return Json(list);
         }
 
         //GET:// add customer

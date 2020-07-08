@@ -1,6 +1,4 @@
-﻿@using InventoryManagement.Repository
-@model IEnumerable<CustomerListViewModel>
-
+﻿
 @{
     ViewData["Title"] = "Customers";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -27,7 +25,7 @@
     <div class="card card-body">
         <div class="mb-3">
             <div class="custom-control custom-radio custom-control-inline">
-                <input id="radioIndividual" name="IsIndividual" value="true" checked type="radio" class="custom-control-input" onchange="radioSelected(this)">
+                <input id="radioIndividual" name="IsIndividual" value="true" checked="" type="radio" class="custom-control-input" onchange="radioSelected(this)">
                 <label class="custom-control-label" for="radioIndividual">Individual</label>
             </div>
 
@@ -51,25 +49,10 @@
                             <span class="corporate-field">Corporate Name</span>
                         </th>
                         <th>Address</th>
-                        <th>Description</th>
                         <th>Edit</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td class="text-left">
-                                <a class="blue-text" href="/Customer/Details/@item.CustomerId">@item.CustomerName</a>
-                            </td>
-                            <td>@item.PhonePrimary</td>
-                            <td class="text-left">@item.OrganizationName</td>
-                            <td class="text-left">@item.CustomerAddress</td>
-                            <td class="text-left">@item.Description</td>
-                            <td><a class="fas fa-edit" href="/Customer/Update/@item.CustomerId"></a></td>
-                        </tr>
-                    }
-                </tbody>
+                <tbody id="t-body"></tbody>
             </table>
         </div>
     </div>
@@ -78,28 +61,21 @@
 @section scripts{
     <script>
         $(function() {
-            $("#data-table").DataTable()
+            getData();
         });
 
-
-        //$('#example').DataTable({
-        //    "processing": true,
-        //    "serverSide": true,
-        //    "ajax": {
-        //        "url": "scripts/server_processing.php",
-        //        "data": function(d) {
-        //             d.custom = $('#myInput').val();
-        //        }
-        //    }
-        //});
-
-
-        //show hide field
+        //on change radio
         function radioSelected(evt) {
+            bindLabel(evt.value);
+            getData(evt.value);
+        };
+
+        //change column by customer type
+        function bindLabel(value) {
             const individual = document.querySelectorAll('.individual-field')
             const corporate = document.querySelectorAll('.corporate-field')
 
-            if (evt.value === 'true') {
+            if (value === 'true') {
                 individual.forEach(item => {
                     item.style.display = 'block';
                 })
@@ -116,6 +92,49 @@
                     item.style.display = 'block';
                 })
             }
-        };
+        }
+
+        //get data from server
+        function getData(customerType) {
+            axios.get('/Customer/CustomerList', { params: { customerType } }).then(response => {
+                appendTable(response.data)
+            })
+        }
+
+        //append table data
+        function appendTable(data) {
+            let html = ''
+            data.forEach(row => {
+                html += `<tr>
+                        <td class="text-left"><a class="blue-text" href="/Customer/Details/${row.CustomerId}">${row.CustomerName}</a></td>
+                        <td>${row.PhonePrimary}</td>
+                        <td class="text-left">${row.OrganizationName}</td>
+                        <td class="text-left">${row.CustomerAddress}</td>
+                        <td><a class="fas fa-edit" href="/Customer/Update/${row.CustomerId}"></a></td</tr>`
+            })
+
+            //selector
+            const tBody = document.getElementById('t-body');
+
+            if (tBody.querySelectorAll('tr').length)
+                $("#data-table").DataTable().destroy();
+
+            tBody.innerHTML = '';
+            tBody.innerHTML = html;
+
+            $("#data-table").DataTable();
+        }
+
+
+        //$('#example').DataTable({
+        //    "processing": true,
+        //    "serverSide": true,
+        //    "ajax": {
+        //        "url": "scripts/server_processing.php",
+        //        "data": function(d) {
+        //             d.custom = $('#myInput').val();
+        //        }
+        //    }
+        //});
     </script>
 }
