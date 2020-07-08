@@ -16,26 +16,20 @@
             <div class="form-row">
                 <div class="col-lg-3">
                     <div class="md-form">
-                        <input id="inputNumerOfCode" type="number" class="form-control" value="40" min="1" max="280" required />
-                        <label for="inputNumerOfCode">Numer of barcode</label>
+                        <input id="inputNumberOfCode" type="number" class="form-control" value="40" min="1" max="280" required />
+                        <label for="inputNumberOfCode">Number of barcode</label>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-3">
                     <div class="md-form">
                         <input id="inputBarWidth" type="number" value="1" step="0.01" class="form-control" min="0" max="3" required />
                         <label for="inputBarWidth">Bar width</label>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-3">
                     <div class="md-form">
                         <input id="inputHeight" type="number" class="form-control" value="30" step="0.01" min="0" max="120" required />
                         <label for="inputHeight">Barcode Height</label>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="md-form">
-                        <input id="inputCodeFontSize" type="number" class="form-control" value="12" step="0.01" min="0" max="30" required />
-                        <label for="inputCodeFontSize">Code Font Size</label>
                     </div>
                 </div>
                 <div class="col-lg-3 text-right">
@@ -62,15 +56,13 @@
             evt.preventDefault();
 
             const codeContainer = document.getElementById('code-container');
-            const inputNumerOfCode = +document.getElementById('inputNumerOfCode').value;
+            const inputNumberOfCode = +document.getElementById('inputNumberOfCode').value;
             const inputBarWidth = +document.getElementById('inputBarWidth').value;
             const inputHeight = +document.getElementById('inputHeight').value;
-            const inputFontSize = +document.getElementById('inputCodeFontSize').value;
-
             const fragment = document.createDocumentFragment();
             codeContainer.innerHTML = '';
 
-            for (let i = 0; i < inputNumerOfCode; i++) {
+            for (let i = 0; i < inputNumberOfCode; i++) {
                 const canvas = document.createElement('canvas');
                 canvas.classList.add('barcode');
                 fragment.appendChild(canvas);
@@ -79,17 +71,17 @@
             //append the canvas in DOM
             codeContainer.appendChild(fragment);
 
-            const canvas = document.querySelectorAll('.barcode');
+            const canvasContainer = document.querySelectorAll('.barcode');
             const options = {
                 format: "EAN13",
+                lineColor: "#000",
                 height: inputHeight,
                 width: inputBarWidth,
-                fontSize: inputFontSize,
                 margin: 5
             }
 
-            canvas.forEach(canvas => {
-                JsBarcode(canvas, getRandom(), options);
+            canvasContainer.forEach(element => {
+                JsBarcode(element, getRandom(), options);
             }); 
         }
 

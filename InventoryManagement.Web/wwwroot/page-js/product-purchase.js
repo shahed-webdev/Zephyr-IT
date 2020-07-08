@@ -247,40 +247,43 @@ const clearInput = function () {
 }
 
 //category dropdown change
-const onCategoryChanged = function () {
+const onCategoryChanged = function() {
     const categoryId = +this.value
+
+
+    $('.product-select').materialSelect("destroy");
+
+    // Material Select Initialization
+    $('.product-select').materialSelect();
+
+    clearMDBdropDownList(formCart)
+
     if (!categoryId) return;
 
     const url = '/Product/GetProductByCategory'
     const parameter = { params: { categoryId } }
 
-    axios.get(url, parameter)
-        .then(res => {
-            if (res.data.length) {
-                const fragment = document.createDocumentFragment()
-                const option1 = document.createElement("option");
-                option1.value = ""
-                option1.text = "Product Name"
-                option1.setAttribute("disabled", "disabled")
-                option1.setAttribute("selected", true)
-                fragment.appendChild(option1)
+    axios.get(url, parameter).then(res => {
+        const fragment = document.createDocumentFragment()
+        const option1 = document.createElement("option");
+        option1.value = ""
+        option1.text = "Brand and Model"
+        option1.setAttribute("disabled", "disabled")
+        option1.setAttribute("selected", true)
+        fragment.appendChild(option1)
 
-                res.data.forEach(item => {
-                    const option = document.createElement("option");
-                    option.value = item.ProductId
-                    option.text = item.ProductName
-                    fragment.appendChild(option)
-                })
+        if (res.data.length) {
+            res.data.forEach(item => {
+                const option = document.createElement("option");
+                option.value = item.ProductId
+                option.text = item.ProductName
+                fragment.appendChild(option)
+            })
+        }
 
-                $('.product-select').materialSelect("destroy");
-
-                selectProductId.innerHTML = ''
-                selectProductId.appendChild(fragment)
-
-                // Material Select Initialization
-                $('.product-select').materialSelect();
-            }
-        })
+        selectProductId.innerHTML = ''
+        selectProductId.appendChild(fragment)
+    })
 }
 
 //product dropdown change
@@ -744,12 +747,12 @@ const onPurchaseSubmitClicked = function (evt) {
     axios(options)
         .then(response => {
             if (response.data.IsSuccess) {
-                localstoreClear();
+                localStoreClear();
                 location.href = `/Purchase/PurchaseReceipt/${response.data.Data}`;
             }
         })
         .catch(error => {
-            console.log('error:', error.response);
+            console.log('error:', error);
 
             if (error.response)
                 vendorError.textContent = error.response.Message;
