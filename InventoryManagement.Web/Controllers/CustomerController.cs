@@ -23,9 +23,9 @@ namespace InventoryManagement.Web.Controllers
 
         //GET:// List of customer
 
-        public IActionResult List()
+        public IActionResult List(bool customerType = true)
         {
-            var list = _db.Customers.ListCustom();
+            var list = _db.Customers.ListCustom(customerType);
             return View(list);
         }
 
