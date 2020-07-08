@@ -6,7 +6,7 @@ namespace InventoryManagement.Repository
 {
     public interface ICustomerRepository : IRepository<Customer>, IAddCustom<CustomerAddUpdateViewModel>
     {
-        ICollection<CustomerListViewModel> ListCustom();
+        ICollection<CustomerListViewModel> ListCustom(bool customerType);
         Task<bool> IsPhoneNumberExistAsync(string number, int id = 0);
         CustomerAddUpdateViewModel FindCustom(int id);
         CustomerProfileViewModel ProfileDetails(int id);

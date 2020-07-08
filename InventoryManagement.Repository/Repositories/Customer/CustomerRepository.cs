@@ -12,9 +12,9 @@ namespace InventoryManagement.Repository
         {
         }
 
-        public ICollection<CustomerListViewModel> ListCustom()
+        public ICollection<CustomerListViewModel> ListCustom(bool customerType)
         {
-            var cList = Context.Customer.Select(c => new CustomerListViewModel
+            var cList = Context.Customer.Where(c => c.IsIndividual == customerType).Select(c => new CustomerListViewModel
             {
                 CustomerId = c.CustomerId,
                 OrganizationName = c.OrganizationName,
