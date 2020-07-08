@@ -93,12 +93,12 @@ namespace InventoryManagement.Repository
         public void UpdatePaidDue(int id)
         {
             var vendor = Find(id);
-            var obj = Context.Purchase.Where(s => s.PurchaseId == vendor.VendorId).GroupBy(s => s.PurchaseId).Select(s =>
+            var obj = Context.Purchase.Where(p => p.VendorId == vendor.VendorId).GroupBy(pg => pg.VendorId).Select(p =>
                 new
                 {
-                    TotalAmount = s.Sum(c => c.PurchaseTotalPrice),
-                    TotalDiscount = s.Sum(c => c.PurchaseDiscountAmount),
-                    Paid = s.Sum(c => c.PurchasePaidAmount)
+                    TotalAmount = p.Sum(c => c.PurchaseTotalPrice),
+                    TotalDiscount = p.Sum(c => c.PurchaseDiscountAmount),
+                    Paid = p.Sum(c => c.PurchasePaidAmount)
                 }).FirstOrDefault();
 
             vendor.TotalAmount = obj.TotalAmount;

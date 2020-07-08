@@ -37,7 +37,8 @@ namespace InventoryManagement.Web.Views
 
             if (response.IsSuccess)
             {
-                _db.Vendors.UpdatePaidDue(model.PurchaseId);
+                _db.Vendors.UpdatePaidDue(model.VendorId);
+                await _db.SaveChangesAsync();
                 return Ok(response);
             }
             else

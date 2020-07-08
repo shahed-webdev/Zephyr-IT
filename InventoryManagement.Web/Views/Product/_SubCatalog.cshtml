@@ -4,23 +4,24 @@
     Layout = null;
 }
 
-    
-        @foreach (var sub in Model)
-        {
-            <li class="childCategory d-flex justify-content-between">
-                <div>
-                    <span class="far fa-folder-open ic-w mr-1"></span>@sub.CatalogName
-                </div>
-                <div>
-                    <i data-id="@sub.ProductCatalogId" class="delete fal fa-trash-alt mr-2"></i>
-                    <i data-id="@sub.ProductCatalogId" class="edit fal fa-edit"></i>
-                </div>
-            </li>
 
-            @if (sub.SubCatalog != null)
-            {
-                <partial name="_SubCatalog" model="@sub.SubCatalog" />
-            }
+@foreach (var sub in Model)
+{
+    <li class="childCategory d-flex justify-content-between">
+        <div>
+            <span class="far fa-folder-open ic-w mr-1"></span>@sub.CatalogName
+        </div>
+        <div>
+            <i data-id="@sub.ProductCatalogId" class="delete fal fa-trash-alt mr-2"></i>
+            <i data-id="@sub.ProductCatalogId" class="edit fal fa-edit"></i>
+        </div>
+    </li>
 
-        }
-       
+    @if (sub.SubCatalog.Any())
+    {
+        <ul class="nested mb-1">
+            <partial name="_SubCatalog" model="@sub.SubCatalog" />
+        </ul>
+    }
+
+}

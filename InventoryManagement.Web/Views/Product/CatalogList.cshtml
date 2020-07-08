@@ -7,19 +7,44 @@
 }
 @section Styles{
     <style>
-        .treeview i { cursor: pointer }
-        .treeview i.delete { color: #fb5959 }
+        .treeview i {
+            cursor: pointer
+        }
 
-        .parentCategory, .childCategory { transition: all .3s ease-in-out }
-        .parentCategory i.muted { color: #bfbfbf; pointer-events: none }
-        .parentCategory:hover, .childCategory:hover { background-color: #eee; border-radius: 3px }
+            .treeview i.delete {
+                color: #fb5959
+            }
 
-        .childCategory i {font-size: 15px }
+        .parentCategory, .childCategory {
+            transition: all .3s ease-in-out
+        }
 
-        .nested { display: none }
-        .nested.show { display: block }
+            .parentCategory i.muted {
+                color: #bfbfbf;
+                pointer-events: none
+            }
 
-        .down { content: "\f107"; font-family: 'Font Awesome 5 Pro' }
+            .parentCategory:hover, .childCategory:hover {
+                background-color: #eee;
+                border-radius: 3px
+            }
+
+            .childCategory i {
+                font-size: 15px
+            }
+
+        .nested {
+            display: none
+        }
+
+            .nested.show {
+                display: block
+            }
+
+        .down {
+            content: "\f107";
+            font-family: 'Font Awesome 5 Pro'
+        }
     </style>
 }
 
@@ -56,21 +81,21 @@
                         @if (!isNoCategory)
                         {
                             <ul class="nested mb-1">
-                                <partial name="_SubCatalog" model="@catalog.SubCatalog"/>
+                                <partial name="_SubCatalog" model="@catalog.SubCatalog" />
                             </ul>
                         }
                     </li>
                 }
-           </ul>
+            </ul>
         </div>
     </div>
-</div>  
+</div>
 
 @section Scripts{
     <script>
         const list = document.querySelector('.list-group');
 
-        list.addEventListener('click', function(evt) {
+        list.addEventListener('click', function (evt) {
             const element = evt.target;
 
             if (element.classList.contains('delete')) {
@@ -96,7 +121,7 @@
                         element.parentElement.parentElement.remove();
                     else
                         alert('Category already in used');
-            })
+                })
         }
 
         function toggleCategory(element) {
