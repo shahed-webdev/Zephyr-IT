@@ -201,6 +201,19 @@ namespace InventoryManagement.Repository
                   .Sum(s => s.SellingTotalPrice - s.SellingDiscountAmount) ?? 0;
         }
 
+        public double DailyProfit(DateTime? date)
+        {
+            var saleDate = date ?? DateTime.Now;
+            return (from selling in Context.Selling
+                    join sellingList in Context.SellingList on selling.SellingId equals sellingList.SellingId
+                    join productStock in Context.ProductStock on sellingList.SellingListId equals productStock.SellingListId
+                    join purchaseList in Context.PurchaseList on productStock.PurchaseListId equals purchaseList
+                        .PurchaseListId
+                    where selling.SellingDate.Date == saleDate.Date
+                    select sellingList.SellingPrice - purchaseList.PurchasePrice - ((purchaseList.PurchasePrice * purchaseList.Purchase.PurchaseDiscountPercentage) / 100))?.Sum() ?? 0;
+
+        }
+
         public double DailySoldPurchaseAmount(DateTime? date)
         {
             var saleDate = date ?? DateTime.Now;
@@ -231,23 +244,32 @@ namespace InventoryManagement.Repository
             return months;
         }
 
-        public ICollection<MonthlyAmount> MonthlySoldPurchaseAmounts(int year)
+        public ICollection<MonthlyAmount> MonthlyProfit(int year)
         {
-            var months = Context.Selling
-                .Include(s => s.SellingList)
-                .ThenInclude(l => l.ProductStock)
-                .ThenInclude(p => p.PurchaseList).Where(e => e.SellingDate.Year == year)
-                .GroupBy(e => new
-                {
-                    number = e.SellingDate.Month
+            var months = (from selling in Context.Selling
+                          join sellingList in Context.SellingList on selling.SellingId equals sellingList.SellingId
+                          join productStock in Context.ProductStock on sellingList.SellingListId equals productStock.SellingListId
+                          join purchaseList in Context.PurchaseList on productStock.PurchaseListId equals purchaseList
+                              .PurchaseListId
+                          where selling.SellingDate.Year == year
+                          select new
+                          {
+                              MonthNumer = selling.SellingDate.Month,
+                              profit = sellingList.SellingPrice - purchaseList.PurchasePrice - ((purchaseList.PurchasePrice * purchaseList.Purchase.PurchaseDiscountPercentage) / 100)
+                          }
+                     ).GroupBy(e => new
+                     {
+                         number = e.MonthNumer
 
-                })
-                .Select(g => new MonthlyAmount
-                {
-                    MonthNumber = g.Key.number,
-                    Amount = g.Sum(s => s.SellingList.Select(l => l.ProductStock.Select(p => p.PurchaseList.PurchasePrice).Sum()).Sum())
-                })
-                .ToList();
+                     })
+                     .Select(g => new MonthlyAmount
+                     {
+                         MonthNumber = g.Key.number,
+                         Amount = g.Sum(s => s.profit)
+                     })
+                     .ToList();
+
+
 
             return months;
         }

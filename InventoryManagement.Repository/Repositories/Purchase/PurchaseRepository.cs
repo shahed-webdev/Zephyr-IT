@@ -224,6 +224,13 @@ namespace InventoryManagement.Repository
             return Context.Purchase?.Sum(p => p.PurchaseDueAmount) ?? 0;
         }
 
+        public double DailyPurchaseAmount(DateTime? date)
+        {
+            var saleDate = date ?? DateTime.Now;
+            return Context.Purchase.Where(s => s.PurchaseDate.Date == saleDate.Date)?
+                       .Sum(s => s.PurchaseTotalPrice - s.PurchaseDiscountAmount) ?? 0;
+        }
+
         public ICollection<MonthlyAmount> MonthlyAmounts(int year)
         {
             var months = Context.Purchase.Where(e => e.PurchaseDate.Year == year)

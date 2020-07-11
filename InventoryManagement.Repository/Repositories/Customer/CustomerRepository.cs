@@ -185,7 +185,7 @@ namespace InventoryManagement.Repository
 
         public ICollection<CustomerDueViewModel> TopDue(int totalCustomer)
         {
-            return Context.Customer.OrderByDescending(c => c.Due).Take(totalCustomer).Select(c => new CustomerDueViewModel
+            return Context.Customer.Where(c => c.Due > 0).OrderByDescending(c => c.Due).Take(totalCustomer).Select(c => new CustomerDueViewModel
             {
                 CustomerId = c.CustomerId,
                 Name = c.CustomerName,
