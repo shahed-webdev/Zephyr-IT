@@ -51,8 +51,8 @@ namespace InventoryManagement.Repository
         {
             _reportDay = DateTime.Now;
             var sale = _db.Selling.DailySaleAmount(_reportDay);
-            var purchase = _db.Selling.DailySoldPurchaseAmount(_reportDay);
-            var profit = sale - purchase;
+            var purchase = _db.Purchases.DailyPurchaseAmount(_reportDay);
+            var profit = _db.Selling.DailyProfit(_reportDay);
             var expense = _db.Expenses.DailyExpenseAmount(_reportDay);
             var dailySummary = new DailyDashboardSummaryViewModel
             {
@@ -87,15 +87,18 @@ namespace InventoryManagement.Repository
                               into purchase
                           from p in purchase.DefaultIfEmpty()
 
+                          join pt in _db.Selling.MonthlyProfit(_reportYear) on m.MonthNumber equals pt.MonthNumber
+                              into profit
+                          from pt in profit.DefaultIfEmpty()
+
                           select new MonthlyDashboardSummaryViewModel
                           {
                               Month = m,
                               MonthlySale = s?.Amount ?? 0,
-                              MonthlySoldPurchasePrice = 0,
                               MonthlyNewPurchase = p?.Amount ?? 0,
                               MonthlyExpense = e?.Amount ?? 0,
-                              MonthlyProfit = 0,
-                              DailyAverageProfit = 0
+                              MonthlyProfit = pt?.Amount ?? 0,
+                              DailyAverageProfit = pt?.Amount ?? 0 / 30
                           }).ToList();
 
             return result ?? new List<MonthlyDashboardSummaryViewModel>(); ;

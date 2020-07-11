@@ -20,7 +20,6 @@ namespace InventoryManagement.Repository
     {
         public MonthName Month { get; set; }
         public double MonthlySale { get; set; }
-        public double MonthlySoldPurchasePrice { get; set; }
         public double MonthlyNewPurchase { get; set; }
         public double MonthlyExpense { get; set; }
         public double MonthlyProfit { get; set; }

@@ -15,8 +15,9 @@ namespace InventoryManagement.Repository
         ICollection<int> Years();
         double TotalDue();
         double DailySaleAmount(DateTime? day);
+        double DailyProfit(DateTime? day);
         double DailySoldPurchaseAmount(DateTime? day);
         ICollection<MonthlyAmount> MonthlyAmounts(int year);
-        ICollection<MonthlyAmount> MonthlySoldPurchaseAmounts(int year);
+        ICollection<MonthlyAmount> MonthlyProfit(int year);
     }
 }
