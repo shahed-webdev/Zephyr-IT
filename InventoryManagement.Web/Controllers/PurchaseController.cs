@@ -27,7 +27,7 @@ namespace InventoryManagement.Web.Views
         //POST: Purchase
         [Authorize(Roles = "admin, purchase")]
         [HttpPost]
-        public async Task<IActionResult> Purchase([FromBody] PurchaseViewModel model)
+        public async Task<IActionResult> Purchase(PurchaseViewModel model)
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
 

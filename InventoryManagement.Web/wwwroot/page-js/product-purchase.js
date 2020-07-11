@@ -715,7 +715,7 @@ const localStoreClear = function () {
 }
 
 //submit on server
-const onPurchaseSubmitClicked = function (evt) {
+const onPurchaseSubmitClicked = function(evt) {
     evt.preventDefault();
 
     const valid = validation();
@@ -733,35 +733,21 @@ const onPurchaseSubmitClicked = function (evt) {
         PurchasePaidAmount: +inputPaid.value | 0,
         PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
         MemoNumber: inputMemoNumber.value,
-        PurchaseDate: new Date(inputPurchaseDate.value),
+        PurchaseDate: inputPurchaseDate.value,
         Products: storage
     }
 
     const url = '/Purchase/Purchase';
-    const options = {
-        method: 'post',
-        url: url,
-        data: body
-    }
+    $.post(url, { model: body }, function(data) {
+        if (data.IsSuccess) {
+            localStoreClear();
 
-    axios(options)
-        .then(response => {
-            if (response.data.IsSuccess) {
-                localStoreClear();
-                location.href = `/Purchase/PurchaseReceipt/${response.data.Data}`;
-            }
-        })
-        .catch(error => {
-            console.log('error:', error);
-
-            if (error.response)
-                vendorError.textContent = error.response.Message;
-
-        })
-        .finally(() => {
             btnSubmit.innerText = 'PURCHASE';
             btnSubmit.disabled = false;
-        });
+
+            location.href = `/Purchase/PurchaseReceipt/${data.Data}`;
+        }
+    })
 }
 
 //event listener

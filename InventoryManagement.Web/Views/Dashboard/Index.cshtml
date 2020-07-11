@@ -108,7 +108,7 @@
 
         <section>
             <div class="row">
-                <div class="col-xl-4 mb-3">
+                <div class="col-xl-5 mb-3">
                     <div class="card card-cascade narrower">
                         <div class="view view-cascade gradient-card-header aqua-gradient lighten-1 p-3">
                             <h3 class="h3-responsive mb-0 p-1 font-weight-light">Top Due Customers</h3>
@@ -128,18 +128,17 @@
                     </div>
                 </div>
 
-                <div class="col-xl-8">
+                <div class="col-xl-7">
                     <div class="card card-body pb-0 mb-4">
                         <table class="table mb-0">
                             <thead>
                                 <tr>
                                     <th class="font-weight-bold dark-grey-text"><strong>Month</strong></th>
                                     <th class="font-weight-bold dark-grey-text"><strong>Sales</strong></th>
-                                    <th class="font-weight-bold dark-grey-text"><strong>Sold Purchase Price</strong></th>
-                                    <th class="font-weight-bold dark-grey-text"><strong>New Purchase</strong></th>
+                                    <th class="font-weight-bold dark-grey-text"><strong>Purchase</strong></th>
                                     <th class="font-weight-bold dark-grey-text"><strong>Expense</strong></th>
                                     <th class="font-weight-bold dark-grey-text"><strong>Monthly Profit</strong></th>
-                                    <th class="font-weight-bold dark-grey-text"><strong>Daily Average Profit</strong></th>
+                                    <th class="font-weight-bold dark-grey-text"><strong>Daily Avg. Profit</strong></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -148,7 +147,6 @@
                                     <tr>
                                         <td>@item.Month.Month</td>
                                         <td>@item.MonthlySale</td>
-                                        <td>@item.MonthlySoldPurchasePrice</td>
                                         <td>@item.MonthlyNewPurchase</td>
                                         <td>@item.MonthlyExpense</td>
                                         <td>@item.MonthlyProfit</td>
@@ -165,19 +163,40 @@
 
 @section Scripts {
     <script>
+        let months = [];
+        let sales = [];
+        let profit = [];
+
+        @foreach (var item in Model.MonthlySummary)
+        {
+            @:months.push("@item.Month.Month");
+            @:sales.push(@item.MonthlySale);
+            @:profit.push(@item.MonthlyProfit);
+        }
+
+
         // Main chart
         var ctxL = document.getElementById("lineChart").getContext('2d');
         var myLineChart = new Chart(ctxL, {
             type: 'line',
             data: {
-                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                datasets: [{
-                    label: "Monthly Sales",
-                    fillColor: "#fff",
-                    backgroundColor: 'rgba(255, 255, 255, .3)',
-                    borderColor: 'rgba(255, 255, 255)',
-                    data: [0, 10, 5, 2, 20, 30, 45, 0, 10, 5, 2, 20, 30, 45]
-                }]
+                labels: months,
+                datasets: [
+                    {
+                        label: "SALES",
+                        fillColor: "#fff",
+                        borderColor: 'rgba(205, 220, 57, 0.7)',
+                        data: sales,
+                        borderWidth: 3
+                    },
+                    {
+                        label: "PROFIT",
+                        fillColor: "#fff",
+                        borderColor: 'rgba(244, 67, 54, 0.7)',
+                        data: profit,
+                        borderWidth: 3
+                    }
+                ]
             },
             options: {
                 legend: {
