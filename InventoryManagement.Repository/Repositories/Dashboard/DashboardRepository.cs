@@ -90,10 +90,10 @@ namespace InventoryManagement.Repository
                           select new MonthlyDashboardSummaryViewModel
                           {
                               Month = m,
-                              MonthlySale = s.Amount,
+                              MonthlySale = s?.Amount ?? 0,
                               MonthlySoldPurchasePrice = 0,
-                              MonthlyNewPurchase = p.Amount,
-                              MonthlyExpense = e.Amount,
+                              MonthlyNewPurchase = p?.Amount ?? 0,
+                              MonthlyExpense = e?.Amount ?? 0,
                               MonthlyProfit = 0,
                               DailyAverageProfit = 0
                           }).ToList();

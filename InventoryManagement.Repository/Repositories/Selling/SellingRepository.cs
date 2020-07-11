@@ -204,12 +204,13 @@ namespace InventoryManagement.Repository
         public double DailySoldPurchaseAmount(DateTime? date)
         {
             var saleDate = date ?? DateTime.Now;
-            return Context.Selling
-                .Include(s => s.SellingList)
-                .ThenInclude(l => l.ProductStock)
-                .ThenInclude(p => p.PurchaseList)
-                .Where(s => s.SellingDate.Date == saleDate.Date)?.Sum(s =>
-                    s.SellingList.Select(l => l.ProductStock.Select(p => p.PurchaseList.PurchasePrice).Sum()).Sum()) ?? 0;
+            //return Context.Selling
+            //    .Include(s => s.SellingList)
+            //    .ThenInclude(l => l.ProductStock)
+            //    .ThenInclude(p => p.PurchaseList)
+            //    .Where(s => s.SellingDate.Date == saleDate.Date)?.Sum(s =>
+            //        s.SellingList.Sum(l => l.ProductStock.Sum(p => p.PurchaseList.PurchasePrice))) ?? 0;
+            return 0;
         }
 
         public ICollection<MonthlyAmount> MonthlyAmounts(int year)
@@ -223,7 +224,7 @@ namespace InventoryManagement.Repository
                 .Select(g => new MonthlyAmount
                 {
                     MonthNumber = g.Key.number,
-                    Amount = g.Sum(s => s.SellingList.Select(l => l.ProductStock.Select(p => p.PurchaseList.PurchasePrice).Sum()).Sum())
+                    Amount = g.Sum(e => e.SellingTotalPrice - e.SellingDiscountAmount)
                 })
                 .ToList();
 
@@ -244,7 +245,7 @@ namespace InventoryManagement.Repository
                 .Select(g => new MonthlyAmount
                 {
                     MonthNumber = g.Key.number,
-                    Amount = g.Sum(e => e.SellingTotalPrice - e.SellingDiscountAmount)
+                    Amount = g.Sum(s => s.SellingList.Select(l => l.ProductStock.Select(p => p.PurchaseList.PurchasePrice).Sum()).Sum())
                 })
                 .ToList();
 
