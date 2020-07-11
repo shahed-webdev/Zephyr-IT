@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace InventoryManagement.Web.Controllers
 {
-   [Authorize]
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly IUnitOfWork _db;
@@ -15,9 +15,10 @@ namespace InventoryManagement.Web.Controllers
             _db = db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? year)
         {
-            return View();
+            var d = new DashboardRepository(_db);
+            return View(d.Data(year));
         }
 
         //GET: Profile
@@ -44,7 +45,7 @@ namespace InventoryManagement.Web.Controllers
             var model = _db.Institutions.FindCustom();
             return View(model);
         }
-       
+
         [HttpPost]
         public IActionResult StoreInfo(InstitutionVM model)
         {
