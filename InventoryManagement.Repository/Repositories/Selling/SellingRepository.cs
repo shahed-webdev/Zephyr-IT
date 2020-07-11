@@ -1,6 +1,7 @@
 ﻿using InventoryManagement.Data;
 using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -168,6 +169,86 @@ namespace InventoryManagement.Repository
                 SellingDate = s.SellingDate
             });
             return r.ToDataResult(request);
+        }
+
+        public ICollection<int> Years()
+        {
+            var years = Context.Selling
+                .GroupBy(e => new
+                {
+                    e.SellingDate.Year
+                })
+                .Select(g => g.Key.Year)
+                .OrderBy(o => o)
+                .ToList();
+
+            var currentYear = DateTime.Now.Year;
+
+            if (!years.Contains(currentYear)) years.Add(currentYear);
+
+            return years;
+        }
+
+        public double TotalDue()
+        {
+            return Context.Selling?.Sum(s => s.SellingDueAmount) ?? 0;
+        }
+
+        public double DailySaleAmount(DateTime? date)
+        {
+            var saleDate = date ?? DateTime.Now;
+            return Context.Selling.Where(s => s.SellingDate.Date == saleDate.Date)?
+                  .Sum(s => s.SellingTotalPrice - s.SellingDiscountAmount) ?? 0;
+        }
+
+        public double DailySoldPurchaseAmount(DateTime? date)
+        {
+            var saleDate = date ?? DateTime.Now;
+            return Context.Selling
+                .Include(s => s.SellingList)
+                .ThenInclude(l => l.ProductStock)
+                .ThenInclude(p => p.PurchaseList)
+                .Where(s => s.SellingDate.Date == saleDate.Date)?.Sum(s =>
+                    s.SellingList.Select(l => l.ProductStock.Select(p => p.PurchaseList.PurchasePrice).Sum()).Sum()) ?? 0;
+        }
+
+        public ICollection<MonthlyAmount> MonthlyAmounts(int year)
+        {
+            var months = Context.Selling.Where(e => e.SellingDate.Year == year)
+                .GroupBy(e => new
+                {
+                    number = e.SellingDate.Month
+
+                })
+                .Select(g => new MonthlyAmount
+                {
+                    MonthNumber = g.Key.number,
+                    Amount = g.Sum(s => s.SellingList.Select(l => l.ProductStock.Select(p => p.PurchaseList.PurchasePrice).Sum()).Sum())
+                })
+                .ToList();
+
+            return months;
+        }
+
+        public ICollection<MonthlyAmount> MonthlySoldPurchaseAmounts(int year)
+        {
+            var months = Context.Selling
+                .Include(s => s.SellingList)
+                .ThenInclude(l => l.ProductStock)
+                .ThenInclude(p => p.PurchaseList).Where(e => e.SellingDate.Year == year)
+                .GroupBy(e => new
+                {
+                    number = e.SellingDate.Month
+
+                })
+                .Select(g => new MonthlyAmount
+                {
+                    MonthNumber = g.Key.number,
+                    Amount = g.Sum(e => e.SellingTotalPrice - e.SellingDiscountAmount)
+                })
+                .ToList();
+
+            return months;
         }
     }
 }

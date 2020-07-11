@@ -12,6 +12,7 @@ namespace InventoryManagement.Repository
         // void AddCustom(ExpenseViewModel model);
         void RemoveCustom(int id);
         ICollection<int> Years();
+        double DailyExpenseAmount(DateTime? day);
         double ExpenseYearly(int year);
         ICollection<MonthlyAmount> MonthlyAmounts(int year);
 

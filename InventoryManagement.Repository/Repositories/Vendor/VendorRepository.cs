@@ -114,5 +114,10 @@ namespace InventoryManagement.Repository
             Remove(Find(id));
             return true;
         }
+
+        public double TotalDue()
+        {
+            return Context.Vendor?.Sum(v => v.Due) ?? 0;
+        }
     }
 }

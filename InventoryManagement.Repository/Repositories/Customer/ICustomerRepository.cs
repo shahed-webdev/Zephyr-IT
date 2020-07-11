@@ -13,5 +13,7 @@ namespace InventoryManagement.Repository
         void CustomUpdate(CustomerAddUpdateViewModel model);
         void UpdatePaidDue(int id);
         Task<ICollection<CustomerListViewModel>> SearchAsync(string key);
+        double TotalDue();
+        ICollection<CustomerDueViewModel> TopDue(int totalCustomer);
     }
 }

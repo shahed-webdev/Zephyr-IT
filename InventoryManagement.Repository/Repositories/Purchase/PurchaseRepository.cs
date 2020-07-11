@@ -1,6 +1,7 @@
 ﻿using InventoryManagement.Data;
 using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -198,6 +199,47 @@ namespace InventoryManagement.Repository
                 MemoNumber = p.MemoNumber
             });
             return r.ToDataResult(request);
+        }
+
+        public ICollection<int> Years()
+        {
+            var years = Context.Purchase
+                .GroupBy(e => new
+                {
+                    e.PurchaseDate.Year
+                })
+                .Select(g => g.Key.Year)
+                .OrderBy(o => o)
+                .ToList();
+
+            var currentYear = DateTime.Now.Year;
+
+            if (!years.Contains(currentYear)) years.Add(currentYear);
+
+            return years;
+        }
+
+        public double TotalDue()
+        {
+            return Context.Purchase?.Sum(p => p.PurchaseDueAmount) ?? 0;
+        }
+
+        public ICollection<MonthlyAmount> MonthlyAmounts(int year)
+        {
+            var months = Context.Purchase.Where(e => e.PurchaseDate.Year == year)
+                .GroupBy(e => new
+                {
+                    number = e.PurchaseDate.Month
+
+                })
+                .Select(g => new MonthlyAmount
+                {
+                    MonthNumber = g.Key.number,
+                    Amount = g.Sum(e => e.PurchaseTotalPrice - e.PurchaseDiscountAmount)
+                })
+                .ToList();
+
+            return months;
         }
     }
 }

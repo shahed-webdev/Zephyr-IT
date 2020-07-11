@@ -77,5 +77,11 @@ namespace InventoryManagement.Repository
         {
             return Context.ProductStock.Include(s => s.Product).Where(s => codes.Contains(s.ProductCode)).ToListAsync();
         }
+
+        public double StockProductPurchaseValue()
+        {
+            return Context.ProductStock.Include(s => s.PurchaseList)
+                       .Where(s => !s.IsSold)?.Sum(s => s.PurchaseList.PurchasePrice) ?? 0;
+        }
     }
 }

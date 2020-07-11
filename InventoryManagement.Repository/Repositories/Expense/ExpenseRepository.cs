@@ -91,6 +91,13 @@ namespace InventoryManagement.Repository
             return years;
         }
 
+        public double DailyExpenseAmount(DateTime? date)
+        {
+            var saleDate = date ?? DateTime.Now;
+            return Context.Expense.Where(e => e.ExpenseDate.Date == saleDate.Date)?
+                       .Sum(e => e.ExpenseAmount) ?? 0;
+        }
+
         public double ExpenseYearly(int year)
         {
             return ToList().Where(s => s.ExpenseDate.Year == year).Sum(s => s.ExpenseAmount);

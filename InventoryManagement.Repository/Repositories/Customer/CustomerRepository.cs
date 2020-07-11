@@ -178,6 +178,21 @@ namespace InventoryManagement.Repository
                   }).Take(5).ToListAsync().ConfigureAwait(false);
         }
 
+        public double TotalDue()
+        {
+            return Context.Customer?.Sum(s => s.Due) ?? 0;
+        }
+
+        public ICollection<CustomerDueViewModel> TopDue(int totalCustomer)
+        {
+            return Context.Customer.OrderByDescending(c => c.Due).Take(totalCustomer).Select(c => new CustomerDueViewModel
+            {
+                CustomerId = c.CustomerId,
+                Name = c.CustomerName,
+                Due = c.Due
+            }).ToList();
+        }
+
 
         public void AddCustom(CustomerAddUpdateViewModel model)
         {
