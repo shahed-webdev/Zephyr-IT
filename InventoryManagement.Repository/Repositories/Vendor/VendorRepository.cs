@@ -119,5 +119,18 @@ namespace InventoryManagement.Repository
         {
             return Context.Vendor?.Sum(v => v.Due) ?? 0;
         }
+
+        public ICollection<VendorPaidDue> TopDue(int totalVendor)
+        {
+            return Context.Vendor.Where(v => v.Due > 0).OrderByDescending(v=> v.Due).Take(totalVendor).Select(v => new VendorPaidDue
+            {
+                VendorId = v.VendorId,
+                VendorCompanyName = v.VendorCompanyName,
+                VendorDue = v.Due,
+                VendorPaid = v.Paid,
+                TotalAmount = v.TotalAmount,
+                TotalDiscount = v.TotalDiscount
+            }).ToList();
+        }
     }
 }

@@ -5,55 +5,29 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-    <div class="container-fluid">
-        <section class="mb-5 mt-4">
-            <h5>Daily Report</h5>
-            <div class="row">
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="media white z-depth-1 rounded">
-                        <i class="far fa-money-bill-alt fa-2x success-color z-depth-1 p-4 rounded-left text-white mr-3"></i>
-                        <div class="media-body mt-3">
-                            <p class="text-uppercase text-muted mb-0"><small>purchase</small></p>
-                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Purchase</h5>
+@{
+    var businessStatus = (Model.CustomerDue + Model.StockProductPurchaseValue) - Model.MarketDue;
+}
+
+<div class="container-fluid">
+    <section class="mt-4">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card">
+                    <div class="row mt-4 mb-3">
+                        <div class="col-md-3 col-3 text-left pl-4">
+                            <div class="p-2 m-2 fa-lg">
+                                <i class="far fa-business-time fa-2x @(businessStatus > 0 ?"text-success":"text-danger")"></i>
+                            </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="media white z-depth-1 rounded">
-                        <i class="fas fa-chart-bar fa-2x teal z-depth-1 p-4 rounded-left text-white mr-3"></i>
-                        <div class="media-body mt-3">
-                            <p class="text-uppercase text-muted mb-0"><small>sales</small></p>
-                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Sale</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="media white z-depth-1 rounded">
-                        <i class="fas fa-chart-pie fa-2x pink z-depth-1 p-4 rounded-left text-white mr-3"></i>
-                        <div class="media-body mt-3">
-                            <p class="text-uppercase text-muted mb-0"><small>expense</small></p>
-                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Expense</h5>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="media white z-depth-1 rounded">
-                        <i class="fas fa-chart-line fa-2x deep-purple z-depth-1 p-4 rounded-left text-white mr-3"></i>
-                        <div class="media-body mt-3">
-                            <p class="text-uppercase text-muted mb-0"><small>profit</small></p>
-                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Profit</h5>
+                        <div class="col-md-9 col-9 text-right pr-5">
+                            <p class="grey-text mb-2">Business Status</p>
+                            <h4 class="ml-4 font-weight-bold h4-responsive @(businessStatus > 0 ?"text-success":"text-danger")">৳@businessStatus</h4>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <section class="row mb-5">
-            <div class="col-lg-3 col-xl-6">
+            <div class="col-lg-3 col-md-6 mb-4">
                 <div class="card">
                     <div class="row mt-4 mb-3">
                         <div class="col-md-3 col-3 text-left pl-4">
@@ -63,12 +37,14 @@
                         </div>
                         <div class="col-md-9 col-9 text-right pr-5">
                             <p class="grey-text mb-2">Market Due</p>
-                            <h5 class="ml-4 font-weight-bold">৳@Model.MarketDue</h5>
+                            <h4 class="ml-4 font-weight-bold h4-responsive">৳@Model.MarketDue</h4>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="card mt-4">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card">
                     <div class="row mt-4 mb-3">
                         <div class="col-md-3 col-3 text-left pl-4">
                             <div class="p-2 m-2 fa-lg">
@@ -76,90 +52,172 @@
                             </div>
                         </div>
                         <div class="col-md-9 col-9 text-right pr-5">
-                            <p class="grey-text mb-2">My Customer Due</p>
-                            <h5 class="ml-4 font-weight-bold">৳@Model.CustomerDue</h5>
+                            <p class="grey-text mb-2">Customer Due</p>
+                            <h4 class="ml-4 font-weight-bold h4-responsive">৳@Model.CustomerDue</h4>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="card mt-4 mb-4">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card">
                     <div class="row mt-4 mb-3">
                         <div class="col-md-3 col-3 text-left pl-4">
                             <div class="p-2 m-2 fa-lg">
-                                <i class="fas fa-shopping-cart fa-2x cyan-text"></i>
+                                <i class="far fa-shopping-bag fa-2x orange-text"></i>
                             </div>
                         </div>
                         <div class="col-md-9 col-9 text-right pr-5">
-                            <p class="grey-text mb-2">My Product(taka)</p>
-                            <h5 class="ml-4 font-weight-bold">৳@Model.StockProductPurchaseValue</h5>
+                            <p class="grey-text mb-2">Product(taka)</p>
+                            <h4 class="ml-4 font-weight-bold h4-responsive">৳@Model.StockProductPurchaseValue</h4>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="col-lg-9 col-xl-6">
-                <div class="card card-cascade narrower">
-                    <div class="view view-cascade gradient-card-header aqua-gradient mb-3">
-                        <canvas id="lineChart"></canvas>
+    <section class="mb-5 mt-1">
+        <h5>Daily Report</h5>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="media white z-depth-1 rounded">
+                    <i class="far fa-money-bill-alt fa-2x primary-color-dark z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <div class="media-body mt-3">
+                        <p class="text-uppercase text-muted mb-0"><small>purchase</small></p>
+                        <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Purchase</h5>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <section>
-            <div class="row">
-                <div class="col-xl-5 mb-3">
-                    <div class="card card-cascade narrower">
-                        <div class="view view-cascade gradient-card-header aqua-gradient lighten-1 p-3">
-                            <h3 class="h3-responsive mb-0 p-1 font-weight-light">Top Due Customers</h3>
-                        </div>
-
-                        <div class="card-body card-body-cascade">
-                            <ul class="list-group list-group-flush">
-                                @foreach (var due in Model.TopDueCustomer)
-                                {
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <a href="/Customer/Details/@due.CustomerId" target="_blank">@due.Name</a>
-                                        <strong>৳@due.Due</strong>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="media white z-depth-1 rounded">
+                    <i class="fas fa-chart-bar fa-2x lime darken-3 z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <div class="media-body mt-3">
+                        <p class="text-uppercase text-muted mb-0"><small>sales</small></p>
+                        <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Sale</h5>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-xl-7">
-                    <div class="card card-body pb-0 mb-4">
-                        <table class="table mb-0">
-                            <thead>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="media white z-depth-1 rounded">
+                    <i class="fas fa-chart-pie fa-2x pink z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <div class="media-body mt-3">
+                        <p class="text-uppercase text-muted mb-0"><small>expense</small></p>
+                        <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Expense</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="media white z-depth-1 rounded">
+                    <i class="fas fa-chart-line fa-2x success-color-dark z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <div class="media-body mt-3">
+                        <p class="text-uppercase text-muted mb-0"><small>profit</small></p>
+                        <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Profit</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="row mb-5">
+        <div class="col-xl-5 col-lg-5 mb-3">
+            <div class="card card-cascade narrower">
+                <div class="view view-cascade gradient-card-header blue-gradient lighten-1 p-3">
+                    <h3 class="h3-responsive mb-0 p-1 font-weight-light">Due Vendors</h3>
+                </div>
+
+                <div class="card-body card-body-cascade">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th><strong>Company</strong></th>
+                                <th><strong>Amount</strong></th>
+                                <th><strong>Paid</strong></th>
+                                <th><strong>Due</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var due in Model.DueVendors)
+                            {
                                 <tr>
-                                    <th class="font-weight-bold dark-grey-text"><strong>Month</strong></th>
-                                    <th class="font-weight-bold dark-grey-text"><strong>Sales</strong></th>
-                                    <th class="font-weight-bold dark-grey-text"><strong>Purchase</strong></th>
-                                    <th class="font-weight-bold dark-grey-text"><strong>Expense</strong></th>
-                                    <th class="font-weight-bold dark-grey-text"><strong>Profit</strong></th>
-                                    <th class="font-weight-bold dark-grey-text"><strong>Avg. Profit</strong></th>
+                                    <td>@due.VendorCompanyName</td>
+                                    <td>৳@due.TotalAmount</td>
+                                    <td>৳@due.VendorPaid</td>
+                                    <td>৳@due.VendorDue</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.MonthlySummary)
-                                {
-                                    <tr>
-                                        <td>@item.Month.Month</td>
-                                        <td>@item.MonthlySale</td>
-                                        <td>@item.MonthlyNewPurchase</td>
-                                        <td>@item.MonthlyExpense</td>
-                                        <td>@item.MonthlyProfit</td>
-                                        <td>@item.DailyAverageProfit</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>  
+                            }
+                        </tbody>
+                    </table>  
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-7 col-lg-7">
+            <div class="card card-cascade narrower">
+                <div class="view view-cascade gradient-card-header blue-gradient mb-3">
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="row">
+            <div class="col-xl-5 mb-3">
+                <div class="card card-cascade narrower">
+                    <div class="view view-cascade gradient-card-header blue-gradient p-3">
+                        <h3 class="h3-responsive mb-0 p-1 font-weight-light">Due Customers</h3>
+                    </div>
+
+                    <div class="card-body card-body-cascade">
+                        <ul class="list-group list-group-flush">
+                            @foreach (var due in Model.TopDueCustomer)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="/Customer/Details/@due.CustomerId" target="_blank">@due.Name</a>
+                                    <strong>৳@due.Due</strong>
+                                </li>
+                            }
+                        </ul>
                     </div>
                 </div>
             </div>
-        </section>
-    </div>   
+
+            <div class="col-xl-7">
+                <div class="card card-body pb-0 mb-4">
+                    <table class="table mb-0">
+                        <thead>
+                        <tr>
+                            <th class="font-weight-bold dark-grey-text"><strong>Month</strong></th>
+                            <th class="font-weight-bold dark-grey-text"><strong>Sales</strong></th>
+                            <th class="font-weight-bold dark-grey-text"><strong>Purchase</strong></th>
+                            <th class="font-weight-bold dark-grey-text"><strong>Expense</strong></th>
+                            <th class="font-weight-bold dark-grey-text"><strong>Profit</strong></th>
+                            <th class="font-weight-bold dark-grey-text"><strong>Avg. Profit</strong></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in Model.MonthlySummary)
+                        {
+                            <tr>
+                                <td>@item.Month.Month</td>
+                                <td>@item.MonthlySale</td>
+                                <td>@item.MonthlyNewPurchase</td>
+                                <td>@item.MonthlyExpense</td>
+                                <td>@item.MonthlyProfit</td>
+                                <td>@item.DailyAverageProfit</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>   
 
 @section Scripts {
     <script>
@@ -179,7 +237,7 @@
         }
 
 
-        // Main chart
+        // Line chart
         var ctxL = document.getElementById("lineChart").getContext('2d');
         var myLineChart = new Chart(ctxL, {
             type: 'line',
@@ -189,7 +247,7 @@
                     {
                         label: "PURCHASE",
                         fillColor: "#fff",
-                        borderColor: 'rgba(0, 0, 0, 0.8)',
+                        borderColor: 'rgba(76, 175, 80, 0.7)',
                         data: purchase,
                         borderWidth: 3
                     },

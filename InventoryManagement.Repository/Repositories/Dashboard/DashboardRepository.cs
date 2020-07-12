@@ -42,7 +42,8 @@ namespace InventoryManagement.Repository
                 CustomerDue = _db.Customers.TotalDue(),
                 StockProductPurchaseValue = _db.ProductStocks.StockProductPurchaseValue(),
                 MonthlySummary = GetMonthlySummary(),
-                TopDueCustomer = _db.Customers.TopDue(13)
+                TopDueCustomer = _db.Customers.TopDue(13),
+                DueVendors = _db.Vendors.TopDue(6)
             };
             return dashboard;
         }

@@ -8,6 +8,7 @@ namespace InventoryManagement.Repository
         {
             MonthlySummary = new HashSet<MonthlyDashboardSummaryViewModel>();
             TopDueCustomer = new HashSet<CustomerDueViewModel>();
+            DueVendors = new HashSet<VendorPaidDue>();
         }
         public DailyDashboardSummaryViewModel DailySummary { get; set; }
         public double MarketDue { get; set; }
@@ -15,7 +16,9 @@ namespace InventoryManagement.Repository
         public double StockProductPurchaseValue { get; set; }
         public ICollection<MonthlyDashboardSummaryViewModel> MonthlySummary { get; set; }
         public ICollection<CustomerDueViewModel> TopDueCustomer { get; set; }
+        public ICollection<VendorPaidDue> DueVendors { get; set; }
     }
+
     public class MonthlyDashboardSummaryViewModel
     {
         public MonthName Month { get; set; }
