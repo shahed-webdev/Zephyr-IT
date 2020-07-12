@@ -57,6 +57,5 @@ namespace InventoryManagement.Repository
         public string Note { get; set; }
         public double SellingPrice { get; set; }
         public int Stock { get; set; }
-
     }
 }

@@ -16,5 +16,7 @@
         public string Note { get; set; }
         public double SellingPrice { get; set; }
         public double PurchasePrice { get; set; }
+        public int? SellingSn { get; set; }
+        public int? SellingId { get; set; }
     }
 }

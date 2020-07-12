@@ -53,10 +53,13 @@ namespace InventoryManagement.Repository
 
         public Task<ProductStockDetailsViewModel> FindforDetailsAsync(string code)
         {
+            int? sellingListId;
             var product = Context.ProductStock
                 .Include(s => s.Product)
                 .ThenInclude(p => p.ProductCatalog)
                 .Include(s => s.PurchaseList)
+                .Include(p => p.SellingList)
+                .ThenInclude(sl => sl.Selling)
                 .Where(s => s.ProductCode == code)
                 .Select(s => new ProductStockDetailsViewModel
                 {
@@ -68,9 +71,15 @@ namespace InventoryManagement.Repository
                     Note = s.Product.Note,
                     SellingPrice = s.Product.SellingPrice,
                     ProductCatalogName = s.Product.ProductCatalog.CatalogName,
-                    PurchasePrice = s.PurchaseList.PurchasePrice
-                });
-            return product.FirstOrDefaultAsync();
+                    PurchasePrice = s.PurchaseList.PurchasePrice,
+                    SellingId = s.SellingList.SellingId,
+                    SellingSn = s.SellingList.Selling.SellingSn
+                }).FirstOrDefaultAsync();
+
+
+
+
+            return product;
         }
 
         public Task<List<ProductStock>> SellingStockFromCodesAsync(string[] codes)
