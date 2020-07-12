@@ -40,6 +40,7 @@
                 <h4 class="mb-1 font-weight-bold"><strong id="category"></strong></h4>
             </div>
             <ul class="striped list-unstyled mb-0">
+                <li id="receipt"></li>
                 <li><strong>Code:</strong><span id="productCode"></span></li>
                 <li><strong>Brand and Model:</strong><span id="productName"></span></li>
                 <li><strong>Purchase Price:</strong><span id="purchasePrice"></span></li>
@@ -93,7 +94,7 @@
                 infoContainer.classList.remove('show')
                 return;
             }
-            console.log(product)
+
             infoContainer.classList.add('show')
             document.getElementById('category').textContent = product.ProductCatalogName;
             document.getElementById('productCode').textContent = product.ProductCode;
@@ -103,6 +104,9 @@
             document.getElementById('warranty').textContent = product.Warranty;
             document.getElementById('description').textContent = product.Description;
             document.getElementById('note').textContent = product.Note;
+
+            const bill = document.getElementById('receipt')
+            product.SellingId ? bill.innerHTML = `<strong class="green-text">Bill No: </strong><a target="_blank" href="/Selling/SellingReceipt/${product.SellingId}" id="receiptNo">#${product.SellingSn}</a>` : bill.innerHTML = '';
         }
     </script>
 }
