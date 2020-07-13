@@ -6,7 +6,7 @@
 }
 
 @section Styles{
-    <link href="~/css/selling-receipt.css?v=1.1" rel="stylesheet" />
+    <link href="~/css/selling-receipt.css?v=1.5" rel="stylesheet" />
 }
 
 <div class="container">
@@ -22,10 +22,10 @@
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
-                <td class="td-size text-right"><strong>Name</strong></td>
-                <td class="td-val-size">@Model.CustomerInfo.CustomerName</td>
-                <td class="td-size text-right"><strong>Bill&nbsp;No</strong></td>
-                <td class="td-val-size">@Model.SellingSn</td>
+                <td class="text-right" style="width: 50px"><strong>Name</strong></td>
+                <td>@Model.CustomerInfo.CustomerName</td>
+                <td class="text-right" style="width: 50px"><strong>Bill&nbsp;No</strong></td>
+                <td style="width: 90px">@Model.SellingSn</td>
             </tr>
             <tr>
                 <td class="text-right"><strong>Address</strong></td>
@@ -100,8 +100,8 @@
                     {
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span>৳@item.PaidAmount/- <small class="text-muted">@item.PaymentMethod</small></span>
-                                <small class="text-muted">@item.PaidDate.ToString("d MMM yyyy")</small>
+                                <span>৳@item.PaidAmount/- <small>@item.PaymentMethod</small></span>
+                                <small>@item.PaidDate.ToString("d MMM yyyy")</small>
                             </li>
                         </ul>
 
