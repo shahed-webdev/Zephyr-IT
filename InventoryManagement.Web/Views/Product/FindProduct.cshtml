@@ -54,7 +54,6 @@
 </div>
 
 @section Scripts{
-    <script src="~/js/onscan.min.js"></script>
     <script>
         //*****SELECTORS*****/
         // product code form
@@ -63,17 +62,6 @@
         const codeError = formCode.querySelector('#codeError')
         const btnFind = formCode.btnFind
         const infoContainer = document.querySelector('.info-container')
-
-        // scan barcode
-        onScan.attachTo(document, {
-            suffixKeyCodes: [13],
-            reactToPaste: true,
-            onScan: (sCode, iQty) => {
-                inputProductCode.value = sCode
-                inputProductCode.nextElementSibling.classList.add('active')
-                btnFind.click()
-            }
-        })
 
         // on Product code submit
         formCode.addEventListener('submit', evt => {

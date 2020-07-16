@@ -85,17 +85,6 @@ const storage = {
 
 
 //****FUNCTIONS****//
-// scan barcode
-onScan.attachTo(document, {
-    suffixKeyCodes: [13],
-    reactToPaste: true,
-    onScan: (sCode, iQty) => {
-        inputBarCode.value = sCode
-        inputBarCode.nextElementSibling.classList.add('active')
-        btnFind.click()
-    }
-})
-
 //append code
 const appendCode = function (codes) {
    let html = ''

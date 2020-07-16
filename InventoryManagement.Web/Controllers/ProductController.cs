@@ -140,8 +140,8 @@ namespace InventoryManagement.Web.Controllers
 
             if (response.IsSuccess)
                 return Ok(response.Data);
-            else
-                return UnprocessableEntity(response.Message);
+
+            return UnprocessableEntity(response.Message);
         }
 
 
