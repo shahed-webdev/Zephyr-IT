@@ -95,7 +95,7 @@ const appendCode = function (codes) {
 // create table rows
 const createTableRow = function (item) {
     const description = item.Description && `${item.Description},`
-    const note = item.Note && `<span style="font-size: 12px;" class="badge badge-pill badge-secondary">${item.Note}</span>`
+    const note = item.Note ? `<span style="font-size: 12px;" class="badge badge-pill badge-secondary">${item.Note}</span>` : "";
 
     return `<tr data-id="${item.ProductCatalogId}">
                 <td>${item.ProductCatalogName}</td>
