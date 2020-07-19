@@ -5,7 +5,7 @@
 }
 
 @section Styles{
-    <link href="~/css/barcode.css" rel="stylesheet" />
+    <link href="~/css/barcode.css?v=.02" rel="stylesheet" />
 }
 
 <div class="m-3">
@@ -45,11 +45,11 @@
 </div>
 
 @section Scripts{
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/barcodes/JsBarcode.ean-upc.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
     <script>
-        const getRandom = function () {
-            const rand = (Math.random() * 99);
-            return Math.floor(rand + Date.now()).toString().slice(1);
+        const getRandom = function (index) {
+            const rand = (Math.random() * 99.25);
+            return Math.floor(((rand * index) * Math.random()) + Date.now()).toString().slice(1);
         }
 
         const generateBarcode = function (evt) {
@@ -63,9 +63,14 @@
             codeContainer.innerHTML = '';
 
             for (let i = 0; i < inputNumberOfCode; i++) {
-                const canvas = document.createElement('canvas');
+                const canvas = document.createElementNS("http://www.w3.org/2000/svg", "svg");
                 canvas.classList.add('barcode');
-                fragment.appendChild(canvas);
+
+                const contain = document.createElement("div");
+                contain.classList.add('svg-container');
+                contain.appendChild(canvas);
+
+                fragment.appendChild(contain);
             }
 
             //append the canvas in DOM
@@ -76,12 +81,12 @@
                 format: "EAN13",
                 lineColor: "#000",
                 height: inputHeight,
-                width: inputBarWidth,
-                margin: 5
+                width: inputBarWidth
+                //fontOptions: "bold"
             }
 
-            canvasContainer.forEach(element => {
-                JsBarcode(element, getRandom(), options);
+            canvasContainer.forEach((element, index) => {
+                JsBarcode(element, getRandom(index), options);
             }); 
         }
 

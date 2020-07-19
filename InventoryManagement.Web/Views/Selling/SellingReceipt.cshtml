@@ -6,7 +6,7 @@
 }
 
 @section Styles{
-    <link href="~/css/selling-receipt.css?v=.5" rel="stylesheet" />
+    <link href="~/css/selling-receipt.css?v=.6" rel="stylesheet" />
 }
 
 <div class="container" id="receipt">
@@ -100,26 +100,25 @@
         @if (Model.Payments.Count > 0)
         {
             <div class="col">
-                <fieldset class="border p-2">
+                <fieldset class="p-2">
                     <legend>Paid Record</legend>
 
                     @foreach (var item in Model.Payments)
                     {
-                        <ul class="list-group list-group-flush">
+                        <ul class="list-group list-group-flush black-text">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <span>৳@item.PaidAmount/- <small>@item.PaymentMethod</small></span>
                                 <small>@item.PaidDate.ToString("d MMM yyyy")</small>
                             </li>
                         </ul>
-
                     }
                 </fieldset>
             </div>
         }
         <div class="col">
-            <fieldset class="border p-2">
+            <fieldset class="p-2">
                 <legend>Note</legend>
-                <small>
+                <small class="black-text">
                     No warranty will be applicable in case of burning or physical damage. Warranty will
                     also be void if warranty sticker is removed. Sold products are non-refundable.
                 </small>
