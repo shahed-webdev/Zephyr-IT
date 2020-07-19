@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System.Linq;
 using System.Threading.Tasks;
 namespace InventoryManagement.Web.Controllers
@@ -104,6 +103,15 @@ namespace InventoryManagement.Web.Controllers
             var r = _db.SaveChanges();
 
             return r > 0;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

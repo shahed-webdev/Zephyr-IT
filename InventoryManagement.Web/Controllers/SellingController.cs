@@ -34,12 +34,12 @@ namespace InventoryManagement.Web.Controllers
 
             if (response.IsSuccess)
             {
-                _db.Customers.UpdatePaidDue(model.CustomerId);
-                await _db.SaveChangesAsync();
                 return Ok(response);
             }
             else
+            {
                 return UnprocessableEntity(response);
+            }
         }
 
         //Selling receipt
@@ -80,6 +80,73 @@ namespace InventoryManagement.Web.Controllers
         {
             var data = _db.Selling.Records(request);
             return Json(data);
+        }
+
+
+        //GET: Due Collection
+        public async Task<ActionResult> DueCollection(int? id)
+        {
+            if (id == null) return RedirectToAction($"Record");
+            var model = await _db.Selling.SellingReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
+            if (model == null) return RedirectToAction($"Record");
+            return View(model);
+        }
+
+        [HttpPost]
+        public async void DueCollectionMultiple(SellingDuePayMultipleModel model)
+        {
+            if (model.PaidAmount <= 0) BadRequest("");
+
+            model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+
+            var dbResponse = await _db.SellingPayments.DuePayMultipleAsync(model, _db).ConfigureAwait(false);
+
+            if (dbResponse.IsSuccess)
+            {
+                Ok();
+            }
+            else
+            {
+                BadRequest(dbResponse.Message);
+            }
+        }
+        [HttpPost]
+        public async void DueCollectionSingle(SellingDuePaySingleModel model)
+        {
+            model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+            var dbResponse = await _db.SellingPayments.DuePaySingleAsync(model, _db).ConfigureAwait(false);
+
+            if (dbResponse.IsSuccess)
+            {
+                Ok();
+            }
+            else
+            {
+                BadRequest(dbResponse.Message);
+            }
+        }
+
+        public void DeleteBill(int id)
+        {
+            var dbResponse = _db.Selling.DeleteBill(id);
+
+            if (dbResponse.IsSuccess)
+            {
+                Ok();
+            }
+            else
+            {
+                BadRequest(dbResponse.Message);
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

@@ -64,5 +64,14 @@ namespace InventoryManagement.Web.Controllers
             var admin = _db.Registrations.GetAdminBasic(User.Identity.Name);
             return JsonConvert.SerializeObject(admin); //Serialize for image binary data
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
