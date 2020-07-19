@@ -90,5 +90,14 @@ namespace InventoryManagement.Web.Controllers
             if (!_db.Vendors.RemoveCustom(id)) return -1;
             return _db.SaveChanges();
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

@@ -88,6 +88,8 @@ namespace InventoryManagement.Repository
             {
                 await Context.SaveChangesAsync().ConfigureAwait(false);
 
+                db.Customers.UpdatePaidDue(model.CustomerId);
+
                 response.IsSuccess = true;
                 response.Message = "Success";
                 response.Data = selling.SellingId;
@@ -273,5 +275,45 @@ namespace InventoryManagement.Repository
 
             return months;
         }
+
+        public DbResponse DeleteBill(int id)
+        {
+            var response = new DbResponse();
+            try
+            {
+                var selling = Context.Selling
+                    .Include(s => s.SellingList)
+                    .Include(s => s.SellingPaymentList)
+                    .FirstOrDefault(s => s.SellingId == id);
+                if (selling == null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Not found";
+                    return response;
+                }
+
+                if (selling.SellingPaymentList.Count > 0)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Payment Exist";
+                    return response;
+                }
+
+                Context.Selling.Remove(selling);
+
+                Context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                response.IsSuccess = false;
+                response.Message = e.Message;
+                return response;
+            }
+
+            response.IsSuccess = true;
+            response.Message = "Success";
+            return response;
+        }
+
     }
 }

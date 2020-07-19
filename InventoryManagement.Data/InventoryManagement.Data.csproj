@@ -19,6 +19,8 @@
     <Compile Remove="Migrations\20200615054436_Delete_PurchaseAdjustment.Designer.cs" />
     <Compile Remove="Migrations\20200703063203_AddNewColumnToCustomerTable.cs" />
     <Compile Remove="Migrations\20200703063203_AddNewColumnToCustomerTable.Designer.cs" />
+    <Compile Remove="Migrations\20200715065755_test.cs" />
+    <Compile Remove="Migrations\20200715065755_test.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,4 +6,10 @@
         public string Message { get; set; }
         public TObject Data { get; set; }
     }
+
+    public class DbResponse
+    {
+        public bool IsSuccess { get; set; }
+        public string Message { get; set; }
+    }
 }

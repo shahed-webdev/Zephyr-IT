@@ -189,5 +189,14 @@ namespace InventoryManagement.Web.Controllers
             var data = await _db.ProductStocks.FindforDetailsAsync(code).ConfigureAwait(false);
             return Json(data);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

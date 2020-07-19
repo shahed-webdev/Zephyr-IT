@@ -70,5 +70,6 @@ namespace InventoryManagement.Web.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }

@@ -83,5 +83,13 @@ namespace InventoryManagement.Web.Views
             var data = _db.Purchases.Records(request);
             return Json(data);
         }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

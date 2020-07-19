@@ -96,5 +96,13 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
