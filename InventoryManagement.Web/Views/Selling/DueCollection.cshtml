@@ -1,7 +1,7 @@
 ﻿@using InventoryManagement.Repository
 @model SellingReceiptViewModel
 @{
-    ViewData["Title"] = "Selling Receipt";
+    ViewData["Title"] = "Due Collection";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -14,7 +14,7 @@
         <div class="d-flex justify-content-between">
             <a class="btn btn-success btn-rounded" href="/Selling/Selling"><i class="fal fa-cart-plus mr-1"></i>Selling</a>
             <div>
-                <button class="btn btn-elegant btn-rounded" onclick="print()"><i class="fal fa-print mr-1"></i>Print</button>
+                <a href="/Customer/List" class="btn btn-elegant btn-rounded">Customers</a>
             </div>
         </div>
     </section>
@@ -59,22 +59,24 @@
                 var index = 1;
                 foreach (var item in Model.Products)
                 {
-                        <tr>
-                            <td class="text-center">@index</td>
-                            <td class="text-center">@item.ProductCatalogName</td>
-                            <td>
-                                @item.ProductName,
-                                @if (item.Description != null)
-                                {
-                                    <span>@item.Description,</span>
-                                }
-                                @string.Join(",", item.ProductCodes)
-                            </td>
-                            <td class="text-center">@item.Warranty</td>
-                            <td class="text-center">@item.ProductCodes.Length</td>
-                            <td class="text-right">৳@item.SellingPrice</td>
-                            <td class="text-right">৳@(item.SellingPrice*item.ProductCodes.Length)</td>
-                        </tr> 
+                    <tr>
+                        <td class="text-center">@index</td>
+                        <td class="text-center">@item.ProductCatalogName</td>
+                        <td>
+                            @item.ProductName,
+                            @if (item.Description != null)
+                            {
+                                <span>@item.Description,</span>
+                            }
+                            @string.Join(",", item.ProductCodes)
+                        </td>
+                        <td class="text-center">@item.Warranty</td>
+                        <td class="text-center">@item.ProductCodes.Length</td>
+                        <td class="text-right">৳@item.SellingPrice</td>
+                        <td class="text-right">৳@(item.SellingPrice*item.ProductCodes.Length)</td>
+                    </tr>
+
+
 
                     index++;
                 }
@@ -127,11 +129,11 @@
     </div>
 </div>
 
- @section scripts{
-     <script src="~/js/amount-in-word.js"></script>
-     <script>
+@section scripts{
+    <script src="~/js/amount-in-word.js"></script>
+    <script>
          $(function() {
              $("#amount-word").text(`Taka (in word): ${number2text(@Model.SellingTotalPrice).toLowerCase()}`);
          });
-     </script>
- }
+    </script>
+}

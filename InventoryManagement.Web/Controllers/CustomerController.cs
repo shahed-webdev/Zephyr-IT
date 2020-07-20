@@ -75,14 +75,11 @@ namespace InventoryManagement.Web.Controllers
             var phone = model.PhoneNumbers.FirstOrDefault()?.Phone;
             var checkPhone = await _db.Customers.IsPhoneNumberExistAsync(phone, model.CustomerId).ConfigureAwait(false);
 
-            if (checkPhone == false)
-            {
-                _db.Customers.CustomUpdate(model);
-                await _db.SaveChangesAsync().ConfigureAwait(false);
-                return RedirectToAction("List");
-            }
+            if (checkPhone) return View(model);
 
-            return View(model);
+            _db.Customers.CustomUpdate(model);
+            await _db.SaveChangesAsync().ConfigureAwait(false);
+            return RedirectToAction("List");
         }
 
         //GET:// Details
@@ -95,6 +92,7 @@ namespace InventoryManagement.Web.Controllers
 
             return View(model);
         }
+
 
         protected override void Dispose(bool disposing)
         {

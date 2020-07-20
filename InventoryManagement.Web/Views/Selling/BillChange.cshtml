@@ -7,7 +7,8 @@
 
 @section Styles{
     <style>
-        .code-removed { text-decoration: line-through; color: gray}
+        .code-removed { text-decoration: line-through; color: #ff0000 }
+        .remove-disable { pointer-events: none }
 
         .remove { cursor: pointer }
         .remove:hover { color: #ff0000 }
@@ -64,31 +65,31 @@
                                 </tr>
                             </thead>
                             <tbody id="t-body">
-                            @foreach (var item in Model.Products)
-                            {
-                                <tr data-id="@item.ProductCatalogId">
-                                    <td>@item.ProductCatalogName</td>
-                                    <td>
-                                        @item.ProductName,
-                                        @item.Description
-                                        @if (item.Note != null)
-                                        {
-                                            <span style="font-size: 12px;" class="badge badge-pill badge-secondary">@item.Note</span>
-                                        }
-                                        <span class="codeSpan">
-                                            @foreach (var code in item.ProductCodes)
+                                @foreach (var item in Model.Products)
+                                {
+                                    <tr data-id="@item.ProductCatalogId">
+                                        <td>@item.ProductCatalogName</td>
+                                        <td>
+                                            @item.ProductName,
+                                            @item.Description
+                                            @if (item.Note != null)
                                             {
-                                                <span class="code">@code</span>
+                                                <span style="font-size: 12px;" class="badge badge-pill badge-secondary">@item.Note</span>
                                             }
-                                        </span>
-                                    </td>
-                                    <td>@item.Warranty</td>
-                                    <td>@item.ProductCodes.Length</td>
-                                    <td><input type="number" required class="form-control inputUnitPrice" step="0.01" min="@item.SellingPrice" max="@item.SellingPrice" value="@item.SellingPrice"/></td>
-                                    <td>@(item.SellingPrice * item.ProductCodes.Length)</td>
-                                    <td class="text-center"><i class="fal fa-times remove"></i></td>
-                                </tr>
-                            }
+                                            <span class="codeSpan">
+                                                @foreach (var code in item.ProductCodes)
+                                                {
+                                                    <span class="code">@code</span>
+                                                }
+                                            </span>
+                                        </td>
+                                        <td>@item.Warranty</td>
+                                        <td>@item.ProductCodes.Length</td>
+                                        <td><input type="number" required class="form-control inputUnitPrice" step="0.01" min="@item.SellingPrice" max="@item.SellingPrice" value="@item.SellingPrice" /></td>
+                                        <td>@(item.SellingPrice * item.ProductCodes.Length)</td>
+                                        <td class="text-center"><i class="fal fa-times remove"></i></td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                         <input id="btnProduct" type="submit" style="display:none" />
@@ -109,13 +110,27 @@
                             <input id="inputDiscount" type="number" min="0" class="form-control" value="@Model.SellingDiscountAmount">
                             <label for="inputDiscount">Discount</label>
                         </li>
+                        <li class="d-flex justify-content-between align-items-center text-success py-4">
+                            <strong>Prev. Paid Amount</strong>
+                            <strong>৳<span id="totalPrevPaid">@Model.SellingPaidAmount</span></strong>
+                        </li>
                         <li class="d-flex justify-content-between align-items-center">
                             <strong>Grand Total</strong>
-                            <strong>৳<span id="totalPayable">@(Model.SellingTotalPrice - Model.SellingDiscountAmount)</span></strong>
+                            <strong>৳<span id="totalPayable">@(Model.SellingTotalPrice - Model.SellingDiscountAmount- Model.SellingPaidAmount)</span></strong>
                         </li>
-                        <li class="d-flex justify-content-between align-items-center text-success py-4">
-                            <strong>Paid Amount</strong>
-                            <strong>৳<span id="totalPaid">@Model.SellingPaidAmount</span></strong>
+
+                        <li class="md-form">
+                            <input id="inputPaid" type="number" min="0" class="form-control">
+                            <label for="inputPaid">Paid Amount</label>
+                        </li>
+                        <li class="md-form">
+                            <select id="selectPaymentMethod" class="mdb-select" style="position: absolute; top: 1rem; left: 0; height: 0; width: 0; opacity: 0; padding: 0; pointer-events: none; display: inline!important;">
+                                <option value="" selected>[ Payment Method ]</option>
+                                <option>Cash</option>
+                                <option>Bank</option>
+                                <option>Cheque</option>
+                                <option>bkash</option>
+                            </select>
                         </li>
                         <li class="d-flex justify-content-between align-items-center text-danger">
                             <strong>Total Due</strong>
@@ -128,17 +143,17 @@
                     </ul>
                     <div class="text-center">
                         <i id="customer-error" class="mt-2 text-center red-text"></i>
-                        <input type="hidden" id="hiddenSellingId" value="@Model.SellingId"/>
+                        <input type="hidden" id="hiddenSellingId" value="@Model.SellingId" />
                         <button type="submit" id="btnSelling" class="btn peach-gradient btn-rounded btn-block mt-0">UPDATE BILL</button>
                     </div>
-                </form>
+                </form> 
             </div>
         </div>
     </div>
 </div>
 
 @section Scripts{
-    <script src="~/page-js/bill-change.js?v=1"></script>
+    <script src="~/page-js/bill-change.js?v=1.2"></script>
     <script>
         //save previous data
         cartProducts = @Html.Raw(Json.Serialize(Model.Products));

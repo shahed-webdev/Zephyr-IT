@@ -127,7 +127,9 @@
                                     <td>@item.SellingAmount</td>
                                     <td>@item.SellingDiscountAmount</td>
                                     <td>@item.SellingPaidAmount</td>
-                                    <td>@item.SellingDueAmount</td>
+                                    <td>
+                                        <a class="blue-text" href="/Selling/DueCollection/@item.SellingId">@item.SellingDueAmount</a>
+                                    </td>
                                     <td>@item.SellingDate.ToString("d MMM yyyy")</td>
                                 </tr>
                             }

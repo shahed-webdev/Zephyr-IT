@@ -87,10 +87,29 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> DueCollection(int? id)
         {
             if (id == null) return RedirectToAction($"Record");
+           
             var model = await _db.Selling.SellingReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
             if (model == null) return RedirectToAction($"Record");
+            
             return View(model);
         }
+
+        [HttpPost]
+        public async void DueCollection(SellingDuePaySingleModel model)
+        {
+            model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+            var dbResponse = await _db.SellingPayments.DuePaySingleAsync(model, _db).ConfigureAwait(false);
+
+            if (dbResponse.IsSuccess)
+            {
+                Ok();
+            }
+            else
+            {
+                BadRequest(dbResponse.Message);
+            }
+        }
+
 
         [HttpPost]
         public async void DueCollectionMultiple(SellingDuePayMultipleModel model)
@@ -110,23 +129,7 @@ namespace InventoryManagement.Web.Controllers
                 BadRequest(dbResponse.Message);
             }
         }
-       
-        [HttpPost]
-        public async void DueCollectionSingle(SellingDuePaySingleModel model)
-        {
-            model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
-            var dbResponse = await _db.SellingPayments.DuePaySingleAsync(model, _db).ConfigureAwait(false);
-
-            if (dbResponse.IsSuccess)
-            {
-                Ok();
-            }
-            else
-            {
-                BadRequest(dbResponse.Message);
-            }
-        }
-
+        
 
         //Post: Change Bill
         public IActionResult BillList()

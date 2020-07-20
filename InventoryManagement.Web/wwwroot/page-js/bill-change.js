@@ -23,7 +23,10 @@ const totalPrice = formPayment.querySelector('#totalPrice')
 const inputDiscount = formPayment.inputDiscount
 const inputReturnAmount = formPayment.inputReturnAmount
 const totalPayable = formPayment.querySelector('#totalPayable')
+const totalPrevPaid = formPayment.querySelector('#totalPrevPaid')
 const totalDue = formPayment.querySelector('#totalDue')
+const inputPaid = formPayment.inputPaid
+const selectPaymentMethod = formPayment.selectPaymentMethod
 
 //customer
  const hiddenSellingId = formPayment.hiddenSellingId;
@@ -86,6 +89,20 @@ const appendCode = function(codes) {
     return html;
 }
 
+//dropdown selected index 0
+const clearMDBdropDownList = function (mainSelector) {
+    const content = mainSelector.querySelectorAll('.select-dropdown li');
+    content.forEach(li => {
+        content[0].classList.add('active', 'selected');
+
+        if (li.classList.contains('selected')) {
+            li.classList.remove(['active', 'selected']);
+            li.click();
+            return;
+        }
+    });
+}
+
 // create table rows
 const createTableRow = function (item) {
     const description = item.Description && `${item.Description},`
@@ -124,11 +141,11 @@ const showProducts = function () {
 }
 
 //remove product code
-const removeProductCode = function(code) {
-    const id = +code.parentElement.parentElement.parentElement.getAttribute('data-id')
+ const removeProductCode = function(code) {
+     const id = +code.parentElement.parentElement.parentElement.getAttribute('data-id');
     const pCode = code.textContent;
 
-    const index = cartProducts.findIndex(item => item.ProductCatalogId === id)
+    const index = cartProducts.findIndex(item => item.ProductCatalogId === id);
     const codes = cartProducts[index].codes;
 
     codes.forEach((obj, i) => {
@@ -138,9 +155,8 @@ const removeProductCode = function(code) {
         }
     })
 
-    showProducts()
+    showProducts();
 }
-
 
 // click remove or stock
 const onRemoveClicked = function (evt) {
@@ -189,6 +205,14 @@ const appendTotalPrice = function () {
 
     if (inputReturnAmount.value)
         inputReturnAmount.value = '';
+
+    if (inputPaid.value)
+        inputPaid.value = '';
+
+    if (selectPaymentMethod.selectedIndex > 0) {
+        clearMDBdropDownList(formPayment);
+        selectPaymentMethod.removeAttribute('required');
+    }
 }
 
 //selling price change
@@ -248,16 +272,49 @@ const validInput = function (total, inputted) {
 //input discount amount
 const onInputDiscount = function () {
     const total = +totalPrice.textContent;
+    const prevPaid = +totalPrevPaid.textContent;
     const discount = +this.value;
-    const isValid = validInput(total, discount);
-    const grandTotal = (total - discount);
+    const grandTotal = (total - discount) - prevPaid;
 
     this.setAttribute('max', total);
 
-    totalPayable.innerText = isValid ? grandTotal.toFixed() : total;
-    totalDue.innerText = isValid ? grandTotal.toFixed() : total;
+    totalPayable.innerText = grandTotal.toFixed();
+    totalDue.innerText = grandTotal.toFixed();
+
+    if (inputPaid.value)
+        inputPaid.value = '';
+
+    if (inputReturnAmount.value)
+        inputReturnAmount.value = '';
 }
 
+//input paid amount
+const onInputPaid = function () {
+    const payable = +totalPayable.textContent;
+    const paid = +this.value;
+    const due = (payable - paid);
+
+    paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
+
+    this.setAttribute('max', payable);
+
+    totalDue.innerText = due.toFixed();
+
+    if (inputReturnAmount.value)
+        inputReturnAmount.value = '';
+}
+
+//input return amount
+const onInputReturnAmount = function () {
+    const payable = +totalPayable.textContent;
+    const paid = +inputPaid.value;
+    const returnAmount = +this.value;
+    const due = (payable - paid);
+
+    this.setAttribute('max', due);
+
+    totalDue.innerText = (due - returnAmount)
+}
 
 //validation info
 const validation = function () {
@@ -338,6 +395,8 @@ const onSellSubmitClicked = function (evt) {
 formPayment.addEventListener('submit', onCheckFormValid)
 formTable.addEventListener('submit', onSellSubmitClicked)
 inputDiscount.addEventListener('input', onInputDiscount)
+inputPaid.addEventListener('input', onInputPaid)
+inputReturnAmount.addEventListener('input', onInputReturnAmount)
 
 function codeValue() {
     const newCode = []
@@ -349,6 +408,9 @@ function codeValue() {
                 if (obj.ProductCodes.indexOf(itm.code) !== -1) {
                     if (itm.isRemove)
                         removeCode.push(itm.code);
+                } else {
+                    if (!itm.isRemove)
+                        newCode.push(itm.code);
                 }
             } else {
                 if (!itm.isRemove)
