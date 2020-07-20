@@ -118,7 +118,7 @@ const checkDuplicatePhone = function (evt) {
 
 
 let elementIndex = hiddenLastIndex;
-const addInputelement = function () {
+const addInputElement = function () {
     const element = `<div class="phone-container">
                 <div class="md-form m-0 flex-grow-1">
                     <input id="phone-${elementIndex}" name="PhoneNumbers[${elementIndex}].Phone" required type="number" class="form-control valid-check" />
@@ -134,7 +134,21 @@ const addInputelement = function () {
     phoneContainer.insertAdjacentHTML('beforeend', element);
 }
 
-const removeInputelement = function (evt) {
+//phone index re assign
+const reAssignIndex = function () {
+    const phones = document.querySelectorAll('.valid-check');
+
+    phones.forEach((phone, i) => {
+        phone.name = `PhoneNumbers[${i}].Phone`;
+        phone.id = `phone-${i}`;
+        phone.nextElementSibling.setAttribute("for", `phone-${i}`);
+        phone.nextElementSibling.nextElementSibling.name = `PhoneNumbers[${i}].CustomerPhoneId`;
+
+        elementIndex = i + 1;
+    });
+}
+
+const removeInputElement = function (evt) {
     evt.target.parentElement.parentElement.remove();
     const id = evt.target.parentElement.previousElementSibling.children[0].id;
     const errorIndex = isError.indexOf(id);
@@ -142,6 +156,8 @@ const removeInputelement = function (evt) {
     if (errorIndex !== -1) isError.splice(errorIndex, 1);
 
     btnEnabledDisable();
+
+    reAssignIndex();
 }
 
 const togglePhoneElement = function (evt) {
@@ -149,10 +165,10 @@ const togglePhoneElement = function (evt) {
     const removeClicked = evt.target.classList.contains("remove");
 
     if (addClicked)
-        addInputelement(evt);
+        addInputElement(evt);
 
     if (removeClicked)
-        removeInputelement(evt);
+        removeInputElement(evt);
 }
 
 const onFormSubmit = function () {
