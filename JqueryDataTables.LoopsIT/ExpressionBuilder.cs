@@ -7,11 +7,9 @@ namespace JqueryDataTables.LoopsIT
 {
     public class ExpressionBuilder
     {
-        private static MethodInfo containsMethod = typeof(string).GetMethod("Contains");
-        private static MethodInfo startsWithMethod =
-        typeof(string).GetMethod("StartsWith", new Type[] { typeof(string) });
-        private static MethodInfo endsWithMethod =
-        typeof(string).GetMethod("EndsWith", new Type[] { typeof(string) });
+        private static readonly MethodInfo ContainsMethod = typeof(string).GetMethod("Contains", new Type[] { typeof(string) });
+        private static readonly MethodInfo StartsWithMethod = typeof(string).GetMethod("StartsWith", new Type[] { typeof(string) });
+        private static readonly MethodInfo EndsWithMethod = typeof(string).GetMethod("EndsWith", new Type[] { typeof(string) });
 
 
         public static Expression<Func<T, bool>> GetExpression<T>(FilterDefinition filter)
@@ -55,13 +53,13 @@ namespace JqueryDataTables.LoopsIT
                     return Expression.LessThanOrEqual(member, constant);
 
                 case Operand.Contains:
-                    return Expression.Call(member, containsMethod, constant);
+                    return Expression.Call(member, ContainsMethod, constant);
 
                 case Operand.StartsWith:
-                    return Expression.Call(member, startsWithMethod, constant);
+                    return Expression.Call(member, StartsWithMethod, constant);
 
                 case Operand.EndsWith:
-                    return Expression.Call(member, endsWithMethod, constant);
+                    return Expression.Call(member, EndsWithMethod, constant);
             }
             return null;
         }

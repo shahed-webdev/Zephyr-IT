@@ -14,7 +14,7 @@ namespace JqueryDataTables.LoopsIT
             {
                 draw = request.draw
             };
-           // try
+            // try
             {
                 result.recordsTotal = result.recordsFiltered = query.Count();
 
@@ -84,7 +84,7 @@ namespace JqueryDataTables.LoopsIT
         {
 
             var result = new CustomDataResult<T> { draw = request.draw };
-           
+
             try
             {
                 result.recordsTotal = result.recordsFiltered = query.Count();
