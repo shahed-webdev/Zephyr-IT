@@ -377,7 +377,7 @@ namespace InventoryManagement.Repository
             return sellingReceipt;
         }
 
-        public DbResponse BillUpdated(SellingUpdatePostModel model, IUnitOfWork db)
+        public async Task<DbResponse> BillUpdated(SellingUpdatePostModel model, IUnitOfWork db)
         {
             var response = new DbResponse();
             try
@@ -389,9 +389,6 @@ namespace InventoryManagement.Repository
                     response.Message = "Not found";
                     return response;
                 }
-
-
-
                 selling.SellingTotalPrice = model.SellingTotalPrice;
                 selling.SellingDiscountAmount = model.SellingDiscountAmount;
                 selling.SellingReturnAmount = model.SellingReturnAmount;
@@ -406,9 +403,44 @@ namespace InventoryManagement.Repository
                     Warranty = p.Warranty,
                 }).ToList();
 
-                var RemovedStocks = db.ProductStocks.SellingStockFromCodesAsync(model.RemovedProductCodes);
-                var AddedStocks = db.ProductStocks.SellingStockFromCodesAsync(model.AddedProductCodes);
 
+                var Stocks = new List<ProductStock>();
+                if (model.RemovedProductCodes.Any())
+                {
+                    var removedStocks = await db.ProductStocks.SellingStockFromCodesAsync(model.RemovedProductCodes);
+
+                    removedStocks = removedStocks.Select(s =>
+                    {
+                        s.IsSold = false;
+                        s.SellingListId = null;
+                        return s;
+                    }).ToList();
+
+                    Stocks.AddRange(removedStocks);
+                }
+
+                if (model.AddedProductCodes.Any())
+                {
+                    var addedStocks = await db.ProductStocks.SellingStockFromCodesAsync(model.AddedProductCodes);
+                    addedStocks = addedStocks.Select(s =>
+                    {
+                        s.IsSold = true;
+                        s.SellingListId = model.SellingId;
+                        return s;
+                    }).ToList();
+                    Stocks.AddRange(addedStocks);
+                }
+
+                if (Stocks.Any())
+                {
+                    Context.ProductStock.UpdateRange(Stocks);
+                }
+
+                Context.Selling.Update(selling);
+
+                await Context.SaveChangesAsync();
+
+                db.Customers.UpdatePaidDue(selling.CustomerId);
             }
             catch (Exception e)
             {

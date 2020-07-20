@@ -146,8 +146,7 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public int BillChange(SellingUpdatePostModel model)
         {
-            var dbResponse = _db.Selling.BillUpdated(model, _db);
-           
+            var dbResponse = await _db.Selling.BillUpdated(model, _db);
             if (dbResponse.IsSuccess)
             {
                 Ok();
