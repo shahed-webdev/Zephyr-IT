@@ -19,6 +19,8 @@ namespace InventoryManagement.Repository
         double DailySoldPurchaseAmount(DateTime? day);
         ICollection<MonthlyAmount> MonthlyAmounts(int year);
         ICollection<MonthlyAmount> MonthlyProfit(int year);
-        DbResponse DeleteBill(int id);
+        Task<DbResponse> DeleteBillAsync(int id, IUnitOfWork db);
+        Task<SellingUpdateGetModel> FindUpdateBillAsync(int id, IUnitOfWork db);
+        DbResponse BillUpdated(SellingUpdatePostModel model, IUnitOfWork db);
     }
 }

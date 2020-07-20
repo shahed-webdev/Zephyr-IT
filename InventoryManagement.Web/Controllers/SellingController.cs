@@ -126,9 +126,37 @@ namespace InventoryManagement.Web.Controllers
             }
         }
 
-        public void DeleteBill(int id)
+
+        public async Task<ActionResult> ReceiptChange(int? id)
         {
-            var dbResponse = _db.Selling.DeleteBill(id);
+            if (id == null) return RedirectToAction("Record");
+            var data = await _db.Selling.FindUpdateBillAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
+            if (data == null) return RedirectToAction("Record");
+            return View(data);
+        }
+
+        //Post: Change Receipt
+        [HttpPost]
+        public async Task<int> ReceiptChange(SellingUpdatePostModel model)
+        {
+            var dbResponse = _db.Selling.BillUpdated(model, _db);
+            if (dbResponse.IsSuccess)
+            {
+                Ok();
+                return model.SellingId;
+            }
+            else
+            {
+                BadRequest(dbResponse.Message);
+                return 0;
+            }
+
+
+        }
+
+        public async Task DeleteBill(int id)
+        {
+            var dbResponse = await _db.Selling.DeleteBillAsync(id, _db).ConfigureAwait(false);
 
             if (dbResponse.IsSuccess)
             {

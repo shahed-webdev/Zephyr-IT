@@ -276,7 +276,7 @@ namespace InventoryManagement.Repository
             return months;
         }
 
-        public DbResponse DeleteBill(int id)
+        public async Task<DbResponse> DeleteBillAsync(int id, IUnitOfWork db)
         {
             var response = new DbResponse();
             try
@@ -299,9 +299,18 @@ namespace InventoryManagement.Repository
                     return response;
                 }
 
-                Context.Selling.Remove(selling);
 
+                var stocks = selling.SellingList.SelectMany(s => s.ProductStock).Select(sp =>
+                 {
+                     sp.IsSold = false;
+                     sp.SellingListId = null;
+                     return sp;
+                 }).ToList();
+
+                Context.ProductStock.UpdateRange(stocks);
+                Context.Selling.Remove(selling);
                 Context.SaveChanges();
+                db.Customers.UpdatePaidDue(selling.CustomerId);
             }
             catch (Exception e)
             {
@@ -315,5 +324,104 @@ namespace InventoryManagement.Repository
             return response;
         }
 
+        public Task<SellingUpdateGetModel> FindUpdateBillAsync(int id, IUnitOfWork db)
+        {
+            var sellingReceipt = Context.Selling
+              .Include(s => s.Customer)
+              .ThenInclude(c => c.CustomerPhone)
+              .Include(s => s.Registration)
+              .Include(s => s.SellingList)
+              .ThenInclude(ps => ps.ProductStock)
+              .ThenInclude(p => p.Product)
+              .ThenInclude(pd => pd.ProductCatalog)
+              .Include(s => s.SellingPaymentList)
+              .ThenInclude(sp => sp.SellingPayment)
+              .Select(s => new SellingUpdateGetModel
+              {
+                  SellingSn = s.SellingSn,
+                  SellingId = s.SellingId,
+                  SellingTotalPrice = s.SellingTotalPrice,
+                  SellingDiscountAmount = s.SellingDiscountAmount,
+                  SellingPaidAmount = s.SellingPaidAmount,
+                  SellingDueAmount = s.SellingDueAmount,
+                  SellingReturnAmount = s.SellingReturnAmount,
+                  SellingDate = s.SellingDate,
+                  Products = s.SellingList.Select(pd => new SellingReceiptProductViewModel
+                  {
+                      ProductId = pd.Product.ProductId,
+                      ProductCatalogId = pd.Product.ProductCatalogId,
+                      ProductCatalogName = pd.Product.ProductCatalog.CatalogName,
+                      ProductName = pd.Product.ProductName,
+                      Description = pd.Product.Description,
+                      Warranty = pd.Product.Warranty,
+                      SellingPrice = pd.SellingPrice,
+                      ProductCodes = pd.ProductStock.Select(ss => ss.ProductCode).ToArray()
+                  }).ToList(),
+                  Payments = s.SellingPaymentList.Select(pp => new SellingPaymentViewModel
+                  {
+                      PaymentMethod = pp.SellingPayment.PaymentMethod,
+                      PaidAmount = pp.SellingPaidAmount,
+                      PaidDate = pp.SellingPayment.PaidDate
+                  }).ToList(),
+                  CustomerInfo = new CustomerReceiptViewModel
+                  {
+                      CustomerId = s.Customer.CustomerId,
+                      OrganizationName = s.Customer.OrganizationName,
+                      CustomerName = s.Customer.CustomerName,
+                      CustomerAddress = s.Customer.CustomerAddress,
+                      CustomerPhone = s.Customer.CustomerPhone.FirstOrDefault().Phone
+                  },
+                  SoildBy = s.Registration.Name
+              }).FirstOrDefaultAsync(s => s.SellingId == id);
+
+            return sellingReceipt;
+        }
+
+        public DbResponse BillUpdated(SellingUpdatePostModel model, IUnitOfWork db)
+        {
+            var response = new DbResponse();
+            try
+            {
+                var selling = Context.Selling.Include(s => s.SellingList).FirstOrDefault(s => s.SellingId == model.SellingId);
+                if (selling == null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Not found";
+                    return response;
+                }
+
+
+
+                selling.SellingTotalPrice = model.SellingTotalPrice;
+                selling.SellingDiscountAmount = model.SellingDiscountAmount;
+                selling.SellingReturnAmount = model.SellingReturnAmount;
+
+                selling.SellingList = model.Products.Select(p => new SellingList
+                {
+                    SellingListId = p.SellingListId,
+                    SellingId = p.ProductId,
+                    ProductId = p.ProductId,
+                    SellingPrice = p.SellingPrice,
+                    Description = p.Description,
+                    Warranty = p.Warranty,
+                }).ToList();
+
+                var RemovedStocks = db.ProductStocks.SellingStockFromCodesAsync(model.RemovedProductCodes);
+                var AddedStocks = db.ProductStocks.SellingStockFromCodesAsync(model.AddedProductCodes);
+
+            }
+            catch (Exception e)
+            {
+                response.IsSuccess = false;
+                response.Message = e.Message;
+                return response;
+            }
+
+            response.IsSuccess = true;
+            response.Message = "Success";
+            return response;
+
+
+        }
     }
 }
