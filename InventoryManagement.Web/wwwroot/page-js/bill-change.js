@@ -10,7 +10,6 @@ let cartProducts = []
 // product code form
 const formCode = document.getElementById('formCode')
 const inputBarCode = formCode.inputBarCode
-const productCount = formCode.querySelector('#productCount')
 const codeExistError = formCode.querySelector('#codeExistError')
 const btnFind = formCode.btnFind
 
@@ -22,13 +21,12 @@ const tbody = document.getElementById('t-body')
 const formPayment = document.getElementById('formPayment')
 const totalPrice = formPayment.querySelector('#totalPrice')
 const inputDiscount = formPayment.inputDiscount
+const inputReturnAmount = formPayment.inputReturnAmount
 const totalPayable = formPayment.querySelector('#totalPayable')
-const inputPaid = formPayment.inputPaid
 const totalDue = formPayment.querySelector('#totalDue')
-const selectPaymentMethod = formPayment.selectPaymentMethod
 
 //customer
-const hiddenCustomerId = formPayment.hiddenCustomerId
+ const hiddenSellingId = formPayment.hiddenSellingId;
 const customerError = formPayment.querySelector('#customer-error')
 
 // get set storage object
@@ -39,11 +37,14 @@ const storage = {
             codeExistError.textContent = `"${inputBarCode.value}" Not found!`
             return
         }
-       
-        const found = cartProducts.some(el => el.ProductCatalogId === product.ProductCatalogId && el.ProductName === product.ProductName);
+
+        //check product added or not
+        const found = cartProducts.some(function(obj) {
+            return (obj.ProductCatalogId === product.ProductCatalogId && obj.ProductName === product.ProductName);
+        });
+
         if (!found) {
-            //save to global object
-            product.codes = [product.ProductCode]
+            product.codes = [{ code: product.ProductCode, isRemove: false }];
             product.sellingFixedValue = product.SellingPrice
             cartProducts.push(product)
         }
@@ -51,51 +52,45 @@ const storage = {
             const index = cartProducts.findIndex(item => item.ProductCatalogId === product.ProductCatalogId)
             const codes = cartProducts[index].codes
 
-            if (codes.indexOf(product.ProductCode) === -1) {
-                codes.push(product.ProductCode)
+            //check code added or not
+            const codeFound = codes.some(obj => obj.code === product.ProductCode);
+
+            if (codeFound) {
+                codeExistError.textContent = `"${inputBarCode.value}" code already added!`;
+                return;
             }
-            else {
-                codeExistError.textContent = `"${inputBarCode.value}" code already added!`
-            }
+
+            codes.push({ code: product.ProductCode, isRemove: false })
         }
+
 
         //clear input
         inputBarCode.value = ''
 
-        //save to local-storage
-        this.setData()
-
         //show table data
         tbody.innerHTML =''
         showProducts()
-    },
-    setData: function () {
-        localStorage.setItem('selling-cart', JSON.stringify(cartProducts))
-    },
-    getData: function () {
-        const store = localStorage.getItem('selling-cart')
-        if (!store) return;
-
-        cartProducts = JSON.parse(store)
-    },
-    countProduct: function () {
-        productCount.textContent = cartProducts.length
     }
 }
 
 
 //****FUNCTIONS****//
 //append code
-const appendCode = function (codes) {
-   let html = ''
-    codes.forEach(code => html += `<span class="code">${code}</span>`)
-    return html
+const appendCode = function(codes) {
+    let html = ''
+    codes.forEach(code => {
+        const remove = code.isRemove ? "code-removed" : "";
+        html += `<span class="code ${remove}">${code.code}</span>`
+    })
+
+    return html;
 }
 
 // create table rows
 const createTableRow = function (item) {
     const description = item.Description && `${item.Description},`
     const note = item.Note ? `<span style="font-size: 12px;" class="badge badge-pill badge-secondary">${item.Note}</span>` : "";
+    const quantity = item.codes.filter(itm => !itm.isRemove).length;
 
     return `<tr data-id="${item.ProductCatalogId}">
                 <td>${item.ProductCatalogName}</td>
@@ -106,9 +101,9 @@ const createTableRow = function (item) {
                     <span class="codeSpan">${appendCode(item.codes)}</span>
                 </td>
                 <td>${item.Warranty}</td>
-                <td>${item.codes.length}</td>
+                <td>${quantity}</td>
                 <td><input type="number" required class="form-control inputUnitPrice" step="0.01" min="${item.sellingFixedValue}" max="${item.SellingPrice}" value="${item.SellingPrice}" /></td>
-                <td>${item.SellingPrice * item.codes.length}</td>
+                <td>${item.SellingPrice * quantity}</td>
                 <td class="text-center"><i class="fal fa-times remove"></i></td>
             </tr>`
 }
@@ -117,63 +112,55 @@ const createTableRow = function (item) {
 const showProducts = function () {
     let table = ''
     cartProducts.forEach(item => {
-        table += createTableRow(item)
+        table += createTableRow(item);
     });
 
-    tbody.innerHTML = table
-
-    //show added items count
-    storage.countProduct()
+    tbody.innerHTML = table;
 
     //append price
-    appendTotalPrice()
+    appendTotalPrice();
+
+    codeValue()
 }
 
 //remove product code
-const removeProductCode = function (code) {
+const removeProductCode = function(code) {
     const id = +code.parentElement.parentElement.parentElement.getAttribute('data-id')
-    const pCode = code.textContent
+    const pCode = code.textContent;
 
     const index = cartProducts.findIndex(item => item.ProductCatalogId === id)
-    const codes = cartProducts[index].codes
-    const pIndex = codes.indexOf(pCode)
+    const codes = cartProducts[index].codes;
 
-    if (codes.length > 1) {
-        codes.splice(pIndex, 1)
+    codes.forEach((obj, i) => {
+        if (obj.code === pCode) {
+            codes[i].isRemove = !codes[i].isRemove;
+            return;
+        }
+    })
 
-        //save to local-storage
-        storage.setData()
-
-        //remove code element
-        code.remove()
-
-        showProducts()
-    }
+    showProducts()
 }
+
 
 // click remove or stock
 const onRemoveClicked = function (evt) {
     const element = evt.target;
-    const removeClicked = element.classList.contains('remove');
-    const codeClicked = element.classList.contains('code');
     const row = element.parentElement.parentElement;
     const id = +row.getAttribute('data-id');
 
-    if (codeClicked) removeProductCode(element)
+    //remove code
+    const codeClicked = element.classList.contains('code');
+    if (codeClicked) removeProductCode(element);
 
+    //remove product
+    const removeClicked = element.classList.contains('remove');
     if (!removeClicked) return;
 
     //remove product from storage
     cartProducts = cartProducts.filter(item => item.ProductCatalogId !== id);
 
-    //save to local storage
-    storage.setData() 
-
     //delete row
     row.remove()
-
-    //show added items count
-    storage.countProduct()
 
     //append price
     appendTotalPrice()
@@ -186,28 +173,12 @@ const loading = function (element, isLoading) {
     element.disabled = isLoading ? true : false;
 }
 
-//dropdown selected index 0
-const clearMDBdropDownList = function (mainSelector) {
-    const content = mainSelector.querySelectorAll('.select-dropdown li');
-    content.forEach(li => {
-        content[0].classList.add('active', 'selected');
-
-        if (li.classList.contains('selected')) {
-            li.classList.remove(['active', 'selected']);
-            li.click();
-            return;
-        }
-    });
-}
-
-//calculate purchase Total
-const purchaseTotalPrice = function () {
-    return cartProducts.map(item => item.SellingPrice * item.codes.length).reduce((prev, cur) => prev + cur, 0);
-}
 
 //append total price to DOM
 const appendTotalPrice = function () {
-    const totalAmount = purchaseTotalPrice();
+    const totalAmount = cartProducts.map(item => {
+        return item.SellingPrice * item.codes.filter(itm => !itm.isRemove).length;
+    }).reduce((prev, cur) => prev + cur, 0);
 
     totalPrice.innerText = totalAmount
     totalPayable.innerText = totalAmount;
@@ -216,25 +187,21 @@ const appendTotalPrice = function () {
     if (inputDiscount.value)
         inputDiscount.value = '';
 
-    if (inputPaid.value)
-        inputPaid.value = '';
-
-    if (selectPaymentMethod.selectedIndex > 0) {
-        clearMDBdropDownList(formPayment);
-        selectPaymentMethod.removeAttribute('required');
-    }
+    if (inputReturnAmount.value)
+        inputReturnAmount.value = '';
 }
 
 //selling price change
 const onInputUnitPrice = function (evt) {
     const input = evt.target
     const onInput = input.classList.contains('inputUnitPrice')
+
     if (onInput) {
         const val = +input.value
-       const min = +input.getAttribute('min')
+        const min = +input.getAttribute('min')
         input.setAttribute('max', input.value)
 
-        if (min > val) return
+        if (min > val) return;
 
         const id = +input.parentElement.parentElement.getAttribute('data-id')
         const index = cartProducts.findIndex(item => item.ProductCatalogId === id)
@@ -242,9 +209,6 @@ const onInputUnitPrice = function (evt) {
 
         const qty = +input.parentElement.previousElementSibling.innerText
         input.parentElement.nextElementSibling.innerText = val * qty
-
-        //save to local-storage
-        storage.setData()
 
         //append price
         appendTotalPrice()
@@ -273,11 +237,6 @@ formCode.addEventListener('submit', evt => {
 tbody.addEventListener('click', onRemoveClicked)
 
 
-//*****CALL FUNCTION*****//
-storage.getData()
-showProducts()
-
-
 //****PAYMENT SECTION****/
 
 //functions
@@ -297,50 +256,16 @@ const onInputDiscount = function () {
 
     totalPayable.innerText = isValid ? grandTotal.toFixed() : total;
     totalDue.innerText = isValid ? grandTotal.toFixed() : total;
-
-    if (inputPaid.value)
-        inputPaid.value = '';
-
-    //check due limit 
-    checkDueLimit();
 }
 
-//input paid amount
-const onInputPaid = function () {
-    const payable = +totalPayable.textContent;
-    const paid = +this.value;
-    const isValid = validInput(payable, paid);
-    const due = (payable - paid);
-
-    paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
-
-    this.setAttribute('max', payable);
-
-    totalDue.innerText = isValid ? due.toFixed() : payable;
-
-    //check due limit 
-    checkDueLimit();
-}
-
-//reset customer Id
-hiddenCustomerId.value = '';
 
 //validation info
 const validation = function () {
     customerError.innerText = ''
 
     if (!cartProducts.length) {
-        customerError.innerText = 'Add product to sell!'
+        customerError.innerText = 'Product Not found!'
         return false;
-    }
-
-    if (!hiddenCustomerId.value) {
-        customerError.innerText = 'Select or add customer!'
-        return false;
-    }
-
-    if (!checkDueLimit()) {
-        return false
     }
 
     return true;
@@ -372,20 +297,17 @@ const onSellSubmitClicked = function (evt) {
         productList.push({ ProductId, SellingPrice, Description, Warranty})
     })
 
-    if (!productCodes.length) return
+    if (!productCodes.length) return;
 
     const body = {
-        CustomerId: +hiddenCustomerId.value,
+        SellingId: +hiddenSellingId.value,
         SellingTotalPrice: +totalPrice.textContent,
         SellingDiscountAmount: +inputDiscount.value | 0,
-        SellingPaidAmount: +inputPaid.value | 0,
-        PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
-        SellingDate: new Date(),
         ProductCodes: productCodes,
         ProductList: productList
     }
 
-    const url = '/Selling/Selling'
+    const url = '/Selling/BillChange'
     const options = {
         method: 'post',
         url: url,
@@ -395,7 +317,6 @@ const onSellSubmitClicked = function (evt) {
     axios(options)
         .then(response => {
             if (response.data.IsSuccess) {
-                localStoreClear()
                 location.href = `/Selling/SellingReceipt/${response.data.Data}`
             }
         })
@@ -417,66 +338,25 @@ const onSellSubmitClicked = function (evt) {
 formPayment.addEventListener('submit', onCheckFormValid)
 formTable.addEventListener('submit', onSellSubmitClicked)
 inputDiscount.addEventListener('input', onInputDiscount)
-inputPaid.addEventListener('input', onInputPaid)
 
-//****CUSTOMER****//
-//customer autocomplete
-$('#inputCustomer').typeahead({
-    minLength: 1,
-    displayText: function (item) {
-        return `${item.CustomerName} ${item.PhonePrimary ? item.PhonePrimary: ''} ${item.OrganizationName ? item.OrganizationName: ''}`;
-    },
-    afterSelect: function (item) {
-        this.$element[0].value = item.CustomerName
-    },
-    source: function (request, result) {
-        $.ajax({
-            url: "/Selling/FindCustomers",
-            data: { prefix: request },
-            success: function (response) { result(response); },
-            error: function (err) { console.log(err) }
-        });
-    },
-    updater: function (item) {
-        appendInfo(item);
-        hiddenCustomerId.value = item.CustomerId;
-        customerError.innerText = ''
-        checkDueLimit()
-        return item;
-    }
-})
+function codeValue() {
+    const newCode = []
+    const removeCode = []
 
-function appendInfo(item) {
-    const html = `<span class="badge badge-pill badge-success">${item.CustomerName}</span>
-        <span class="badge badge-pill badge-danger">Previous Due: ৳<span id="prevDue">${item.Due}</span></span>
-        <span class="badge badge-pill badge-info">Due Limit: ৳<span id="dueLimit">${item.DueLimit}</span></span>`;
+    cartProducts.forEach(obj => {
+        obj.codes.forEach(itm => {
+            if (obj.hasOwnProperty("ProductCodes")) {
+                if (obj.ProductCodes.indexOf(itm.code) !== -1) {
+                    if (itm.isRemove)
+                        removeCode.push(itm.code);
+                }
+            } else {
+                if (!itm.isRemove)
+                    newCode.push(itm.code);
+            }
+        })
+    })
 
-    document.getElementById('customerInfo').innerHTML = html;
-}
-
-//check customer due limit
-function checkDueLimit() {
-    const infoContainer = formPayment.querySelector('#customerInfo')
-    if (!infoContainer.innerHTML) return;
-
-    const prevDue = +formPayment.querySelector('#prevDue').textContent || 0
-    const currentDue = +totalDue.textContent
-    const dueLimit = +formPayment.querySelector('#dueLimit').textContent || 0
-
-    if (dueLimit === 0) return true;
-
-    const due = prevDue + currentDue;
-
-    customerError.innerText = ''
-    if (due > dueLimit) {
-        customerError.innerText = 'Current due greater than due limit!';
-        return false
-    }
-
-    return true  
-}
-
-//remove localstorage
-function localStoreClear() {
-    localStorage.removeItem('selling-cart');
+    console.log(`new ${newCode}`)
+    console.log(`removed ${removeCode}`)
 }

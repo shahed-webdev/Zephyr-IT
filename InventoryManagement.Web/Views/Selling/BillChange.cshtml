@@ -7,6 +7,8 @@
 
 @section Styles{
     <style>
+        .code-removed { text-decoration: line-through; color: gray}
+
         .remove { cursor: pointer }
         .remove:hover { color: #ff0000 }
         #formPayment { padding: 15px 0; color: #4f4f4f; }
@@ -15,14 +17,17 @@
 
         table tbody tr .codeSpan span { margin-right: 5px; }
         table tbody tr .codeSpan span:not(:last-child):after { content: ',' }
-        table tbody tr .codeSpan span:hover { cursor: pointer; color: #ff0000 }
-        table tbody tr .codeSpan span:hover::after { content: 'x'; }
+        table tbody tr .codeSpan span:hover { cursor: pointer; color: #ff0000; text-decoration: line-through; }
         .inputUnitPrice { width: 90px; text-align: center }
     </style>
 }
 
 <div class="m-3">
-    <h4 class="mb-3 page-header d-print-none">Selling</h4>
+    <h4 class="mb-1 page-header d-print-none">Update Bill #@Model.SellingSn</h4>
+    <h5 class="mb-4">
+        <span class="badge badge-pill badge-success">@Model.CustomerInfo.CustomerName</span>
+        <span class="badge badge-pill badge-info">@Model.CustomerInfo.CustomerPhone</span>
+    </h5>
 
     <div class="row">
         <div class="col-lg-9 mb-3">
@@ -35,11 +40,10 @@
                             <span id="codeExistError" class="field-validation-error"></span>
                         </div>
 
-                        <button id="btnFind" type="submit" class="btn btn-sm btn-dark mr-5">
+                        <button id="btnFind" type="submit" class="btn btn-sm btn-brown">
                             <i class="far fa-search text-white"></i>
                             <i class="fas fa-circle-notch fa-spin" style="display:none"></i>
                         </button>
-                        <div class="text-right text-muted"><span id="productCount">0</span> items</div>
                     </div>
                 </form>
             </div>
@@ -67,13 +71,21 @@
                                     <td>
                                         @item.ProductName,
                                         @item.Description
-                                        @item.
-                                        <span class="codeSpan">${appendCode(item.codes)}</span>
+                                        @if (item.Note != null)
+                                        {
+                                            <span style="font-size: 12px;" class="badge badge-pill badge-secondary">@item.Note</span>
+                                        }
+                                        <span class="codeSpan">
+                                            @foreach (var code in item.ProductCodes)
+                                            {
+                                                <span class="code">@code</span>
+                                            }
+                                        </span>
                                     </td>
-                                    <td>${item.Warranty}</td>
-                                    <td>${item.codes.length}</td>
-                                    <td><input type="number" required class="form-control inputUnitPrice" step="0.01" min="${item.sellingFixedValue}" max="${item.SellingPrice}" value="${item.SellingPrice}" /></td>
-                                    <td>${item.SellingPrice * item.codes.length}</td>
+                                    <td>@item.Warranty</td>
+                                    <td>@item.ProductCodes.Length</td>
+                                    <td><input type="number" required class="form-control inputUnitPrice" step="0.01" min="@item.SellingPrice" max="@item.SellingPrice" value="@item.SellingPrice"/></td>
+                                    <td>@(item.SellingPrice * item.ProductCodes.Length)</td>
                                     <td class="text-center"><i class="fal fa-times remove"></i></td>
                                 </tr>
                             }
@@ -91,46 +103,33 @@
                     <ul class="mb-0">
                         <li class="d-flex justify-content-between align-items-center">
                             <strong>Total Amount</strong>
-                            <strong>৳<span id="totalPrice">0</span></strong>
+                            <strong>৳<span id="totalPrice">@Model.SellingTotalPrice</span></strong>
                         </li>
-                        <li class="md-form">
-                            <input id="inputDiscount" type="number" min="0" class="form-control">
+                        <li class="md-form mt-4">
+                            <input id="inputDiscount" type="number" min="0" class="form-control" value="@Model.SellingDiscountAmount">
                             <label for="inputDiscount">Discount</label>
                         </li>
-                        <li class="d-flex justify-content-between align-items-center text-success">
+                        <li class="d-flex justify-content-between align-items-center">
                             <strong>Grand Total</strong>
-                            <strong>৳<span id="totalPayable">0</span></strong>
+                            <strong>৳<span id="totalPayable">@(Model.SellingTotalPrice - Model.SellingDiscountAmount)</span></strong>
                         </li>
-                        <li class="md-form">
-                            <input id="inputPaid" type="number" min="0" class="form-control">
-                            <label for="inputPaid">Paid Amount</label>
+                        <li class="d-flex justify-content-between align-items-center text-success py-4">
+                            <strong>Paid Amount</strong>
+                            <strong>৳<span id="totalPaid">@Model.SellingPaidAmount</span></strong>
                         </li>
                         <li class="d-flex justify-content-between align-items-center text-danger">
                             <strong>Total Due</strong>
-                            <strong>৳<span id="totalDue">0</span></strong>
+                            <strong>৳<span id="totalDue">@Model.SellingDueAmount</span></strong>
                         </li>
-                        <li class="md-form">
-                            <select id="selectPaymentMethod" class="mdb-select" style="position: absolute; top: 1rem; left: 0px; height: 0px; width: 0px; opacity: 0; padding: 0px; pointer-events: none; display: inline!important;">
-                                <option value="" selected>[ Payment Method ]</option>
-                                <option>Cash</option>
-                                <option>Bank</option>
-                                <option>Cheque</option>
-                                <option>bkash</option>
-                            </select>
-                        </li>
-                        <li class="d-flex justify-content-between align-items-center">
-                            <div class="md-form mt-4 flex-1">
-                                <input id="inputCustomer" type="text" class="form-control" autocomplete="off" />
-                                <label for="inputCustomer">Find Customer</label>
-                                <div id="customerInfo" class="text-center"></div>
-                            </div>
-                            <input id="hiddenCustomerId" type="hidden" />
-                            <a href="/Customer/Add" target="_blank" class="btn-floating btn-sm blue-gradient"><i class="fas fa-plus" aria-hidden="true"></i></a>
+                        <li class="md-form mt-4">
+                            <input id="inputReturnAmount" type="number" min="0" class="form-control" value="0">
+                            <label for="inputReturnAmount">Return Amount</label>
                         </li>
                     </ul>
                     <div class="text-center">
                         <i id="customer-error" class="mt-2 text-center red-text"></i>
-                        <button type="submit" id="btnSelling" class="btn peach-gradient btn-rounded btn-block mt-0">SELL PRODUCT</button>
+                        <input type="hidden" id="hiddenSellingId" value="@Model.SellingId"/>
+                        <button type="submit" id="btnSelling" class="btn peach-gradient btn-rounded btn-block mt-0">UPDATE BILL</button>
                     </div>
                 </form>
             </div>
@@ -139,5 +138,15 @@
 </div>
 
 @section Scripts{
-   @* <script src="~/page-js/bill-change.js"></script>*@
+    <script src="~/page-js/bill-change.js?v=1"></script>
+    <script>
+        //save previous data
+        cartProducts = @Html.Raw(Json.Serialize(Model.Products));
+        cartProducts.forEach(function (obj, i) {
+            obj.codes = []
+            obj.ProductCodes.forEach(code => {
+                obj.codes.push({ code, isRemove: false });
+            })
+        });
+    </script>
 }

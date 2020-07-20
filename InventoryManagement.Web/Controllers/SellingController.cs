@@ -84,7 +84,7 @@ namespace InventoryManagement.Web.Controllers
 
 
         //GET: Due Collection
-        public async Task<ActionResult> DueCollection(int? id)
+        public async Task<IActionResult> DueCollection(int? id)
         {
             if (id == null) return RedirectToAction($"Record");
             var model = await _db.Selling.SellingReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
@@ -129,12 +129,12 @@ namespace InventoryManagement.Web.Controllers
 
 
         //Post: Change Bill
-        public ActionResult BillList()
+        public IActionResult BillList()
         {
             return View();
         }
 
-        public async Task<ActionResult> BillChange(int? id)
+        public async Task<IActionResult> BillChange(int? id)
         {
             if (id == null) return RedirectToAction("BillList");
             var data = await _db.Selling.FindUpdateBillAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
@@ -144,32 +144,25 @@ namespace InventoryManagement.Web.Controllers
         }
 
         [HttpPost]
-        public int BillChange(SellingUpdatePostModel model)
+        public async Task<IActionResult> BillChange([FromBody] SellingUpdatePostModel model)
         {
             var dbResponse = await _db.Selling.BillUpdated(model, _db);
-            if (dbResponse.IsSuccess)
-            {
-                Ok();
-                return model.SellingId;
-            }
 
-            BadRequest(dbResponse.Message);
-            return 0;
+            if (dbResponse.IsSuccess)
+                return Ok(model.SellingId);
+
+            return UnprocessableEntity(dbResponse.Message);
         }
 
         //delete Bill
-        public async Task DeleteBill(int id)
+        public async Task<IActionResult> DeleteBill(int id)
         {
             var dbResponse = await _db.Selling.DeleteBillAsync(id, _db).ConfigureAwait(false);
 
             if (dbResponse.IsSuccess)
-            {
-                Ok();
-            }
-            else
-            {
-                BadRequest(dbResponse.Message);
-            }
+                return Ok();
+
+            return UnprocessableEntity(dbResponse.Message);
         }
 
         protected override void Dispose(bool disposing)
