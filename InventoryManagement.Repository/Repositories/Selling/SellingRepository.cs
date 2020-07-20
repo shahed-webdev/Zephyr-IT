@@ -150,7 +150,7 @@ namespace InventoryManagement.Repository
                       CustomerPhone = s.Customer.CustomerPhone.FirstOrDefault().Phone
                   },
                   InstitutionInfo = db.Institutions.FindCustom(),
-                  SoildBy = s.Registration.Name
+                  SoldBy = s.Registration.Name
               }).FirstOrDefaultAsync(s => s.SellingId == id);
 
             return sellingReceipt;

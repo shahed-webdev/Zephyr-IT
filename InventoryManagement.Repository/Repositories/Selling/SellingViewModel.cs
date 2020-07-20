@@ -59,7 +59,7 @@ namespace InventoryManagement.Repository
         public ICollection<SellingReceiptProductViewModel> Products { get; set; }
         public ICollection<SellingPaymentViewModel> Payments { get; set; }
         public CustomerReceiptViewModel CustomerInfo { get; set; }
-        public string SoildBy { get; set; }
+        public string SoldBy { get; set; }
     }
 
 
@@ -112,9 +112,9 @@ namespace InventoryManagement.Repository
     public class SellingUpdateProductPostModel
     {
         public int SellingListId { get; set; }
+        public int ProductId { get; set; }
         public double SellingPrice { get; set; }
         public string Description { get; set; }
         public string Warranty { get; set; }
-        public int ProductId { get; set; }
     }
 }

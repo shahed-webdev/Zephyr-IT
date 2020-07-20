@@ -1,0 +1,143 @@
+﻿@using InventoryManagement.Repository
+@model SellingUpdateGetModel
+@{
+    ViewData["Title"] = "Update Bill";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Styles{
+    <style>
+        .remove { cursor: pointer }
+        .remove:hover { color: #ff0000 }
+        #formPayment { padding: 15px 0; color: #4f4f4f; }
+        #formPayment ul { list-style-type: none; padding: 0; }
+        #formPayment ul li strong { font-weight: 500; }
+
+        table tbody tr .codeSpan span { margin-right: 5px; }
+        table tbody tr .codeSpan span:not(:last-child):after { content: ',' }
+        table tbody tr .codeSpan span:hover { cursor: pointer; color: #ff0000 }
+        table tbody tr .codeSpan span:hover::after { content: 'x'; }
+        .inputUnitPrice { width: 90px; text-align: center }
+    </style>
+}
+
+<div class="m-3">
+    <h4 class="mb-3 page-header d-print-none">Selling</h4>
+
+    <div class="row">
+        <div class="col-lg-9 mb-3">
+            <div class="card card-body mb-3">
+                <form id="formCode">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="md-form mt-0 mb-0 flex-1">
+                            <input id="inputBarCode" autocomplete="off" type="text" class="form-control" required />
+                            <label for="inputBarCode">Product code</label>
+                            <span id="codeExistError" class="field-validation-error"></span>
+                        </div>
+
+                        <button id="btnFind" type="submit" class="btn btn-sm btn-dark mr-5">
+                            <i class="far fa-search text-white"></i>
+                            <i class="fas fa-circle-notch fa-spin" style="display:none"></i>
+                        </button>
+                        <div class="text-right text-muted"><span id="productCount">0</span> items</div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card card-body">
+                <div class="table-responsive">
+                    <form id="formTable">
+                        <table class="table">
+                            <thead class="text-muted">
+                                <tr>
+                                    <th>PRODUCT</th>
+                                    <th>DESCRIPTION</th>
+                                    <th>WARRANTY</th>
+                                    <th>QTY</th>
+                                    <th>U.PRICE</th>
+                                    <th>PRICE</th>
+                                    <th style="width:80px">REMOVE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="t-body">
+                            @foreach (var item in Model.Products)
+                            {
+                                <tr data-id="@item.ProductCatalogId">
+                                    <td>@item.ProductCatalogName</td>
+                                    <td>
+                                        @item.ProductName,
+                                        @item.Description
+                                        @item.
+                                        <span class="codeSpan">${appendCode(item.codes)}</span>
+                                    </td>
+                                    <td>${item.Warranty}</td>
+                                    <td>${item.codes.length}</td>
+                                    <td><input type="number" required class="form-control inputUnitPrice" step="0.01" min="${item.sellingFixedValue}" max="${item.SellingPrice}" value="${item.SellingPrice}" /></td>
+                                    <td>${item.SellingPrice * item.codes.length}</td>
+                                    <td class="text-center"><i class="fal fa-times remove"></i></td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                        <input id="btnProduct" type="submit" style="display:none" />
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="card card-body">
+                <form id="formPayment">
+                    <ul class="mb-0">
+                        <li class="d-flex justify-content-between align-items-center">
+                            <strong>Total Amount</strong>
+                            <strong>৳<span id="totalPrice">0</span></strong>
+                        </li>
+                        <li class="md-form">
+                            <input id="inputDiscount" type="number" min="0" class="form-control">
+                            <label for="inputDiscount">Discount</label>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center text-success">
+                            <strong>Grand Total</strong>
+                            <strong>৳<span id="totalPayable">0</span></strong>
+                        </li>
+                        <li class="md-form">
+                            <input id="inputPaid" type="number" min="0" class="form-control">
+                            <label for="inputPaid">Paid Amount</label>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center text-danger">
+                            <strong>Total Due</strong>
+                            <strong>৳<span id="totalDue">0</span></strong>
+                        </li>
+                        <li class="md-form">
+                            <select id="selectPaymentMethod" class="mdb-select" style="position: absolute; top: 1rem; left: 0px; height: 0px; width: 0px; opacity: 0; padding: 0px; pointer-events: none; display: inline!important;">
+                                <option value="" selected>[ Payment Method ]</option>
+                                <option>Cash</option>
+                                <option>Bank</option>
+                                <option>Cheque</option>
+                                <option>bkash</option>
+                            </select>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center">
+                            <div class="md-form mt-4 flex-1">
+                                <input id="inputCustomer" type="text" class="form-control" autocomplete="off" />
+                                <label for="inputCustomer">Find Customer</label>
+                                <div id="customerInfo" class="text-center"></div>
+                            </div>
+                            <input id="hiddenCustomerId" type="hidden" />
+                            <a href="/Customer/Add" target="_blank" class="btn-floating btn-sm blue-gradient"><i class="fas fa-plus" aria-hidden="true"></i></a>
+                        </li>
+                    </ul>
+                    <div class="text-center">
+                        <i id="customer-error" class="mt-2 text-center red-text"></i>
+                        <button type="submit" id="btnSelling" class="btn peach-gradient btn-rounded btn-block mt-0">SELL PRODUCT</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+   @* <script src="~/page-js/bill-change.js"></script>*@
+}

@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewData["Title"] = "Selling Invoice";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="m-md-3">
+    <h4 class="mb-3 page-header">Selling Invoice</h4>
+    <div class="card card-body">
+
+        <table id="data-table" class="table table-sm table-bordered">
+            <thead>
+                <tr>
+                    <th>#Bill No</th>
+                    <th>Customer Name</th>
+                    <th>Amount</th>
+                    <th>Paid</th>
+                    <th>Discount</th>
+                    <th>Due</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            dataTable.getData();
+        });
+
+        //get data
+        var dataTable = {
+            table: null,
+            init: function () {
+                dataTable.table = $("#data-table").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>><"row"<"col-sm-12"<tr>>><"row"<"col-sm-5"i><"col-sm-7"p>>',
+                    buttons: dataTable.button,
+                    ajax: {
+                        url: "/Selling/SellingRecordsData",
+                        type: "POST"
+                    },
+                    columns:
+                        [
+                            {
+                                data: "SellingSn", "render": function (data, type, row, meta) {
+                                    return `<a class="blue-text" href="/Selling/BillChange/${row.SellingId}">${data}</a>`;
+                                }
+                            },
+                            { data: "CustomerName" },
+                            { data: "SellingAmount", "render": dataTable.addSign },
+                            { data: "SellingPaidAmount", "render": dataTable.addSign },
+                            { data: "SellingDiscountAmount", "render": dataTable.addSign },
+                            { data: "SellingDueAmount", "render": dataTable.addSign },
+                            { data: "SellingDate", "render": function (data) { return moment(data).format('DD MMM YYYY') } }
+                        ],
+                    columnDefs: [
+                        { 'searchable': false, 'targets': [2,3,4,5] },
+                        { 'className': "text-right", "targets": [2, 3, 4,5] },
+                        { 'className': "text-left", "targets": [1] }
+                    ]
+                });
+            },
+            getData: function () {
+                dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
+            },
+            addSign: function (data) { return `${data}/-` },
+            button: {
+                buttons: [{
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i> Print',
+                    title: '',
+                    exportOptions: {
+                        //columns: [0,1] //Column value those print
+                    },
+                    customize: function (win) {
+                        $(win.document.body).prepend(
+                            `<nav class="mb-3 navbar peach-gradient">
+                                <a class="navbar-brand ml-1"><span>Zephyr</span> IT</a>
+                              </nav>
+                             <h3 class="h3-responsive">${$('h4').text()}</h3>`);
+                    },
+                    autoPrint: true
+                }],
+                dom: {
+                    button: {
+                        className: 'btn btn-dark btn-rounded btn-sm my-0'
+                    }
+                }
+            }
+        }</script>
+}
+

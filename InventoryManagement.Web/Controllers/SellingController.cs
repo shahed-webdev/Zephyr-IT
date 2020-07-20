@@ -110,6 +110,7 @@ namespace InventoryManagement.Web.Controllers
                 BadRequest(dbResponse.Message);
             }
         }
+       
         [HttpPost]
         public async void DueCollectionSingle(SellingDuePaySingleModel model)
         {
@@ -127,33 +128,37 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
-        public async Task<ActionResult> ReceiptChange(int? id)
+        //Post: Change Bill
+        public ActionResult BillList()
         {
-            if (id == null) return RedirectToAction("Record");
+            return View();
+        }
+
+        public async Task<ActionResult> BillChange(int? id)
+        {
+            if (id == null) return RedirectToAction("BillList");
             var data = await _db.Selling.FindUpdateBillAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
-            if (data == null) return RedirectToAction("Record");
+           
+            if (data == null) return RedirectToAction("BillList");
             return View(data);
         }
 
-        //Post: Change Receipt
         [HttpPost]
-        public async Task<int> ReceiptChange(SellingUpdatePostModel model)
+        public int BillChange(SellingUpdatePostModel model)
         {
             var dbResponse = _db.Selling.BillUpdated(model, _db);
+           
             if (dbResponse.IsSuccess)
             {
                 Ok();
                 return model.SellingId;
             }
-            else
-            {
-                BadRequest(dbResponse.Message);
-                return 0;
-            }
 
-
+            BadRequest(dbResponse.Message);
+            return 0;
         }
 
+        //delete Bill
         public async Task DeleteBill(int id)
         {
             var dbResponse = await _db.Selling.DeleteBillAsync(id, _db).ConfigureAwait(false);
