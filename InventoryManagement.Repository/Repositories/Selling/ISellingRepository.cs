@@ -21,6 +21,6 @@ namespace InventoryManagement.Repository
         ICollection<MonthlyAmount> MonthlyProfit(int year);
         Task<DbResponse> DeleteBillAsync(int id, IUnitOfWork db);
         Task<SellingUpdateGetModel> FindUpdateBillAsync(int id, IUnitOfWork db);
-        DbResponse BillUpdated(SellingUpdatePostModel model, IUnitOfWork db);
+        Task<DbResponse> BillUpdated(SellingUpdatePostModel model, IUnitOfWork db);
     }
 }

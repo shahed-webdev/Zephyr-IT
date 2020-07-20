@@ -139,7 +139,7 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public async Task<int> ReceiptChange(SellingUpdatePostModel model)
         {
-            var dbResponse = _db.Selling.BillUpdated(model, _db);
+            var dbResponse = await _db.Selling.BillUpdated(model, _db);
             if (dbResponse.IsSuccess)
             {
                 Ok();
