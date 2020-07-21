@@ -298,8 +298,10 @@ const onInputDiscount = function () {
     totalPayable.innerText = isValid ? grandTotal.toFixed() : total;
     totalDue.innerText = isValid ? grandTotal.toFixed() : total;
 
-    if (inputPaid.value)
+    if (inputPaid.value) {
         inputPaid.value = '';
+        inputPaid.previousElementSibling.classList.remove('active');
+    }
 
     //check due limit 
     checkDueLimit();
@@ -352,7 +354,7 @@ const onCheckFormValid = function (evt) {
 }
 
 //submit on server
-const onSellSubmitClicked = function (evt) {
+const onSellSubmitClicked = function(evt) {
     evt.preventDefault()
 
     const valid = validation()
@@ -367,12 +369,12 @@ const onSellSubmitClicked = function (evt) {
     const productList = []
 
     cartProducts.forEach(product => {
-        const { ProductId, SellingPrice, Description, Warranty, codes} = product
+        const { ProductId, SellingPrice, Description, Warranty, codes } = product;
         productCodes.push(...codes)
-        productList.push({ ProductId, SellingPrice, Description, Warranty})
+        productList.push({ ProductId, SellingPrice, Description, Warranty })
     })
 
-    if (!productCodes.length) return
+    if (!productCodes.length) return;
 
     const body = {
         CustomerId: +hiddenCustomerId.value,
@@ -392,25 +394,22 @@ const onSellSubmitClicked = function (evt) {
         data: body
     }
 
-    axios(options)
-        .then(response => {
-            if (response.data.IsSuccess) {
-                localStoreClear()
-                location.href = `/Selling/SellingReceipt/${response.data.Data}`
-            }
-        })
-        .catch(error => {
-            if (error.response)
-                customerError.textContent = error.response.data.Message
-            else if (error.request)
-                console.log(error.request)
-            else
-                console.log('Error', error.message)
-        })
-        .finally(() => {
-            btnSubmit.innerText = 'Sell Product'
-            btnSubmit.disabled = false
-        });
+    axios(options).then(response => {
+        if (response.data.IsSuccess) {
+            localStoreClear();
+            location.href = `/Selling/SellingReceipt/${response.data.Data}`;
+        }
+    }).catch(error => {
+        if (error.response)
+            customerError.textContent = error.response.data.Message;
+        else if (error.request)
+            console.log(error.request);
+        else
+            console.log('Error', error.message);
+    }).finally(() => {
+        btnSubmit.innerText = 'Sell Product'
+        btnSubmit.disabled = false
+    });
 }
 
 //event listener

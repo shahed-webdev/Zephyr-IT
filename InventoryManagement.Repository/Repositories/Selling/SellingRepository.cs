@@ -348,6 +348,7 @@ namespace InventoryManagement.Repository
                   SellingDate = s.SellingDate,
                   Products = s.SellingList.Select(pd => new SellingReceiptProductViewModel
                   {
+                      SellingListId = pd.SellingListId,
                       SellingId = pd.SellingId,
                       ProductId = pd.Product.ProductId,
                       ProductCatalogId = pd.Product.ProductCatalogId,

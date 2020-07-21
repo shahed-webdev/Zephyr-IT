@@ -31,6 +31,8 @@ namespace InventoryManagement.Repository
 
     public class SellingReceiptProductViewModel
     {
+        
+        public int SellingListId { get; set; }
         public int SellingId { get; set; }
         public int ProductId { get; set; }
         public int ProductCatalogId { get; set; }

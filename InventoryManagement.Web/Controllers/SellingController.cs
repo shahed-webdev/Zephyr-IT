@@ -86,28 +86,24 @@ namespace InventoryManagement.Web.Controllers
         //GET: Due Collection
         public async Task<IActionResult> DueCollection(int? id)
         {
-            if (id == null) return RedirectToAction($"Record");
+            if (id == null) return RedirectToAction("List","Customer");
            
             var model = await _db.Selling.SellingReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
-            if (model == null) return RedirectToAction($"Record");
+            if (model == null) return RedirectToAction("List", "Customer");
             
             return View(model);
         }
 
+        //customer due collection(ajax)
         [HttpPost]
-        public async void DueCollection(SellingDuePaySingleModel model)
+        public async Task<IActionResult> DueCollection([FromBody] SellingDuePaySingleModel model)
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
             var dbResponse = await _db.SellingPayments.DuePaySingleAsync(model, _db).ConfigureAwait(false);
 
-            if (dbResponse.IsSuccess)
-            {
-                Ok();
-            }
-            else
-            {
-                BadRequest(dbResponse.Message);
-            }
+            if (dbResponse.IsSuccess) return Ok();
+            
+            return BadRequest(dbResponse.Message);
         }
 
 
@@ -161,9 +157,7 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> DeleteBill(int id)
         {
             var dbResponse = await _db.Selling.DeleteBillAsync(id, _db).ConfigureAwait(false);
-
-            if (dbResponse.IsSuccess)
-                return Ok();
+            if (dbResponse.IsSuccess) return Ok();
 
             return UnprocessableEntity(dbResponse.Message);
         }

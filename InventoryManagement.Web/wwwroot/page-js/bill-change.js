@@ -1,6 +1,6 @@
 ﻿
  // material select initialization
-$('.mdb-select').materialSelect()
+ $('.mdb-select').materialSelect();
 
 // global storage
 let cartProducts = []
@@ -32,6 +32,9 @@ const selectPaymentMethod = formPayment.selectPaymentMethod
  const hiddenSellingId = formPayment.hiddenSellingId;
 const customerError = formPayment.querySelector('#customer-error')
 
+//formReceiptDelete
+formReceiptDelete = document.getElementById('formReceiptDelete');
+
 // get set storage object
 const storage = {
     saveData: function (product) {
@@ -50,6 +53,7 @@ const storage = {
             product.codes = [{ code: product.ProductCode, isRemove: false }];
             product.sellingFixedValue = product.SellingPrice;
             product.sellingQuantity = 1;
+            product.SellingListId = 0;
             cartProducts.push(product);
         }
         else {
@@ -109,8 +113,9 @@ const clearMDBdropDownList = function (mainSelector) {
 const createTableRow = function (item) {
     const description = item.Description && `${item.Description},`
     const note = item.Note ? `<span style="font-size: 12px;" class="badge badge-pill badge-secondary">${item.Note}</span>` : "";
+    const disable = item.sellingQuantity ? "" : "disable-row";
 
-    return `<tr data-id="${item.ProductCatalogId}">
+    return `<tr data-id="${item.ProductCatalogId}" class="${disable}">
                 <td>${item.ProductCatalogName}</td>
                 <td>
                     ${item.ProductName},
@@ -137,8 +142,6 @@ const showProducts = function () {
 
     //append price
     appendTotalPrice();
-
-    codeValue()
 }
 
 //remove product code
@@ -178,10 +181,10 @@ const onRemoveClicked = function (evt) {
     cartProducts = cartProducts.filter(item => item.ProductCatalogId !== id);
 
     //delete row
-    row.remove()
+    row.remove();
 
     //append price
-    appendTotalPrice()
+    appendTotalPrice();
 }
 
 //show loading
@@ -202,14 +205,20 @@ const appendTotalPrice = function () {
     totalPayable.innerText = totalAmount;
     totalDue.innerText = totalAmount;
 
-    if (inputDiscount.value)
+    if (inputDiscount.value) {
         inputDiscount.value = '';
+        inputDiscount.previousElementSibling.classList.remove('active');
+    }
 
-    if (inputReturnAmount.value)
+    if (inputReturnAmount.value) {
         inputReturnAmount.value = '';
+        inputReturnAmount.previousElementSibling.classList.remove('active');
+    }
 
-    if (inputPaid.value)
+    if (inputPaid.value) {
         inputPaid.value = '';
+        inputPaid.previousElementSibling.classList.remove('active');
+    }
 
     if (selectPaymentMethod.selectedIndex > 0) {
         clearMDBdropDownList(formPayment);
@@ -283,11 +292,15 @@ const onInputDiscount = function () {
     totalPayable.innerText = grandTotal.toFixed();
     totalDue.innerText = grandTotal.toFixed();
 
-    if (inputPaid.value)
+    if (inputPaid.value) {
         inputPaid.value = '';
+        inputPaid.previousElementSibling.classList.remove('active');
+    }
 
-    if (inputReturnAmount.value)
+    if (inputReturnAmount.value) {
         inputReturnAmount.value = '';
+        inputReturnAmount.previousElementSibling.classList.remove('active');
+    }
 }
 
 //input paid amount
@@ -302,8 +315,10 @@ const onInputPaid = function () {
 
     totalDue.innerText = due.toFixed();
 
-    if (inputReturnAmount.value)
+    if (inputReturnAmount.value) {
         inputReturnAmount.value = '';
+        inputReturnAmount.previousElementSibling.classList.remove('active');
+    }
 }
 
 //input return amount
@@ -336,7 +351,7 @@ const onCheckFormValid = function (evt) {
 }
 
 //submit on server
-const onSellSubmitClicked = function (evt) {
+const onSellSubmitClicked = function(evt) {
     evt.preventDefault()
 
     const valid = validation()
@@ -347,24 +362,45 @@ const onSellSubmitClicked = function (evt) {
     btnSubmit.innerText = 'submitting..'
     btnSubmit.disabled = true
 
-    const productCodes = []
-    const productList = []
+    //added product without quantity
+    const products = cartProducts.filter(item => item.sellingQuantity);
 
-    cartProducts.forEach(product => {
-        const { ProductId, SellingPrice, Description, Warranty, codes} = product
-        productCodes.push(...codes)
-        productList.push({ ProductId, SellingPrice, Description, Warranty})
+    //get remove and new code
+    const addedProductCodes = [];
+    const removedProductCodes = [];
+
+    cartProducts.forEach(obj => {
+        obj.codes.forEach(itm => {
+            if (obj.hasOwnProperty("ProductCodes")) {
+                if (obj.ProductCodes.indexOf(itm.code) !== -1) {
+                    if (itm.isRemove)
+                        removedProductCodes.push(itm.code);
+                } else {
+                    if (!itm.isRemove)
+                        addedProductCodes.push(itm.code);
+                }
+            } else {
+                if (!itm.isRemove)
+                    addedProductCodes.push(itm.code);
+            }
+        })
     })
 
     const body = {
         SellingId: +hiddenSellingId.value,
         SellingTotalPrice: +totalPrice.textContent,
         SellingDiscountAmount: +inputDiscount.value || 0,
-        SellingReturnAmount: inputReturnAmount.value || 0,
-        AddedProductCodes:[],
-        RemovedProductCodes:[],
-        Products: productList
+        SellingReturnAmount: +inputReturnAmount.value || 0,
+        PaidAmount: +inputPaid.value,
+        PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
+        AddedProductCodes: addedProductCodes,
+        RemovedProductCodes: removedProductCodes,
+        PaidDate: new Date(),
+        Products: products
     }
+
+    console.log(body)
+    return;
 
     const url = '/Selling/BillChange'
     const options = {
@@ -373,24 +409,21 @@ const onSellSubmitClicked = function (evt) {
         data: body
     }
 
-    axios(options)
-        .then(response => {
-            if (response.data.IsSuccess) {
-                location.href = `/Selling/SellingReceipt/${response.data.Data}`
-            }
-        })
-        .catch(error => {
-            if (error.response)
-                customerError.textContent = error.response.data.Message
-            else if (error.request)
-                console.log(error.request)
-            else
-                console.log('Error', error.message)
-        })
-        .finally(() => {
-            btnSubmit.innerText = 'Sell Product'
-            btnSubmit.disabled = false
-        });
+    axios(options).then(response => {
+        if (response.data.IsSuccess) {
+            location.href = `/Selling/SellingReceipt/${response.data.Data}`
+        }
+    }).catch(error => {
+        if (error.response)
+            customerError.textContent = error.response.data.Message
+        else if (error.request)
+            console.log(error.request)
+        else
+            console.log('Error', error.message)
+    }).finally(() => {
+        btnSubmit.innerText = 'Sell Product'
+        btnSubmit.disabled = false
+    });
 }
 
 //event listener
@@ -400,27 +433,21 @@ inputDiscount.addEventListener('input', onInputDiscount)
 inputPaid.addEventListener('input', onInputPaid)
 inputReturnAmount.addEventListener('input', onInputReturnAmount)
 
-function codeValue() {
-    const newCode = []
-    const removeCode = []
+//delete receipt
+formReceiptDelete.addEventListener('submit', function(evt) {
+    evt.preventDefault();
 
-    cartProducts.forEach(obj => {
-        obj.codes.forEach(itm => {
-            if (obj.hasOwnProperty("ProductCodes")) {
-                if (obj.ProductCodes.indexOf(itm.code) !== -1) {
-                    if (itm.isRemove)
-                        removeCode.push(itm.code);
-                } else {
-                    if (!itm.isRemove)
-                        newCode.push(itm.code);
-                }
-            } else {
-                if (!itm.isRemove)
-                    newCode.push(itm.code);
+    const id = +hiddenSellingId.value;
+    if (confirm('This receipt will be deleted permanently')) {
+        $.ajax({
+            type: "POST",
+            url: `/Selling/DeleteBill/${id}`,
+            success: function () {
+                location.href = '/Selling/BillList';
+            },
+            error: function (response) {
+               console.log(response);
             }
-        })
-    })
-
-    console.log(`new ${newCode}`)
-    console.log(`removed ${removeCode}`)
-}
+        });  
+    }
+});

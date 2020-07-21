@@ -6,125 +6,157 @@
 }
 
 @section Styles{
-    <link href="~/css/selling-receipt.css?v=.6" rel="stylesheet" />
+    <style>
+        #receipt .table th { text-align: center }
+        .product-tb h5 { font-weight: 400; font-size: 15px; }
+        .product-tb h5 strong { margin-left: 5px; }
+
+        #amount-word { font-style: italic; font-size: 15px; }
+
+        .paid-record fieldset { border: 1px solid #ddd; }
+        .paid-record fieldset legend { width: auto !important; padding: 0 8px; margin-bottom: 0; font-size: 16px; font-weight: bold; }
+    </style>
 }
-
 <div class="container" id="receipt">
-    <section class="my-4 d-print-none">
-        <div class="d-flex justify-content-between">
-            <a class="btn btn-success btn-rounded" href="/Selling/Selling"><i class="fal fa-cart-plus mr-1"></i>Selling</a>
-            <div>
-                <a href="/Customer/List" class="btn btn-elegant btn-rounded">Customers</a>
+    <div class="card card-body">
+        <section class="my-4 d-print-none">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="/Customer/Details/@Model.CustomerInfo.CustomerId" class="blue-text">
+                    <i class="fas fa-long-arrow-alt-left"></i>
+                    Back to previous
+                </a>
+                <h5 class="mb-0">Due Collection</h5>
+                <a class="btn btn-success btn-rounded" href="/Selling/Selling"><i class="fal fa-cart-plus mr-1"></i>Selling</a>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="text-right" style="width: 50px"><strong>Name</strong></td>
-                <td>@Model.CustomerInfo.CustomerName</td>
-                <td class="text-right" style="width: 50px"><strong>Bill&nbsp;No</strong></td>
-                <td style="width: 90px">@Model.SellingSn</td>
-            </tr>
-            <tr>
-                <td class="text-right"><strong>Address</strong></td>
-                <td>@Model.CustomerInfo.CustomerAddress</td>
-                <td class="text-right"><strong>Date</strong></td>
-                <td>@Model.SellingDate.ToString("d MMM yyyy")</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td class="text-right"><strong>Cell</strong></td>
-                <td>@Model.CustomerInfo.CustomerPhone</td>
-            </tr>
-        </tbody>
-    </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="text-right" style="width: 50px"><strong>Name</strong></td>
+                    <td>@Model.CustomerInfo.CustomerName</td>
+                    <td class="text-right" style="width: 50px"><strong>Bill&nbsp;No</strong></td>
+                    <td style="width: 90px">@Model.SellingSn</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Address</strong></td>
+                    <td>@Model.CustomerInfo.CustomerAddress</td>
+                    <td class="text-right"><strong>Date</strong></td>
+                    <td>@Model.SellingDate.ToString("d MMM yyyy")</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right"><strong>Cell</strong></td>
+                    <td>@Model.CustomerInfo.CustomerPhone</td>
+                </tr>
+            </tbody>
+        </table>
 
-    <table class="product-tb table table-sm table-bordered mt-5">
-        <thead>
-            <tr>
-                <th><strong>SL.</strong></th>
-                <th><strong>Product</strong></th>
-                <th><strong>Description</strong></th>
-                <th><strong>Warranty</strong></th>
-                <th><strong>Qty.</strong></th>
-                <th><strong>U.Price</strong></th>
-                <th><strong>Price</strong></th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                var index = 1;
-                foreach (var item in Model.Products)
-                {
-                    <tr>
-                        <td class="text-center">@index</td>
-                        <td class="text-center">@item.ProductCatalogName</td>
-                        <td>
-                            @item.ProductName,
-                            @if (item.Description != null)
-                            {
-                                <span>@item.Description,</span>
-                            }
-                            @string.Join(",", item.ProductCodes)
-                        </td>
-                        <td class="text-center">@item.Warranty</td>
-                        <td class="text-center">@item.ProductCodes.Length</td>
-                        <td class="text-right">৳@item.SellingPrice</td>
-                        <td class="text-right">৳@(item.SellingPrice*item.ProductCodes.Length)</td>
-                    </tr>
-
-
-
-                    index++;
+        <table class="product-tb table table-sm table-bordered mt-5">
+            <thead>
+                <tr>
+                    <th><strong>SL.</strong></th>
+                    <th><strong>Product</strong></th>
+                    <th><strong>Description</strong></th>
+                    <th><strong>Warranty</strong></th>
+                    <th><strong>Qty.</strong></th>
+                    <th><strong>U.Price</strong></th>
+                    <th><strong>Price</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var index = 1;
+                    foreach (var item in Model.Products)
+                    {
+                        <tr>
+                            <td class="text-center">@index</td>
+                            <td class="text-center">@item.ProductCatalogName</td>
+                            <td>
+                                @item.ProductName,
+                                @if (item.Description != null)
+                                {
+                                    <span>@item.Description,</span>
+                                }
+                                @string.Join(",", item.ProductCodes)
+                            </td>
+                            <td class="text-center">@item.Warranty</td>
+                            <td class="text-center">@item.ProductCodes.Length</td>
+                            <td class="text-right">৳@item.SellingPrice</td>
+                            <td class="text-right">৳@(item.SellingPrice * item.ProductCodes.Length)</td>
+                        </tr>
+                        index++;
+                    }
                 }
+
+                <tr>
+                    <td colspan="6" class="text-center">
+                        <span id="amount-word"></span>
+                    </td>
+                    <td class="text-right">
+                        @if (Model.SellingDiscountAmount > 0)
+                        {
+                            <h5>Discount:<strong>৳@Model.SellingDiscountAmount</strong> </h5>
+                        }
+                        <h5>Total Taka:<strong>৳@Model.SellingTotalPrice</strong> </h5>
+                        <h5>Cash Paid:<strong>৳@Model.SellingPaidAmount</strong> </h5>
+                        <h5>Due:<strong>৳@Model.SellingDueAmount</strong> </h5>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="paid-record row">
+            @if (Model.Payments.Count > 0)
+            {
+                <div class="col">
+                    <fieldset class="p-2">
+                        <legend>Paid Record</legend>
+
+                        @foreach (var item in Model.Payments)
+                        {
+                            <ul class="list-group list-group-flush black-text">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>৳@item.PaidAmount/- <small>@item.PaymentMethod</small></span>
+                                    <small>@item.PaidDate.ToString("d MMM yyyy")</small>
+                                </li>
+                            </ul>
+                        }
+                    </fieldset>
+                </div>
             }
-            <tr>
-                <td colspan="6" class="text-center">
-                    <span id="amount-word"></span>
-                </td>
-                <td class="text-right">
-                    @if (Model.SellingDiscountAmount > 0)
-                    {
-                        <h5>Discount:<strong>৳@Model.SellingDiscountAmount</strong> </h5>
-                    }
-                    <h5>Total Taka:<strong>৳@Model.SellingTotalPrice</strong> </h5>
-                    <h5>Cash Paid:<strong>৳@Model.SellingPaidAmount</strong> </h5>
-                    <h5>Due:<strong>৳@Model.SellingDueAmount</strong> </h5>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="paid-record row">
-        @if (Model.Payments.Count > 0)
-        {
             <div class="col">
-                <fieldset class="p-2">
-                    <legend>Paid Record</legend>
+                <form id="formPayment">
+                    <h5>Total Due: <strong id="totalDues">@Model.SellingDueAmount</strong>/-</h5>
 
-                    @foreach (var item in Model.Payments)
-                    {
-                        <ul class="list-group list-group-flush black-text">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span>৳@item.PaidAmount/- <small>@item.PaymentMethod</small></span>
-                                <small>@item.PaidDate.ToString("d MMM yyyy")</small>
-                            </li>
-                        </ul>
-                    }
-                </fieldset>
+                    <div class="md-form">
+                        <label for="inputDiscount">Discount</label>
+                        <input type="number" id="inputDiscount" min="0" max="@Model.SellingDueAmount" class="form-control">
+                    </div>
+
+                    <div id="payable-container" class="my-2 text-danger" style="display: none">
+                        Payable: <span id="remainDue">@Model.SellingDueAmount</span>/-
+                    </div>
+
+                    <div class="md-form">
+                        <label for="inputPaid">Paid Amount</label>
+                        <input type="number" id="inputPaid" min="0" required class="form-control">
+                    </div>
+
+                    <div class="md-form">
+                        <select id="selectPaymentMethod" class="mdb-select" style="position: absolute; top: 1rem; left: 0; height: 0; width: 0; opacity: 0; padding: 0; pointer-events: none; display: inline !important;">
+                            <option value="" selected>[ Payment Method ]</option>
+                            <option>Cash</option>
+                            <option>Bank</option>
+                            <option>Cheque</option>
+                            <option>bkash</option>
+                        </select>
+                    </div>
+
+                    <input type="submit" value="pay due" class="btn btn-deep-orange">
+                </form>
             </div>
-        }
-        <div class="col">
-            <fieldset class="p-2">
-                <legend>Note</legend>
-                <small class="black-text">
-                    No warranty will be applicable in case of burning or physical damage. Warranty will
-                    also be void if warranty sticker is removed. Sold products are non-refundable.
-                </small>
-            </fieldset>
         </div>
     </div>
 </div>
@@ -132,8 +164,69 @@
 @section scripts{
     <script src="~/js/amount-in-word.js"></script>
     <script>
-         $(function() {
-             $("#amount-word").text(`Taka (in word): ${number2text(@Model.SellingTotalPrice).toLowerCase()}`);
-         });
+        const formPayment = document.getElementById('formPayment');
+        const totalDues = document.getElementById('totalDues');
+        const payableContainer = document.getElementById('payable-container');
+        const remainDue = document.getElementById('remainDue');
+        const inputPaid = formPayment.inputPaid;
+        const inputDiscount = formPayment.inputDiscount;
+
+        //input discount amount
+        const onInputDiscount = function() {
+            const dues = +totalDues.textContent;
+            const discount = +this.value;
+
+            remainDue.innerText = dues - discount;
+            payableContainer.style.display = discount ? "block" : "none";
+
+            if (inputPaid.value) {
+                inputPaid.value = '';
+                inputPaid.previousElementSibling.classList.remove('active');
+            }
+        }
+
+        //input paid amount
+        const onInputPaid = function() {
+            const payable = +remainDue.textContent;
+            const paid = +this.value;
+
+            paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
+            this.setAttribute('max', payable);
+        }
+
+
+        //event listener
+        inputDiscount.addEventListener('input', onInputDiscount);
+        inputPaid.addEventListener('input', onInputPaid);
+        formPayment.addEventListener('submit', function(evt) {
+            evt.preventDefault();
+
+            const data = {
+                SellingId: @Model.SellingId,
+                CustomerId: @Model.CustomerInfo.CustomerId,
+                PaidAmount: +inputPaid.value,
+                PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
+                SellingDiscountAmount: +inputDiscount.value,
+                PaidDate: new Date()
+            }
+
+            const url = '/Selling/DueCollection'
+            const options = {
+                method: 'post',
+                url: url,
+                data: data
+            }
+
+            axios(options).then(response => {
+                location.href = "/Customer/Details/@Model.CustomerInfo.CustomerId";
+            }).catch(error => console.log(error))
+        });
+
+        $(function() {
+            $("#amount-word").text(`Taka( in word): ${number2text(@Model.SellingTotalPrice).toLowerCase()}`);
+
+            // material select initialization
+            $('.mdb-select').materialSelect();
+        });
     </script>
 }

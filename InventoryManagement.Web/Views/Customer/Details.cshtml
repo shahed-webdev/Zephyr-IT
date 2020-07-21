@@ -128,7 +128,14 @@
                                     <td>@item.SellingDiscountAmount</td>
                                     <td>@item.SellingPaidAmount</td>
                                     <td>
-                                        <a class="blue-text" href="/Selling/DueCollection/@item.SellingId">@item.SellingDueAmount</a>
+                                        @if (item.SellingDueAmount > 0)
+                                        {
+                                            <a class="blue-text" href="/Selling/DueCollection/@item.SellingId">@item.SellingDueAmount</a>
+                                        }
+                                        else
+                                        {
+                                           @item.SellingDueAmount 
+                                        }
                                     </td>
                                     <td>@item.SellingDate.ToString("d MMM yyyy")</td>
                                 </tr>
