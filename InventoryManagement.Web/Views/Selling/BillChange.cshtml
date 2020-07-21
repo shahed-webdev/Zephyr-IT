@@ -26,8 +26,8 @@
 <div class="m-3">
     <h4 class="mb-1 page-header d-print-none">Update Bill #@Model.SellingSn</h4>
     <h5 class="mb-4">
-        <span class="badge badge-pill badge-success">@Model.CustomerInfo.CustomerName</span>
-        <span class="badge badge-pill badge-info">@Model.CustomerInfo.CustomerPhone</span>
+        <span class="badge badge-pill purple">@Model.CustomerInfo.CustomerName</span>
+        <span class="badge badge-pill purple">@Model.CustomerInfo.CustomerPhone</span>
     </h5>
 
     <div class="row">
@@ -41,7 +41,7 @@
                             <span id="codeExistError" class="field-validation-error"></span>
                         </div>
 
-                        <button id="btnFind" type="submit" class="btn btn-sm btn-brown">
+                        <button id="btnFind" type="submit" class="btn btn-sm purple-gradient">
                             <i class="far fa-search text-white"></i>
                             <i class="fas fa-circle-notch fa-spin" style="display:none"></i>
                         </button>
@@ -110,7 +110,7 @@
                             <input id="inputDiscount" type="number" min="0" class="form-control" value="@Model.SellingDiscountAmount">
                             <label for="inputDiscount">Discount</label>
                         </li>
-                        <li class="d-flex justify-content-between align-items-center text-success py-4">
+                        <li class="d-flex justify-content-between align-items-center text-success pb-4">
                             <strong>Prev. Paid Amount</strong>
                             <strong>৳<span id="totalPrevPaid">@Model.SellingPaidAmount</span></strong>
                         </li>
@@ -118,8 +118,7 @@
                             <strong>Grand Total</strong>
                             <strong>৳<span id="totalPayable">@(Model.SellingTotalPrice - Model.SellingDiscountAmount- Model.SellingPaidAmount)</span></strong>
                         </li>
-
-                        <li class="md-form">
+                        <li class="md-form mb-4">
                             <input id="inputPaid" type="number" min="0" class="form-control">
                             <label for="inputPaid">Paid Amount</label>
                         </li>
@@ -144,7 +143,7 @@
                     <div class="text-center">
                         <i id="customer-error" class="mt-2 text-center red-text"></i>
                         <input type="hidden" id="hiddenSellingId" value="@Model.SellingId" />
-                        <button type="submit" id="btnSelling" class="btn peach-gradient btn-rounded btn-block mt-0">UPDATE BILL</button>
+                        <button type="submit" id="btnSelling" class="btn purple-gradient btn-rounded btn-block mt-0">UPDATE BILL</button>
                     </div>
                 </form> 
             </div>
@@ -157,8 +156,10 @@
     <script>
         //save previous data
         cartProducts = @Html.Raw(Json.Serialize(Model.Products));
-        cartProducts.forEach(function (obj, i) {
-            obj.codes = []
+        cartProducts.forEach(function(obj, i) {
+            obj.codes = [];
+            obj.sellingQuantity = obj.ProductCodes.length;
+
             obj.ProductCodes.forEach(code => {
                 obj.codes.push({ code, isRemove: false });
             })

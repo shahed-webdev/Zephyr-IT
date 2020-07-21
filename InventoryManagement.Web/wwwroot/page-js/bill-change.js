@@ -48,8 +48,9 @@ const storage = {
 
         if (!found) {
             product.codes = [{ code: product.ProductCode, isRemove: false }];
-            product.sellingFixedValue = product.SellingPrice
-            cartProducts.push(product)
+            product.sellingFixedValue = product.SellingPrice;
+            product.sellingQuantity = 1;
+            cartProducts.push(product);
         }
         else {
             const index = cartProducts.findIndex(item => item.ProductCatalogId === product.ProductCatalogId)
@@ -63,16 +64,17 @@ const storage = {
                 return;
             }
 
-            codes.push({ code: product.ProductCode, isRemove: false })
+            codes.push({ code: product.ProductCode, isRemove: false });
+            cartProducts[index].sellingQuantity = codes.filter(itm => !itm.isRemove).length;
         }
 
 
         //clear input
-        inputBarCode.value = ''
+        inputBarCode.value = '';
 
         //show table data
-        tbody.innerHTML =''
-        showProducts()
+        tbody.innerHTML = '';
+        showProducts();
     }
 }
 
@@ -107,7 +109,6 @@ const clearMDBdropDownList = function (mainSelector) {
 const createTableRow = function (item) {
     const description = item.Description && `${item.Description},`
     const note = item.Note ? `<span style="font-size: 12px;" class="badge badge-pill badge-secondary">${item.Note}</span>` : "";
-    const quantity = item.codes.filter(itm => !itm.isRemove).length;
 
     return `<tr data-id="${item.ProductCatalogId}">
                 <td>${item.ProductCatalogName}</td>
@@ -118,9 +119,9 @@ const createTableRow = function (item) {
                     <span class="codeSpan">${appendCode(item.codes)}</span>
                 </td>
                 <td>${item.Warranty}</td>
-                <td>${quantity}</td>
+                <td>${item.sellingQuantity}</td>
                 <td><input type="number" required class="form-control inputUnitPrice" step="0.01" min="${item.sellingFixedValue}" max="${item.SellingPrice}" value="${item.SellingPrice}" /></td>
-                <td>${item.SellingPrice * quantity}</td>
+                <td>${item.SellingPrice * item.sellingQuantity}</td>
                 <td class="text-center"><i class="fal fa-times remove"></i></td>
             </tr>`
 }
@@ -143,20 +144,21 @@ const showProducts = function () {
 //remove product code
  const removeProductCode = function(code) {
      const id = +code.parentElement.parentElement.parentElement.getAttribute('data-id');
-    const pCode = code.textContent;
+     const pCode = code.textContent;
 
-    const index = cartProducts.findIndex(item => item.ProductCatalogId === id);
-    const codes = cartProducts[index].codes;
+     const index = cartProducts.findIndex(item => item.ProductCatalogId === id);
+     const codes = cartProducts[index].codes;
 
-    codes.forEach((obj, i) => {
-        if (obj.code === pCode) {
-            codes[i].isRemove = !codes[i].isRemove;
-            return;
-        }
-    })
+     codes.forEach((obj, i) => {
+         if (obj.code === pCode) {
+             codes[i].isRemove = !codes[i].isRemove;
+             return;
+         }
+     });
 
-    showProducts();
-}
+     cartProducts[index].sellingQuantity = codes.filter(itm => !itm.isRemove).length;
+     showProducts();
+ }
 
 // click remove or stock
 const onRemoveClicked = function (evt) {
@@ -193,7 +195,7 @@ const loading = function (element, isLoading) {
 //append total price to DOM
 const appendTotalPrice = function () {
     const totalAmount = cartProducts.map(item => {
-        return item.SellingPrice * item.codes.filter(itm => !itm.isRemove).length;
+        return item.SellingPrice * item.sellingQuantity;
     }).reduce((prev, cur) => prev + cur, 0);
 
     totalPrice.innerText = totalAmount
@@ -217,25 +219,25 @@ const appendTotalPrice = function () {
 
 //selling price change
 const onInputUnitPrice = function (evt) {
-    const input = evt.target
-    const onInput = input.classList.contains('inputUnitPrice')
+    const input = evt.target;
+    const onInput = input.classList.contains('inputUnitPrice');
 
     if (onInput) {
-        const val = +input.value
-        const min = +input.getAttribute('min')
-        input.setAttribute('max', input.value)
+        const val = +input.value;
+        const min = +input.getAttribute('min');
+        input.setAttribute('max', input.value);
 
         if (min > val) return;
 
-        const id = +input.parentElement.parentElement.getAttribute('data-id')
-        const index = cartProducts.findIndex(item => item.ProductCatalogId === id)
+        const id = +input.parentElement.parentElement.getAttribute('data-id');
+        const index = cartProducts.findIndex(item => item.ProductCatalogId === id);
         cartProducts[index].SellingPrice = +input.value
 
-        const qty = +input.parentElement.previousElementSibling.innerText
-        input.parentElement.nextElementSibling.innerText = val * qty
+        const qty = +input.parentElement.previousElementSibling.innerText;
+        input.parentElement.nextElementSibling.innerText = val * qty;
 
         //append price
-        appendTotalPrice()
+        appendTotalPrice();
     }
 }
 
@@ -354,14 +356,14 @@ const onSellSubmitClicked = function (evt) {
         productList.push({ ProductId, SellingPrice, Description, Warranty})
     })
 
-    if (!productCodes.length) return;
-
     const body = {
         SellingId: +hiddenSellingId.value,
         SellingTotalPrice: +totalPrice.textContent,
-        SellingDiscountAmount: +inputDiscount.value | 0,
-        ProductCodes: productCodes,
-        ProductList: productList
+        SellingDiscountAmount: +inputDiscount.value || 0,
+        SellingReturnAmount: inputReturnAmount.value || 0,
+        AddedProductCodes:[],
+        RemovedProductCodes:[],
+        Products: productList
     }
 
     const url = '/Selling/BillChange'
