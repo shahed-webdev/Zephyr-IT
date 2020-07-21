@@ -31,6 +31,7 @@ namespace InventoryManagement.Repository
 
     public class SellingReceiptProductViewModel
     {
+        public int SellingId { get; set; }
         public int ProductId { get; set; }
         public int ProductCatalogId { get; set; }
         public string ProductCatalogName { get; set; }
@@ -101,12 +102,15 @@ namespace InventoryManagement.Repository
     public class SellingUpdatePostModel
     {
         public int SellingId { get; set; }
+        public int UpdateRegistrationId { get; set; }
         public double SellingTotalPrice { get; set; }
         public double SellingDiscountAmount { get; set; }
         public double SellingReturnAmount { get; set; }
         public string[] AddedProductCodes { get; set; }
         public string[] RemovedProductCodes { get; set; }
-
+        public double PaidAmount { get; set; }
+        public string PaymentMethod { get; set; }
+        public DateTime PaidDate { get; set; }
         public ICollection<SellingUpdateProductPostModel> Products { get; set; }
     }
 

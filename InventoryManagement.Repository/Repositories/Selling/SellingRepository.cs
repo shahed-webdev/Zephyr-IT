@@ -348,6 +348,7 @@ namespace InventoryManagement.Repository
                   SellingDate = s.SellingDate,
                   Products = s.SellingList.Select(pd => new SellingReceiptProductViewModel
                   {
+                      SellingId = pd.SellingId,
                       ProductId = pd.Product.ProductId,
                       ProductCatalogId = pd.Product.ProductCatalogId,
                       ProductCatalogName = pd.Product.ProductCatalog.CatalogName,
@@ -438,6 +439,29 @@ namespace InventoryManagement.Repository
                 }
 
                 Context.Selling.Update(selling);
+
+                if (model.PaidAmount > 0)
+                {
+                    var newSellingPaymentSn = await db.SellingPayments.GetNewSnAsync().ConfigureAwait(false);
+                    var payment = new SellingPayment
+                    {
+                        RegistrationId = model.UpdateRegistrationId,
+                        CustomerId = selling.CustomerId,
+                        ReceiptSn = newSellingPaymentSn,
+                        PaidAmount = model.PaidAmount,
+                        PaymentMethod = model.PaymentMethod,
+                        PaidDate = model.PaidDate,
+                        SellingPaymentList = new List<SellingPaymentList>
+                        {
+                            new SellingPaymentList
+                            {
+                                SellingPaidAmount = model.PaidAmount,
+                                SellingId =  model.SellingId
+                            }
+                        }
+                    };
+                    Context.SellingPayment.Add(payment);
+                }
 
                 await Context.SaveChangesAsync();
 
