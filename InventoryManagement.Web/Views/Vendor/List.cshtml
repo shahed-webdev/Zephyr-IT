@@ -62,16 +62,16 @@
 
 
 @section Scripts {
-    <partial name="_UnobtrusiveAjaxPartial" />
+    <partial name="_UnobtrusiveAjaxPartial"/>
     <script>
-        $(function () {
+        $(function() {
             //dataTable.getData();
         });
 
         //get data
         var dataTable = {
             table: null,
-            init: function () {
+            init: function() {
                 dataTable.table = $("#DataTable").DataTable({
                     processing: true,
                     serverSide: true,
@@ -80,39 +80,39 @@
                         type: "POST"
                     },
                     columns:
-                        [
-                            {
-                                data: "VendorCompanyName", "render": function (data, type, row, meta) {
-                                    return `<a title="click to details" class="blue-text" href="/Vendors/Details/${row.VendorID}">${data}<a/>`;
-                                }
-                            },
-                            { data: "VendorName" },
-                            { data: "VendorAddress" },
-                            { data: "VendorPhone" },
-                            {
-                                data: "VendorDue", "render": function (data, type, row, meta) {
-                                    return row.VendorDue ? `<a title="click to paid" class="blue-text" href="/Vendors/DueReceipt/${row.VendorID}">${data}/-<a/>` : `${data}/-`;
-                                }
-                            },
-                            { data: "VendorID", "render": function (data) { return `<a class="edit fas fa-edit" href="/Vendors/Edit/${data}"></a>`; } },
-                            { data: "VendorID", "render": function (data) { return `<a style="color:#ff0000" class="delete fas fa-trash-alt" href="/Vendors/Delete/${data}"></a>`; } }
-                        ],
+                    [
+                        {
+                            data: "VendorCompanyName", "render": function(data, type, row, meta) {
+                                return `<a title="click to details" class="blue-text" href="/Vendors/Details/${row.VendorID}">${data}<a/>`;
+                            }
+                        },
+                        { data: "VendorName" },
+                        { data: "VendorAddress" },
+                        { data: "VendorPhone" },
+                        {
+                            data: "VendorDue", "render": function(data, type, row, meta) {
+                                return row.VendorDue ? `<a title="click to paid" class="blue-text" href="/Vendors/DueReceipt/${row.VendorID}">${data}/-<a/>` : `${data}/-`;
+                            }
+                        },
+                        { data: "VendorID", "render": function(data) { return `<a class="edit fas fa-edit" href="/Vendors/Edit/${data}"></a>`; } },
+                        { data: "VendorID", "render": function(data) { return `<a style="color:#ff0000" class="delete fas fa-trash-alt" href="/Vendors/Delete/${data}"></a>`; } }
+                    ],
                     columnDefs: [
                         { 'searchable': false, 'targets': [4, 5, 6] },
                         { 'sortable': false, 'targets': [5, 6] },
-                        { 'className': "text-left", "targets": [0, 1, 2, 3] },
+                        { 'className': "text-left", "targets": [0, 1, 2] },
                         { 'className': "text-right", "targets": [4] }
                     ]
                 });
             },
-            getData: function () {
+            getData: function() {
                 dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
             }
         }
 
         //Insert
-        $("#CreateClick").on("click", function () {
-            $.get($(this).data("url"), function (data) {
+        $("#CreateClick").on("click", function() {
+            $.get($(this).data("url"), function(data) {
                 $('#InsertModal').html(data).modal('show');
             });
         });
@@ -128,11 +128,11 @@
         }
 
         //Update click
-        $('#data-table').on("click", ".edit", function (evt) {
+        $('#data-table').on("click", ".edit", function(evt) {
             evt.preventDefault();
             const url = $(this).attr("href");
 
-            $.get(url, function (data) {
+            $.get(url, function(data) {
                 $('#UpdateModal').html(data).modal('show');
             });
         });
@@ -148,7 +148,7 @@
         }
 
         //Delete click
-        $('#data-table').on("click", ".delete", function (evt) {
+        $('#data-table').on("click", ".delete", function(evt) {
             evt.preventDefault();
 
             var row = $(this).closest("tr");
@@ -161,7 +161,7 @@
             if (!url) return;
 
             if (confirm("Are you sure you want to delete?")) {
-                $.post(url, function (response) {
+                $.post(url, function(response) {
                     if (response === '-1') {
                         row.addClass("error-color").after('<em class="used-error">This data already used in others place</em>');
                         btnDelete.removeAttr("href");

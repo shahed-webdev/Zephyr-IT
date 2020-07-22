@@ -66,6 +66,12 @@ namespace InventoryManagement.Web.Controllers
             return Json(productList);
         }
 
+        public IActionResult Stock(int id)
+        {
+            return View();
+        }
+
+
         //GET: Barcode
         [Authorize(Roles = "admin, barcode")]
         public IActionResult Barcode()

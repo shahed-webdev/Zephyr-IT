@@ -166,7 +166,7 @@ const onRemoveClicked = function (evt) {
     if (!removeClicked) return;
 
     //remove product from storage
-    cartProducts = cartProducts.filter(item => item.ProductCatalogId !== id && item.ProductName === name);
+    cartProducts = cartProducts.filter(item => item.ProductCatalogId !== id && item.ProductName !== name);
 
     //save to local storage
     storage.setData();

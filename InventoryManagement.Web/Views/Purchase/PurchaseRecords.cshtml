@@ -26,72 +26,65 @@
 
 @section scripts{
     <script>
-        $(function () {
+        $(function() {
             dataTable.getData();
         });
 
         //get data
         var dataTable = {
             table: null,
-            init: function () {
+            init: function() {
                 dataTable.table = $("#data-table").DataTable({
                     processing: true,
                     serverSide: true,
-                    dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>><"row"<"col-sm-12"<tr>>><"row"<"col-sm-5"i><"col-sm-7"p>>',
                     buttons: dataTable.button,
+                    dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>><"row"<"col-sm-12"<tr>>><"row"<"col-sm-5"i><"col-sm-7"p>>',
                     ajax: {
                         url: "/Purchase/PurchaseRecordsData",
                         type: "POST"
                     },
                     columns:
-                        [
-                            {
-                                data: "PurchaseSn", "render": function (data, type, row, meta) {
-                                    return `<a class="blue-text" href="/Purchase/PurchaseReceipt/${row.PurchaseId}">${data}</a>`;
-                                }
-                            },
-                            { data: "MemoNumber" },
-                            { data: "VendorCompanyName" },
-                            { data: "PurchaseAmount", "render": dataTable.addSign },
-                            { data: "PurchasePaidAmount", "render": dataTable.addSign },
-                            { data: "PurchaseDueAmount", "render": dataTable.addSign },
-                            { data: "PurchaseDate", "render": function (data) { return moment(data).format('DD MMM YYYY') } }
-                        ],
+                    [
+                        {
+                            data: "PurchaseSn", "render": function(data, type, row, meta) {
+                                return `<a class="blue-text" href="/Purchase/PurchaseReceipt/${row.PurchaseId}">${data}</a>`;
+                            }
+                        },
+                        { data: "MemoNumber" },
+                        { data: "VendorCompanyName" },
+                        { data: "PurchaseAmount", "render": dataTable.addSign },
+                        { data: "PurchasePaidAmount", "render": dataTable.addSign },
+                        { data: "PurchaseDueAmount", "render": dataTable.addSign },
+                        { data: "PurchaseDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } }
+                    ],
                     columnDefs: [
-                        { 'searchable': false, 'targets': [3,4,5,6] },
-                        { 'className': "text-right", "targets": [3, 4,5] },
-                        //{ 'className': "text-left", "targets": [1] }
+                        { searchable: false, 'targets': [3, 4, 5] },
+                        { className: "text-right", "targets": [3, 4, 5] },
+                        { className: "text-left", "targets": [2] }
                     ]
                 });
             },
-            getData: function () {
+            getData: function() {
                 dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
             },
-            addSign: function (data) { return `${data}/-` },
+            addSign: function(data) { return `${data}/-` },
             button: {
                 buttons: [{
                     extend: 'print',
                     text: '<i class="fa fa-print"></i> Print',
                     title: '',
-                    exportOptions: {
-                        //columns: [0,1] //Column value those print
-                    },
-                    customize: function (win) {
-                        $(win.document.body).prepend(
-                            `<nav class="mb-3 navbar peach-gradient">
-                                <a class="navbar-brand ml-1"><span>Zephyr</span> IT</a>
-                              </nav>
-                             <h3 class="h3-responsive">${$('h4').text()}</h3>`);
-                    },
-                    autoPrint: true
+                    exportOptions: { /*columns: [0,1] //Column value those print*/ },
+                    autoPrint: true,
+                    customize: function(win) {
+                        $(win.document.body).prepend(`<nav class="mb-3 navbar peach-gradient"><a class="navbar-brand ml-1"><span>Zephyr</span> IT</a></nav><h3 class="h3-responsive">${$('h4').text()}</h3>`);
+                    }
                 }],
                 dom: {
-                    button: {
-                        className: 'btn btn-dark btn-rounded btn-sm my-0'
-                    }
+                    button: { className: 'btn btn-dark btn-rounded btn-sm my-0' }
                 }
             }
-        }</script>
+        }
+    </script>
 }
 
 
