@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Repository;
+using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -29,9 +30,9 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //For Data-table
-        public IActionResult CustomerList(bool customerType = true)
+        public IActionResult CustomerList(DataRequest request)
         {
-            var list = _db.Customers.ListCustom(customerType);
+            var list = _db.Customers.ListDataTable(request);
             return Json(list);
         }
 

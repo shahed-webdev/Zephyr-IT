@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Data;
+using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,26 @@ namespace InventoryManagement.Repository
             });
 
             return cList.ToList();
+        }
+
+        public DataResult<CustomerListViewModel> ListDataTable(DataRequest request)
+        {
+            var cList = Context.Customer.Select(c => new CustomerListViewModel
+            {
+                CustomerId = c.CustomerId,
+                OrganizationName = c.OrganizationName,
+                CustomerName = c.CustomerName,
+                CustomerAddress = c.CustomerAddress,
+                PhonePrimary = c.CustomerPhone.FirstOrDefault(p => p.IsPrimary == true).Phone,
+                Due = c.Due,
+                DueLimit = c.DueLimit,
+                Description = c.Description,
+                Designation = c.Designation,
+                IsIndividual = c.IsIndividual,
+                SignUpDate = c.InsertDate
+            });
+
+            return cList.ToDataResult(request);
         }
 
         public async Task<bool> IsPhoneNumberExistAsync(string number, int id = 0)

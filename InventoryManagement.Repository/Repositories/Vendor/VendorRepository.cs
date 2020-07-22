@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Data;
+using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,22 @@ namespace InventoryManagement.Repository
             }).ToListAsync().ConfigureAwait(false);
 
             return vendor;
+        }
+
+        public DataResult<VendorViewModel> ToListDataTable(DataRequest request)
+        {
+            var vendor = Context.Vendor.Select(v => new VendorViewModel
+            {
+                VendorId = v.VendorId,
+                VendorCompanyName = v.VendorCompanyName,
+                VendorName = v.VendorName,
+                VendorAddress = v.VendorAddress,
+                VendorPhone = v.VendorPhone,
+                InsertDate = v.InsertDate,
+                Due = v.Due
+            });
+
+            return vendor.ToDataResult(request);
         }
 
         public async Task<ICollection<VendorViewModel>> SearchAsync(string key)
@@ -122,7 +139,7 @@ namespace InventoryManagement.Repository
 
         public ICollection<VendorPaidDue> TopDue(int totalVendor)
         {
-            return Context.Vendor.Where(v => v.Due > 0).OrderByDescending(v=> v.Due).Take(totalVendor).Select(v => new VendorPaidDue
+            return Context.Vendor.Where(v => v.Due > 0).OrderByDescending(v => v.Due).Take(totalVendor).Select(v => new VendorPaidDue
             {
                 VendorId = v.VendorId,
                 VendorCompanyName = v.VendorCompanyName,

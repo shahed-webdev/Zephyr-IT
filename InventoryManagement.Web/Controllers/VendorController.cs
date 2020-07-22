@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Repository;
+using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -18,12 +19,16 @@ namespace InventoryManagement.Web.Controllers
 
         // GET: List
         [Authorize(Roles = "admin, vendor-list")]
-        public async Task<IActionResult> List()
+        public IActionResult List()
         {
-            var model = await _db.Vendors.ToListCustomAsync();
-            return View(model);
+            return View();
         }
 
+        public IActionResult ListDataTable(DataRequest request)
+        {
+            var data = _db.Vendors.ToListDataTable(request);
+            return Json(data);
+        }
 
         // GET: Vendors/Create
         [Authorize(Roles = "admin, vendor")]
