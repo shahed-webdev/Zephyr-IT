@@ -154,7 +154,7 @@
                         </select>
                     </div>
 
-                    <input type="submit" value="pay due" class="btn btn-deep-orange">
+                    <input type="submit" value="pay due" class="btn btn-deep-orange" @(Model.SellingDueAmount > 0? "":"disabled")>
                 </form>
             </div>
         </div>

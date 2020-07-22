@@ -97,7 +97,7 @@ const createTableRow = function (item) {
     const description = item.Description ? `${item.Description},` :'';
     const note = item.Note ? `<span style="font-size: 12px;" class="badge badge-pill badge-secondary">${item.Note}</span>` : "";
 
-    return `<tr data-id="${item.ProductCatalogId}">
+    return `<tr data-id="${item.ProductCatalogId}" data-name="${item.ProductName}">
                 <td>${item.ProductCatalogName}</td>
                 <td>
                     ${item.ProductName},
@@ -131,23 +131,24 @@ const showProducts = function () {
 
 //remove product code
 const removeProductCode = function (code) {
-    const id = +code.parentElement.parentElement.parentElement.getAttribute('data-id')
-    const pCode = code.textContent
+    const id = +code.parentElement.parentElement.parentElement.getAttribute('data-id');
+    const name = code.parentElement.parentElement.parentElement.getAttribute('data-name');
+    const pCode = code.textContent;
 
-    const index = cartProducts.findIndex(item => item.ProductCatalogId === id)
-    const codes = cartProducts[index].codes
-    const pIndex = codes.indexOf(pCode)
+    const index = cartProducts.findIndex(item => item.ProductCatalogId === id && item.ProductName === name);
+    const codes = cartProducts[index].codes;
+    const pIndex = codes.indexOf(pCode);
 
     if (codes.length > 1) {
-        codes.splice(pIndex, 1)
+        codes.splice(pIndex, 1);
 
         //save to local-storage
-        storage.setData()
+        storage.setData();
 
         //remove code element
-        code.remove()
+        code.remove();
 
-        showProducts()
+        showProducts();
     }
 }
 
@@ -158,25 +159,26 @@ const onRemoveClicked = function (evt) {
     const codeClicked = element.classList.contains('code');
     const row = element.parentElement.parentElement;
     const id = +row.getAttribute('data-id');
+    const name = row.getAttribute('data-name');
 
-    if (codeClicked) removeProductCode(element)
+    if (codeClicked) removeProductCode(element);
 
     if (!removeClicked) return;
 
     //remove product from storage
-    cartProducts = cartProducts.filter(item => item.ProductCatalogId !== id);
+    cartProducts = cartProducts.filter(item => item.ProductCatalogId !== id && item.ProductName !== name);
 
     //save to local storage
-    storage.setData() 
+    storage.setData();
 
     //delete row
-    row.remove()
+    row.remove();
 
     //show added items count
-    storage.countProduct()
+    storage.countProduct();
 
     //append price
-    appendTotalPrice()
+    appendTotalPrice();
 }
 
 //show loading
@@ -227,27 +229,30 @@ const appendTotalPrice = function () {
 
 //selling price change
 const onInputUnitPrice = function (evt) {
-    const input = evt.target
-    const onInput = input.classList.contains('inputUnitPrice')
+    const input = evt.target;
+    const onInput = input.classList.contains('inputUnitPrice');
+
     if (onInput) {
-        const val = +input.value
-       const min = +input.getAttribute('min')
-        input.setAttribute('max', input.value)
+        const val = +input.value;
+        const min = +input.getAttribute('min');
+        input.setAttribute('max', input.value);
 
-        if (min > val) return
+        if (min > val) return;
 
-        const id = +input.parentElement.parentElement.getAttribute('data-id')
-        const index = cartProducts.findIndex(item => item.ProductCatalogId === id)
-        cartProducts[index].SellingPrice = +input.value
+        const id = +input.parentElement.parentElement.getAttribute('data-id');
+        const name = input.parentElement.parentElement.getAttribute('data-name');
 
-        const qty = +input.parentElement.previousElementSibling.innerText
-        input.parentElement.nextElementSibling.innerText = val * qty
+        const index = cartProducts.findIndex(item => item.ProductCatalogId === id && item.ProductName === name);
+        cartProducts[index].SellingPrice = +input.value;
+
+        const qty = +input.parentElement.previousElementSibling.innerText;
+        input.parentElement.nextElementSibling.innerText = val * qty;
 
         //save to local-storage
-        storage.setData()
+        storage.setData();
 
         //append price
-        appendTotalPrice()
+        appendTotalPrice();
     }
 }
 
