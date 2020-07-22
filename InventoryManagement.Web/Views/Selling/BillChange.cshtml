@@ -22,7 +22,7 @@
         .inputUnitPrice { width: 90px; text-align: center }
         .disable-row { background-color: #dbdbdb }
         .disable-row input { background-color: #dbdbdb; pointer-events: none }
-    </style>
+    </style>  
 }
 
 <div class="m-3">
@@ -111,7 +111,7 @@
                     <ul class="mb-0">
                         <li class="d-flex justify-content-between align-items-center">
                             <strong>Total Amount</strong>
-                            <strong>৳<span id="totalPrice">@Model.SellingTotalPrice</span></strong>
+                            <strong><span id="totalPrice">@Model.SellingTotalPrice</span>/-</strong>
                         </li>
                         <li class="md-form mt-4">
                             <label for="inputDiscount">Discount</label>
@@ -119,20 +119,17 @@
                         </li>
                         <li class="d-flex justify-content-between align-items-center text-success pb-4">
                             <strong>Prev. Paid Amount</strong>
-                            <strong>৳<span id="totalPrevPaid">@Model.SellingPaidAmount</span></strong>
+                            <strong><span id="totalPrevPaid">@Model.SellingPaidAmount</span>/-</strong>
                         </li>
-                        <li class="d-flex justify-content-between align-items-center">
-                            <strong>Grand Total</strong>
-                            <strong>৳<span id="grandTotal">@(Model.SellingTotalPrice - Model.SellingDiscountAmount - Model.SellingPaidAmount)</span></strong>
+                        <li class="d-flex justify-content-between align-items-center text-danger">
+                            <strong>Total Due</strong>
+                            <strong><span id="totalDue">@Model.SellingDueAmount</span>/-</strong>
                         </li>
                         <li class="md-form mt-4">
                             <label for="inputReturnAmount">Return Amount</label>
                             <input id="inputReturnAmount" value="@Model.SellingReturnAmount" type="number" min="0" class="form-control">
                         </li>
-                        <li class="d-flex justify-content-between align-items-center text-danger">
-                            <strong>Total Due</strong>
-                            <strong>৳<span id="totalDue">@Model.SellingDueAmount</span></strong>
-                        </li>
+
                         <li class="md-form mb-4">
                             <label for="inputPaid">Paid Amount</label>
                             <input id="inputPaid" type="number" min="0" class="form-control">
@@ -159,7 +156,7 @@
 </div>
 
 @section Scripts{
-    <script src="~/page-js/bill-change.js?v=.3"></script>
+    <script src="~/page-js/bill-change.js?v=.7"></script>
     <script>
         //save previous data
         cartProducts = @Html.Raw(Json.Serialize(Model.Products));

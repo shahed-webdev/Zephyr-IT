@@ -4,12 +4,7 @@
     ViewData["Title"] = "Add Product Info";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-@section styles{
-    <style>
-        .remove { cursor: pointer }
-        .remove:hover { color: #ff0000 }
-    </style>  
-}
+
 
 <div class="m-md-3">
     <h4 class="mb-3 page-header">Add Product Info</h4>
@@ -55,17 +50,16 @@
 
     <section class="card card-body mt-3">
         <h4 id="categoryName"></h4>
-        <table class="data-table table table-bordered table-sm">
+        <table id="data-table" class="table table-bordered table-sm">
             <thead>
                 <tr>
                     <th><strong>Brand & Model</strong></th>
                     <th><strong>Stock</strong></th>
                     <th><strong>Warranty</strong></th>
                     <th><strong>Description</strong></th>
-                    <th><strong>Remove</strong></th>
+                    <th style="width: 50px"><strong>Remove</strong></th>
                 </tr>
             </thead>
-            <tbody id="tbody"></tbody>
         </table>
     </section>
 </div>
@@ -75,71 +69,84 @@
         $(function() {
             // Material Select Initialization
             $('.mdb-select').materialSelect();
+
+            dataTable.getData();
+        });
+
+        const dataTable = {
+            table: null,
+            filter:[],
+            init: function() {
+                dataTable.table = $("#data-table").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "/Product/GetProductByCategory",
+                        type: "POST",
+                        data: function (d) {
+                            d.filters = dataTable.filter;
+                        }
+                    },
+                    columns:
+                    [
+                        { data: "ProductName" },
+                        { data: "Stock" },
+                        { data: "Warranty" },
+                        { data: "Description" },
+                        { data: "ProductId", "render": function(data) { return `<a class="far fa-trash-alt red-text remove"  href="/Product/DeleteProduct/${data}"></a>`; } }
+                    ],
+                    columnDefs: [
+                        { 'searchable': false, 'targets': [4] },
+                        { 'sortable': false, 'targets': [4] },
+                        { 'className': "text-left", "targets": [0, 2, 3] }
+                    ]
+                });
+            },
+            getData: function() {
+                dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
+            }
+        }
+
+
+        //delete click
+        $('#data-table').on("click", ".remove", function(evt) {
+            evt.preventDefault();
+
+            var row = $(this).closest("tr");
+            var btnDelete = $(this);
+            const url = $(this).attr('href');
+
+            $('#table-row em').remove();
+            $('#table-row tr').removeClass("error-color");
+
+            if (!url) return;
+
+            if (confirm("Are you sure you want to delete?")) {
+                $.post(url, function(response) {
+                    if (response === -1) {
+                        row.addClass("error-color").after('<em class="used-error">This data already used in others place</em>');
+                        btnDelete.removeAttr("href");
+                        return;
+                    }
+                    row.hide();
+                });
+            }
         });
 
         // selectors
         const parentId = document.getElementById('ParentId');
-        const tbody = document.getElementById('tbody');
 
-        // functions
-        const getProductsInfo = function(categoryId = 0) {
-            const url = '/Product/GetProductByCategory'
-            const param = { params: { categoryId: categoryId } };
-
-            axios.get(url, param).then(res => {
-                let html = '';
-                res.data.forEach(item => {
-                    const warranty = item.Warranty ? item.Warranty : ''
-                    const description = item.Description ? item.Description : ''
-
-                    html += `<tr>
-                        <td class="text-left">${item.ProductName}</td>
-                        <td>${item.Stock}</td>
-                        <td class="text-left">${warranty}</td>
-                        <td class="text-left">${description}</td>
-                        <td style="width:50px; text-align:center"><i class="far fa-trash-alt red-text" id="${item.ProductId}"></i></td>
-                        </tr>`
-                });
-
-                tbody.innerHTML = '';
-                tbody.innerHTML = html;
-            }).catch(err => console.log(err));
-        }
-
-        //on change dropdown
-        const onCategoryChanged = function() {
-            const categoryId = +this.value;
+        // event change category
+        parentId.addEventListener('change', function() {
+            const categoryId = this.value;
             if (!categoryId) return;
 
-            const categoryName = document.getElementById('categoryName')
+            console.log(categoryId)
+            const categoryName = document.getElementById('categoryName');
             categoryName.textContent = this.options[this.selectedIndex].text;
 
-            getProductsInfo(categoryId)
-        }
-
-        //remove
-        const onRemoveClicked = function(e) {
-            const clicked = e.target.classList.contains('remove');
-            if (clicked) {
-                const id = e.target.id;
-                const url = '/Product/DeleteProduct';
-                const param = { params: { id } };
-
-                axios.get(url, param).then(res => {
-                    if (res.data !== -1) {
-                        e.target.parentElement.parentElement.remove();
-                    } else {
-                        alert('this product already used!');
-                    }
-                }).catch(err => console.log(err));
-            }
-        }
-
-        // call function
-        getProductsInfo();
-
-        // event
-        parentId.addEventListener('change', onCategoryChanged);
-        tbody.addEventListener('click', onRemoveClicked);
+            dataTable.filter.push({ Field: "ProductCatalogId", Value: categoryId, Operand: "==" });
+            dataTable.getData();
+        });
     </script>
 }

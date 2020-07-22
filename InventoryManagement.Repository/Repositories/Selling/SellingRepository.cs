@@ -383,6 +383,17 @@ namespace InventoryManagement.Repository
             var response = new DbResponse();
             try
             {
+                var stocks = new List<ProductStock>();
+                if (model.AddedProductCodes.Any())
+                {
+                    var addedStocks = await db.ProductStocks.SellingStockFromCodesAsync(model.AddedProductCodes);
+                    addedStocks = addedStocks.Select(s =>
+                    {
+                        s.IsSold = true;
+                        return s;
+                    }).ToList();
+                    stocks.AddRange(addedStocks);
+                }
                 var selling = Context.Selling.Include(s => s.SellingList).FirstOrDefault(s => s.SellingId == model.SellingId);
                 if (selling == null)
                 {
@@ -393,19 +404,22 @@ namespace InventoryManagement.Repository
                 selling.SellingTotalPrice = model.SellingTotalPrice;
                 selling.SellingDiscountAmount = model.SellingDiscountAmount;
                 selling.SellingReturnAmount = model.SellingReturnAmount;
+                selling.SellingPaidAmount += model.PaidAmount; 
 
                 selling.SellingList = model.Products.Select(p => new SellingList
                 {
                     SellingListId = p.SellingListId,
-                    SellingId = p.ProductId,
+                    SellingId =  model.SellingId,
                     ProductId = p.ProductId,
                     SellingPrice = p.SellingPrice,
                     Description = p.Description,
                     Warranty = p.Warranty,
+                    ProductStock = stocks.Where(s=> s.ProductId == p.ProductId).ToList()
                 }).ToList();
 
 
-                var Stocks = new List<ProductStock>();
+                
+
                 if (model.RemovedProductCodes.Any())
                 {
                     var removedStocks = await db.ProductStocks.SellingStockFromCodesAsync(model.RemovedProductCodes);
@@ -417,25 +431,15 @@ namespace InventoryManagement.Repository
                         return s;
                     }).ToList();
 
-                    Stocks.AddRange(removedStocks);
-                }
-
-                if (model.AddedProductCodes.Any())
-                {
-                    var addedStocks = await db.ProductStocks.SellingStockFromCodesAsync(model.AddedProductCodes);
-                    addedStocks = addedStocks.Select(s =>
+                    if (removedStocks.Any())
                     {
-                        s.IsSold = true;
-                        s.SellingListId = model.SellingId;
-                        return s;
-                    }).ToList();
-                    Stocks.AddRange(addedStocks);
+                        Context.ProductStock.UpdateRange(removedStocks);
+                    }
                 }
 
-                if (Stocks.Any())
-                {
-                    Context.ProductStock.UpdateRange(Stocks);
-                }
+                
+
+               
 
                 Context.Selling.Update(selling);
 
@@ -476,8 +480,6 @@ namespace InventoryManagement.Repository
             response.IsSuccess = true;
             response.Message = "Success";
             return response;
-
-
         }
     }
 }

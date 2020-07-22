@@ -15,7 +15,7 @@ namespace InventoryManagement.Data
             entity.HasOne(d => d.Selling)
                 .WithMany(p => p.SellingList)
                 .HasForeignKey(d => d.SellingId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_SellingList_Selling");
 
         }

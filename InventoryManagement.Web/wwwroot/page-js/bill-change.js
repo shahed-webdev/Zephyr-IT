@@ -22,7 +22,6 @@ const tbody = document.getElementById('t-body');
 const totalPrice = formPayment.querySelector('#totalPrice');
 const inputDiscount = formPayment.inputDiscount;
 const inputReturnAmount = formPayment.inputReturnAmount;
-const grandTotal = formPayment.querySelector('#grandTotal');
 const totalPrevPaid = formPayment.querySelector('#totalPrevPaid');
 const totalDue = formPayment.querySelector('#totalDue');
 const inputPaid = formPayment.inputPaid;
@@ -184,20 +183,19 @@ const appendTotalPrice = function () {
         return item.SellingPrice * item.sellingQuantity;
     }).reduce((prev, cur) => prev + cur, 0);
 
-    totalPrice.innerText = totalAmount
-    grandTotal.innerText = totalAmount;
-    totalDue.innerText = totalAmount;
+    totalPrice.innerText = totalAmount;
 
-    if (inputDiscount.value) {
-        inputDiscount.value = '';
-        inputDiscount.previousElementSibling.classList.remove('active');
-    }
+    const discount = +inputDiscount.value;
+    const prevPaid = +totalPrevPaid.textContent;
+    const returnAmount = +inputReturnAmount.value;
 
-    if (inputReturnAmount.value) {
-        inputReturnAmount.value = '';
-        inputReturnAmount.previousElementSibling.classList.remove('active');
-    }
+    const sum = totalAmount - (discount + prevPaid + returnAmount);
 
+    totalDue.textContent = sum;
+
+    disablePaid(sum);
+
+    //for reset paid amount and method
     if (inputPaid.value) {
         inputPaid.value = '';
         inputPaid.previousElementSibling.classList.remove('active');
@@ -236,7 +234,7 @@ const onInputUnitPrice = function (evt) {
 }
 
 //selling price click
- formTable.addEventListener('input', onInputUnitPrice);
+formTable.addEventListener('input', onInputUnitPrice);
 
 
 // onProduct code submit
@@ -254,7 +252,7 @@ formCode.addEventListener('submit', evt => {
 })
 
 // remove product click
- tbody.addEventListener('click', onRemoveClicked);
+tbody.addEventListener('click', onRemoveClicked);
 
 
 //****PAYMENT SECTION****/
@@ -265,59 +263,61 @@ const validInput = function (total, inputted) {
     return (total < inputted) ? false : true;
 }
 
+
 //input discount amount
 const onInputDiscount = function () {
-    const total = +totalPrice.textContent;
-    const prevPaid = +totalPrevPaid.textContent;
+    const totalAmount = +totalPrice.textContent;
     const discount = +this.value;
-    const grandTotal = (total - discount) - prevPaid;
+    const prevPaid = +totalPrevPaid.textContent;
+    const returnAmount = +inputReturnAmount.value;
 
-    this.setAttribute('max', total);
+    const sum = (totalAmount + returnAmount) - (discount + prevPaid);
 
-    grandTotal.innerText = grandTotal.toFixed();
-    totalDue.innerText = grandTotal.toFixed();
+    totalDue.innerText = sum;
 
-    if (inputPaid.value) {
-        inputPaid.value = '';
-        inputPaid.previousElementSibling.classList.remove('active');
-    }
-
-    if (inputReturnAmount.value) {
-        inputReturnAmount.value = '';
-        inputReturnAmount.previousElementSibling.classList.remove('active');
-    }
+    disablePaid(sum);
 }
 
 //input return amount
 const onInputReturnAmount = function () {
-    const payable = +grandTotal.textContent;
-    const paid = +inputPaid.value;
+    const totalAmount = +totalPrice.textContent;
+    const discount = +inputDiscount.value;
+    const prevPaid = +totalPrevPaid.textContent;
     const returnAmount = +this.value;
-    const due = (payable - paid);
 
-    this.setAttribute('max', payable);
+    const sum = (totalAmount + returnAmount) - (discount + prevPaid);
 
-    totalDue.innerText = (due - returnAmount)
+    totalDue.innerText = sum;
+
+    disablePaid(sum);
 }
 
 //input paid amount
 const onInputPaid = function () {
-    const payable = +grandTotal.textContent;
     const paid = +this.value;
-    const due = (payable - paid);
-
     paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
-
-    this.setAttribute('max', due);
-
-    totalDue.innerText = due.toFixed();
-
-    if (inputReturnAmount.value) {
-        inputReturnAmount.value = '';
-        inputReturnAmount.previousElementSibling.classList.remove('active');
-    }
 }
 
+
+function disablePaid(dueAmount) {
+    if (dueAmount > 0) {
+        inputPaid.removeAttribute('disabled');
+        selectPaymentMethod.removeAttribute('disabled');
+        inputPaid.setAttribute('max', dueAmount);
+    } else {
+        inputPaid.setAttribute('disabled', 'disabled');
+        selectPaymentMethod.setAttribute('disabled', 'disabled');
+
+        const paid = +inputPaid.value;
+
+        if (paid) {
+            inputPaid.value = '';
+            inputPaid.previousElementSibling.classList.remove('active');
+        }
+
+        paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
+    }
+}
 
 //validation info
 const validation = function () {
@@ -325,6 +325,12 @@ const validation = function () {
 
     if (!cartProducts.length) {
         customerError.innerText = 'Product Not found!'
+        return false;
+    }
+
+    const due = +totalDue.textContent;
+    if (due < 0) {
+        customerError.innerText = "Due Amount must be more than or equal 0!"
         return false;
     }
 
@@ -385,8 +391,6 @@ const onSellSubmitClicked = function(evt) {
         Products: products
     }
 
-    console.log(body)
-    return;
 
     const url = '/Selling/BillChange'
     const options = {
@@ -396,9 +400,7 @@ const onSellSubmitClicked = function(evt) {
     }
 
     axios(options).then(response => {
-        if (response.data.IsSuccess) {
-            location.href = `/Selling/SellingReceipt/${response.data.Data}`
-        }
+        location.href = `/Selling/SellingReceipt/${response.data}`
     }).catch(error => {
         if (error.response)
             customerError.textContent = error.response.data.Message

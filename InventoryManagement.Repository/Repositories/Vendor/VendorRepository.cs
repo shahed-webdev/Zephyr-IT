@@ -127,7 +127,7 @@ namespace InventoryManagement.Repository
 
         public bool RemoveCustom(int id)
         {
-            //if (Context.Selling.Any(s => s.VendorID == id)) return false;
+            if (Context.Purchase.Any(s => s.VendorId == id)) return false;
             Remove(Find(id));
             return true;
         }

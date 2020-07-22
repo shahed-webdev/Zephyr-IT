@@ -28,7 +28,7 @@
 
     <div class="tab-content card pt-5">
         <div class="tab-pane fade show active" id="individual-tab" role="tabpanel" aria-labelledby="home-tab-just">
-            <table id="individual-table" class="table table-sm table-bordered data-table">
+            <table id="individual-table" class="table table-sm table-bordered data-table" style="width:100% !important">
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -38,11 +38,10 @@
                     <th>Edit</th>
                 </tr>
                 </thead>
-                <tbody id="t-body"></tbody>
             </table>
         </div>
         <div class="tab-pane fade" id="corporate-tab" role="tabpanel" aria-labelledby="profile-tab-just">
-            <table id="corporate-table" class="table table-sm table-bordered data-table">
+            <table id="corporate-table" class="table table-sm table-bordered data-table" style="width:100% !important">
                 <thead>
                 <tr>
                     <th>Corporate Name</th>
@@ -52,7 +51,6 @@
                     <th>Edit</th>
                 </tr>
                 </thead>
-                <tbody id="corporate-t-body"></tbody>
             </table>
         </div>
     </div>
@@ -61,63 +59,77 @@
 @section scripts{
     <script>
         $(function() {
-            appendTableIndividual();
-            appendTableCorporate();
+            individual.getData();
+            corporate.getData();
         });
 
 
-        //append table data(individual)
-        function appendTableIndividual() {
-            axios.get('/Customer/CustomerList', { params: { customerType: true } }).then(response => {
-                let html = '';
-                response.data.forEach(row => {
-                    html += `<tr>
-                    <td class="text-left"><a class="blue-text" href="/Customer/Details/${row.CustomerId}">${row.CustomerName}</a></td>
-                    <td>${row.PhonePrimary}</td>
-                    <td class="text-left">${row.CustomerAddress}</td>
-                    <td class="text-left">${row.Description ? row.Description : ''}</td>
-                    <td><a class="fas fa-edit" href="/Customer/Update/${row.CustomerId}"></a></td</tr>`
-                })
-
-                //selector
-                const tBody = document.getElementById('t-body');
-                tBody.innerHTML = html;
-
-                $("#individual-table").DataTable();
-            })
-        }
-
-        //append table data(Corporate)
-        function appendTableCorporate() {
-            axios.get('/Customer/CustomerList', { params: { customerType: false } }).then(response => {
-                let html = '';
-                response.data.forEach(row => {
-                    html += `<tr>
-                    <td class="text-left"><a class="blue-text" href="/Customer/Details/${row.CustomerId}">${row.OrganizationName}</a></td>
-                    <td class="text-left">${row.CustomerName}</td>
-                    <td>${row.PhonePrimary}</td>
-                    <td class="text-left">${row.CustomerAddress}</td>
-                    <td><a class="fas fa-edit" href="/Customer/Update/${row.CustomerId}"></a></td</tr>`
+        //get individual data
+        const individual = {
+            table: null,
+            init: function() {
+                individual.table = $("#individual-table").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "/Customer/CustomerList",
+                        type: "POST",
+                        data: function(d) {
+                            d.filters = [{ Field: "IsIndividual", Value: "True", Operand: "==" }]
+                        }
+                    },
+                    columns:
+                    [
+                        { data: "CustomerId", "render": function(data, type, row, meta) { return `<a class="blue-text" href="/Customer/Details/${data}">${row.CustomerName}</a>`; } },
+                        { data: "PhonePrimary" },
+                        { data: "CustomerAddress" },
+                        { data: "Description" },
+                        { data: "CustomerId", "render": function(data) { return `<a class="fas fa-edit" href="/Customer/Update/${data}"></a>`; } }
+                    ],
+                    columnDefs: [
+                        { 'searchable': false, 'targets': [4] },
+                        { 'sortable': false, 'targets': [4] },
+                        { 'className': "text-left", "targets": [0, 2, 3] }
+                    ]
                 });
-
-                //selector
-                const tBody = document.getElementById('corporate-t-body');
-                tBody.innerHTML = html;
-
-                $("#corporate-table").DataTable();
-            })
+            },
+            getData: function() {
+                individual.table ? individual.table.ajax.reload() : individual.init();
+            }
         }
 
-
-        //$('#example').DataTable({
-        //    "processing": true,
-        //    "serverSide": true,
-        //    "ajax": {
-        //        "url": "scripts/server_processing.php",
-        //        "data": function(d) {
-        //             d.custom = $('#myInput').val();
-        //        }
-        //    }
-        //});
+        //get corporate data
+        const corporate = {
+            table: null,
+            init: function () {
+                corporate.table = $("#corporate-table").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "/Customer/CustomerList",
+                        type: "POST",
+                        data: function (d) {
+                            d.filters = [{ Field: "IsIndividual", Value: "False", Operand: "==" }]
+                        }
+                    },
+                    columns:
+                        [
+                            { data: "CustomerId", "render": function (data, type, row, meta) { return `<a class="blue-text" href="/Customer/Details/${data}">${row.OrganizationName}</a>`; } },
+                            { data: "CustomerName" },
+                            { data: "PhonePrimary" },
+                            { data: "CustomerAddress" },
+                            { data: "CustomerId", "render": function (data) { return `<a class="fas fa-edit" href="/Customer/Update/${data}"></a>`; } }
+                        ],
+                    columnDefs: [
+                        { 'searchable': false, 'targets': [4] },
+                        { 'sortable': false, 'targets': [4] },
+                        { 'className': "text-left", "targets": [0, 1, 3] }
+                    ]
+                });
+            },
+            getData: function () {
+                corporate.table ? corporate.table.ajax.reload() : corporate.init();
+            }
+        }
     </script>
 }

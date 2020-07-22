@@ -145,6 +145,8 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> BillChange([FromBody] SellingUpdatePostModel model)
         {
+            var regid = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+            model.UpdateRegistrationId = regid;
             var dbResponse = await _db.Selling.BillUpdated(model, _db);
 
             if (dbResponse.IsSuccess)
