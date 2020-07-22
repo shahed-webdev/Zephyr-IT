@@ -70,13 +70,12 @@
                                     <th>QTY</th>
                                     <th>U.PRICE</th>
                                     <th>PRICE</th>
-                                    <th style="width: 80px">REMOVE</th>
                                 </tr>
                             </thead>
                             <tbody id="t-body">
                                 @foreach (var item in Model.Products)
                                 {
-                                    <tr data-id="@item.ProductCatalogId">
+                                    <tr data-id="@item.ProductCatalogId" data-name="@item.ProductName">
                                         <td>@item.ProductCatalogName</td>
                                         <td>
                                             @item.ProductName,
@@ -96,7 +95,6 @@
                                         <td>@item.ProductCodes.Length</td>
                                         <td><input type="number" required class="form-control inputUnitPrice" step="0.01" min="@item.SellingPrice" max="@item.SellingPrice" value="@item.SellingPrice" /></td>
                                         <td>@(item.SellingPrice * item.ProductCodes.Length)</td>
-                                        <td class="text-center"><i class="fal fa-times remove"></i></td>
                                     </tr>
                                 }
                             </tbody>
@@ -125,7 +123,15 @@
                         </li>
                         <li class="d-flex justify-content-between align-items-center">
                             <strong>Grand Total</strong>
-                            <strong>৳<span id="totalPayable">@(Model.SellingTotalPrice - Model.SellingDiscountAmount - Model.SellingPaidAmount)</span></strong>
+                            <strong>৳<span id="grandTotal">@(Model.SellingTotalPrice - Model.SellingDiscountAmount - Model.SellingPaidAmount)</span></strong>
+                        </li>
+                        <li class="md-form mt-4">
+                            <label for="inputReturnAmount">Return Amount</label>
+                            <input id="inputReturnAmount" value="@Model.SellingReturnAmount" type="number" min="0" class="form-control">
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center text-danger">
+                            <strong>Total Due</strong>
+                            <strong>৳<span id="totalDue">@Model.SellingDueAmount</span></strong>
                         </li>
                         <li class="md-form mb-4">
                             <label for="inputPaid">Paid Amount</label>
@@ -140,14 +146,6 @@
                                 <option>bkash</option>
                             </select>
                         </li>
-                        <li class="d-flex justify-content-between align-items-center text-danger">
-                            <strong>Total Due</strong>
-                            <strong>৳<span id="totalDue">@Model.SellingDueAmount</span></strong>
-                        </li>
-                        <li class="md-form mt-4">
-                            <label for="inputReturnAmount">Return Amount</label>
-                            <input id="inputReturnAmount" type="number" min="0" class="form-control">
-                        </li>
                     </ul>
                     <div class="text-center">
                         <i id="customer-error" class="mt-2 text-center red-text"></i>
@@ -161,7 +159,7 @@
 </div>
 
 @section Scripts{
-    <script src="~/page-js/bill-change.js?v=1.2"></script>
+    <script src="~/page-js/bill-change.js?v=.3"></script>
     <script>
         //save previous data
         cartProducts = @Html.Raw(Json.Serialize(Model.Products));

@@ -41,6 +41,7 @@ namespace InventoryManagement.Repository
                 {
                     ProductId = s.ProductId,
                     ProductCatalogId = s.Product.ProductCatalogId,
+                    ProductCatalogName = s.Product.ProductCatalog.CatalogName,
                     ProductCode = s.ProductCode,
                     ProductName = s.Product.ProductName,
                     Description = s.Product.Description,

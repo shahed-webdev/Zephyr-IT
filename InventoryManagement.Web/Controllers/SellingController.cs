@@ -57,8 +57,6 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> FindProductByCode(string code)
         {
             var data = await _db.ProductStocks.FindforSellAsync(code).ConfigureAwait(false);
-            if (data != null) data.ProductCatalogName = _db.ProductCatalogs.CatalogNameNode(data.ProductCatalogId);
-
             return Json(data);
         }
 

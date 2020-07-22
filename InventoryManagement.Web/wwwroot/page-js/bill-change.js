@@ -3,34 +3,34 @@
  $('.mdb-select').materialSelect();
 
 // global storage
-let cartProducts = []
+ let cartProducts = [];
 
 
 //*****SELECTORS*****/
 // product code form
-const formCode = document.getElementById('formCode')
-const inputBarCode = formCode.inputBarCode
-const codeExistError = formCode.querySelector('#codeExistError')
-const btnFind = formCode.btnFind
+ const formCode = document.getElementById('formCode');
+const inputBarCode = formCode.inputBarCode;
+const codeExistError = formCode.querySelector('#codeExistError');
+const btnFind = formCode.btnFind;
 
 // product table
-const formTable = document.getElementById('formTable')
-const tbody = document.getElementById('t-body')
+ const formTable = document.getElementById('formTable');
+const tbody = document.getElementById('t-body');
 
 //payment selectors
-const formPayment = document.getElementById('formPayment')
-const totalPrice = formPayment.querySelector('#totalPrice')
-const inputDiscount = formPayment.inputDiscount
-const inputReturnAmount = formPayment.inputReturnAmount
-const totalPayable = formPayment.querySelector('#totalPayable')
-const totalPrevPaid = formPayment.querySelector('#totalPrevPaid')
-const totalDue = formPayment.querySelector('#totalDue')
-const inputPaid = formPayment.inputPaid
-const selectPaymentMethod = formPayment.selectPaymentMethod
+ const formPayment = document.getElementById('formPayment');
+const totalPrice = formPayment.querySelector('#totalPrice');
+const inputDiscount = formPayment.inputDiscount;
+const inputReturnAmount = formPayment.inputReturnAmount;
+const grandTotal = formPayment.querySelector('#grandTotal');
+const totalPrevPaid = formPayment.querySelector('#totalPrevPaid');
+const totalDue = formPayment.querySelector('#totalDue');
+const inputPaid = formPayment.inputPaid;
+const selectPaymentMethod = formPayment.selectPaymentMethod;
 
 //customer
  const hiddenSellingId = formPayment.hiddenSellingId;
-const customerError = formPayment.querySelector('#customer-error')
+ const customerError = formPayment.querySelector('#customer-error');
 
 //formReceiptDelete
 formReceiptDelete = document.getElementById('formReceiptDelete');
@@ -57,7 +57,7 @@ const storage = {
             cartProducts.push(product);
         }
         else {
-            const index = cartProducts.findIndex(item => item.ProductCatalogId === product.ProductCatalogId)
+            const index = cartProducts.findIndex(item => item.ProductCatalogId === product.ProductCatalogId && item.ProductName === product.ProductName);
             const codes = cartProducts[index].codes
 
             //check code added or not
@@ -96,7 +96,7 @@ const appendCode = function(codes) {
 }
 
 //dropdown selected index 0
-const clearMDBdropDownList = function (mainSelector) {
+const clearMDBdropDownList = function(mainSelector) {
     const content = mainSelector.querySelectorAll('.select-dropdown li');
     content.forEach(li => {
         content[0].classList.add('active', 'selected');
@@ -111,11 +111,11 @@ const clearMDBdropDownList = function (mainSelector) {
 
 // create table rows
 const createTableRow = function (item) {
-    const description = item.Description && `${item.Description},`
+    const description = item.Description? `${item.Description},`:''
     const note = item.Note ? `<span style="font-size: 12px;" class="badge badge-pill badge-secondary">${item.Note}</span>` : "";
     const disable = item.sellingQuantity ? "" : "disable-row";
 
-    return `<tr data-id="${item.ProductCatalogId}" class="${disable}">
+    return `<tr data-id="${item.ProductCatalogId}" data-name="${item.ProductName}" class="${disable}">
                 <td>${item.ProductCatalogName}</td>
                 <td>
                     ${item.ProductName},
@@ -127,7 +127,6 @@ const createTableRow = function (item) {
                 <td>${item.sellingQuantity}</td>
                 <td><input type="number" required class="form-control inputUnitPrice" step="0.01" min="${item.sellingFixedValue}" max="${item.SellingPrice}" value="${item.SellingPrice}" /></td>
                 <td>${item.SellingPrice * item.sellingQuantity}</td>
-                <td class="text-center"><i class="fal fa-times remove"></i></td>
             </tr>`
 }
 
@@ -144,47 +143,31 @@ const showProducts = function () {
     appendTotalPrice();
 }
 
-//remove product code
- const removeProductCode = function(code) {
-     const id = +code.parentElement.parentElement.parentElement.getAttribute('data-id');
-     const pCode = code.textContent;
-
-     const index = cartProducts.findIndex(item => item.ProductCatalogId === id);
-     const codes = cartProducts[index].codes;
-
-     codes.forEach((obj, i) => {
-         if (obj.code === pCode) {
-             codes[i].isRemove = !codes[i].isRemove;
-             return;
-         }
-     });
-
-     cartProducts[index].sellingQuantity = codes.filter(itm => !itm.isRemove).length;
-     showProducts();
- }
-
 // click remove or stock
-const onRemoveClicked = function (evt) {
+const onRemoveClicked = function(evt) {
     const element = evt.target;
-    const row = element.parentElement.parentElement;
+    const row = element.parentElement.parentElement.parentElement;
     const id = +row.getAttribute('data-id');
+    const name = row.getAttribute('data-name');
 
     //remove code
     const codeClicked = element.classList.contains('code');
-    if (codeClicked) removeProductCode(element);
 
-    //remove product
-    const removeClicked = element.classList.contains('remove');
-    if (!removeClicked) return;
+    if (!codeClicked) return;
 
-    //remove product from storage
-    cartProducts = cartProducts.filter(item => item.ProductCatalogId !== id);
+    const pCode = element.textContent;
+    const index = cartProducts.findIndex(item => item.ProductCatalogId === id && item.ProductName === name);
+    const codes = cartProducts[index].codes;
 
-    //delete row
-    row.remove();
+    codes.forEach((obj, i) => {
+        if (obj.code === pCode) {
+            codes[i].isRemove = !codes[i].isRemove;
+            return;
+        }
+    });
 
-    //append price
-    appendTotalPrice();
+    cartProducts[index].sellingQuantity = codes.filter(itm => !itm.isRemove).length;
+    showProducts();
 }
 
 //show loading
@@ -202,7 +185,7 @@ const appendTotalPrice = function () {
     }).reduce((prev, cur) => prev + cur, 0);
 
     totalPrice.innerText = totalAmount
-    totalPayable.innerText = totalAmount;
+    grandTotal.innerText = totalAmount;
     totalDue.innerText = totalAmount;
 
     if (inputDiscount.value) {
@@ -239,7 +222,9 @@ const onInputUnitPrice = function (evt) {
         if (min > val) return;
 
         const id = +input.parentElement.parentElement.getAttribute('data-id');
-        const index = cartProducts.findIndex(item => item.ProductCatalogId === id);
+        const name = input.parentElement.parentElement.getAttribute('data-name');
+
+        const index = cartProducts.findIndex(item => item.ProductCatalogId === id && item.ProductName === name);
         cartProducts[index].SellingPrice = +input.value
 
         const qty = +input.parentElement.previousElementSibling.innerText;
@@ -251,7 +236,7 @@ const onInputUnitPrice = function (evt) {
 }
 
 //selling price click
-formTable.addEventListener('input', onInputUnitPrice)
+ formTable.addEventListener('input', onInputUnitPrice);
 
 
 // onProduct code submit
@@ -269,7 +254,7 @@ formCode.addEventListener('submit', evt => {
 })
 
 // remove product click
-tbody.addEventListener('click', onRemoveClicked)
+ tbody.addEventListener('click', onRemoveClicked);
 
 
 //****PAYMENT SECTION****/
@@ -289,7 +274,7 @@ const onInputDiscount = function () {
 
     this.setAttribute('max', total);
 
-    totalPayable.innerText = grandTotal.toFixed();
+    grandTotal.innerText = grandTotal.toFixed();
     totalDue.innerText = grandTotal.toFixed();
 
     if (inputPaid.value) {
@@ -303,15 +288,27 @@ const onInputDiscount = function () {
     }
 }
 
+//input return amount
+const onInputReturnAmount = function () {
+    const payable = +grandTotal.textContent;
+    const paid = +inputPaid.value;
+    const returnAmount = +this.value;
+    const due = (payable - paid);
+
+    this.setAttribute('max', payable);
+
+    totalDue.innerText = (due - returnAmount)
+}
+
 //input paid amount
 const onInputPaid = function () {
-    const payable = +totalPayable.textContent;
+    const payable = +grandTotal.textContent;
     const paid = +this.value;
     const due = (payable - paid);
 
     paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
 
-    this.setAttribute('max', payable);
+    this.setAttribute('max', due);
 
     totalDue.innerText = due.toFixed();
 
@@ -321,17 +318,6 @@ const onInputPaid = function () {
     }
 }
 
-//input return amount
-const onInputReturnAmount = function () {
-    const payable = +totalPayable.textContent;
-    const paid = +inputPaid.value;
-    const returnAmount = +this.value;
-    const due = (payable - paid);
-
-    this.setAttribute('max', due);
-
-    totalDue.innerText = (due - returnAmount)
-}
 
 //validation info
 const validation = function () {

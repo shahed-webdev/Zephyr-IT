@@ -132,11 +132,7 @@
 
                     <div class="md-form">
                         <label for="inputDiscount">Discount</label>
-                        <input type="number" id="inputDiscount" min="0" max="@Model.SellingDueAmount" class="form-control">
-                    </div>
-
-                    <div id="payable-container" class="my-2 text-danger" style="display: none">
-                        Payable: <span id="remainDue">@Model.SellingDueAmount</span>/-
+                        <input type="number" id="inputDiscount" value="@Model.SellingDiscountAmount" min="0" max="@(Model.SellingDiscountAmount + Model.SellingDueAmount)" class="form-control">
                     </div>
 
                     <div class="md-form">
@@ -173,11 +169,19 @@
 
         //input discount amount
         const onInputDiscount = function() {
-            const dues = +totalDues.textContent;
+            const dues = @Model.SellingDueAmount;
             const discount = +this.value;
 
-            remainDue.innerText = dues - discount;
-            payableContainer.style.display = discount ? "block" : "none";
+            totalDues.innerText = dues - discount;
+
+            if ((dues - discount) > 0)
+                inputPaid.removeAttribute('disabled');
+            else
+                inputPaid.setAttribute('disabled', 'disabled');
+
+
+            const paid = +inputPaid.value;
+            paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
 
             if (inputPaid.value) {
                 inputPaid.value = '';
@@ -187,7 +191,7 @@
 
         //input paid amount
         const onInputPaid = function() {
-            const payable = +remainDue.textContent;
+            const payable = +totalDues.textContent;
             const paid = +this.value;
 
             paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');

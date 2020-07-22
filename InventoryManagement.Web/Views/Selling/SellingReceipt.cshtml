@@ -100,7 +100,7 @@
         @if (Model.Payments.Count > 0)
         {
             <div class="col">
-                <fieldset class="p-2">
+                <fieldset>
                     <legend>Paid Record</legend>
 
                     @foreach (var item in Model.Payments)
@@ -116,12 +116,12 @@
             </div>
         }
         <div class="col">
-            <fieldset class="p-2">
+            <fieldset>
                 <legend>Note</legend>
-                <small class="black-text">
+                <p>
                     No warranty will be applicable in case of burning or physical damage. Warranty will
                     also be void if warranty sticker is removed. Sold products are non-refundable.
-                </small>
+                </p>
             </fieldset>
         </div>
     </div>
