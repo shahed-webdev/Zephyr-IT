@@ -49,8 +49,7 @@ namespace InventoryManagement.Repository
     public class CustomerReceiptViewModel
     {
         public int CustomerId { get; set; }
-        public string OrganizationName { get; set; }
-        public string CustomerName { get; set; }
+        public string Name { get; set; }
         public string CustomerAddress { get; set; }
         public string CustomerPhone { get; set; }
     }

@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Repository;
+using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -60,9 +61,9 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //get product from ajax by categoryId
-        public async Task<IActionResult> GetProductByCategory(int categoryId = 0)
+        public IActionResult GetProductByCategory(DataRequest request)
         {
-            var productList = await _db.Products.FindByCategoryAsync(categoryId);
+            var productList = _db.Products.FindDataTable(request);
             return Json(productList);
         }
 

@@ -43,26 +43,28 @@ namespace InventoryManagement.Repository
                     response.Message = "Paid amount is greater than due";
                 }
 
-                var sellingPayment = new SellingPayment
+                if (model.PaidAmount > 0)
                 {
-                    RegistrationId = model.RegistrationId,
-                    CustomerId = model.CustomerId,
-                    ReceiptSn = Sn,
-                    PaidAmount = model.PaidAmount,
-                    PaymentMethod = model.PaymentMethod,
-                    PaidDate = model.PaidDate,
-
-                    SellingPaymentList = new List<SellingPaymentList>
+                    var sellingPayment = new SellingPayment
                     {
-                        new SellingPaymentList
-                        {
-                            SellingId = model.SellingId,
-                            SellingPaidAmount = model.PaidAmount
-                        }
-                    }
-                };
+                        RegistrationId = model.RegistrationId,
+                        CustomerId = model.CustomerId,
+                        ReceiptSn = Sn,
+                        PaidAmount = model.PaidAmount,
+                        PaymentMethod = model.PaymentMethod,
+                        PaidDate = model.PaidDate,
 
-                await Context.SellingPayment.AddAsync(sellingPayment).ConfigureAwait(false);
+                        SellingPaymentList = new List<SellingPaymentList>
+                        {
+                            new SellingPaymentList
+                            {
+                                SellingId = model.SellingId,
+                                SellingPaidAmount = model.PaidAmount
+                            }
+                        }
+                    };
+                    await Context.SellingPayment.AddAsync(sellingPayment).ConfigureAwait(false);
+                }
 
                 selling.SellingDiscountAmount = model.SellingDiscountAmount;
                 selling.SellingPaidAmount += model.PaidAmount;
