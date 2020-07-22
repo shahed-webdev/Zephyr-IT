@@ -125,9 +125,10 @@ namespace InventoryManagement.Web.Controllers
                 BadRequest(dbResponse.Message);
             }
         }
-        
+
 
         //Post: Change Bill
+        [Authorize(Roles = "admin, bill-change")]
         public IActionResult BillList()
         {
             return View();
@@ -142,6 +143,7 @@ namespace InventoryManagement.Web.Controllers
             return View(data);
         }
 
+        [Authorize(Roles = "admin, bill-change")]
         [HttpPost]
         public async Task<IActionResult> BillChange([FromBody] SellingUpdatePostModel model)
         {
@@ -154,6 +156,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //delete Bill
+        [Authorize(Roles = "admin, bill-change")]
         public async Task<IActionResult> DeleteBill(int id)
         {
             var dbResponse = await _db.Selling.DeleteBillAsync(id, _db).ConfigureAwait(false);

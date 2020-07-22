@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Views
 {
+    [Authorize]
     public class PurchaseController : Controller
     {
         private readonly IUnitOfWork _db;
@@ -77,12 +78,14 @@ namespace InventoryManagement.Web.Views
             return View();
         }
 
-        //request from datatable(ajax)
+        //request from data-table(ajax)
         public IActionResult PurchaseRecordsData(DataRequest request)
         {
             var data = _db.Purchases.Records(request);
             return Json(data);
         }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

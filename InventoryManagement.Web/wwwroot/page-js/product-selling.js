@@ -34,40 +34,40 @@ const customerError = formPayment.querySelector('#customer-error')
 // get set storage object
 const storage = {
     saveData: function (product) {
-        codeExistError.textContent = ''
+        codeExistError.textContent = '';
         if (!product) {
-            codeExistError.textContent = `"${inputBarCode.value}" Not found!`
-            return
+            codeExistError.textContent = `"${inputBarCode.value}" Not found!`;
+            return;
         }
        
         const found = cartProducts.some(el => el.ProductCatalogId === product.ProductCatalogId && el.ProductName === product.ProductName);
         if (!found) {
             //save to global object
-            product.codes = [product.ProductCode]
-            product.sellingFixedValue = product.SellingPrice
-            cartProducts.push(product)
+            product.codes = [product.ProductCode];
+            product.sellingFixedValue = product.SellingPrice;
+            cartProducts.push(product);
         }
         else {
-            const index = cartProducts.findIndex(item => item.ProductCatalogId === product.ProductCatalogId)
-            const codes = cartProducts[index].codes
+            const index = cartProducts.findIndex(item => item.ProductCatalogId === product.ProductCatalogId && item.ProductName === product.ProductName);
+            const codes = cartProducts[index].codes;
 
             if (codes.indexOf(product.ProductCode) === -1) {
-                codes.push(product.ProductCode)
+                codes.push(product.ProductCode);
             }
             else {
-                codeExistError.textContent = `"${inputBarCode.value}" code already added!`
+                codeExistError.textContent = `"${inputBarCode.value}" code already added!`;
             }
         }
 
         //clear input
-        inputBarCode.value = ''
+        inputBarCode.value = '';
 
         //save to local-storage
-        this.setData()
+        this.setData();
 
         //show table data
-        tbody.innerHTML =''
-        showProducts()
+        tbody.innerHTML = '';
+        showProducts();
     },
     setData: function () {
         localStorage.setItem('selling-cart', JSON.stringify(cartProducts))
@@ -94,7 +94,7 @@ const appendCode = function (codes) {
 
 // create table rows
 const createTableRow = function (item) {
-    const description = item.Description && `${item.Description},`
+    const description = item.Description ? `${item.Description},` :'';
     const note = item.Note ? `<span style="font-size: 12px;" class="badge badge-pill badge-secondary">${item.Note}</span>` : "";
 
     return `<tr data-id="${item.ProductCatalogId}">
