@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Data;
+using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +55,23 @@ namespace InventoryManagement.Repository
             {
                 return products.Take(20).ToListAsync();
             }
+        }
+
+        public DataResult<ProductShowViewModel> FindDataTable(DataRequest request)
+        {
+            var products = Context.Product.Include(p => p.ProductStock).Select(p =>
+                new ProductShowViewModel
+                {
+                    ProductId = p.ProductId,
+                    ProductCatalogId = p.ProductCatalogId,
+                    ProductName = p.ProductName,
+                    Description = p.Description,
+                    Warranty = p.Warranty,
+                    Note = p.Note,
+                    SellingPrice = p.SellingPrice,
+                    Stock = p.ProductStock.Count(s => !s.IsSold)
+                });
+            return products.ToDataResult(request);
         }
 
         public bool RemoveCustom(int id)

@@ -144,8 +144,7 @@ namespace InventoryManagement.Repository
                   CustomerInfo = new CustomerReceiptViewModel
                   {
                       CustomerId = s.Customer.CustomerId,
-                      OrganizationName = s.Customer.OrganizationName,
-                      CustomerName = s.Customer.CustomerName,
+                      Name = s.Customer.IsIndividual ? s.Customer.CustomerName : s.Customer.OrganizationName,
                       CustomerAddress = s.Customer.CustomerAddress,
                       CustomerPhone = s.Customer.CustomerPhone.FirstOrDefault().Phone
                   },
@@ -369,8 +368,7 @@ namespace InventoryManagement.Repository
                   CustomerInfo = new CustomerReceiptViewModel
                   {
                       CustomerId = s.Customer.CustomerId,
-                      OrganizationName = s.Customer.OrganizationName,
-                      CustomerName = s.Customer.CustomerName,
+                      Name = s.Customer.IsIndividual ? s.Customer.CustomerName : s.Customer.OrganizationName,
                       CustomerAddress = s.Customer.CustomerAddress,
                       CustomerPhone = s.Customer.CustomerPhone.FirstOrDefault().Phone
                   },
