@@ -38,8 +38,6 @@ namespace InventoryManagement.Web.Views
 
             if (response.IsSuccess)
             {
-                _db.Vendors.UpdatePaidDue(model.VendorId);
-                await _db.SaveChangesAsync();
                 return Ok(response);
             }
             else
@@ -83,6 +81,29 @@ namespace InventoryManagement.Web.Views
         {
             var data = _db.Purchases.Records(request);
             return Json(data);
+        }
+
+        //GET: Due Collection
+        public async Task<IActionResult> DueCollection(int? id)
+        {
+            if (id == null) return RedirectToAction("List", "Vendor");
+
+            var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
+            if (model == null) return RedirectToAction("List", "Vendor");
+
+            return View(model);
+        }
+
+        //customer due collection(ajax)
+        [HttpPost]
+        public async Task<IActionResult> DueCollection([FromBody] PurchaseDuePaySingleModel model)
+        {
+            model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+            var dbResponse = await _db.PurchasePayments.DuePaySingleAsync(model, _db).ConfigureAwait(false);
+
+            if (dbResponse.IsSuccess) return Ok();
+
+            return BadRequest(dbResponse.Message);
         }
 
 

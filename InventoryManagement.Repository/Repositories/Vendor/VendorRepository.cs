@@ -123,6 +123,7 @@ namespace InventoryManagement.Repository
             vendor.Paid = obj.Paid;
 
             Update(vendor);
+            Context.SaveChanges();
         }
 
         public bool RemoveCustom(int id)
