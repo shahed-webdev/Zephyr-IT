@@ -75,7 +75,7 @@
 
         const dataTable = {
             table: null,
-            filter:[],
+            filter: null,
             init: function() {
                 dataTable.table = $("#data-table").DataTable({
                     processing: true,
@@ -141,11 +141,10 @@
             const categoryId = this.value;
             if (!categoryId) return;
 
-            console.log(categoryId)
             const categoryName = document.getElementById('categoryName');
             categoryName.textContent = this.options[this.selectedIndex].text;
 
-            dataTable.filter.push({ Field: "ProductCatalogId", Value: categoryId, Operand: "==" });
+            dataTable.filter = [{ Field: "ProductCatalogId", Value: categoryId, Operand: "==" }];
             dataTable.getData();
         });
     </script>

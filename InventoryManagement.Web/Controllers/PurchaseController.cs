@@ -86,6 +86,17 @@ namespace InventoryManagement.Web.Views
         }
 
 
+        public async Task<IActionResult> PayDue(int? id)
+        {
+            if (id == null) return RedirectToAction("PurchaseRecords");
+
+            var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
+
+            if (model == null) return RedirectToAction("PurchaseRecords");
+            return View(model);
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

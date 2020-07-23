@@ -284,6 +284,7 @@ namespace InventoryManagement.Repository
                     .Include(s => s.SellingList)
                     .Include(s => s.SellingPaymentList)
                     .FirstOrDefault(s => s.SellingId == id);
+               
                 if (selling == null)
                 {
                     response.IsSuccess = false;
@@ -394,6 +395,7 @@ namespace InventoryManagement.Repository
                     }).ToList();
                     stocks.AddRange(addedStocks);
                 }
+
                 var selling = Context.Selling.Include(s => s.SellingList).FirstOrDefault(s => s.SellingId == model.SellingId);
                 if (selling == null)
                 {
@@ -401,6 +403,7 @@ namespace InventoryManagement.Repository
                     response.Message = "Not found";
                     return response;
                 }
+
                 selling.SellingTotalPrice = model.SellingTotalPrice;
                 selling.SellingDiscountAmount = model.SellingDiscountAmount;
                 selling.SellingReturnAmount = model.SellingReturnAmount;
@@ -417,8 +420,6 @@ namespace InventoryManagement.Repository
                     ProductStock = stocks.Where(s=> s.ProductId == p.ProductId).ToList()
                 }).ToList();
 
-
-                
 
                 if (model.RemovedProductCodes.Any())
                 {
@@ -437,9 +438,6 @@ namespace InventoryManagement.Repository
                     }
                 }
 
-                
-
-               
 
                 Context.Selling.Update(selling);
 
@@ -463,6 +461,7 @@ namespace InventoryManagement.Repository
                             }
                         }
                     };
+
                     Context.SellingPayment.Add(payment);
                 }
 

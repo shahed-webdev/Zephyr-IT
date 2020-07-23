@@ -1,6 +1,6 @@
 ﻿
  // material select initialization
-$('.mdb-select').materialSelect()
+ $('.mdb-select').materialSelect();
 
 // global storage
 let cartProducts = []
