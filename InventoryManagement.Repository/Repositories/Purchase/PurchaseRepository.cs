@@ -250,5 +250,37 @@ namespace InventoryManagement.Repository
 
             return months;
         }
+
+        public async Task<DbResponse> UpdateMemoNumber(int purchaseId, string newMemoNumber)
+        {
+            var response = new DbResponse();
+
+            try
+            {
+                var purchase = await Context.Purchase.FindAsync(purchaseId).ConfigureAwait(false);
+                var isExist = await Context.Purchase.AnyAsync(p => p.MemoNumber == newMemoNumber && p.PurchaseId != purchaseId).ConfigureAwait(false);
+
+                if (isExist)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Memo Number already exist";
+                    return response;
+                }
+
+                purchase.MemoNumber = newMemoNumber;
+
+                Context.Purchase.Update(purchase);
+                await Context.SaveChangesAsync().ConfigureAwait(false);
+                response.IsSuccess = true;
+                response.Message = "Success";
+            }
+            catch (DbUpdateException e)
+            {
+                response.Message = e.Message;
+                response.IsSuccess = false;
+            }
+
+            return response;
+        }
     }
 }

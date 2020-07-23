@@ -16,5 +16,6 @@ namespace InventoryManagement.Repository
         double TotalDue();
         double DailyPurchaseAmount(DateTime? date);
         ICollection<MonthlyAmount> MonthlyAmounts(int year);
+        Task<DbResponse> UpdateMemoNumber(int purchaseId, string newMemoNumber);
     }
 }
