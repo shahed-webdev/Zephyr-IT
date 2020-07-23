@@ -8,149 +8,126 @@
 
 @section Styles{
     <style>
-        .section-devider { height: 3px; background-color: black; width: 100% }
-        #institution-info h3 { font-weight: 700; color: #f75a23; }
-        #institution-info p { font-weight: 400; margin: 0 }
-
         .receipt-date { font-size: 15px; font-weight: bold }
         .receipt-date h5 { border: 2px solid #333; font-size: 20px; padding: 9px; border-radius: 15px; font-weight: 700; margin: 0; }
 
         #vendor-area { margin-bottom: 15px }
         #vendor-area h5 { font-size: 15px }
 
-        #main-page table { border: 1px solid #000; width: 100%; text-align:center }
-        #main-page table thead th { vertical-align: bottom; border-bottom: 2px solid #8B8B8B; text-align: center; background-color: #f0f0f0; }
-        #main-page table td, th { padding: 0.5rem; font-weight: 400; border: 1px solid #000; }
         #main-page table h5 { font-weight: 400; font-size: 16px }
         #amount-word { font-style: italic; font-size: 14px }
 
-        #main-page table ul li { list-style: none; text-align: left; }
-
-        #main-page table tbody tr .codeSpan span { margin-right: 5px; }
-        #main-page table tbody tr .codeSpan span:not(:last-child):after { content: ',' }
+        #product-table tbody tr .codeSpan span { margin-right: 5px; }
+        #product-table tbody tr .codeSpan span:not(:last-child):after { content: ',' }
     </style>
 }
 
 <div class="container">
-    <section class="my-4 d-print-none">
-        <div class="d-flex justify-content-between">
-            <a class="btn btn-success btn-rounded" href="/Purchase/DueCollection/@Model.PurchaseId"><i class="fas fa-money-bill-alt mr-1"></i>Pay Due</a>
-            <div>
-                <a class="btn btn-elegant btn-rounded" href="/Purchase/Purchase"><i class="fas fa-shopping-cart mr-1"></i>Purchase</a>
-                <button class="btn btn-amber btn-rounded" onclick="print()"><i class="fas fa-print mr-1"></i>Print</button>
-            </div>
-        </div>
-    </section>
+    <h4 class="page-header mb-3">Pay Vendor Due</h4>
 
-    <section id="main-page">
-        <div id="institution-info" class="mb-4 text-center">
-            <h3 class="mb-2">@Model.InstitutionInfo.InstitutionName</h3>
-            <p><i class="fas fa-map-marker-alt mr-1"></i>@Model.InstitutionInfo.Address</p>
-            <p><i class="fas fa-globe mr-1"></i>@Model.InstitutionInfo.Website, <i class="fas fa-at mr-1"></i>@Model.InstitutionInfo.Email</p>
-            <p><i class="fas fa-phone mr-1"></i>@Model.InstitutionInfo.Phone</p>
-        </div>
+    <div class="card card-body">
+        <section id="main-page">
+            <div class="row mb-4 receipt-date">
+                <div class="col pt-3">
+                    Memo Number# @Model.MemoNumber
+                </div>
+                <div class="col text-center">
+                    <h5>INVOICE - @Model.PurchaseSn</h5>
+                </div>
+                <div class="col text-right col pt-3">
+                    Purchase Date: @Model.PurchaseDate.ToString("d MMM yyyy")
+                </div>
+            </div>
 
-        <div class="row mb-4 receipt-date">
-            <div class="col pt-3">
-                Memo Number# @Model.MemoNumber
+            <div id="vendor-area" class="row">
+                <div class="col">
+                    <h5>Company: <strong>@Model.VendorInfo.VendorCompanyName</strong></h5>
+                    <h5>Name: <strong>@Model.VendorInfo.VendorName</strong></h5>
+                </div>
+                <div class="col text-right">
+                    <h5>Phone: <strong>@Model.VendorInfo.VendorPhone</strong></h5>
+                    <h5>Address: <strong>@Model.VendorInfo.VendorAddress</strong></h5>
+                </div>
             </div>
-            <div class="col text-center">
-                <h5>INVOICE - @Model.PurchaseSn</h5>
-            </div>
-            <div class="col text-right col pt-3">
-                Purchase Date: @Model.PurchaseDate.ToString("d MMM yyyy")
-            </div>
-        </div>
 
-        <div id="vendor-area" class="row">
-            <div class="col">
-                <h5>Company: <strong>@Model.VendorInfo.VendorCompanyName</strong></h5>
-                <h5>Name: <strong>@Model.VendorInfo.VendorName</strong></h5>
-            </div>
-            <div class="col text-right">
-                <h5>Phone: <strong>@Model.VendorInfo.VendorPhone</strong></h5>
-                <h5>Address: <strong>@Model.VendorInfo.VendorAddress</strong></h5>
-            </div>
-        </div>
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th style="width: 30px"><strong>No.</strong></th>
-                <th><strong>Product&nbsp;Category</strong></th>
-                <th><strong>Brand & Model</strong></th>
-                <th><strong>Purchase&nbsp;Price</strong></th>
-                <th><strong>Stocks</strong></th>
-                <th><strong>Product&nbsp;Code</strong></th>
-                <th><strong>Warranty</strong></th>
-                <th><strong>Description</strong></th>
-            </tr>
-            </thead>
-            <tbody>
-            @{
-                var index = 0;
-                foreach (var item in Model.Products)
-                {
-                    index++;
-                    <tr>
-                        <td>@index</td>
-                        <td>@item.ProductCatalogName</td>
-                        <td>@item.ProductName</td>
-                        <td>@item.PurchasePrice</td>
-                        <td>@item.ProductStocks.Count</td>
-                        <td class="codeSpan">
-                            @foreach (var stock in item.ProductStocks)
-                            {
-                                <span>@stock.ProductCode</span>
-                            }
-                        </td>
-                        <td>@item.Warranty</td>
-                        <td>@item.Description</td>
-                    </tr>
+            <table id="product-table" class="table table-bordered table-sm">
+                <thead>
+                <tr>
+                    <th style="width: 30px"><strong>No.</strong></th>
+                    <th><strong>Product&nbsp;Category</strong></th>
+                    <th><strong>Brand & Model</strong></th>
+                    <th><strong>Purchase&nbsp;Price</strong></th>
+                    <th><strong>Stocks</strong></th>
+                    <th><strong>Product&nbsp;Code</strong></th>
+                    <th><strong>Warranty</strong></th>
+                    <th><strong>Description</strong></th>
+                </tr>
+                </thead>
+                <tbody>
+                @{
+                    var index = 0;
+                    foreach (var item in Model.Products)
+                    {
+                        index++;
+                        <tr>
+                            <td>@index</td>
+                            <td>@item.ProductCatalogName</td>
+                            <td>@item.ProductName</td>
+                            <td>@item.PurchasePrice</td>
+                            <td>@item.ProductStocks.Count</td>
+                            <td class="codeSpan">
+                                @foreach (var stock in item.ProductStocks)
+                                {
+                                    <span>@stock.ProductCode</span>
+                                }
+                            </td>
+                            <td>@item.Warranty</td>
+                            <td>@item.Description</td>
+                        </tr>
+                    }
                 }
-            }
-            <tr>
-                <td colspan="7">
-                    <span id="amount-word"></span>
-                </td>
-                <td>
-                    <div class="text-right">
-                        <h5>Total: <strong>@Model.PurchaseTotalPrice/-</strong></h5>
-                        @{
-                            var discount = Model.PurchaseDiscountAmount;
+                <tr>
+                    <td colspan="7">
+                        <span id="amount-word"></span>
+                    </td>
+                    <td>
+                        <div class="text-right">
+                            <h5>Total: <strong>@Model.PurchaseTotalPrice/-</strong></h5>
+                            @{
+                                var discount = Model.PurchaseDiscountAmount;
 
-                            if (discount > 0)
-                            {
-                                <h5>Discount: <strong>@Model.PurchaseDiscountAmount/-</strong></h5>
+                                if (discount > 0)
+                                {
+                                    <h5>Discount: <strong>@Model.PurchaseDiscountAmount/-</strong></h5>
+                                }
                             }
-                        }
 
-                        <h5>Paid: <strong> @Model.PurchasePaidAmount/-</strong></h5>
-                        <h5>Due: <strong>@Model.PurchaseDueAmount/-</strong></h5>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </section>
+                            <h5>Paid: <strong> @Model.PurchasePaidAmount/-</strong></h5>
+                            <h5>Due: <strong>@Model.PurchaseDueAmount/-</strong></h5>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
 
-    <div class="row">
-        <div class="col">
-            @{
-                var paymentRecord = Model.Payments;
+        <div class="row">
+            <div class="col">
+                @{
+                    var paymentRecord = Model.Payments;
 
-                if (paymentRecord.Count > 0)
-                {
-                    <h5 class="mt-4">PAYMENT RECORD</h5>
-                    <table class="table table-sm data-table">
-                        <thead>
+                    if (paymentRecord.Count > 0)
+                    {
+                        <h5 class="mt-4">PAYMENT RECORD</h5>
+                        <table class="table table-sm table-bordered">
+                            <thead>
                             <tr>
                                 <th><strong>Paid Date</strong></th>
                                 <th><strong>Paid Amount</strong></th>
                                 <th><strong>Payment Method</strong></th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             @foreach (var item in paymentRecord)
                             {
                                 <tr>
@@ -159,19 +136,18 @@
                                     <td class="text-center">@item.PaymentMethod</td>
                                 </tr>
                             }
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    }
                 }
-            }
-        </div>
-        <div class="col">
-            <div class="card card-body">
+            </div>
+            <div class="col">
                 <form id="formPayment">
-                    <h5>Total Due: @Model.PurchaseDueAmount/-</h5>
+                    <h5 class="mb-0">Total Due: @Model.PurchaseDueAmount/-</h5>
 
                     <div class="md-form">
                         <label for="inputPaid">Paid Amount</label>
-                        <input id="inputPaid" type="number" class="form-control" min="0" max="@Model.PurchaseDueAmount">
+                        <input id="inputPaid" type="number" required class="form-control" min="0" max="@Model.PurchaseDueAmount">
                     </div>
                     <div class="md-form">
                         <select id="selectPaymentMethod" class="mdb-select" style="position: absolute; top: 1rem; left: 0; height: 0; width: 0; opacity: 0; padding: 0; pointer-events: none; display: inline !important;">
@@ -183,10 +159,10 @@
                         </select>
                     </div>
                     <div class="md-form">
-                        <label for="inputPaidDate">Paid Date</label>
                         <input id="inputPaidDate" type="text" class="form-control datepicker">
                     </div>
-                    <input type="submit" value="Pay" class="btn btn-brown" />
+                    <input type="submit" @(Model.PurchaseDueAmount > 0 ? "" : "disabled") value="Pay" class="btn btn-brown"/>
+                    <a href="/Purchase/PurchaseRecords">Back to Previous</a>
                 </form>
             </div>
         </div>
@@ -210,6 +186,7 @@
         const formPayment = document.getElementById('formPayment');
         const inputPaid = formPayment.inputPaid;
         const selectPaymentMethod = formPayment.selectPaymentMethod;
+        const inputPaidDate = formPayment.inputPaidDate;
 
         //input paid amount
         inputPaid.addEventListener('input', function() {
@@ -221,9 +198,14 @@
             evt.preventDefault();
 
             const body = {
+                PurchaseId: @Model.PurchaseId,
+                VendorId: @Model.VendorInfo.VendorId,
+                PaidAmount: +inputPaid.value,
+                PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
+                PaidDate: new Date(inputPaidDate.value)
             }
 
-            const url = '/Purchase/PayDue'
+            const url = '/Purchase/DueCollection';
             const options = {
                 method: 'POST',
                 url: url,
