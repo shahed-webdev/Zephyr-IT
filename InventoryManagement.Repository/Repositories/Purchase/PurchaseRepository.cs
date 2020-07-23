@@ -107,6 +107,8 @@ namespace InventoryManagement.Repository
             {
                 await Context.SaveChangesAsync().ConfigureAwait(false);
 
+                db.Vendors.UpdatePaidDue(model.VendorId);
+
                 response.IsSuccess = true;
                 response.Message = "Success";
                 response.Data = purchase.PurchaseId;

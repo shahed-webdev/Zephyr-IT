@@ -84,11 +84,11 @@ namespace InventoryManagement.Web.Controllers
         //GET: Due Collection
         public async Task<IActionResult> DueCollection(int? id)
         {
-            if (id == null) return RedirectToAction("List","Customer");
-           
+            if (id == null) return RedirectToAction("List", "Customer");
+
             var model = await _db.Selling.SellingReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
             if (model == null) return RedirectToAction("List", "Customer");
-            
+
             return View(model);
         }
 
@@ -100,7 +100,7 @@ namespace InventoryManagement.Web.Controllers
             var dbResponse = await _db.SellingPayments.DuePaySingleAsync(model, _db).ConfigureAwait(false);
 
             if (dbResponse.IsSuccess) return Ok();
-            
+
             return BadRequest(dbResponse.Message);
         }
 
@@ -136,7 +136,7 @@ namespace InventoryManagement.Web.Controllers
         {
             if (id == null) return RedirectToAction("BillList");
             var data = await _db.Selling.FindUpdateBillAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
-           
+
             if (data == null) return RedirectToAction("BillList");
             return View(data);
         }

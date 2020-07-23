@@ -22,5 +22,6 @@ namespace InventoryManagement.Repository
         Task<DbResponse> DeleteBillAsync(int id, IUnitOfWork db);
         Task<SellingUpdateGetModel> FindUpdateBillAsync(int id, IUnitOfWork db);
         Task<DbResponse> BillUpdated(SellingUpdatePostModel model, IUnitOfWork db);
+
     }
 }
