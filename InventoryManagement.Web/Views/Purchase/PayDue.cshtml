@@ -1,0 +1,223 @@
+﻿@using InventoryManagement.Repository
+@model PurchaseReceiptViewModel
+@{
+    ViewData["Title"] = "Purchase Due Pay";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section Styles{
+    <style>
+        .receipt-date { font-size: 15px; font-weight: bold }
+        .receipt-date h5 { border: 2px solid #333; font-size: 20px; padding: 9px; border-radius: 15px; font-weight: 700; margin: 0; }
+
+        #vendor-area { margin-bottom: 15px }
+        #vendor-area h5 { font-size: 15px }
+
+        #main-page table h5 { font-weight: 400; font-size: 16px }
+        #amount-word { font-style: italic; font-size: 14px }
+
+        #product-table tbody tr .codeSpan span { margin-right: 5px; }
+        #product-table tbody tr .codeSpan span:not(:last-child):after { content: ',' }
+    </style>
+}
+
+<div class="container">
+    <h4 class="page-header mb-3">Pay Vendor Due</h4>
+
+    <div class="card card-body">
+        <section id="main-page">
+            <div class="row mb-4 receipt-date">
+                <div class="col pt-3">
+                    Memo Number# @Model.MemoNumber
+                </div>
+                <div class="col text-center">
+                    <h5>INVOICE - @Model.PurchaseSn</h5>
+                </div>
+                <div class="col text-right col pt-3">
+                    Purchase Date: @Model.PurchaseDate.ToString("d MMM yyyy")
+                </div>
+            </div>
+
+            <div id="vendor-area" class="row">
+                <div class="col">
+                    <h5>Company: <strong>@Model.VendorInfo.VendorCompanyName</strong></h5>
+                    <h5>Name: <strong>@Model.VendorInfo.VendorName</strong></h5>
+                </div>
+                <div class="col text-right">
+                    <h5>Phone: <strong>@Model.VendorInfo.VendorPhone</strong></h5>
+                    <h5>Address: <strong>@Model.VendorInfo.VendorAddress</strong></h5>
+                </div>
+            </div>
+
+            <table id="product-table" class="table table-bordered table-sm">
+                <thead>
+                <tr>
+                    <th style="width: 30px"><strong>No.</strong></th>
+                    <th><strong>Product&nbsp;Category</strong></th>
+                    <th><strong>Brand & Model</strong></th>
+                    <th><strong>Purchase&nbsp;Price</strong></th>
+                    <th><strong>Stocks</strong></th>
+                    <th><strong>Product&nbsp;Code</strong></th>
+                    <th><strong>Warranty</strong></th>
+                    <th><strong>Description</strong></th>
+                </tr>
+                </thead>
+                <tbody>
+                @{
+                    var index = 0;
+                    foreach (var item in Model.Products)
+                    {
+                        index++;
+                        <tr>
+                            <td>@index</td>
+                            <td>@item.ProductCatalogName</td>
+                            <td>@item.ProductName</td>
+                            <td>@item.PurchasePrice</td>
+                            <td>@item.ProductStocks.Count</td>
+                            <td class="codeSpan">
+                                @foreach (var stock in item.ProductStocks)
+                                {
+                                    <span>@stock.ProductCode</span>
+                                }
+                            </td>
+                            <td>@item.Warranty</td>
+                            <td>@item.Description</td>
+                        </tr>
+                    }
+                }
+                <tr>
+                    <td colspan="7">
+                        <span id="amount-word"></span>
+                    </td>
+                    <td>
+                        <div class="text-right">
+                            <h5>Total: <strong>@Model.PurchaseTotalPrice/-</strong></h5>
+                            @{
+                                var discount = Model.PurchaseDiscountAmount;
+
+                                if (discount > 0)
+                                {
+                                    <h5>Discount: <strong>@Model.PurchaseDiscountAmount/-</strong></h5>
+                                }
+                            }
+
+                            <h5>Paid: <strong> @Model.PurchasePaidAmount/-</strong></h5>
+                            <h5>Due: <strong>@Model.PurchaseDueAmount/-</strong></h5>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <div class="row">
+            <div class="col">
+                @{
+                    var paymentRecord = Model.Payments;
+
+                    if (paymentRecord.Count > 0)
+                    {
+                        <h5 class="mt-4">PAYMENT RECORD</h5>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                            <tr>
+                                <th><strong>Paid Date</strong></th>
+                                <th><strong>Paid Amount</strong></th>
+                                <th><strong>Payment Method</strong></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var item in paymentRecord)
+                            {
+                                <tr>
+                                    <td>@item.PaidDate.ToString("d MMM yyyy")</td>
+                                    <td class="text-right">@item.PaidAmount/-</td>
+                                    <td class="text-center">@item.PaymentMethod</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    }
+                }
+            </div>
+            <div class="col">
+                <form id="formPayment">
+                    <h5 class="mb-0">Total Due: @Model.PurchaseDueAmount/-</h5>
+
+                    <div class="md-form">
+                        <label for="inputPaid">Paid Amount</label>
+                        <input id="inputPaid" type="number" required class="form-control" min="0" max="@Model.PurchaseDueAmount">
+                    </div>
+                    <div class="md-form">
+                        <select id="selectPaymentMethod" class="mdb-select" style="position: absolute; top: 1rem; left: 0; height: 0; width: 0; opacity: 0; padding: 0; pointer-events: none; display: inline !important;">
+                            <option value="" selected>[ Payment Method ]</option>
+                            <option>Cash</option>
+                            <option>Bank</option>
+                            <option>Cheque</option>
+                            <option>bkash</option>
+                        </select>
+                    </div>
+                    <div class="md-form">
+                        <input id="inputPaidDate" type="text" class="form-control datepicker">
+                    </div>
+                    <input type="submit" @(Model.PurchaseDueAmount > 0 ? "" : "disabled") value="Pay" class="btn btn-brown"/>
+                    <a href="/Purchase/PurchaseRecords">Back to Previous</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/js/amount-in-word.js"></script>
+    <script>
+        $(function() {
+            $("#amount-word").text(`Taka (in word): ${number2text(@Model.PurchaseTotalPrice).toLowerCase()}`);
+
+            //date picker
+            $('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'));
+
+            // material select initialization
+            $('.mdb-select').materialSelect();
+        });
+
+        const formPayment = document.getElementById('formPayment');
+        const inputPaid = formPayment.inputPaid;
+        const selectPaymentMethod = formPayment.selectPaymentMethod;
+        const inputPaidDate = formPayment.inputPaidDate;
+
+        //input paid amount
+        inputPaid.addEventListener('input', function() {
+            const paid = +this.value;
+            paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
+        });
+
+        formPayment.addEventListener('submit', function(evt) {
+            evt.preventDefault();
+
+            const body = {
+                PurchaseId: @Model.PurchaseId,
+                VendorId: @Model.VendorInfo.VendorId,
+                PaidAmount: +inputPaid.value,
+                PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
+                PaidDate: new Date(inputPaidDate.value)
+            }
+
+            const url = '/Purchase/DueCollection';
+            const options = {
+                method: 'POST',
+                url: url,
+                data: body
+            }
+
+            axios(options).then(response => {
+                location.href = `/Purchase/PurchaseRecords`;
+            }).catch(error => {
+                console.log(error);
+            })
+        });
+    </script>
+}
+

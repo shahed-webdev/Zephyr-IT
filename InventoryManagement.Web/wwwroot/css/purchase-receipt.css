@@ -18,11 +18,11 @@ body { background-color: #fff; color: black }
 
 #main-page table ul li { list-style: none; text-align: left; }
 
-table tbody tr .codeSpan span { margin-right:5px;}
-table tbody tr .codeSpan span:not(:last-child):after { content: ',' }
+#main-page table tbody tr .codeSpan span { margin-right: 5px; }
+#main-page table tbody tr .codeSpan span:not(:last-child):after { content: ',' }
 
 @page { margin: 3rem}
 @media print {
     #header { display: none !important }
-    table td, table th { font-size: .8rem; }
+    #main-page table td, table th { font-size: .8rem; }
 }

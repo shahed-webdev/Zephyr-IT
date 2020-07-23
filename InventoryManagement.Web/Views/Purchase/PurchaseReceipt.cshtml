@@ -13,7 +13,8 @@
 <section class="my-4 d-print-none">
     <div class="card">
         <div class="card-body d-flex justify-content-between">
-            <a class="btn btn-success btn-rounded" href="/Purchase/DueCollection/@Model.PurchaseId"><i class="fas fa-money-bill-alt mr-1"></i>Pay Due</a>
+            <a class="btn btn-success btn-rounded" href="/Purchase/PayDue/@Model.PurchaseId"><i class="fas fa-money-bill-alt mr-1"></i>Pay Due</a>
+            
             <div>
                 <a class="btn btn-elegant btn-rounded" href="/Purchase/Purchase"><i class="fas fa-shopping-cart mr-1"></i>Purchase</a>
                 <button class="btn btn-amber btn-rounded" onclick="print()"><i class="fas fa-print mr-1"></i>Print</button>
@@ -142,24 +143,6 @@
             </table>
         }
     }
-
-    @*<div class="p-footer">
-            <div class="row">
-                <div class="col">
-                    Received By
-                    <small class="d-block text-muted">@DateTime.Now.ToString("ddd, dd-MMM-yyyy (hh: mm tt)")</small>
-                </div>
-                <div class="col text-center font-weight-bold">
-                    Thank you for your business!
-                    <small class="d-block text-muted">Technical support: www.loopsit.com</small>
-                </div>
-
-                <div class="col text-right">
-                    For: <strong>@Model.InstitutionInfo.InstitutionName</strong>
-                    <small class="d-block text-muted">Served By: <strong>@Model.SoildBy</strong></small>
-                </div>
-            </div>
-        </div>*@
 </div>
 
 

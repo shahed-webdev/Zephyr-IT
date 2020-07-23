@@ -145,12 +145,12 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> BillChange([FromBody] SellingUpdatePostModel model)
         {
-            var regid = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
-            model.UpdateRegistrationId = regid;
+            var regId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+            model.UpdateRegistrationId = regId;
+
             var dbResponse = await _db.Selling.BillUpdated(model, _db);
 
-            if (dbResponse.IsSuccess)
-                return Ok(model.SellingId);
+            if (dbResponse.IsSuccess) return Ok(model.SellingId);
 
             return UnprocessableEntity(dbResponse.Message);
         }
@@ -160,6 +160,7 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> DeleteBill(int id)
         {
             var dbResponse = await _db.Selling.DeleteBillAsync(id, _db).ConfigureAwait(false);
+           
             if (dbResponse.IsSuccess) return Ok();
 
             return UnprocessableEntity(dbResponse.Message);

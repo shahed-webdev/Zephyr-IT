@@ -424,8 +424,11 @@ inputReturnAmount.addEventListener('input', onInputReturnAmount)
 //delete receipt
 formReceiptDelete.addEventListener('submit', function(evt) {
     evt.preventDefault();
-
+    const error = document.getElementById('delete-error');
     const id = +hiddenSellingId.value;
+
+    error.textContent = '';
+
     if (confirm('This receipt will be deleted permanently')) {
         $.ajax({
             type: "POST",
@@ -434,7 +437,8 @@ formReceiptDelete.addEventListener('submit', function(evt) {
                 location.href = '/Selling/BillList';
             },
             error: function (response) {
-               console.log(response);
+                console.log(response);
+                error.textContent = response.responseText;
             }
         });  
     }

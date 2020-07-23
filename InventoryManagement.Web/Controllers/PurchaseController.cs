@@ -84,17 +84,17 @@ namespace InventoryManagement.Web.Views
         }
 
         //GET: Due Collection
-        public async Task<IActionResult> DueCollection(int? id)
+        public async Task<IActionResult> PayDue(int? id)
         {
-            if (id == null) return RedirectToAction("List", "Vendor");
+            if (id == null) return RedirectToAction("PurchaseRecords");
 
             var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
-            if (model == null) return RedirectToAction("List", "Vendor");
 
+            if (model == null) return RedirectToAction("PurchaseRecords");
             return View(model);
         }
 
-        //customer due collection(ajax)
+        //vendor due collection(ajax)
         [HttpPost]
         public async Task<IActionResult> DueCollection([FromBody] PurchaseDuePaySingleModel model)
         {

@@ -54,7 +54,11 @@
                         { data: "VendorCompanyName" },
                         { data: "PurchaseAmount", "render": dataTable.addSign },
                         { data: "PurchasePaidAmount", "render": dataTable.addSign },
-                        { data: "PurchaseDueAmount", "render": dataTable.addSign },
+                        {
+                            data: "PurchaseDueAmount", "render": function(data, type, row, meta) {
+                                return data > 0 ? `<a class="blue-text" href="/Purchase/PayDue/${row.PurchaseId}">${data}/-</a>` : data;
+                            }
+                        },
                         { data: "PurchaseDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } }
                     ],
                     columnDefs: [
@@ -73,7 +77,7 @@
                     extend: 'print',
                     text: '<i class="fa fa-print"></i> Print',
                     title: '',
-                    exportOptions: { /*columns: [0,1] //Column value those print*/ },
+                    exportOptions: { /*columns: [0,1] //Column value those print*/  },
                     autoPrint: true,
                     customize: function(win) {
                         $(win.document.body).prepend(`<nav class="mb-3 navbar peach-gradient"><a class="navbar-brand ml-1"><span>Zephyr</span> IT</a></nav><h3 class="h3-responsive">${$('h4').text()}</h3>`);
