@@ -4,10 +4,21 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-    <div class="m-md-3">
+@section Styles
+{
+    <style>
+        .memo{ cursor: pointer }
+        .memo:hover{color: #4992df; }
+        .memo i { pointer-events: none; color: #8a8a8a; }
+
+        .inputMemo { border: 1px solid #B6B4B4; border-radius: 3px; padding: 6px; text-align: center; box-shadow: 1px 0 7px rgba(0, 0, 0, 0.2); width: 100% }
+        .inputMemo:focus { border: 1px solid #00bfff }
+    </style>  
+}
+
+<div class="m-md-3">
         <h4 class="mb-3 page-header">Purchase Invoice</h4>
         <div class="card card-body">
-
             <table id="data-table" class="table table-sm table-bordered">
                 <thead>
                     <tr>
@@ -50,7 +61,11 @@
                                 return `<a class="blue-text" href="/Purchase/PurchaseReceipt/${row.PurchaseId}">${data}</a>`;
                             }
                         },
-                        { data: "MemoNumber" },
+                        {
+                            data: "MemoNumber", "render": function(data, type, row, meta) {
+                                return `<div class="memo" data-old="${data}" data-id="${row.PurchaseId}">${data} <i class="fal fa-edit"></i></div>`;
+                            }
+                        },
                         { data: "VendorCompanyName" },
                         { data: "PurchaseAmount", "render": dataTable.addSign },
                         { data: "PurchasePaidAmount", "render": dataTable.addSign },
@@ -87,6 +102,43 @@
                     button: { className: 'btn btn-dark btn-rounded btn-sm my-0' }
                 }
             }
+        }
+
+        const tBody = document.getElementById('data-table');
+        tBody.addEventListener('click', function(evt) {
+            const element = evt.target;
+
+            const onMemo = element.classList.contains('memo');
+            if (!onMemo) return;
+            const old = element.getAttribute('data-old');
+
+            const html = `<form onsubmit="return updateMemo(this)">
+                <input name="inputMemo" value="${old}" class="inputMemo" type="text" />
+            </form>`;
+
+            element.innerHTML = html;
+        });
+
+        function updateMemo(form) {
+            const id = form.parentElement.getAttribute('data-id');
+            const newValue = form.inputMemo.value;
+
+            if (!newValue) return;
+
+            $.post({
+                type: 'GET',
+                url: '/Purchase/MemoUpdate',
+                contentType: 'application/json; charset=utf-8',
+                data: { id: id, newMemoNo: newValue },
+                success: function(response) {
+                    if (response.IsSuccess) {
+                        form.parentElement.innerHTML = `${newValue} <i class="fal fa-edit"></i>`;
+                        form.remove();
+                    }
+                }
+            });
+
+            return false;
         }
     </script>
 }

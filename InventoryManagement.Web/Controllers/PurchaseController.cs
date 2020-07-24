@@ -83,6 +83,16 @@ namespace InventoryManagement.Web.Views
             return Json(data);
         }
 
+        //memo number update
+        public async Task<IActionResult> MemoUpdate(int id, string newMemoNo)
+        {
+            var response = await _db.Purchases.UpdateMemoNumberAsync(id, newMemoNo);
+            if (response.IsSuccess) return Ok(response);
+
+            return UnprocessableEntity(response.Message);
+        }
+
+
         //GET: Due Collection
         public async Task<IActionResult> PayDue(int? id)
         {
@@ -105,7 +115,6 @@ namespace InventoryManagement.Web.Views
 
             return BadRequest(dbResponse.Message);
         }
-
 
         protected override void Dispose(bool disposing)
         {
