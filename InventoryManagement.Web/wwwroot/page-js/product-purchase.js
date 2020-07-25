@@ -250,7 +250,6 @@ const clearInput = function () {
 const onCategoryChanged = function() {
     const categoryId = +this.value
 
-
     $('.product-select').materialSelect("destroy");
 
     // Material Select Initialization
@@ -260,7 +259,7 @@ const onCategoryChanged = function() {
 
     if (!categoryId) return;
 
-    const url = '/Product/GetProductByCategory'
+    const url = '/Product/GetProductByCategoryDropDown'
     const parameter = { params: { categoryId } }
 
     axios.get(url, parameter).then(res => {

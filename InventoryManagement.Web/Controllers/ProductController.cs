@@ -60,12 +60,21 @@ namespace InventoryManagement.Web.Controllers
             return _db.SaveChanges();
         }
 
-        //get product from ajax by categoryId
+        //get product from ajax by categoryId (data-table)
         public IActionResult GetProductByCategory(DataRequest request)
         {
             var productList = _db.Products.FindDataTable(request);
             return Json(productList);
         }
+
+        //get product by categoryId in dropdown
+        public async Task<IActionResult> GetProductByCategoryDropDown(int categoryId)
+        {
+            var productList = await _db.Products.FindByCategoryAsync(categoryId);
+            return Json(productList);
+        }
+
+
 
         public IActionResult Stock(int id)
         {
