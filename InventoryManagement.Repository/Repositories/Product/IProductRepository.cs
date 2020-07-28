@@ -12,6 +12,6 @@ namespace InventoryManagement.Repository
         DataResult<ProductShowViewModel> FindDataTable(DataRequest request);
         bool RemoveCustom(int id);
         Task<ProductShowViewModel> FindByIdAsync(int productId);
-        DbResponse<ProductPurchaseViewModel> ProductWithCodes(int productId);
+        DbResponse<ProductViewModel> ProductWithCodes(int productId);
     }
 }

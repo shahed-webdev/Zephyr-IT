@@ -98,12 +98,12 @@ namespace InventoryManagement.Repository
             return product.FirstOrDefaultAsync();
         }
 
-        public DbResponse<ProductPurchaseViewModel> ProductWithCodes(int productId)
+        public DbResponse<ProductViewModel> ProductWithCodes(int productId)
         {
-            var response = new DbResponse<ProductPurchaseViewModel>();
+            var response = new DbResponse<ProductViewModel>();
             try
             {
-                var product = Context.Product.Include(p => p.ProductStock).Select(p => new ProductPurchaseViewModel
+                var product = Context.Product.Include(p => p.ProductCatalog).Include(p => p.ProductStock).Select(p => new ProductViewModel
                 {
                     ProductId = p.ProductId,
                     Description = p.Description,
@@ -114,7 +114,10 @@ namespace InventoryManagement.Repository
                     ProductStocks = p.ProductStock.Select(s => new ProductStockViewModel
                     {
                         ProductCode = s.ProductCode
-                    }).ToList()
+                    }).ToList(),
+                    ProductName = p.ProductName,
+                    ProductCatalogId = p.ProductCatalogId,
+                    ProductCatalogName = p.ProductCatalog.CatalogName
                 }).FirstOrDefault(p => p.ProductId == productId);
 
                 if (product == null)
