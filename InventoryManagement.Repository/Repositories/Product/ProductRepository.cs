@@ -1,6 +1,7 @@
 ﻿using InventoryManagement.Data;
 using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -95,6 +96,45 @@ namespace InventoryManagement.Repository
                  });
 
             return product.FirstOrDefaultAsync();
+        }
+
+        public DbResponse<ProductPurchaseViewModel> ProductWithCodes(int productId)
+        {
+            var response = new DbResponse<ProductPurchaseViewModel>();
+            try
+            {
+                var product = Context.Product.Include(p => p.ProductStock).Select(p => new ProductPurchaseViewModel
+                {
+                    ProductId = p.ProductId,
+                    Description = p.Description,
+                    Warranty = p.Warranty,
+                    Note = p.Note,
+                    SellingPrice = p.SellingPrice,
+                    PurchasePrice = p.SellingPrice,
+                    ProductStocks = p.ProductStock.Select(s => new ProductStockViewModel
+                    {
+                        ProductCode = s.ProductCode
+                    }).ToList()
+                }).FirstOrDefault(p => p.ProductId == productId);
+
+                if (product == null)
+                {
+                    response.Message = "No data Found";
+                    response.IsSuccess = false;
+                    return response;
+                }
+
+                response.IsSuccess = true;
+                response.Message = "Success";
+                response.Data = product;
+                return response;
+            }
+            catch (Exception e)
+            {
+                response.Message = e.Message;
+                response.IsSuccess = false;
+                return response;
+            }
         }
     }
 }
