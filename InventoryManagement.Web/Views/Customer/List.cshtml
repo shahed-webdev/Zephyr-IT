@@ -80,7 +80,7 @@
                     },
                     columns:
                     [
-                        { data: "CustomerId", "render": function(data, type, row, meta) { return `<a class="blue-text" href="/Customer/Details/${data}">${row.CustomerName}</a>`; } },
+                        { data: "CustomerName", "render": function(data, type, row, meta) { return `<a class="blue-text" href="/Customer/Details/${row.CustomerId}">${data}</a>`; } },
                         { data: "PhonePrimary" },
                         { data: "CustomerAddress" },
                         { data: "Description" },
@@ -101,25 +101,25 @@
         //get corporate data
         const corporate = {
             table: null,
-            init: function () {
+            init: function() {
                 corporate.table = $("#corporate-table").DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: {
                         url: "/Customer/CustomerList",
                         type: "POST",
-                        data: function (d) {
+                        data: function(d) {
                             d.filters = [{ Field: "IsIndividual", Value: "False", Operand: "==" }]
                         }
                     },
                     columns:
-                        [
-                            { data: "CustomerId", "render": function (data, type, row, meta) { return `<a class="blue-text" href="/Customer/Details/${data}">${row.OrganizationName}</a>`; } },
-                            { data: "CustomerName" },
-                            { data: "PhonePrimary" },
-                            { data: "CustomerAddress" },
-                            { data: "CustomerId", "render": function (data) { return `<a class="fas fa-edit" href="/Customer/Update/${data}"></a>`; } }
-                        ],
+                    [
+                        { data: "OrganizationName", "render": function (data, type, row, meta) { return `<a class="blue-text" href="/Customer/Details/${row.CustomerId}">${data}</a>`; } },
+                        { data: "CustomerName" },
+                        { data: "PhonePrimary" },
+                        { data: "CustomerAddress" },
+                        { data: "CustomerId", "render": function(data) { return `<a class="fas fa-edit" href="/Customer/Update/${data}"></a>`; } }
+                    ],
                     columnDefs: [
                         { 'searchable': false, 'targets': [4] },
                         { 'sortable': false, 'targets': [4] },
@@ -127,7 +127,7 @@
                     ]
                 });
             },
-            getData: function () {
+            getData: function() {
                 corporate.table ? corporate.table.ajax.reload() : corporate.init();
             }
         }
