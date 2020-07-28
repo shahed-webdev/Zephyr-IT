@@ -133,10 +133,10 @@
 
                         <li class="md-form mb-4">
                             <label for="inputPaid">Paid Amount</label>
-                            <input id="inputPaid" type="number" min="0" class="form-control">
+                            <input id="inputPaid" @(Model.SellingDueAmount> 0 ? "":"disabled") type="number" min="0" class="form-control">
                         </li>
                         <li class="md-form">
-                            <select id="selectPaymentMethod" class="mdb-select" style="position: absolute; top: 1rem; left: 0; height: 0; width: 0; opacity: 0; padding: 0; pointer-events: none; display: inline !important;">
+                            <select id="selectPaymentMethod" class="mdb-select">
                                 <option value="" selected>[ Payment Method ]</option>
                                 <option>Cash</option>
                                 <option>Bank</option>
@@ -157,7 +157,7 @@
 </div>
 
 @section Scripts{
-    <script src="~/page-js/bill-change.js?v=.7"></script>
+    <script src="~/page-js/bill-change.js?v=.12"></script>
     <script>
         //save previous data
         cartProducts = @Html.Raw(Json.Serialize(Model.Products));

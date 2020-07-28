@@ -1,0 +1,38 @@
+﻿@using InventoryManagement.Repository
+@model ProductViewModel
+@{
+    ViewData["Title"] = "Product Stock";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Styles
+{
+    <style>
+        #codes span { margin: 5px; font-size: 17px; }
+    </style>
+}
+<div class="m-md-3">
+    <a href="/Product/AddProduct"><i class="far fa-long-arrow-alt-left"></i> Back to Product</a>
+
+    <div class="card d-block mt-2" id="codes">
+        <div class="card-header">
+            <h5 class="mb-0 font-weight-bold">@Model.ProductName (@Model.ProductStocks.Count)</h5>
+            <small class="text-muted">@Model.ProductCatalogName</small>
+            <small class="text-muted">, Selling Price: ৳@Model.SellingPrice</small>
+            <small class="text-muted">, Purchase Price: ৳@Model.PurchasePrice</small>
+            <small class="text-muted">, Warranty: @Model.Warranty</small>
+            <small class="text-muted">, Note: @Model.Note</small>
+        </div>
+
+        <div class="card-body text-center">
+            @foreach (var item in Model.ProductStocks)
+            {
+                <span class="badge badge-pill badge-info">@item.ProductCode</span>
+            }
+        </div>
+    </div>
+</div>   
+
+@section Scripts{
+    
+}

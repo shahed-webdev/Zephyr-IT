@@ -74,11 +74,13 @@ namespace InventoryManagement.Web.Controllers
             return Json(productList);
         }
 
-
-
-        public IActionResult Stock(int id)
+        //Stock Details
+        public IActionResult StockDetails(int? id)
         {
-            return View();
+            if (id == null) return RedirectToAction("AddProduct");
+            var model = _db.Products.ProductWithCodes(id.GetValueOrDefault());
+
+            return View(model.Data);
         }
 
 

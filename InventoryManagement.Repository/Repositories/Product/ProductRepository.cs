@@ -50,9 +50,8 @@ namespace InventoryManagement.Repository
                 });
 
             if (categoryId != 0)
-            {
                 return products.Where(p => p.ProductCatalogId == categoryId).ToListAsync();
-            }
+
 
             return products.Take(20).ToListAsync();
         }
@@ -111,7 +110,7 @@ namespace InventoryManagement.Repository
                     Note = p.Note,
                     SellingPrice = p.SellingPrice,
                     PurchasePrice = p.SellingPrice,
-                    ProductStocks = p.ProductStock.Select(s => new ProductStockViewModel
+                    ProductStocks = p.ProductStock.Where(s=> !s.IsSold).Select(s => new ProductStockViewModel
                     {
                         ProductCode = s.ProductCode
                     }).ToList(),

@@ -47,7 +47,7 @@
             </div>
         </form>
     </section>
-
+    
     <section class="card card-body mt-3">
         <h4 id="categoryName"></h4>
         <table id="data-table" class="table table-bordered table-sm">
@@ -83,14 +83,18 @@
                     ajax: {
                         url: "/Product/GetProductByCategory",
                         type: "POST",
-                        data: function (d) {
+                        data: function(d) {
                             d.filters = dataTable.filter;
                         }
                     },
                     columns:
                     [
                         { data: "ProductName" },
-                        { data: "Stock" },
+                        {
+                            data: "Stock", "render": function(data, type, row, meta) {
+                                return data >0? `<a class="blue-text" href="/Product/StockDetails/${row.ProductId}">${data}</a>`:data;
+                            }
+                        },
                         { data: "Warranty" },
                         { data: "Description" },
                         { data: "ProductId", "render": function(data) { return `<a class="far fa-trash-alt red-text remove"  href="/Product/DeleteProduct/${data}"></a>`; } }
