@@ -31,7 +31,7 @@ namespace InventoryManagement.Repository
 
     public class SellingReceiptProductViewModel
     {
-        
+
         public int SellingListId { get; set; }
         public int SellingId { get; set; }
         public int ProductId { get; set; }
@@ -59,6 +59,7 @@ namespace InventoryManagement.Repository
         public double SellingDiscountAmount { get; set; }
         public double SellingPaidAmount { get; set; }
         public double SellingDueAmount { get; set; }
+        public double SellingReturnAmount { get; set; }
         public DateTime SellingDate { get; set; }
         public ICollection<SellingReceiptProductViewModel> Products { get; set; }
         public ICollection<SellingPaymentViewModel> Payments { get; set; }

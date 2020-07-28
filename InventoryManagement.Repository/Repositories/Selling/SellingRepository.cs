@@ -123,6 +123,7 @@ namespace InventoryManagement.Repository
                   SellingDiscountAmount = s.SellingDiscountAmount,
                   SellingPaidAmount = s.SellingPaidAmount,
                   SellingDueAmount = s.SellingDueAmount,
+                  SellingReturnAmount = s.SellingReturnAmount,
                   SellingDate = s.SellingDate,
                   Products = s.SellingList.Select(pd => new SellingReceiptProductViewModel
                   {
@@ -284,7 +285,7 @@ namespace InventoryManagement.Repository
                     .Include(s => s.SellingList)
                     .Include(s => s.SellingPaymentList)
                     .FirstOrDefault(s => s.SellingId == id);
-               
+
                 if (selling == null)
                 {
                     response.IsSuccess = false;
@@ -384,6 +385,8 @@ namespace InventoryManagement.Repository
             var response = new DbResponse();
             try
             {
+
+
                 var stocks = new List<ProductStock>();
                 if (model.AddedProductCodes.Any())
                 {
@@ -407,17 +410,25 @@ namespace InventoryManagement.Repository
                 selling.SellingTotalPrice = model.SellingTotalPrice;
                 selling.SellingDiscountAmount = model.SellingDiscountAmount;
                 selling.SellingReturnAmount = model.SellingReturnAmount;
-                selling.SellingPaidAmount += model.PaidAmount; 
+                selling.SellingPaidAmount += model.PaidAmount;
+
+                var due = (selling.SellingTotalPrice + selling.SellingReturnAmount) - (selling.SellingDiscountAmount + selling.SellingPaidAmount);
+                if (due < 0)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Due cannot be less than zero";
+                    return response;
+                }
 
                 selling.SellingList = model.Products.Select(p => new SellingList
                 {
                     SellingListId = p.SellingListId,
-                    SellingId =  model.SellingId,
+                    SellingId = model.SellingId,
                     ProductId = p.ProductId,
                     SellingPrice = p.SellingPrice,
                     Description = p.Description,
                     Warranty = p.Warranty,
-                    ProductStock = stocks.Where(s=> s.ProductId == p.ProductId).ToList()
+                    ProductStock = stocks.Where(s => s.ProductId == p.ProductId).ToList()
                 }).ToList();
 
 

@@ -64,7 +64,7 @@ namespace InventoryManagement.Repository
 
         public CustomerAddUpdateViewModel FindCustom(int id)
         {
-            var customerList = Context.Customer.Select(c => new CustomerAddUpdateViewModel
+            var customerList = Context.Customer.Include(c => c.CustomerPhone).Select(c => new CustomerAddUpdateViewModel
             {
                 CustomerId = c.CustomerId,
                 OrganizationName = c.OrganizationName,
@@ -182,7 +182,7 @@ namespace InventoryManagement.Repository
                       OrganizationName = c.OrganizationName,
                       CustomerName = c.CustomerName,
                       CustomerAddress = c.CustomerAddress,
-                      PhonePrimary = c.CustomerPhone.FirstOrDefault(p => p.Phone.Contains(key)).Phone,
+                      PhonePrimary = c.CustomerPhone.FirstOrDefault(p => p.Phone.Contains(key)).Phone ?? c.CustomerPhone.FirstOrDefault(p=> p.IsPrimary == true).Phone,
                       Due = c.Due,
                       DueLimit = c.DueLimit,
                       SignUpDate = c.InsertDate,
