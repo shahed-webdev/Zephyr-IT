@@ -10,6 +10,8 @@
 }
 
 <div class="container-fluid">
+@if (User.IsInRole("admin"))
+{
     <section class="mt-4">
         <div class="row">
             <div class="col-lg-3 col-md-6 mb-4">
@@ -17,12 +19,12 @@
                     <div class="row mt-4 mb-3">
                         <div class="col-md-3 col-3 text-left pl-4">
                             <div class="p-2 m-2 fa-lg">
-                                <i class="far fa-business-time fa-2x @(businessStatus > 0 ?"text-success":"text-danger")"></i>
+                                <i class="far fa-business-time fa-2x @(businessStatus > 0 ? "text-success" : "text-danger")"></i>
                             </div>
                         </div>
                         <div class="col-md-9 col-9 text-right pr-5">
                             <p class="text-dark mb-2">Business Status</p>
-                            <h4 class="ml-4 font-weight-bold h4-responsive @(businessStatus > 0 ?"text-success":"text-danger")">৳@businessStatus</h4>
+                            <h4 class="ml-4 font-weight-bold h4-responsive @(businessStatus > 0 ? "text-success" : "text-danger")">৳@businessStatus</h4>
                         </div>
                     </div>
                 </div>
@@ -121,40 +123,43 @@
             </div>
         </div>
     </section>
+}
 
-    <section class="row mb-5">
-        <div class="col-xl-5 col-lg-5 mb-3">
-            <div class="card card-cascade narrower">
-                <div class="view view-cascade gradient-card-header blue-gradient lighten-1 p-3">
-                    <h3 class="h3-responsive mb-0 p-1 font-weight-light">Due Vendors</h3>
-                </div>
+<section class="row mb-5">
+    <div class="col-xl-5 col-lg-5 mb-3">
+        <div class="card card-cascade narrower">
+            <div class="view view-cascade gradient-card-header blue-gradient lighten-1 p-3">
+                <h3 class="h3-responsive mb-0 p-1 font-weight-light">Due Vendors</h3>
+            </div>
 
-                <div class="card-body card-body-cascade">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th><strong>Company</strong></th>
-                                <th><strong>Amount</strong></th>
-                                <th><strong>Paid</strong></th>
-                                <th><strong>Due</strong></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var due in Model.DueVendors)
-                            {
-                                <tr>
-                                    <td>@due.VendorCompanyName</td>
-                                    <td>৳@due.TotalAmount</td>
-                                    <td>৳@due.VendorPaid</td>
-                                    <td>৳@due.VendorDue</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>  
-                </div>
+            <div class="card-body card-body-cascade">
+                <table class="table table-sm">
+                    <thead>
+                    <tr>
+                        <th><strong>Company</strong></th>
+                        <th><strong>Amount</strong></th>
+                        <th><strong>Paid</strong></th>
+                        <th><strong>Due</strong></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var due in Model.DueVendors)
+                    {
+                        <tr>
+                            <td>@due.VendorCompanyName</td>
+                            <td>৳@due.TotalAmount</td>
+                            <td>৳@due.VendorPaid</td>
+                            <td>৳@due.VendorDue</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
 
+    @if (User.IsInRole("admin"))
+    {
         <div class="col-xl-7 col-lg-7">
             <div class="card card-cascade narrower">
                 <div class="view view-cascade gradient-card-header blue-gradient mb-3">
@@ -162,30 +167,33 @@
                 </div>
             </div>
         </div>
-    </section>
+    }
+</section>
 
-    <section>
-        <div class="row">
-            <div class="col-xl-5 mb-3">
-                <div class="card card-cascade narrower">
-                    <div class="view view-cascade gradient-card-header blue-gradient p-3">
-                        <h3 class="h3-responsive mb-0 p-1 font-weight-light">Due Customers</h3>
-                    </div>
+<section>
+    <div class="row">
+        <div class="col-xl-5 mb-3">
+            <div class="card card-cascade narrower">
+                <div class="view view-cascade gradient-card-header blue-gradient p-3">
+                    <h3 class="h3-responsive mb-0 p-1 font-weight-light">Due Customers</h3>
+                </div>
 
-                    <div class="card-body card-body-cascade">
-                        <ul class="list-group list-group-flush">
-                            @foreach (var due in Model.TopDueCustomer)
-                            {
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <a href="/Customer/Details/@due.CustomerId" target="_blank">@due.Name</a>
-                                    <strong>৳@due.Due</strong>
-                                </li>
-                            }
-                        </ul>
-                    </div>
+                <div class="card-body card-body-cascade">
+                    <ul class="list-group list-group-flush">
+                        @foreach (var due in Model.TopDueCustomer)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <a href="/Customer/Details/@due.CustomerId" target="_blank">@due.Name</a>
+                                <strong>৳@due.Due</strong>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
+        </div>
 
+        @if (User.IsInRole("admin"))
+        {
             <div class="col-xl-7">
                 <div class="card card-body pb-0 mb-4">
                     <table class="table mb-0">
@@ -215,9 +223,10 @@
                     </table>
                 </div>
             </div>
-        </div>
-    </section>
-</div>   
+        }
+    </div>
+</section>
+</div>
 
 @section Scripts {
     <script>

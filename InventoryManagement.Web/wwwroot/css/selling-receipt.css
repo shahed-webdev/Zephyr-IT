@@ -7,10 +7,11 @@ body { background-color: #fff; }
 #receipt .table-bordered th,
 #receipt .table-bordered td { border: 1px solid #000 !important; }
 #receipt table.table-sm td, table.table-sm th { padding-top: .25rem; padding-bottom: .25rem; }
-
 #receipt .table th { text-align: center }
+
 .product-tb h5 { font-weight: 400; font-size: 14px; color: black; margin-bottom: 5px; }
 .product-tb h5 strong { margin-left: 5px; color: black; }
+.product-tb .codeSpan:not(:last-child):after { content: ',' }
 
 #amount-word { font-style: italic; font-size: 15px; color: black; }
 
