@@ -19,9 +19,9 @@ namespace InventoryManagement.Web.Controllers
 
         //Add products info
         [Authorize(Roles = "admin, add-product")]
-        public IActionResult AddProduct()
+        public IActionResult AddProduct(int? id)
         {
-            ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
+            ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label", id.GetValueOrDefault());
             return View();
         }
 

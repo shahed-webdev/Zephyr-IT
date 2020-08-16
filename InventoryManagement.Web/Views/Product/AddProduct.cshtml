@@ -7,6 +7,10 @@
 
 
 <div class="m-md-3">
+    <a href="/Product/CatalogList" class="blue-text">
+        <i class="fas fa-long-arrow-alt-left"></i>
+        Back to category
+    </a>
     <h4 class="mb-3 page-header">Add Product Info</h4>
 
     <section class="card card-body">
@@ -22,7 +26,7 @@
 
                 <div class="col-lg-3">
                     <div class="md-form">
-                        <input asp-for="ProductName" class="form-control" required />
+                        <input asp-for="ProductName" class="form-control" required/>
                         <label for="ProductName">Brand & Model</label>
                         <span asp-validation-for="ProductName"></span>
                     </div>
@@ -30,35 +34,35 @@
 
                 <div class="col-lg-3">
                     <div class="md-form">
-                        <input id="inputWarranty" name="Warranty" class="form-control" type="text" />
+                        <input id="inputWarranty" name="Warranty" class="form-control" type="text"/>
                         <label for="inputWarranty">Warranty</label>
                     </div>
                 </div>
 
                 <div class="col-lg-3">
                     <div class="md-form">
-                        <input id="inputDescription" name="Description" class="form-control" type="text" />
+                        <input id="inputDescription" name="Description" class="form-control" type="text"/>
                         <label for="inputDescription">Description</label>
                     </div>
                 </div>
             </div>
             <div class="text-right">
-                <input type="submit" value="Add Product" class="btn btn-deep-orange btn-rounded" />
+                <input type="submit" value="Add Product" class="btn btn-deep-orange btn-rounded"/>
             </div>
         </form>
     </section>
-    
+
     <section class="card card-body mt-3">
         <h4 id="categoryName"></h4>
         <table id="data-table" class="table table-bordered table-sm">
             <thead>
-                <tr>
-                    <th><strong>Brand & Model</strong></th>
-                    <th><strong>Stock</strong></th>
-                    <th><strong>Warranty</strong></th>
-                    <th><strong>Description</strong></th>
-                    <th style="width: 50px"><strong>Remove</strong></th>
-                </tr>
+            <tr>
+                <th><strong>Brand & Model</strong></th>
+                <th><strong>Stock</strong></th>
+                <th><strong>Warranty</strong></th>
+                <th><strong>Description</strong></th>
+                <th style="width: 50px"><strong>Remove</strong></th>
+            </tr>
             </thead>
         </table>
     </section>
@@ -92,7 +96,7 @@
                         { data: "ProductName" },
                         {
                             data: "Stock", "render": function(data, type, row, meta) {
-                                return data >0? `<a class="blue-text" href="/Product/StockDetails/${row.ProductId}">${data}</a>`:data;
+                                return data > 0 ? `<a class="blue-text" href="/Product/StockDetails/${row.ProductId}">${data}</a>` : data;
                             }
                         },
                         { data: "Warranty" },
@@ -140,16 +144,26 @@
         // selectors
         const parentId = document.getElementById('ParentId');
 
+        if (parentId.selectedIndex > 0) {
+            categoryBasedProduct(parentId.selectedValue);
+        }
+
+
         // event change category
         parentId.addEventListener('change', function() {
             const categoryId = this.value;
             if (!categoryId) return;
 
+            categoryBasedProduct(categoryId);
+        });
+
+        //show category based product
+        function categoryBasedProduct(categoryId) {
             const categoryName = document.getElementById('categoryName');
             categoryName.textContent = this.options[this.selectedIndex].text;
 
             dataTable.filter = [{ Field: "ProductCatalogId", Value: categoryId, Operand: "==" }];
             dataTable.getData();
-        });
+        }
     </script>
 }
