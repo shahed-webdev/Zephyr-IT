@@ -74,7 +74,8 @@ namespace InventoryManagement.Repository
                     ProductCatalogName = s.Product.ProductCatalog.CatalogName,
                     PurchasePrice = s.PurchaseList.PurchasePrice,
                     SellingId = s.SellingList.SellingId,
-                    SellingSn = s.SellingList.Selling.SellingSn
+                    SellingSn = s.SellingList.Selling.SellingSn,
+                    PurchaseId = s.PurchaseList.PurchaseId
                 }).FirstOrDefaultAsync();
 
 

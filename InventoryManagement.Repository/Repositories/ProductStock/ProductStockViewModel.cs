@@ -18,5 +18,6 @@
         public double PurchasePrice { get; set; }
         public int? SellingSn { get; set; }
         public int? SellingId { get; set; }
+        public int? PurchaseId { get; set; }
     }
 }
