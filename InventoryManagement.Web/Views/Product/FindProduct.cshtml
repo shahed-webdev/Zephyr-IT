@@ -41,6 +41,7 @@
             </div>
             <ul class="striped list-unstyled mb-0">
                 <li id="receipt"></li>
+                <li id="purchase"></li>
                 <li><strong>Code:</strong><span id="productCode"></span></li>
                 <li><strong>Brand and Model:</strong><span id="productName"></span></li>
                 <li><strong>Purchase Price:</strong><span id="purchasePrice"></span></li>
@@ -67,7 +68,7 @@
         formCode.addEventListener('submit', evt => {
             evt.preventDefault()
             const url = '/Product/FindProductDetailsByCode'
-            const param = { params: { code: inputProductCode.value } };
+            const param = { params: { code: inputProductCode.value.trim() } };
 
             axios.get(url, param).then(res => {
                 appendData(res.data)
@@ -83,7 +84,7 @@
                 return;
             }
 
-            infoContainer.classList.add('show')
+            infoContainer.classList.add('show');
             document.getElementById('category').textContent = product.ProductCatalogName;
             document.getElementById('productCode').textContent = product.ProductCode;
             document.getElementById('productName').textContent = product.ProductName;
@@ -93,8 +94,11 @@
             document.getElementById('description').textContent = product.Description;
             document.getElementById('note').textContent = product.Note;
 
-            const bill = document.getElementById('receipt')
-            product.SellingId ? bill.innerHTML = `<strong class="green-text">Bill No: </strong><a target="_blank" href="/Selling/SellingReceipt/${product.SellingId}" id="receiptNo">#${product.SellingSn}</a>` : bill.innerHTML = '';
+            const bill = document.getElementById('receipt');
+            const purchase = document.getElementById('purchase');
+
+            product.SellingId ? bill.innerHTML = `<strong class="green-text">Bill No: </strong><a target="_blank" href="/Selling/SellingReceipt/${product.SellingId}">#${product.SellingSn}</a>` : bill.innerHTML = '';
+            purchase.innerHTML = `<a target="_blank" href="/Purchase/PurchaseReceipt/${product.PurchaseId}">Purchase Details <i class="fal fa-long-arrow-right"></i></a>`;
         }
     </script>
 }

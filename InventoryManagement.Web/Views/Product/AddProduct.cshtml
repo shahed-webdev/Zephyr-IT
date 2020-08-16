@@ -53,7 +53,7 @@
     </section>
 
     <section class="card card-body mt-3">
-        <h4 id="categoryName"></h4>
+        <h5 class="font-weight-bold mb-3" id="categoryName"></h5>
         <table id="data-table" class="table table-bordered table-sm">
             <thead>
             <tr>
@@ -70,11 +70,18 @@
 
 @section Scripts{
     <script>
+        // selectors
+        const parentId = document.getElementById('ParentId');
+
         $(function() {
             // Material Select Initialization
             $('.mdb-select').materialSelect();
 
-            dataTable.getData();
+            if (parentId.selectedIndex > 0) {
+                categoryBasedProduct(parentId.value);
+            } else {
+                dataTable.getData();
+            }
         });
 
         const dataTable = {
@@ -115,7 +122,6 @@
             }
         }
 
-
         //delete click
         $('#data-table').on("click", ".remove", function(evt) {
             evt.preventDefault();
@@ -141,14 +147,6 @@
             }
         });
 
-        // selectors
-        const parentId = document.getElementById('ParentId');
-
-        if (parentId.selectedIndex > 0) {
-            categoryBasedProduct(parentId.selectedValue);
-        }
-
-
         // event change category
         parentId.addEventListener('change', function() {
             const categoryId = this.value;
@@ -160,7 +158,7 @@
         //show category based product
         function categoryBasedProduct(categoryId) {
             const categoryName = document.getElementById('categoryName');
-            categoryName.textContent = this.options[this.selectedIndex].text;
+            categoryName.textContent = parentId.options[parentId.selectedIndex].text;
 
             dataTable.filter = [{ Field: "ProductCatalogId", Value: categoryId, Operand: "==" }];
             dataTable.getData();
