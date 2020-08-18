@@ -169,7 +169,7 @@
 
         //input discount amount
         const onInputDiscount = function() {
-            const dues = @Model.SellingDueAmount;
+            const dues = @(Model.SellingDueAmount + Model.SellingDiscountAmount);
             const discount = +this.value;
 
             totalDues.innerText = dues - discount;
