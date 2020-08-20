@@ -49,7 +49,7 @@ input[type="number"] { -moz-appearance: textfield; }
 
 
 /*Printing*/
-@page { size: auto !important; margin: 5px; }
+/*@page { size: auto !important; margin: 5px; }*/
 @media print {
     body { min-width: 0 !important; background-color: #fff; padding:0 !important }
     .btn-floating, footer { display: none !important }

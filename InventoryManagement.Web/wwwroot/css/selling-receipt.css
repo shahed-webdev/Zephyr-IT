@@ -1,28 +1,26 @@
 ﻿
 body { background-color: #fff; }
 
-#receipt {font-family: Arial, Helvetica, sans-serif;}
+#receipt {font-family: Arial, Helvetica, sans-serif; }
 
-#receipt table td, table th { color: black !important; font-size: 13px; }
+#receipt table td, table th { color: black !important; font-size: 12.2px; }
 #receipt .table-bordered th,
 #receipt .table-bordered td { border: 1px solid #000 !important; }
-#receipt table.table-sm td, table.table-sm th { padding-top: .25rem; padding-bottom: .25rem; }
+#receipt table.table-sm td, table.table-sm th { padding-top: .05rem; padding-bottom: .05rem; }
 #receipt .table th { text-align: center }
 
-.product-tb h5 { font-weight: 400; font-size: 14px; color: black; margin-bottom: 5px; }
+.product-tb h5 { font-weight: 400; font-size: 13px; color: black; margin-bottom: 4px; }
 .product-tb h5 strong { margin-left: 5px; color: black; }
 .product-tb .codeSpan:not(:last-child):after { content: ',' }
 
-#amount-word { font-style: italic; font-size: 15px; color: black; }
+#amount-word { font-style: italic; font-size: 13px; color: black; }
 
 .paid-record fieldset {padding: 4px; border: 1px solid #000; }
 .paid-record fieldset legend {width: auto !important; padding: 0 8px; margin-bottom: 0; font-size: 16px; font-weight: bold; color: black !important; }
 .paid-record fieldset p { line-height: 16px; color: #000; font-size: small; margin-bottom: 0; }
-
 .paid-record .list-group-item { padding: .2rem .5rem; border-color: #000; }
 
-
-@page { margin: 2in .5in 0 .5in }
+/*@page { margin: 50.8mm 12.7mm 50.8mm 12.7mm; }*/
 @media print {
     #header { display: none !important }
 }
