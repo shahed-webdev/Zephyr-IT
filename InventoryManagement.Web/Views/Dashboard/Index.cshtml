@@ -5,6 +5,13 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+@section Styles{
+    <style>
+        .active-cyan-2 input.form-control[type=text]:focus:not([readonly]) { border-bottom: 1px solid #3fa3e2; box-shadow: 0 1px 0 0 #3fa3e2; }
+        .active-cyan-2 .fas { color: #3144a2; }
+    </style>  
+}
+
 @{
     var businessStatus = (Model.CustomerDue + Model.StockProductPurchaseValue) - Model.MarketDue;
 }
@@ -133,7 +140,7 @@
             </div>
 
             <div class="card-body card-body-cascade">
-                <table class="table table-sm">
+                <table id="table-vendor" class="table table-sm">
                     <thead>
                     <tr>
                         <th><strong>Company</strong></th>
@@ -175,19 +182,35 @@
         <div class="col-xl-5 mb-3">
             <div class="card card-cascade narrower">
                 <div class="view view-cascade gradient-card-header blue-gradient p-3">
-                    <h3 class="h3-responsive mb-0 p-1 font-weight-light">Due Customers</h3>
+                    <div class="md-form m-0">
+                        <h3 class="h3-responsive mb-0 p-1 font-weight-light">
+                            Due Customers
+                        </h3>
+                    </div>
                 </div>
+                <div class="card-body card-body-cascade pt-0">
+                    <div class="form-inline d-flex justify-content-center align-items-center md-form form-sm active-cyan-2 mb-0 mt-2">
+                        <input id="input-find" class="form-control form-control-sm mb-0 w-75" type="text" placeholder="Search">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                    </div>
 
-                <div class="card-body card-body-cascade">
-                    <ul class="list-group list-group-flush">
+                    <table id="table-customer" class="table table-sm">
+                        <thead>
+                        <tr>
+                            <th><strong>Name</strong></th>
+                            <th><strong>Due</strong></th>
+                        </tr>
+                        </thead>
+                        <tbody>
                         @foreach (var due in Model.TopDueCustomer)
                         {
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <a href="/Customer/Details/@due.CustomerId" target="_blank">@due.Name</a>
-                                <strong>৳@due.Due</strong>
-                            </li>
+                            <tr>
+                                <td><a class="blue-text" href="/Customer/Details/@due.CustomerId" target="_blank">@due.Name</a></td>
+                                <td><strong>৳@due.Due</strong></td>
+                            </tr>
                         }
-                    </ul>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -230,6 +253,18 @@
 
 @section Scripts {
     <script>
+        $(function () {
+            const options = {
+                pageLength: 10,
+                dom: 't'
+            }
+            const oTable = $('#table-customer').DataTable(options);
+
+            $('#input-find').on("input",function(){
+                oTable.search($(this).val()).draw();
+            })
+        });
+
         let months = [];
         let sales = [];
         let purchase = [];
@@ -245,10 +280,9 @@
             @:expense.push(@item.MonthlyExpense);
         }
 
-
         // Line chart
-        var ctxL = document.getElementById("lineChart").getContext('2d');
-        var myLineChart = new Chart(ctxL, {
+        const ctxL = document.getElementById("lineChart").getContext('2d');
+        const myLineChart = new Chart(ctxL, {
             type: 'line',
             data: {
                 labels: months,
@@ -285,9 +319,7 @@
             },
             options: {
                 legend: {
-                    labels: {
-                        fontColor: "#fff"
-                    }
+                    labels: { fontColor: "#fff" }
                 },
                 scales: {
                     xAxes: [{
@@ -295,9 +327,7 @@
                             display: true,
                             color: "rgba(255,255,255,.25)"
                         },
-                        ticks: {
-                            fontColor: "#fff"
-                        },
+                        ticks: { fontColor: "#fff" }
                     }],
                     yAxes: [{
                         display: true,
@@ -305,9 +335,7 @@
                             display: true,
                             color: "rgba(255,255,255,.25)"
                         },
-                        ticks: {
-                            fontColor: "#fff"
-                        }
+                        ticks: { fontColor: "#fff" }
                     }]
                 }
             }

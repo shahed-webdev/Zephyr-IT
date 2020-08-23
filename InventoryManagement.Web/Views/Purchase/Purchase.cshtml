@@ -34,7 +34,7 @@
             <div class="form-row">
                 <div class="col-lg-3">
                     <div class="md-form">
-                        <select id="ParentId" asp-items="ViewBag.ParentId" class="mdb-select" required>
+                        <select id="ParentId" searchable="Search here.." asp-items="ViewBag.ParentId" class="mdb-select" required>
                             <option value="" disabled selected>Select Category</option>
                         </select>
                     </div>
@@ -42,7 +42,7 @@
 
                 <div class="col-lg-3">
                     <div class="md-form">
-                        <select id="selectProductId" class="mdb-select product-select" required>
+                        <select id="selectProductId" searchable="Search here.." class="mdb-select product-select" required>
                             <option value="" disabled selected>Brand and Model</option>
                         </select>
                     </div>
@@ -243,7 +243,7 @@
 </div>
 
 @section Scripts {
-    <partial name="_UnobtrusiveAjaxPartial" />
-    <script src="~/page-js/product-purchase.js?v=.001"></script>
+    <partial name="_UnobtrusiveAjaxPartial"/>
+    <script src="~/page-js/product-purchase.js?v=.9021" ></script>
 }
 

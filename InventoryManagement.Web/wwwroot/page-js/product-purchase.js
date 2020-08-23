@@ -1,10 +1,11 @@
 ﻿
-//date picker
- $('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'));
+$(function() {
+    //date picker
+    $('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'));
 
-// Material Select Initialization
-$('.mdb-select').materialSelect();
-
+    // Material Select Initialization
+    $('.mdb-select').materialSelect();
+})
 
 //global store
 let storage = [];
@@ -250,12 +251,12 @@ const clearInput = function () {
 const onCategoryChanged = function() {
     const categoryId = +this.value
 
-    $('.product-select').materialSelect("destroy");
+    //$('.product-select').materialSelect("destroy");
 
-    // Material Select Initialization
-    $('.product-select').materialSelect();
+    //// Material Select Initialization
+    //$('.product-select').materialSelect();
 
-    clearMDBdropDownList(formCart)
+    //clearMDBdropDownList(formCart);
 
     if (!categoryId) return;
 
@@ -263,25 +264,26 @@ const onCategoryChanged = function() {
     const parameter = { params: { categoryId } }
 
     axios.get(url, parameter).then(res => {
-        const fragment = document.createDocumentFragment()
+        const fragment = document.createDocumentFragment();
         const option1 = document.createElement("option");
-        option1.value = ""
-        option1.text = "Brand and Model"
-        option1.setAttribute("disabled", "disabled")
-        option1.setAttribute("selected", true)
-        fragment.appendChild(option1)
+
+        option1.value = "";
+        option1.text = "Brand and Model";
+        option1.setAttribute("disabled", "disabled");
+        option1.setAttribute("selected", true);
+        fragment.appendChild(option1);
 
         if (res.data.length) {
             res.data.forEach(item => {
                 const option = document.createElement("option");
-                option.value = item.ProductId
-                option.text = item.ProductName
-                fragment.appendChild(option)
+                option.value = item.ProductId;
+                option.text = item.ProductName;
+                fragment.appendChild(option);
             })
         }
 
-        selectProductId.innerHTML = ''
-        selectProductId.appendChild(fragment)
+        selectProductId.innerHTML = '';
+        selectProductId.appendChild(fragment);
     })
 }
 
@@ -558,7 +560,7 @@ const onAddProductToList = function () {
 }
 
 
-//event listners
+//event listeners
 formCart.addEventListener('submit', onOpenProductCodeModal);
 btnAddTolist.addEventListener('click', onAddProductToList);
 
