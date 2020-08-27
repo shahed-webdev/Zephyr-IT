@@ -43,7 +43,10 @@
                     <li class="list-group-item">
                         <div class="parentCategory d-flex justify-content-between mb-2">
                             <div>
-                                <span class="fas fa-angle-right rotate"></span>
+                                @if (!isNoCategory)
+                                {
+                                    <span class="fas fa-angle-right rotate"></span>
+                                }
                                 <strong><span class="far fa-folder-open ic-w mx-1"></span>@catalog.CatalogName</strong>
                             </div>
                             <div>

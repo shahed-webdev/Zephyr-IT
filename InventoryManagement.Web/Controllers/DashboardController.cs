@@ -29,7 +29,7 @@ namespace InventoryManagement.Web.Controllers
         }
         public IActionResult TopDueVendor(DataRequest request)
         {
-            var data = _db.Vendors.ToListDataTable(request);
+            var data = _db.Vendors.TopDueDataTable(request);
             return Json(data);
         }
 

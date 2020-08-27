@@ -140,6 +140,11 @@
             </div>
 
             <div class="card-body card-body-cascade">
+                <div class="form-inline d-flex justify-content-center align-items-center md-form form-sm active-cyan-2 mb-0 mt-2">
+                    <input id="vendor-input-find" class="form-control form-control-sm mb-0 w-75" type="text" placeholder="Search">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                </div>
+
                 <table id="table-vendor" class="table table-sm">
                     <thead>
                     <tr>
@@ -149,17 +154,6 @@
                         <th><strong>Due</strong></th>
                     </tr>
                     </thead>
-                    <tbody>
-                    @foreach (var due in Model.DueVendors)
-                    {
-                        <tr>
-                            <td>@due.VendorCompanyName</td>
-                            <td>৳@due.TotalAmount</td>
-                            <td>৳@due.VendorPaid</td>
-                            <td>৳@due.VendorDue</td>
-                        </tr>
-                    }
-                    </tbody>
                 </table>
             </div>
         </div>
@@ -201,15 +195,6 @@
                             <th><strong>Due</strong></th>
                         </tr>
                         </thead>
-                        <tbody>
-                        @foreach (var due in Model.TopDueCustomer)
-                        {
-                            <tr>
-                                <td><a class="blue-text" href="/Customer/Details/@due.CustomerId" target="_blank">@due.Name</a></td>
-                                <td><strong>৳@due.Due</strong></td>
-                            </tr>
-                        }
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -254,16 +239,59 @@
 @section Scripts {
     <script>
         $(function () {
-            const options = {
+            //vendor data-table
+            const customerTable = $('#table-customer').DataTable({
+                processing: true,
+                serverSide: true,
                 pageLength: 10,
-                dom: 't'
-            }
-            const oTable = $('#table-customer').DataTable(options);
+                dom: 't',
+                ajax: {
+                    url: "/Dashboard/TopDueCustomer",
+                    type: "POST"
+                },
+                columns:
+                [
+                    {
+                        data: "Name", "render": function(data, type, row, meta) {
+                            return `<a class="blue-text" href="/Customer/Details/${row.CustomerId}">${data}</a>`;
+                        }
+                    },
+                    { data: "Due" }
+                ],
+                order: [[1, 'desc']]
+            });
 
-            $('#input-find').on("input",function(){
-                oTable.search($(this).val()).draw();
+            //on search input
+            $('#input-find').on("input", function() {
+                customerTable.search($(this).val()).draw();
+            });
+
+
+            //vendor data-table
+            const vendorTable = $('#table-vendor').DataTable({
+                processing: true,
+                serverSide: true,
+                pageLength: 10,
+                dom: 't',
+                ajax: {
+                    url: "/Dashboard/TopDueVendor",
+                    type: "POST"
+                },
+                columns:
+                [
+                    { data: "VendorCompanyName" },
+                    { data: "TotalAmount" },
+                    { data: "VendorPaid" },
+                    { data: "VendorDue" }
+                ]
+            });
+
+            //on search input
+            $('#vendor-input-find').on("input", function() {
+                vendorTable.search($(this).val()).draw();
             })
         });
+
 
         let months = [];
         let sales = [];
