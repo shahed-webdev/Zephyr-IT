@@ -17,5 +17,6 @@ namespace InventoryManagement.Repository
         Task<ICollection<CustomerListViewModel>> SearchAsync(string key);
         double TotalDue();
         ICollection<CustomerDueViewModel> TopDue(int totalCustomer);
+        DataResult<CustomerDueViewModel> TopDueDataTable(DataRequest request);
     }
 }

@@ -182,7 +182,7 @@ namespace InventoryManagement.Repository
                       OrganizationName = c.OrganizationName,
                       CustomerName = c.CustomerName,
                       CustomerAddress = c.CustomerAddress,
-                      PhonePrimary = c.CustomerPhone.FirstOrDefault(p => p.Phone.Contains(key)).Phone ?? c.CustomerPhone.FirstOrDefault(p=> p.IsPrimary == true).Phone,
+                      PhonePrimary = c.CustomerPhone.FirstOrDefault(p => p.Phone.Contains(key)).Phone ?? c.CustomerPhone.FirstOrDefault(p => p.IsPrimary == true).Phone,
                       Due = c.Due,
                       DueLimit = c.DueLimit,
                       SignUpDate = c.InsertDate,
@@ -205,6 +205,18 @@ namespace InventoryManagement.Repository
                 Name = c.CustomerName,
                 Due = c.Due
             }).ToList();
+        }
+
+        public DataResult<CustomerDueViewModel> TopDueDataTable(DataRequest request)
+        {
+            return Context.Customer.Where(c => c.Due > 0)
+                .OrderByDescending(c => c.Due)
+                .Select(c => new CustomerDueViewModel
+                {
+                    CustomerId = c.CustomerId,
+                    Name = c.CustomerName,
+                    Due = c.Due
+                }).ToDataResult(request);
         }
 
 

@@ -17,6 +17,7 @@ namespace InventoryManagement.Repository
         bool RemoveCustom(int id);
         double TotalDue();
         ICollection<VendorPaidDue> TopDue(int totalVendor);
+        DataResult<VendorPaidDue> TopDueDataTable(DataRequest request);
     }
 
 }

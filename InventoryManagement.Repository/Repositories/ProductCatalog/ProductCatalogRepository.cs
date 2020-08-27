@@ -88,10 +88,10 @@ namespace InventoryManagement.Repository
         public string CatalogNameNode(int id)
         {
             return Context.ProductCatalog
-                   .AsEnumerable()?
-                   .Where(c => c.ProductCatalogId == id)
-                   .Select(c => CatalogDllFunction(c.Parent, c.CatalogName))
-                   .FirstOrDefault();
+                .Where(c => c.ProductCatalogId == id)
+                .AsEnumerable()?
+                .Select(c => CatalogDllFunction(c.Parent, c.CatalogName))
+                .FirstOrDefault();
         }
 
         public void DeleteCustom(int id)

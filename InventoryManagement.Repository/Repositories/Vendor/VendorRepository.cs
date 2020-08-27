@@ -150,5 +150,19 @@ namespace InventoryManagement.Repository
                 TotalDiscount = v.TotalDiscount
             }).ToList();
         }
+
+        public DataResult<VendorPaidDue> TopDueDataTable(DataRequest request)
+        {
+            return Context.Vendor.Where(v => v.Due > 0)
+                .OrderByDescending(v => v.Due).Select(v => new VendorPaidDue
+                {
+                    VendorId = v.VendorId,
+                    VendorCompanyName = v.VendorCompanyName,
+                    VendorDue = v.Due,
+                    VendorPaid = v.Paid,
+                    TotalAmount = v.TotalAmount,
+                    TotalDiscount = v.TotalDiscount
+                }).ToDataResult(request);
+        }
     }
 }

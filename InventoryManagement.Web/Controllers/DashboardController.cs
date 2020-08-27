@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Repository;
+using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -19,6 +20,17 @@ namespace InventoryManagement.Web.Controllers
         {
             var d = new DashboardRepository(_db);
             return View(d.Data(year));
+        }
+
+        public IActionResult TopDueCustomer(DataRequest request)
+        {
+            var data = _db.Customers.TopDueDataTable(request);
+            return Json(data);
+        }
+        public IActionResult TopDueVendor(DataRequest request)
+        {
+            var data = _db.Vendors.ToListDataTable(request);
+            return Json(data);
         }
 
         //GET: Profile
