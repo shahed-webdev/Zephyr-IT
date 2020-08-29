@@ -111,7 +111,7 @@ namespace InventoryManagement.Web.Views
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
             var dbResponse = await _db.PurchasePayments.DuePaySingleAsync(model, _db).ConfigureAwait(false);
 
-            if (dbResponse.IsSuccess) return Ok();
+            if (dbResponse.IsSuccess) return Ok(dbResponse);
 
             return BadRequest(dbResponse.Message);
         }

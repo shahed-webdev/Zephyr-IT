@@ -1,6 +1,8 @@
 ﻿
- // material select initialization
- $('.mdb-select').materialSelect();
+$(function() {
+    // material select initialization
+    $('.mdb-select').materialSelect();
+});
 
 // global storage
 let cartProducts = []

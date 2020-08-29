@@ -160,6 +160,13 @@
 @section scripts{
     <script src="~/js/amount-in-word.js"></script>
     <script>
+        $(function() {
+            $("#amount-word").text(`Taka(in word): ${number2text(@Model.SellingTotalPrice).toLowerCase()}`);
+
+            // material select initialization
+            $('.mdb-select').materialSelect();
+        });
+
         const formPayment = document.getElementById('formPayment');
         const totalDues = document.getElementById('totalDues');
         const payableContainer = document.getElementById('payable-container');
@@ -214,9 +221,9 @@
                 PaidDate: new Date()
             }
 
-            const url = '/Selling/DueCollection'
+            const url = '/Selling/DueCollection';
             const options = {
-                method: 'post',
+                method: 'POST',
                 url: url,
                 data: data
             }
@@ -224,13 +231,6 @@
             axios(options).then(response => {
                 location.href = "/Customer/Details/@Model.CustomerInfo.CustomerId";
             }).catch(error => console.log(error))
-        });
-
-        $(function() {
-            $("#amount-word").text(`Taka( in word): ${number2text(@Model.SellingTotalPrice).toLowerCase()}`);
-
-            // material select initialization
-            $('.mdb-select').materialSelect();
         });
     </script>
 }
