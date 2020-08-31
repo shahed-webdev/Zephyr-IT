@@ -1,6 +1,8 @@
 ﻿
- // material select initialization
- $('.mdb-select').materialSelect();
+$(function() {
+    // material select initialization
+    $('.mdb-select').materialSelect();
+});
 
 // global storage
  let cartProducts = [];
@@ -8,7 +10,7 @@
 
 //*****SELECTORS*****/
 // product code form
- const formCode = document.getElementById('formCode');
+const formCode = document.getElementById('formCode');
 const inputBarCode = formCode.inputBarCode;
 const codeExistError = formCode.querySelector('#codeExistError');
 const btnFind = formCode.btnFind;
