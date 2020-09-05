@@ -431,7 +431,7 @@ namespace InventoryManagement.Repository
                     SellingPrice = p.SellingPrice,
                     Description = p.Description,
                     Warranty = p.Warranty,
-                    ProductStock = stocks.Where(s => s.ProductId == p.ProductId).ToList()
+                    ProductStock = stocks.Where(s => p.AddedProductCodes.Contains(s.ProductCode)).ToList()
                 }).ToList();
 
 

@@ -126,5 +126,6 @@ namespace InventoryManagement.Repository
         public double SellingPrice { get; set; }
         public string Description { get; set; }
         public string Warranty { get; set; }
+        public string[] AddedProductCodes { get; set; }
     }
 }
