@@ -46,6 +46,7 @@ namespace InventoryManagement.Repository
         public string Warranty { get; set; }
         public string Note { get; set; }
         public double SellingPrice { get; set; }
+        public double PurchasePrice { get; set; }
     }
 
     public class ProductShowViewModel

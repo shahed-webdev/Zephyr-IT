@@ -36,7 +36,10 @@ namespace InventoryManagement.Repository
 
         public Task<ProductSellViewModel> FindforSellAsync(string code)
         {
-            var product = Context.ProductStock.Include(s => s.Product).Where(s => s.ProductCode == code && !s.IsSold)
+            var product = Context.ProductStock
+                .Include(s => s.Product)
+                .Include(s => s.PurchaseList)
+                .Where(s => s.ProductCode == code && !s.IsSold)
                 .Select(s => new ProductSellViewModel
                 {
                     ProductId = s.ProductId,
@@ -44,10 +47,11 @@ namespace InventoryManagement.Repository
                     ProductCatalogName = s.Product.ProductCatalog.CatalogName,
                     ProductCode = s.ProductCode,
                     ProductName = s.Product.ProductName,
-                    Description = s.Product.Description,
-                    Warranty = s.Product.Warranty,
-                    Note = s.Product.Note,
-                    SellingPrice = s.Product.SellingPrice
+                    Description = s.PurchaseList.Description,
+                    Warranty = s.PurchaseList.Warranty,
+                    Note = s.PurchaseList.Note,
+                    SellingPrice = s.PurchaseList.SellingPrice,
+                    PurchasePrice = s.PurchaseList.PurchasePrice
                 });
             return product.FirstOrDefaultAsync();
         }
@@ -67,10 +71,10 @@ namespace InventoryManagement.Repository
                     ProductId = s.ProductId,
                     ProductCode = s.ProductCode,
                     ProductName = s.Product.ProductName,
-                    Description = s.Product.Description,
-                    Warranty = s.Product.Warranty,
-                    Note = s.Product.Note,
-                    SellingPrice = s.Product.SellingPrice,
+                    Description = s.PurchaseList.Description,
+                    Warranty = s.PurchaseList.Warranty,
+                    Note = s.PurchaseList.Note,
+                    SellingPrice = s.PurchaseList.SellingPrice,
                     ProductCatalogName = s.Product.ProductCatalog.CatalogName,
                     PurchasePrice = s.PurchaseList.PurchasePrice,
                     SellingId = s.SellingList.SellingId,
