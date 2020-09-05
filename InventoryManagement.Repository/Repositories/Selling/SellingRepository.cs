@@ -334,6 +334,7 @@ namespace InventoryManagement.Repository
               .Include(s => s.Registration)
               .Include(s => s.SellingList)
               .ThenInclude(ps => ps.ProductStock)
+              .ThenInclude(s => s.PurchaseList)
               .ThenInclude(p => p.Product)
               .ThenInclude(pd => pd.ProductCatalog)
               .Include(s => s.SellingPaymentList)
@@ -356,10 +357,11 @@ namespace InventoryManagement.Repository
                       ProductCatalogId = pd.Product.ProductCatalogId,
                       ProductCatalogName = pd.Product.ProductCatalog.CatalogName,
                       ProductName = pd.Product.ProductName,
-                      Description = pd.Product.Description,
+                      Description = pd.Description,
                       Note = pd.Product.Note,
-                      Warranty = pd.Product.Warranty,
+                      Warranty = pd.Warranty,
                       SellingPrice = pd.SellingPrice,
+                      PurchasePrice = pd.ProductStock.FirstOrDefault().PurchaseList.PurchasePrice,
                       ProductCodes = pd.ProductStock.Select(ss => ss.ProductCode).ToArray()
                   }).ToList(),
                   Payments = s.SellingPaymentList.Select(pp => new SellingPaymentViewModel
