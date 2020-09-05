@@ -17,7 +17,7 @@ namespace InventoryManagement.Repository
         public double SellingPaidAmount { get; set; }
         public string PaymentMethod { get; set; }
         public DateTime SellingDate { get; set; }
-        public string[] ProductCodes { get; set; }
+        //public string[] ProductCodes { get; set; }
         public ICollection<SellingProductListViewModel> ProductList { get; set; }
     }
 
@@ -27,6 +27,7 @@ namespace InventoryManagement.Repository
         public double SellingPrice { get; set; }
         public string Description { get; set; }
         public string Warranty { get; set; }
+        public string[] ProductCodes { get; set; }
     }
 
     public class SellingReceiptProductViewModel

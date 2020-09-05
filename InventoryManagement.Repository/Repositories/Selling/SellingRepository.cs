@@ -28,7 +28,8 @@ namespace InventoryManagement.Repository
         public async Task<DbResponse<int>> AddCustomAsync(SellingViewModel model, IUnitOfWork db)
         {
             var response = new DbResponse<int>();
-            var StockOuts = await db.ProductStocks.IsStockOutAsync(model.ProductCodes).ConfigureAwait(false);
+            var codes = model.ProductList.SelectMany(p => p.ProductCodes).ToArray();
+            var StockOuts = await db.ProductStocks.IsStockOutAsync(codes).ConfigureAwait(false);
             if (StockOuts.Length > 0)
             {
                 response.Message = "Product Stock Out";
@@ -38,7 +39,7 @@ namespace InventoryManagement.Repository
 
             var newSellingSn = await GetNewSnAsync().ConfigureAwait(false);
             var newSellingPaymentSn = await db.SellingPayments.GetNewSnAsync().ConfigureAwait(false);
-            var sellingStock = await db.ProductStocks.SellingStockFromCodesAsync(model.ProductCodes);
+            var sellingStock = await db.ProductStocks.SellingStockFromCodesAsync(codes);
 
             var selling = new Selling
             {
@@ -56,7 +57,7 @@ namespace InventoryManagement.Repository
                     SellingPrice = l.SellingPrice,
                     Description = l.Description,
                     Warranty = l.Warranty,
-                    ProductStock = sellingStock.Where(s => s.ProductId == l.ProductId).Select(s =>
+                    ProductStock = sellingStock.Where(s => l.ProductCodes.Contains(s.ProductCode)).Select(s =>
                     {
                         s.IsSold = true;
                         return s;
