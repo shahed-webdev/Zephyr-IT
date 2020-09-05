@@ -32,7 +32,6 @@ namespace InventoryManagement.Repository
 
     public class SellingReceiptProductViewModel
     {
-
         public int SellingListId { get; set; }
         public int SellingId { get; set; }
         public int ProductId { get; set; }
@@ -126,6 +125,6 @@ namespace InventoryManagement.Repository
         public double SellingPrice { get; set; }
         public string Description { get; set; }
         public string Warranty { get; set; }
-        public string[] AddedProductCodes { get; set; }
+        public string[] RemainCodes { get; set; }
     }
 }

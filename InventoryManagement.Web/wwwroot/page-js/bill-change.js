@@ -16,11 +16,11 @@ const codeExistError = formCode.querySelector('#codeExistError');
 const btnFind = formCode.btnFind;
 
 // product table
- const formTable = document.getElementById('formTable');
+const formTable = document.getElementById('formTable');
 const tbody = document.getElementById('t-body');
 
 //payment selectors
- const formPayment = document.getElementById('formPayment');
+const formPayment = document.getElementById('formPayment');
 const totalPrice = formPayment.querySelector('#totalPrice');
 const inputDiscount = formPayment.inputDiscount;
 const inputReturnAmount = formPayment.inputReturnAmount;
@@ -47,18 +47,19 @@ const storage = {
 
         //check product added or not
         const found = cartProducts.some(function(obj) {
-            return (obj.ProductCatalogId === product.ProductCatalogId && obj.ProductName === product.ProductName);
+            return (obj.ProductCatalogId === product.ProductCatalogId && obj.ProductName === product.ProductName && obj.PurchasePrice === product.PurchasePrice);
         });
 
         if (!found) {
             product.codes = [{ code: product.ProductCode, isRemove: false }];
+            product.RemainCodes = [];
             product.sellingFixedValue = product.SellingPrice;
             product.sellingQuantity = 1;
             product.SellingListId = 0;
             cartProducts.push(product);
         }
         else {
-            const index = cartProducts.findIndex(item => item.ProductCatalogId === product.ProductCatalogId && item.ProductName === product.ProductName);
+            const index = cartProducts.findIndex(item => item.ProductCatalogId === product.ProductCatalogId && item.ProductName === product.ProductName && item.PurchasePrice === product.PurchasePrice);
             const codes = cartProducts[index].codes
 
             //check code added or not
@@ -116,7 +117,7 @@ const createTableRow = function (item) {
     const note = item.Note ? `<span style="font-size: 12px;" class="badge badge-pill badge-secondary">${item.Note}</span>` : "";
     const disable = item.sellingQuantity ? "" : "disable-row";
 
-    return `<tr data-id="${item.ProductCatalogId}" data-name="${item.ProductName}" class="${disable}">
+    return `<tr data-id="${item.ProductCatalogId}" data-name="${item.ProductName}" data-pprice="${item.PurchasePrice}" class="${disable}">
                 <td>${item.ProductCatalogName}</td>
                 <td>
                     ${item.ProductName},
@@ -150,6 +151,7 @@ const onRemoveClicked = function(evt) {
     const row = element.parentElement.parentElement.parentElement;
     const id = +row.getAttribute('data-id');
     const name = row.getAttribute('data-name');
+    const purchasePrice = +row.getAttribute('data-pprice');
 
     //remove code
     const codeClicked = element.classList.contains('code');
@@ -157,7 +159,7 @@ const onRemoveClicked = function(evt) {
     if (!codeClicked) return;
 
     const pCode = element.textContent;
-    const index = cartProducts.findIndex(item => item.ProductCatalogId === id && item.ProductName === name);
+    const index = cartProducts.findIndex(item => item.ProductCatalogId === id && item.ProductName === name && item.PurchasePrice === purchasePrice);
     const codes = cartProducts[index].codes;
 
     codes.forEach((obj, i) => {
@@ -223,8 +225,9 @@ const onInputUnitPrice = function (evt) {
 
         const id = +input.parentElement.parentElement.getAttribute('data-id');
         const name = input.parentElement.parentElement.getAttribute('data-name');
+        const purchasePrice = +input.parentElement.parentElement.getAttribute('data-pprice');
 
-        const index = cartProducts.findIndex(item => item.ProductCatalogId === id && item.ProductName === name);
+        const index = cartProducts.findIndex(item => item.ProductCatalogId === id && item.ProductName === name && item.PurchasePrice === purchasePrice);
         cartProducts[index].SellingPrice = +input.value
 
         const qty = +input.parentElement.previousElementSibling.innerText;
@@ -356,9 +359,6 @@ const onSellSubmitClicked = function(evt) {
     btnSubmit.innerText = 'submitting..'
     btnSubmit.disabled = true
 
-    //added product without quantity
-    const products = cartProducts.filter(item => item.sellingQuantity);
-
     //get remove and new code
     const addedProductCodes = [];
     const removedProductCodes = [];
@@ -367,18 +367,27 @@ const onSellSubmitClicked = function(evt) {
         obj.codes.forEach(itm => {
             if (obj.hasOwnProperty("ProductCodes")) {
                 if (obj.ProductCodes.indexOf(itm.code) !== -1) {
-                    if (itm.isRemove)
+                    if (itm.isRemove) {
                         removedProductCodes.push(itm.code);
+                    } else {
+                        obj.RemainCodes.push(itm.code);
+                    }
                 } else {
-                    if (!itm.isRemove)
+                    if (!itm.isRemove) {
                         addedProductCodes.push(itm.code);
+                    }
                 }
             } else {
-                if (!itm.isRemove)
+                if (!itm.isRemove) {
                     addedProductCodes.push(itm.code);
+                }
             }
         })
     })
+
+    //added product without quantity
+    const products = cartProducts.filter(item => item.sellingQuantity);
+
 
     const body = {
         SellingId: +hiddenSellingId.value,
@@ -392,7 +401,6 @@ const onSellSubmitClicked = function(evt) {
         PaidDate: new Date(),
         Products: products
     }
-
 
     const url = '/Selling/BillChange'
     const options = {

@@ -76,7 +76,7 @@
                             <tbody id="t-body">
                                 @foreach (var item in Model.Products)
                                 {
-                                    <tr data-id="@item.ProductCatalogId" data-name="@item.ProductName">
+                                    <tr data-id="@item.ProductCatalogId" data-name="@item.ProductName" data-pprice="@item.PurchasePrice">
                                         <td>@item.ProductCatalogName</td>
                                         <td>
                                             @item.ProductName,
@@ -157,12 +157,13 @@
 </div>
 
 @section Scripts{
-    <script src="~/page-js/bill-change.js?v=.01"></script>
+    <script src="~/page-js/bill-change.js?v=.07"></script>
     <script>
         //save previous data
         cartProducts = @Html.Raw(Json.Serialize(Model.Products));
         cartProducts.forEach(function(obj, i) {
             obj.codes = [];
+            obj.RemainCodes = [];
             obj.sellingQuantity = obj.ProductCodes.length;
 
             obj.ProductCodes.forEach(code => {
