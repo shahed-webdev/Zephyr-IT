@@ -131,8 +131,8 @@ namespace InventoryManagement.Repository
                       ProductCatalogId = pd.Product.ProductCatalogId,
                       ProductCatalogName = pd.Product.ProductCatalog.CatalogName,
                       ProductName = pd.Product.ProductName,
-                      Description = pd.Product.Description,
-                      Warranty = pd.Product.Warranty,
+                      Description = pd.Description,
+                      Warranty = pd.Warranty,
                       SellingPrice = pd.SellingPrice,
                       ProductCodes = pd.ProductStock.Select(ss => ss.ProductCode).ToArray()
                   }).ToList(),
