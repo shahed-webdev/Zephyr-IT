@@ -51,7 +51,7 @@ namespace InventoryManagement.Repository
                         ReceiptSn = Sn,
                         PaidAmount = model.PaidAmount,
                         PaymentMethod = model.PaymentMethod,
-                        PaidDate = model.PaidDate,
+                        PaidDate = model.PaidDate.ToLocalTime(),
 
                         PurchasePaymentList = new List<PurchasePaymentList>
                         {

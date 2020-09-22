@@ -50,7 +50,7 @@ namespace InventoryManagement.Repository
                 SellingDiscountAmount = model.SellingDiscountAmount,
                 SellingDiscountPercentage = model.SellingDiscountAmount,
                 SellingPaidAmount = model.SellingPaidAmount,
-                SellingDate = model.SellingDate,
+                SellingDate = model.SellingDate.ToLocalTime(),
                 SellingList = model.ProductList.Select(l => new SellingList
                 {
                     ProductId = l.ProductId,
@@ -77,7 +77,7 @@ namespace InventoryManagement.Repository
                                 ReceiptSn = newSellingPaymentSn,
                                 PaidAmount = model.SellingPaidAmount,
                                 PaymentMethod = model.PaymentMethod,
-                                PaidDate = model.SellingDate
+                                PaidDate = model.SellingDate.ToLocalTime()
                             }
                         }
                     } : null
