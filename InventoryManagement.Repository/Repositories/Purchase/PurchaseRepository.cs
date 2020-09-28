@@ -52,7 +52,7 @@ namespace InventoryManagement.Repository
                 PurchaseDiscountAmount = model.PurchaseDiscountAmount,
                 PurchasePaidAmount = model.PurchasePaidAmount,
                 MemoNumber = model.MemoNumber,
-                PurchaseDate = model.PurchaseDate,
+                PurchaseDate = model.PurchaseDate.ToLocalTime(),
                 PurchaseList = model.Products.Select(p => new PurchaseList
                 {
                     ProductId = p.ProductId,
@@ -81,7 +81,7 @@ namespace InventoryManagement.Repository
                                 ReceiptSn = newPurchasePaymentSn,
                                 PaidAmount = model.PurchasePaidAmount,
                                 PaymentMethod = model.PaymentMethod,
-                                PaidDate = model.PurchaseDate
+                                PaidDate = model.PurchaseDate.ToLocalTime()
                             }
                         }
                     } : null
