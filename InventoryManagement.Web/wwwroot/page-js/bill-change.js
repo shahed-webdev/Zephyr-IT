@@ -365,12 +365,16 @@ const onSellSubmitClicked = function(evt) {
 
     cartProducts.forEach(obj => {
         obj.codes.forEach(itm => {
+            if (!itm.isRemove) {
+                if (obj.RemainCodes.indexOf(itm.code) === -1) {
+                    obj.RemainCodes.push(itm.code);
+                }
+            }
+
             if (obj.hasOwnProperty("ProductCodes")) {
                 if (obj.ProductCodes.indexOf(itm.code) !== -1) {
                     if (itm.isRemove) {
                         removedProductCodes.push(itm.code);
-                    } else {
-                        obj.RemainCodes.push(itm.code);
                     }
                 } else {
                     if (!itm.isRemove) {

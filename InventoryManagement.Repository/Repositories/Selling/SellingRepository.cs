@@ -387,8 +387,6 @@ namespace InventoryManagement.Repository
             var response = new DbResponse();
             try
             {
-
-
                 var stocks = new List<ProductStock>();
                 if (model.AddedProductCodes.Any())
                 {
