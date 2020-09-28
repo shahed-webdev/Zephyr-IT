@@ -20,7 +20,7 @@ namespace InventoryManagement.Data
             entity.HasOne(d => d.SellingList)
                 .WithMany(p => p.ProductStock)
                 .HasForeignKey(d => d.SellingListId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK_ProductStock_SellingList");
 
             entity.HasOne(d => d.PurchaseList)

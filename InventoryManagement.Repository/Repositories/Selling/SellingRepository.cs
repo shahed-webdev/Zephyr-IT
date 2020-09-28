@@ -305,7 +305,6 @@ namespace InventoryManagement.Repository
                 var stocks = selling.SellingList.SelectMany(s => s.ProductStock).Select(sp =>
                  {
                      sp.IsSold = false;
-                     sp.SellingListId = null;
                      return sp;
                  }).ToList();
 
