@@ -57,10 +57,10 @@ namespace InventoryManagement.Repository
             var expense = _db.Expenses.DailyExpenseAmount(_reportDay);
             var dailySummary = new DailyDashboardSummaryViewModel
             {
-                Sale = sale,
-                Purchase = purchase,
-                Profit = profit,
-                Expense = expense
+                Sale = Math.Round(sale, 2),
+                Purchase = Math.Round(purchase, 2),
+                Profit = Math.Round(profit, 2),
+                Expense = Math.Round(expense, 2)
             };
             return dailySummary;
 
@@ -95,11 +95,11 @@ namespace InventoryManagement.Repository
                           select new MonthlyDashboardSummaryViewModel
                           {
                               Month = m,
-                              MonthlySale = s?.Amount ?? 0,
-                              MonthlyNewPurchase = p?.Amount ?? 0,
-                              MonthlyExpense = e?.Amount ?? 0,
-                              MonthlyProfit = pt?.Amount ?? 0,
-                              DailyAverageProfit = pt?.Amount ?? 0 / 30
+                              MonthlySale = Math.Round(s?.Amount ?? 0, 2),
+                              MonthlyNewPurchase = Math.Round(p?.Amount ?? 0, 2),
+                              MonthlyExpense = Math.Round(e?.Amount ?? 0, 2),
+                              MonthlyProfit = Math.Round(pt?.Amount ?? 0, 2),
+                              DailyAverageProfit = Math.Round(pt?.Amount ?? 0/30, 2)
                           }).ToList();
 
             return result ?? new List<MonthlyDashboardSummaryViewModel>(); ;

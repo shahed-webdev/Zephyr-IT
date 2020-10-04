@@ -24,6 +24,7 @@ namespace InventoryManagement.Data
         public double SellingDueAmount { get; set; }
         public string SellingPaymentStatus { get; set; }
         public DateTime SellingDate { get; set; }
+        public DateTime? LastUpdateDate { get; set; }
         public DateTime InsertDate { get; set; }
 
         public virtual Customer Customer { get; set; }

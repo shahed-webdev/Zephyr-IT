@@ -51,6 +51,7 @@ namespace InventoryManagement.Repository
                 SellingDiscountPercentage = model.SellingDiscountAmount,
                 SellingPaidAmount = model.SellingPaidAmount,
                 SellingDate = model.SellingDate.ToLocalTime(),
+                LastUpdateDate = model.SellingDate.ToLocalTime(),
                 SellingList = model.ProductList.Select(l => new SellingList
                 {
                     ProductId = l.ProductId,
@@ -212,7 +213,7 @@ namespace InventoryManagement.Repository
                     join productStock in Context.ProductStock on sellingList.SellingListId equals productStock.SellingListId
                     join purchaseList in Context.PurchaseList on productStock.PurchaseListId equals purchaseList
                         .PurchaseListId
-                    where selling.SellingDate.Date == saleDate.Date
+                    where selling.LastUpdateDate == saleDate.Date && selling.SellingPaymentStatus == "Paid"
                     select sellingList.SellingPrice - purchaseList.PurchasePrice - ((purchaseList.PurchasePrice * purchaseList.Purchase.PurchaseDiscountPercentage) / 100))?.Sum() ?? 0;
 
         }
@@ -254,10 +255,10 @@ namespace InventoryManagement.Repository
                           join productStock in Context.ProductStock on sellingList.SellingListId equals productStock.SellingListId
                           join purchaseList in Context.PurchaseList on productStock.PurchaseListId equals purchaseList
                               .PurchaseListId
-                          where selling.SellingDate.Year == year
+                          where selling.LastUpdateDate.Value.Year == year && selling.SellingPaymentStatus == "Paid"
                           select new
                           {
-                              MonthNumer = selling.SellingDate.Month,
+                              MonthNumer = selling.LastUpdateDate.Value.Month,
                               profit = sellingList.SellingPrice - purchaseList.PurchasePrice - ((purchaseList.PurchasePrice * purchaseList.Purchase.PurchaseDiscountPercentage) / 100)
                           }
                      ).GroupBy(e => new
@@ -411,6 +412,7 @@ namespace InventoryManagement.Repository
                 selling.SellingDiscountAmount = model.SellingDiscountAmount;
                 selling.SellingReturnAmount = model.SellingReturnAmount;
                 selling.SellingPaidAmount += model.PaidAmount;
+                selling.LastUpdateDate = model.PaidDate.ToLocalTime();
 
                 var due = (selling.SellingTotalPrice + selling.SellingReturnAmount) - (selling.SellingDiscountAmount + selling.SellingPaidAmount);
                 if (due < 0)

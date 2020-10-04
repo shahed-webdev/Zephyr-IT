@@ -52,7 +52,7 @@ namespace InventoryManagement.Repository
                         ReceiptSn = Sn,
                         PaidAmount = model.PaidAmount,
                         PaymentMethod = model.PaymentMethod,
-                        PaidDate = model.PaidDate,
+                        PaidDate = model.PaidDate.ToLocalTime(),
 
                         SellingPaymentList = new List<SellingPaymentList>
                         {
@@ -68,6 +68,7 @@ namespace InventoryManagement.Repository
 
                 selling.SellingDiscountAmount = model.SellingDiscountAmount;
                 selling.SellingPaidAmount += model.PaidAmount;
+                selling.LastUpdateDate = model.PaidDate.ToLocalTime();
 
                 Context.Selling.Update(selling);
 
@@ -106,6 +107,7 @@ namespace InventoryManagement.Repository
                         return response;
                     }
                     sell.SellingPaidAmount += invoice.SellingPaidAmount;
+                    sell.LastUpdateDate = model.PaidDate.ToLocalTime();
                 }
 
                 var Sn = await db.SellingPayments.GetNewSnAsync().ConfigureAwait(false);
@@ -117,7 +119,7 @@ namespace InventoryManagement.Repository
                     ReceiptSn = Sn,
                     PaidAmount = model.PaidAmount,
                     PaymentMethod = model.PaymentMethod,
-                    PaidDate = model.PaidDate,
+                    PaidDate = model.PaidDate.ToLocalTime(),
                     SellingPaymentList = model.Bills.Select(i => new SellingPaymentList
                     {
                         SellingId = i.SellingId,
