@@ -428,6 +428,7 @@ const onSellSubmitClicked = function(evt) {
     });
 }
 
+
 //event listener
 formPayment.addEventListener('submit', onCheckFormValid)
 formTable.addEventListener('submit', onSellSubmitClicked)
