@@ -52,15 +52,37 @@ namespace InventoryManagement.Repository
         {
             _reportDay = DateTime.Now;
             var sale = _db.Selling.DailySaleAmount(_reportDay);
-            var purchase = _db.Purchases.DailyPurchaseAmount(_reportDay);
+            var productSold = _db.Selling.DailyProductSoldAmount(_reportDay);
+            var cashCollection = _db.SellingPayments.DailyCashCollectionAmount(_reportDay);
             var profit = _db.Selling.DailyProfit(_reportDay);
             var expense = _db.Expenses.DailyExpenseAmount(_reportDay);
             var dailySummary = new DailyDashboardSummaryViewModel
             {
-                Sale = Math.Round(sale, 2),
-                Purchase = Math.Round(purchase, 2),
+                TotalSale = Math.Round(sale, 2),
+                ProductSold = Math.Round(productSold, 2),
+                CashCollection = Math.Round(cashCollection, 2),
+                Expense = Math.Round(expense, 2),
                 Profit = Math.Round(profit, 2),
-                Expense = Math.Round(expense, 2)
+                NetProfit = Math.Round(profit - expense, 2)
+            };
+            return dailySummary;
+
+        }
+        public DailyDashboardSummaryViewModel DailyData(DateTime date)
+        {
+            var sale = _db.Selling.DailySaleAmount(date);
+            var productSold = _db.Selling.DailyProductSoldAmount(date);
+            var cashCollection = _db.SellingPayments.DailyCashCollectionAmount(date);
+            var profit = _db.Selling.DailyProfit(date);
+            var expense = _db.Expenses.DailyExpenseAmount(date);
+            var dailySummary = new DailyDashboardSummaryViewModel
+            {
+                TotalSale = Math.Round(sale, 2),
+                ProductSold = Math.Round(productSold, 2),
+                CashCollection = Math.Round(cashCollection, 2),
+                Expense = Math.Round(expense, 2),
+                Profit = Math.Round(profit, 2),
+                NetProfit = Math.Round(profit - expense, 2)
             };
             return dailySummary;
 
@@ -99,7 +121,7 @@ namespace InventoryManagement.Repository
                               MonthlyNewPurchase = Math.Round(p?.Amount ?? 0, 2),
                               MonthlyExpense = Math.Round(e?.Amount ?? 0, 2),
                               MonthlyProfit = Math.Round(pt?.Amount ?? 0, 2),
-                              DailyAverageProfit = Math.Round(pt?.Amount ?? 0/30, 2)
+                              DailyAverageProfit = Math.Round((pt?.Amount ?? 0) / 30, 2)
                           }).ToList();
 
             return result ?? new List<MonthlyDashboardSummaryViewModel>(); ;

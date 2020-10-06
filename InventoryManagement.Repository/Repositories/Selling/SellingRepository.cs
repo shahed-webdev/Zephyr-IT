@@ -170,7 +170,8 @@ namespace InventoryManagement.Repository
                 SellingPaidAmount = s.SellingPaidAmount,
                 SellingDiscountAmount = s.SellingDiscountAmount,
                 SellingDueAmount = s.SellingDueAmount,
-                SellingDate = s.SellingDate
+                SellingDate = s.SellingDate,
+                LastUpdateDate = s.LastUpdateDate.Value
             });
             return r.ToDataResult(request);
         }
@@ -197,12 +198,42 @@ namespace InventoryManagement.Repository
         {
             return Context.Selling?.Sum(s => s.SellingDueAmount) ?? 0;
         }
-
+        /// <summary>Calculate Report By (Total Amount – discount) Totally Payment competed date
+        /// </summary>
         public double DailySaleAmount(DateTime? date)
         {
             var saleDate = date ?? DateTime.Now;
-            return Context.Selling.Where(s => s.SellingDate.Date == saleDate.Date)?
+            return Context.Selling.Where(s => s.LastUpdateDate == saleDate.Date)?
                   .Sum(s => s.SellingTotalPrice - s.SellingDiscountAmount) ?? 0;
+        }
+
+        public double SaleAmountDateWise(DateTime? sDateTime, DateTime? eDateTime)
+        {
+            var sD = sDateTime ?? new DateTime(DateTime.Now.Year, 1, 1);
+            var eD = eDateTime ?? new DateTime(DateTime.Now.Year, 12, 31);
+            return Context
+                .Selling
+                .Where(r => r.LastUpdateDate <= eD && r.LastUpdateDate >= sD)
+                .Sum(s => s.SellingTotalPrice - s.SellingDiscountAmount);
+        }
+
+        /// <summary>Calculate Report By (Total Amount – discount) Selling date
+        /// </summary>
+        public double DailyProductSoldAmount(DateTime? date)
+        {
+            var saleDate = date ?? DateTime.Now;
+            return Context.Selling.Where(s => s.SellingDate == saleDate.Date)?
+                       .Sum(s => s.SellingTotalPrice - s.SellingDiscountAmount) ?? 0;
+        }
+
+        public double ProductSoldAmountDateWise(DateTime? sDateTime, DateTime? eDateTime)
+        {
+            var sD = sDateTime ?? new DateTime(DateTime.Now.Year, 1, 1);
+            var eD = eDateTime ?? new DateTime(DateTime.Now.Year, 12, 31);
+            return Context
+                .Selling
+                .Where(r => r.SellingDate <= eD && r.SellingDate >= sD)
+                .Sum(s => s.SellingTotalPrice - s.SellingDiscountAmount);
         }
 
         public double DailyProfit(DateTime? date)
@@ -214,7 +245,8 @@ namespace InventoryManagement.Repository
                     join purchaseList in Context.PurchaseList on productStock.PurchaseListId equals purchaseList
                         .PurchaseListId
                     where selling.LastUpdateDate == saleDate.Date && selling.SellingPaymentStatus == "Paid"
-                    select sellingList.SellingPrice - purchaseList.PurchasePrice - ((purchaseList.PurchasePrice * purchaseList.Purchase.PurchaseDiscountPercentage) / 100))?.Sum() ?? 0;
+                    select (sellingList.SellingPrice - (sellingList.SellingPrice * sellingList.Selling.SellingDiscountPercentage) / 100) -
+                           (purchaseList.PurchasePrice - ((purchaseList.PurchasePrice * purchaseList.Purchase.PurchaseDiscountPercentage) / 100)))?.Sum() ?? 0;
 
         }
 
@@ -232,10 +264,10 @@ namespace InventoryManagement.Repository
 
         public ICollection<MonthlyAmount> MonthlyAmounts(int year)
         {
-            var months = Context.Selling.Where(e => e.SellingDate.Year == year)
+            var months = Context.Selling.Where(e => e.LastUpdateDate.Value.Year == year)
                 .GroupBy(e => new
                 {
-                    number = e.SellingDate.Month
+                    number = e.LastUpdateDate.Value.Month
 
                 })
                 .Select(g => new MonthlyAmount
@@ -259,7 +291,8 @@ namespace InventoryManagement.Repository
                           select new
                           {
                               MonthNumer = selling.LastUpdateDate.Value.Month,
-                              profit = sellingList.SellingPrice - purchaseList.PurchasePrice - ((purchaseList.PurchasePrice * purchaseList.Purchase.PurchaseDiscountPercentage) / 100)
+                              profit = (sellingList.SellingPrice - (sellingList.SellingPrice * sellingList.Selling.SellingDiscountPercentage) / 100) -
+                                       (purchaseList.PurchasePrice - ((purchaseList.PurchasePrice * purchaseList.Purchase.PurchaseDiscountPercentage) / 100))
                           }
                      ).GroupBy(e => new
                      {

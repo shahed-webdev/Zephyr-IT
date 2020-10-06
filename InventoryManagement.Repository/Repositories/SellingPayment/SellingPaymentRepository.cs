@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Data;
+using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -145,6 +146,39 @@ namespace InventoryManagement.Repository
                 response.IsSuccess = false;
                 return response;
             }
+        }
+
+        public double DailyCashCollectionAmount(DateTime? date)
+        {
+            var saleDate = date ?? DateTime.Now;
+            return Context.SellingPayment.Where(s => s.PaidDate == saleDate.Date)?
+                       .Sum(s => s.PaidAmount) ?? 0;
+        }
+
+        public DataResult<SellingPaymentRecordModel> Records(DataRequest request)
+        {
+            return Context.SellingPayment
+                .Include(s => s.Customer)
+                .Select(s => new SellingPaymentRecordModel
+                {
+                    SellingPaymentId = s.SellingPaymentId,
+                    CustomerId = s.CustomerId,
+                    CustomerName = s.Customer.CustomerName,
+                    ReceiptSn = s.ReceiptSn,
+                    PaidAmount = s.PaidAmount,
+                    PaymentMethod = s.PaymentMethod,
+                    PaidDate = s.PaidDate
+                })
+                .ToDataResult(request);
+        }
+
+        public double CollectionAmountDateWise(DateTime? sDateTime, DateTime? eDateTime)
+        {
+            var sD = sDateTime ?? new DateTime(DateTime.Now.Year, 1, 1);
+            var eD = eDateTime ?? new DateTime(DateTime.Now.Year, 12, 31);
+            return Context
+                .SellingPayment
+                .Where(r => r.PaidDate <= eD && r.PaidDate >= sD).Sum(s => s.PaidAmount);
         }
     }
 }

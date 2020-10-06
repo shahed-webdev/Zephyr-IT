@@ -39,6 +39,7 @@ namespace InventoryManagement.Repository
             var product = Context.ProductStock
                 .Include(s => s.Product)
                 .Include(s => s.PurchaseList)
+                .ThenInclude(pl => pl.Purchase)
                 .Where(s => s.ProductCode == code && !s.IsSold)
                 .Select(s => new ProductSellViewModel
                 {
@@ -51,7 +52,7 @@ namespace InventoryManagement.Repository
                     Warranty = s.PurchaseList.Warranty,
                     Note = s.PurchaseList.Note,
                     SellingPrice = s.PurchaseList.SellingPrice,
-                    PurchasePrice = s.PurchaseList.PurchasePrice
+                    PurchasePrice = s.PurchaseList.PurchasePrice - (s.PurchaseList.Purchase.PurchaseDiscountPercentage) - ((s.PurchaseList.PurchasePrice * s.PurchaseList.Purchase.PurchaseDiscountPercentage) / 100),
                 });
             return product.FirstOrDefaultAsync();
         }
@@ -63,6 +64,7 @@ namespace InventoryManagement.Repository
                 .Include(s => s.Product)
                 .ThenInclude(p => p.ProductCatalog)
                 .Include(s => s.PurchaseList)
+                .ThenInclude(pl => pl.Purchase)
                 .Include(p => p.SellingList)
                 .ThenInclude(sl => sl.Selling)
                 .Where(s => s.ProductCode == code)
@@ -76,7 +78,7 @@ namespace InventoryManagement.Repository
                     Note = s.PurchaseList.Note,
                     SellingPrice = s.PurchaseList.SellingPrice,
                     ProductCatalogName = s.Product.ProductCatalog.CatalogName,
-                    PurchasePrice = s.PurchaseList.PurchasePrice,
+                    PurchasePrice = s.PurchaseList.PurchasePrice - (s.PurchaseList.Purchase.PurchaseDiscountPercentage) - ((s.PurchaseList.PurchasePrice * s.PurchaseList.Purchase.PurchaseDiscountPercentage) / 100),
                     SellingId = s.SellingList.SellingId,
                     SellingSn = s.SellingList.Selling.SellingSn,
                     PurchaseId = s.PurchaseList.PurchaseId

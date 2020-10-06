@@ -31,10 +31,12 @@ namespace InventoryManagement.Repository
 
     public class DailyDashboardSummaryViewModel
     {
-        public double Sale { get; set; }
-        public double Purchase { get; set; }
-        public double Profit { get; set; }
+        public double TotalSale { get; set; }
+        public double ProductSold { get; set; }
+        public double CashCollection { get; set; }
         public double Expense { get; set; }
+        public double Profit { get; set; }
+        public double NetProfit { get; set; }
     }
 
 }

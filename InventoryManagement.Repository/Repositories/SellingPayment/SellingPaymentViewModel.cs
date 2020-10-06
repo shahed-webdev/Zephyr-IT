@@ -42,4 +42,15 @@ namespace InventoryManagement.Repository
         public double SellingDiscountAmount { get; set; }
 
     }
+
+    public class SellingPaymentRecordModel
+    {
+        public int SellingPaymentId { get; set; }
+        public int CustomerId { get; set; }
+        public string CustomerName { get; set; }
+        public int ReceiptSn { get; set; }
+        public double PaidAmount { get; set; }
+        public string PaymentMethod { get; set; }
+        public DateTime PaidDate { get; set; }
+    }
 }

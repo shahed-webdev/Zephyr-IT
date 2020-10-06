@@ -7,9 +7,15 @@
 
 @section Styles{
     <style>
-        .active-cyan-2 input.form-control[type=text]:focus:not([readonly]) { border-bottom: 1px solid #3fa3e2; box-shadow: 0 1px 0 0 #3fa3e2; }
-        .active-cyan-2 .fas { color: #3144a2; }
-    </style>  
+        .active-cyan-2 input.form-control[type=text]:focus:not([readonly]) {
+            border-bottom: 1px solid #3fa3e2;
+            box-shadow: 0 1px 0 0 #3fa3e2;
+        }
+
+        .active-cyan-2 .fas {
+            color: #3144a2;
+        }
+    </style>
 }
 
 @{
@@ -17,183 +23,160 @@
 }
 
 <div class="container-fluid">
-@if (User.IsInRole("admin"))
-{
-    <section class="mt-4">
-        <div class="row">
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="card">
-                    <div class="row mt-4 mb-3">
-                        <div class="col-md-3 col-3 text-left pl-4">
-                            <div class="p-2 m-2 fa-lg">
-                                <i class="far fa-business-time fa-2x @(businessStatus > 0 ? "text-success" : "text-danger")"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-9 col-9 text-right pr-5">
-                            <p class="text-dark mb-2">Business Status</p>
-                            <h4 class="ml-4 font-weight-bold h4-responsive @(businessStatus > 0 ? "text-success" : "text-danger")">৳@businessStatus</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="card">
-                    <div class="row mt-4 mb-3">
-                        <div class="col-md-3 col-3 text-left pl-4">
-                            <div class="p-2 m-2 fa-lg">
-                                <i class="fas fa-analytics fa-2x blue-text"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-9 col-9 text-right pr-5">
-                            <p class="text-dark mb-2">Market Due</p>
-                            <h4 class="ml-4 font-weight-bold h4-responsive">৳@Model.MarketDue</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="card">
-                    <div class="row mt-4 mb-3">
-                        <div class="col-md-3 col-3 text-left pl-4">
-                            <div class="p-2 m-2 fa-lg">
-                                <i class="far fa-user-chart fa-2x red-text"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-9 col-9 text-right pr-5">
-                            <p class="text-dark mb-2">Customer Due</p>
-                            <h4 class="ml-4 font-weight-bold h4-responsive">৳@Model.CustomerDue</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="card">
-                    <div class="row mt-4 mb-3">
-                        <div class="col-md-3 col-3 text-left pl-4">
-                            <div class="p-2 m-2 fa-lg">
-                                <i class="far fa-shopping-bag fa-2x orange-text"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-9 col-9 text-right pr-5">
-                            <p class="text-dark mb-2">Product(taka)</p>
-                            <h4 class="ml-4 font-weight-bold h4-responsive">৳@Model.StockProductPurchaseValue</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="mb-5 mt-1">
-        <h5>Daily Report</h5>
-        <div class="row">
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="media white z-depth-1 rounded">
-                    <i class="far fa-money-bill-alt fa-2x primary-color-dark z-depth-1 p-4 rounded-left text-white mr-3"></i>
-                    <div class="media-body mt-3">
-                        <p class="mb-0">Purchase</p>
-                        <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Purchase</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="media white z-depth-1 rounded">
-                    <i class="fas fa-chart-bar fa-2x lime darken-3 z-depth-1 p-4 rounded-left text-white mr-3"></i>
-                    <div class="media-body mt-3">
-                        <p class="mb-0">Sales</p>
-                        <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Sale</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="media white z-depth-1 rounded">
-                    <i class="fas fa-chart-pie fa-2x pink z-depth-1 p-4 rounded-left text-white mr-3"></i>
-                    <div class="media-body mt-3">
-                        <p class="mb-0">Expense</p>
-                        <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Expense</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="media white z-depth-1 rounded">
-                    <i class="fas fa-chart-line fa-2x success-color-dark z-depth-1 p-4 rounded-left text-white mr-3"></i>
-                    <div class="media-body mt-3">
-                        <p class="mb-0">Profit</p>
-                        <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Profit</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-}
-
-<section class="row mb-5">
-    <div class="col-xl-5 col-lg-5 mb-3">
-        <div class="card card-cascade narrower">
-            <div class="view view-cascade gradient-card-header blue-gradient lighten-1 p-3">
-                <h3 class="h3-responsive mb-0 p-1 font-weight-light">Due Vendors</h3>
-            </div>
-
-            <div class="card-body card-body-cascade">
-                <div class="form-inline d-flex justify-content-center align-items-center md-form form-sm active-cyan-2 mb-0 mt-2">
-                    <input id="vendor-input-find" class="form-control form-control-sm mb-0 w-75" type="text" placeholder="Search">
-                    <i class="fas fa-search" aria-hidden="true"></i>
-                </div>
-
-                <table id="table-vendor" class="table table-sm">
-                    <thead>
-                    <tr>
-                        <th><strong>Company</strong></th>
-                        <th><strong>Amount</strong></th>
-                        <th><strong>Paid</strong></th>
-                        <th><strong>Due</strong></th>
-                    </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-    </div>
-
     @if (User.IsInRole("admin"))
     {
-        <div class="col-xl-7 col-lg-7">
-            <div class="card card-cascade narrower">
-                <div class="view view-cascade gradient-card-header blue-gradient mb-3">
-                    <canvas id="lineChart"></canvas>
-                </div>
-            </div>
-        </div>
-    }
-</section>
-
-<section>
-    <div class="row">
-        <div class="col-xl-5 mb-3">
-            <div class="card card-cascade narrower">
-                <div class="view view-cascade gradient-card-header blue-gradient p-3">
-                    <div class="md-form m-0">
-                        <h3 class="h3-responsive mb-0 p-1 font-weight-light">
-                            Due Customers
-                        </h3>
+        <section class="mt-4">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card">
+                        <div class="row mt-4 mb-3">
+                            <div class="col-md-3 col-3 text-left pl-4">
+                                <div class="p-2 m-2 fa-lg">
+                                    <i class="far fa-business-time fa-2x @(businessStatus > 0 ? "text-success" : "text-danger")"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-9 col-9 text-right pr-5">
+                                <p class="text-dark mb-2">Business Status</p>
+                                <h4 class="ml-4 font-weight-bold h4-responsive @(businessStatus > 0 ? "text-success" : "text-danger")">৳@businessStatus</h4>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="card-body card-body-cascade pt-0">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card">
+                        <div class="row mt-4 mb-3">
+                            <div class="col-md-3 col-3 text-left pl-4">
+                                <div class="p-2 m-2 fa-lg">
+                                    <i class="fas fa-analytics fa-2x blue-text"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-9 col-9 text-right pr-5">
+                                <p class="text-dark mb-2">Market Due</p>
+                                <h4 class="ml-4 font-weight-bold h4-responsive">৳@Model.MarketDue</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card">
+                        <div class="row mt-4 mb-3">
+                            <div class="col-md-3 col-3 text-left pl-4">
+                                <div class="p-2 m-2 fa-lg">
+                                    <i class="far fa-user-chart fa-2x red-text"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-9 col-9 text-right pr-5">
+                                <p class="text-dark mb-2">Customer Due</p>
+                                <h4 class="ml-4 font-weight-bold h4-responsive">৳@Model.CustomerDue</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card">
+                        <div class="row mt-4 mb-3">
+                            <div class="col-md-3 col-3 text-left pl-4">
+                                <div class="p-2 m-2 fa-lg">
+                                    <i class="far fa-shopping-bag fa-2x orange-text"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-9 col-9 text-right pr-5">
+                                <p class="text-dark mb-2">Product(taka)</p>
+                                <h4 class="ml-4 font-weight-bold h4-responsive">৳@Model.StockProductPurchaseValue</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5 mt-1">
+            <h5>Daily Report</h5>
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="media white z-depth-1 rounded">
+                        <i class="fas fa-chart-bar fa-2x lime darken-3 z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                        <div class="media-body mt-3">
+                            <p class="mb-0">Sales</p>
+                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.TotalSale</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="media white z-depth-1 rounded">
+                        <i class="fas fa-chart-bar fa-2x lime darken-3 z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                        <div class="media-body mt-3">
+                            <p class="mb-0">Cash Collection</p>
+                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.CashCollection</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="media white z-depth-1 rounded">
+                        <i class="far fa-money-bill-alt fa-2x primary-color-dark z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                        <div class="media-body mt-3">
+                            <p class="mb-0">Product Sold</p>
+                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.ProductSold</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="media white z-depth-1 rounded">
+                        <i class="fas fa-chart-pie fa-2x pink z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                        <div class="media-body mt-3">
+                            <p class="mb-0">Expense</p>
+                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Expense</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="media white z-depth-1 rounded">
+                        <i class="fas fa-chart-line fa-2x success-color-dark z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                        <div class="media-body mt-3">
+                            <p class="mb-0">Profit</p>
+                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Profit</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="media white z-depth-1 rounded">
+                        <i class="fas fa-chart-line fa-2x success-color-dark z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                        <div class="media-body mt-3">
+                            <p class="mb-0">Net</p>
+                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.NetProfit</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
+    <section class="row mb-5">
+        <div class="col-xl-5 col-lg-5 mb-3">
+            <div class="card card-cascade narrower">
+                <div class="view view-cascade gradient-card-header blue-gradient lighten-1 p-3">
+                    <h3 class="h3-responsive mb-0 p-1 font-weight-light">Due Vendors</h3>
+                </div>
+
+                <div class="card-body card-body-cascade">
                     <div class="form-inline d-flex justify-content-center align-items-center md-form form-sm active-cyan-2 mb-0 mt-2">
-                        <input id="input-find" class="form-control form-control-sm mb-0 w-75" type="text" placeholder="Search">
+                        <input id="vendor-input-find" class="form-control form-control-sm mb-0 w-75" type="text" placeholder="Search">
                         <i class="fas fa-search" aria-hidden="true"></i>
                     </div>
 
-                    <table id="table-customer" class="table table-sm">
+                    <table id="table-vendor" class="table table-sm">
                         <thead>
-                        <tr>
-                            <th><strong>Name</strong></th>
-                            <th><strong>Due</strong></th>
-                        </tr>
+                            <tr>
+                                <th><strong>Company</strong></th>
+                                <th><strong>Amount</strong></th>
+                                <th><strong>Paid</strong></th>
+                                <th><strong>Due</strong></th>
+                            </tr>
                         </thead>
                     </table>
                 </div>
@@ -202,38 +185,79 @@
 
         @if (User.IsInRole("admin"))
         {
-            <div class="col-xl-7">
-                <div class="card card-body pb-0 mb-4">
-                    <table class="table mb-0">
-                        <thead>
-                        <tr>
-                            <th class="font-weight-bold dark-grey-text"><strong>Month</strong></th>
-                            <th class="font-weight-bold dark-grey-text"><strong>Sales</strong></th>
-                            <th class="font-weight-bold dark-grey-text"><strong>Purchase</strong></th>
-                            <th class="font-weight-bold dark-grey-text"><strong>Expense</strong></th>
-                            <th class="font-weight-bold dark-grey-text"><strong>Profit</strong></th>
-                            <th class="font-weight-bold dark-grey-text"><strong>Avg. Profit</strong></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach (var item in Model.MonthlySummary)
-                        {
-                            <tr>
-                                <td>@item.Month.Month</td>
-                                <td>@item.MonthlySale</td>
-                                <td>@item.MonthlyNewPurchase</td>
-                                <td>@item.MonthlyExpense</td>
-                                <td>@item.MonthlyProfit</td>
-                                <td>@item.DailyAverageProfit</td>
-                            </tr>
-                        }
-                        </tbody>
-                    </table>
+            <div class="col-xl-7 col-lg-7">
+                <div class="card card-cascade narrower">
+                    <div class="view view-cascade gradient-card-header blue-gradient mb-3">
+                        <canvas id="lineChart"></canvas>
+                    </div>
                 </div>
             </div>
         }
-    </div>
-</section>
+    </section>
+
+    <section>
+        <div class="row">
+            <div class="col-xl-5 mb-3">
+                <div class="card card-cascade narrower">
+                    <div class="view view-cascade gradient-card-header blue-gradient p-3">
+                        <div class="md-form m-0">
+                            <h3 class="h3-responsive mb-0 p-1 font-weight-light">
+                                Due Customers
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="card-body card-body-cascade pt-0">
+                        <div class="form-inline d-flex justify-content-center align-items-center md-form form-sm active-cyan-2 mb-0 mt-2">
+                            <input id="input-find" class="form-control form-control-sm mb-0 w-75" type="text" placeholder="Search">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </div>
+
+                        <table id="table-customer" class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th><strong>Name</strong></th>
+                                    <th><strong>Due</strong></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            @if (User.IsInRole("admin"))
+            {
+                <div class="col-xl-7">
+                    <div class="card card-body pb-0 mb-4">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="font-weight-bold dark-grey-text"><strong>Month</strong></th>
+                                    <th class="font-weight-bold dark-grey-text"><strong>Sales</strong></th>
+                                    <th class="font-weight-bold dark-grey-text"><strong>Purchase</strong></th>
+                                    <th class="font-weight-bold dark-grey-text"><strong>Expense</strong></th>
+                                    <th class="font-weight-bold dark-grey-text"><strong>Profit</strong></th>
+                                    <th class="font-weight-bold dark-grey-text"><strong>Avg. Profit</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.MonthlySummary)
+                                {
+                                    <tr>
+                                        <td>@item.Month.Month</td>
+                                        <td>@item.MonthlySale</td>
+                                        <td>@item.MonthlyNewPurchase</td>
+                                        <td>@item.MonthlyExpense</td>
+                                        <td>@item.MonthlyProfit</td>
+                                        <td>@item.DailyAverageProfit</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
 </div>
 
 @section Scripts {
