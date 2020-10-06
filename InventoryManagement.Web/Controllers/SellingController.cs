@@ -1,4 +1,5 @@
-﻿using InventoryManagement.Repository;
+﻿using System;
+using InventoryManagement.Repository;
 using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -155,6 +156,7 @@ namespace InventoryManagement.Web.Controllers
             return UnprocessableEntity(dbResponse.Message);
         }
 
+
         //delete Bill
         [Authorize(Roles = "admin, bill-change")]
         public async Task<IActionResult> DeleteBill(int id)
@@ -165,6 +167,43 @@ namespace InventoryManagement.Web.Controllers
 
             return UnprocessableEntity(dbResponse.Message);
         }
+
+
+        //report
+        public IActionResult SalesReport()
+        {
+            return View();
+        }
+
+
+        //request from data-table(ajax)
+        public IActionResult SalesReportData(DataRequest request)
+        {
+            var data = _db.Selling.Records(request);
+            return Json(data);
+        }
+
+
+        public IActionResult ProductSoldReport()
+        {
+            return View();
+        }
+        
+
+        //request from data-table(ajax)
+        public IActionResult ProductSoldReportData(DataRequest request)
+        {
+            var data = _db.Selling.Records(request);
+            return Json(data);
+        }
+
+
+        //GET:// GetAmountByDate(ajax)
+        //public IActionResult GetAmountByDate(DateTime? fromDate, DateTime? toDate)
+        //{
+        //    var model = _db.Selling.DateWiseSellingSummary(fromDate, toDate);
+        //    return Json(model);
+        //}
 
         protected override void Dispose(bool disposing)
         {

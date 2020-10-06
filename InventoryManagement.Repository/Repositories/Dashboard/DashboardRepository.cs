@@ -6,7 +6,7 @@ namespace InventoryManagement.Repository
 {
     public class DashboardRepository
     {
-        private IUnitOfWork _db;
+        private readonly IUnitOfWork _db;
         private int _reportYear;
         private DateTime _reportDay;
         public ICollection<DDL> Years { get; }

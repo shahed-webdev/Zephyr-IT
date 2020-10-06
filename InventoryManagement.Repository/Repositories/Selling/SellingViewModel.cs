@@ -82,7 +82,6 @@ namespace InventoryManagement.Repository
         public double SellingDueAmount { get; set; }
         public DateTime SellingDate { get; set; }
         public DateTime LastUpdateDate { get; set; }
-
     }
 
     public class SellingUpdateGetModel

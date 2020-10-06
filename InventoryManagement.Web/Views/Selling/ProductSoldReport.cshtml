@@ -1,0 +1,228 @@
+﻿
+@{
+    ViewData["Title"] = "Product Sold Report";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="m-md-3">
+    <h4 class="page-header mb-3">Product Sold Report</h4>
+
+    <div class="card card-body">
+        <form id="formPost">
+            <div class="d-flex align-items-center mb-4">
+                <div class="md-form m-0">
+                    <input type="text" id="inputFromDate" class="form-control datepicker m-0">
+                    <label for="inputFromDate">From Date</label>
+                </div>
+                <div class="md-form m-0 ml-3">
+                    <input type="text" id="inputToDate" class="form-control datepicker m-0">
+                    <label for="inputToDate">To Date</label>
+                </div>
+                <button type="submit" class="btn btn-indigo py-2"><i class="fal fa-search"></i></button>
+            </div>
+        </form>
+
+        <section class="mb-4">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-5">
+                    <div class="media white z-depth-1 rounded">
+                        <i class="far fa-money-bill-alt fa-lg blue z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                        <div class="media-body p-1">
+                            <p class="text-uppercase text-muted mb-1"><small>sold</small></p>
+                            <h5 id="setSold" class="font-weight-bold mb-0">0</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="media white z-depth-1 rounded">
+                        <i class="fas fa-chart-pie-alt fa-lg deep-purple z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                        <div class="media-body p-1">
+                            <p class="text-uppercase text-muted mb-1"><small>discount</small></p>
+                            <h5 id="setDiscount" class="font-weight-bold mb-0">0</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="media white z-depth-1 rounded">
+                        <i class="fas fa-chart-line fa-lg teal z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                        <div class="media-body p-1">
+                            <p class="text-uppercase text-muted mb-1"><small>paid</small></p>
+                            <h5 id="setPaid" class="font-weight-bold mb-0">0</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="media white z-depth-1 rounded">
+                        <i class="far fa-chart-line-down fa-lg pink z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                        <div class="media-body p-1">
+                            <p class="text-uppercase text-muted mb-1"><small>due</small></p>
+                            <h5 id="setDue" class="font-weight-bold mb-0">0</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <table id="data-table" class="table table-sm table-bordered">
+            <thead>
+            <tr>
+                <th>#Bill No</th>
+                <th>Customer Name</th>
+                <th>Amount</th>
+                <th>Paid</th>
+                <th>Discount</th>
+                <th>Due</th>
+                <th>Selling Date</th>
+                <th>Full Paid Date</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        $(function() {
+            $('.datepicker').pickadate();
+
+            dataTable.getData();
+
+            //getAmountSummery();
+        });
+
+        //get data
+        var dataTable = {
+            table: null,
+            filter: null,
+            init: function() {
+                dataTable.table = $("#data-table").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>><"row"<"col-sm-12"<tr>>><"row"<"col-sm-5"i><"col-sm-7"p>>',
+                    buttons: dataTable.button,
+                    ajax: {
+                        url: "/Selling/ProductSoldReportData",
+                        type: "POST",
+                        data: function(d) {
+                            d.filters = dataTable.filter;
+                        }
+                    },
+                    columns:
+                    [
+                        {
+                            data: "SellingSn", "render": function(data, type, row, meta) {
+                                return `<a class="blue-text" href="/Selling/SellingReceipt/${row.SellingId}">${data}</a>`;
+                            }
+                        },
+                        { data: "CustomerName" },
+                        { data: "SellingAmount", "render": dataTable.addSign },
+                        { data: "SellingPaidAmount", "render": dataTable.addSign },
+                        { data: "SellingDiscountAmount", "render": dataTable.addSign },
+                        { data: "SellingDueAmount", "render": function(data, type, row, meta) {
+                                return data ? `<a class="blue-text" href="/Selling/DueCollection/${row.SellingId}">${data}/-</a>` : data;
+                            }
+                        },
+                        { data: "SellingDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
+                        { data: "LastUpdateDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } }
+                    ],
+                    columnDefs: [
+                        { 'searchable': false, 'targets': [2, 3, 4, 5] },
+                        { 'className': "text-right", "targets": [2, 3, 4, 5] },
+                        { 'className': "text-left", "targets": [1] }
+                    ]
+                });
+            },
+            operand: {
+                Equal: 0,
+                NotEqual: 1,
+                GreaterThan: 2,
+                LessThan: 3,
+                GreaterThanOrEqual: 4,
+                LessThanOrEqual: 5,
+                Contains: 6,
+                StartsWith: 7,
+                EndsWith: 8
+            },
+            getData: function() {
+                dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
+            },
+            addSign: function(data) { return `${data}/-` },
+            button: {
+                buttons: [{
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i> Print',
+                    title: '',
+                    exportOptions: {
+                        //columns: [0,1] //Column value those print
+                                                                                                     },
+                    customize: function(win) {
+                        $(win.document.body).prepend(`<nav class="mb-3 navbar peach-gradient"><a class="navbar-brand ml-1"><span>Zephyr</span> IT</a></nav><h3 class="h3-responsive">${$('h4').text()}</h3>`);
+                    },
+                    autoPrint: true
+                }],
+                dom: {
+                    button: {
+                        className: 'btn btn-dark btn-rounded btn-sm my-0'
+                    }
+                }
+            }
+        }
+
+        //selectors
+        const formPost = document.getElementById("formPost");
+
+        formPost.addEventListener('submit', function(evt) {
+            evt.preventDefault();
+
+            const inputFromDate = formPost.inputFromDate.value;
+            const inputToDate = formPost.inputToDate.value;
+
+            dataTable.filter = [];
+
+            if (inputFromDate)
+                dataTable.filter.push({ Field: "SellingDate", Value: inputFromDate, Operand: dataTable.operand.GreaterThanOrEqual });
+
+            if (inputToDate)
+                dataTable.filter.push({ Field: "SellingDate", Value: inputToDate, Operand: dataTable.operand.LessThanOrEqual });
+
+
+            dataTable.getData();
+
+
+            const data = {
+                fromDate: inputFromDate,
+                toDate: inputToDate
+            };
+
+            getAmountSummery(data);
+        });
+
+        function getAmountSummery(dates) {
+            //for get and set total amount
+            const setSold = document.getElementById('setSold');
+            const setDiscount = document.getElementById('setDiscount');
+            const setPaid = document.getElementById('setPaid');
+            const setDue = document.getElementById('setDue');
+
+            const url = "/Selling/GetAmountByDate";
+
+            $.ajax({
+                type: "POST",
+                url,
+                data: dates,
+                success: function(response) {
+                    const sales = response.Data;
+                    setSold.innerText = sales.SoldAmount;
+                    setDiscount.innerText = sales.DiscountAmount;
+                    setPaid.innerText = sales.ReceivedAmount;
+                    setDue.innerText = sales.DueAmount;
+                }
+            });
+        }
+    </script>
+}

@@ -1,4 +1,5 @@
-﻿using InventoryManagement.Repository;
+﻿using System;
+using InventoryManagement.Repository;
 using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,10 +28,19 @@ namespace InventoryManagement.Web.Controllers
             var data = _db.Customers.TopDueDataTable(request);
             return Json(data);
         }
+
         public IActionResult TopDueVendor(DataRequest request)
         {
             var data = _db.Vendors.TopDueDataTable(request);
             return Json(data);
+        }
+
+        public IActionResult DailyReport(DateTime date)
+        {
+            var data = new DashboardRepository(_db);
+           var response = data.DailyData(date);
+
+            return Json(response);
         }
 
         //GET: Profile
@@ -61,11 +71,10 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public IActionResult StoreInfo(InstitutionVM model)
         {
-            if (ModelState.IsValid)
-            {
-                _db.Institutions.UpdateCustom(model);
-                _db.SaveChanges();
-            }
+            if (!ModelState.IsValid) return RedirectToAction("Index");
+
+            _db.Institutions.UpdateCustom(model);
+            _db.SaveChanges();
 
             return RedirectToAction("Index");
         }
