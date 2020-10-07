@@ -169,12 +169,11 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
-        //report
+        //Sales report
         public IActionResult SalesReport()
         {
             return View();
         }
-
 
         //request from data-table(ajax)
         public IActionResult SalesReportData(DataRequest request)
@@ -183,17 +182,30 @@ namespace InventoryManagement.Web.Controllers
             return Json(data);
         }
 
-
+        //Product Sold Report
         public IActionResult ProductSoldReport()
         {
             return View();
         }
         
-
         //request from data-table(ajax)
         public IActionResult ProductSoldReportData(DataRequest request)
         {
             var data = _db.Selling.Records(request);
+            return Json(data);
+        }
+
+
+        //Cash Collection
+        public IActionResult CashCollection()
+        {
+            return View();
+        }
+
+        //request from data-table(ajax)
+        public IActionResult CashCollectionData(DataRequest request)
+        {
+            var data = _db.SellingPayments.Records(request);
             return Json(data);
         }
 

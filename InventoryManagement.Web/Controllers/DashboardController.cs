@@ -35,6 +35,7 @@ namespace InventoryManagement.Web.Controllers
             return Json(data);
         }
 
+        //find by date
         public IActionResult DailyReport(DateTime date)
         {
             var data = new DashboardRepository(_db);

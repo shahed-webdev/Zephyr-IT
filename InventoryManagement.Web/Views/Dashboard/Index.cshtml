@@ -9,7 +9,8 @@
     <style>
         .active-cyan-2 input.form-control[type=text]:focus:not([readonly]) { border-bottom: 1px solid #3fa3e2; box-shadow: 0 1px 0 0 #3fa3e2; }
         .active-cyan-2 .fas { color: #3144a2; }
-    </style>   
+        .fa-spinner { pointer-events: none}
+    </style>
 }
 
 @{
@@ -36,6 +37,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-3 col-md-6 mb-4">
                     <div class="card">
                         <div class="row mt-4 mb-3">
@@ -87,7 +89,20 @@
         </section>
 
         <section class="mb-5 mt-1">
-            <h5>Daily Report</h5>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Daily Report</h5>
+                <form id="findForm">
+                    <div class="input-group">
+                        <input id="inputFindDate" class="form-control my-0 py-1 datepicker" type="text" placeholder="Search By Date">
+                        <div class="input-group-append">
+                            <button id="btnFind" type="submit" class="btn btn-md btn-grey m-0 py-2 px-3">
+                                <i id="icoFind" class="fas fa-search text-grey"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
             <div class="row">
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="media white z-depth-1 rounded">
@@ -96,7 +111,9 @@
                             <p class="mb-0">
                                 <a href="/Selling/SalesReport">Sales <i class="far fa-long-arrow-alt-right"></i></a>
                             </p>
-                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.TotalSale</h5>
+                            <h5 class="font-weight-bold mb-0">
+                                ৳<span id="totalSale">@Model.DailySummary.TotalSale</span>
+                            </h5>
                         </div>
                     </div>
                 </div>
@@ -105,11 +122,15 @@
                     <div class="media white z-depth-1 rounded">
                         <i class="fas fa-wallet fa-2x green darken-1 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
-                            <p class="mb-0">Cash Collection</p>
-                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.CashCollection</h5>
+                            <p class="mb-0">
+                                <a href="/Selling/CashCollection">Cash Collection <i class="far fa-long-arrow-alt-right"></i></a>
+                            </p>
+                            <h5 class="font-weight-bold mb-0">
+                                ৳<span id="totalCashCollection">@Model.DailySummary.CashCollection</span>
+                            </h5>
                         </div>
                     </div>
-                </div>
+                </div>  
 
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="media white z-depth-1 rounded">
@@ -118,9 +139,11 @@
                             <p class="mb-0">
                                 <a href="/Selling/ProductSoldReport">Product Sold <i class="far fa-long-arrow-alt-right"></i></a>
                             </p>
-                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.ProductSold</h5>
+                            <h5 class="font-weight-bold mb-0">
+                                ৳<span id="totalProductSold">@Model.DailySummary.ProductSold</span>
+                            </h5>
                         </div>
-                    </div>     
+                    </div>
                 </div>
             </div>
 
@@ -130,7 +153,9 @@
                         <i class="fas fa-chart-pie fa-2x pink z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
                             <p class="mb-0">Expense</p>
-                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Expense</h5>
+                            <h5 class="font-weight-bold mb-0">
+                                ৳<span id="totalExpense">@Model.DailySummary.Expense</span>
+                            </h5>
                         </div>
                     </div>
                 </div>
@@ -140,7 +165,9 @@
                         <i class="fas fa-chart-line fa-2x deep-purple darken-3 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
                             <p class="mb-0">Profit</p>
-                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.Profit</h5>
+                            <h5 class="font-weight-bold mb-0">
+                                ৳<span id="totalProfit">@Model.DailySummary.Profit</span>
+                            </h5>
                         </div>
                     </div>
                 </div>
@@ -150,7 +177,9 @@
                         <i class="far fa-chart-bar fa-2x brown darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
                             <p class="mb-0">Net</p>
-                            <h5 class="font-weight-bold mb-0">৳@Model.DailySummary.NetProfit</h5>
+                            <h5 class="font-weight-bold mb-0">
+                                ৳<span id="totalNetProfit">@Model.DailySummary.NetProfit</span>
+                            </h5>
                         </div>
                     </div>
                 </div>
@@ -264,135 +293,190 @@
 
 @section Scripts {
     <script>
-        $(function () {
-            //vendor data-table
-            const customerTable = $('#table-customer').DataTable({
-                processing: true,
-                serverSide: true,
-                pageLength: 12,
-                dom: 't',
-                ajax: {
-                    url: "/Dashboard/TopDueCustomer",
-                    type: "POST"
+    $(function() {
+        //date picker
+        $('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'));
+
+
+        //vendor data-table
+        const customerTable = $('#table-customer').DataTable({
+            processing: true,
+            serverSide: true,
+            pageLength: 12,
+            dom: 't',
+            ajax: {
+                url: "/Dashboard/TopDueCustomer",
+                type: "POST"
+            },
+            columns:
+            [
+                {
+                    data: "Name", "render": function(data, type, row, meta) {
+                        return `<a class="blue-text" href="/Customer/Details/${row.CustomerId}">${data}</a>`;
+                    }
                 },
-                columns:
-                [
-                    {
-                        data: "Name", "render": function(data, type, row, meta) {
-                            return `<a class="blue-text" href="/Customer/Details/${row.CustomerId}">${data}</a>`;
-                        }
-                    },
-                    { data: "Due" }
-                ],
-                order: [[1, 'desc']]
-            });
+                { data: "Due" }
+            ],
+            order: [[1, 'desc']]
+        });
 
-            //on search input
-            $('#input-find').on("input", function() {
-                customerTable.search($(this).val()).draw();
-            });
-
-
-            //vendor data-table
-            const vendorTable = $('#table-vendor').DataTable({
-                processing: true,
-                serverSide: true,
-                pageLength: 6,
-                dom: 't',
-                ajax: {
-                    url: "/Dashboard/TopDueVendor",
-                    type: "POST"
-                },
-                columns:
-                [
-                    { data: "VendorCompanyName" },
-                    { data: "TotalAmount" },
-                    { data: "VendorPaid" },
-                    { data: "VendorDue" }
-                ]
-            });
-
-            //on search input
-            $('#vendor-input-find').on("input", function() {
-                vendorTable.search($(this).val()).draw();
-            })
+        //on search input
+        $('#input-find').on("input", function() {
+            customerTable.search($(this).val()).draw();
         });
 
 
-        let months = [];
-        let sales = [];
-        let purchase = [];
-        let profit = [];
-        let expense = [];
-
-        @foreach (var item in Model.MonthlySummary)
-        {
-            @:months.push("@item.Month.Month");
-            @:sales.push(@item.MonthlyNewPurchase);
-            @:purchase.push(@item.MonthlySale);
-            @:profit.push(@item.MonthlyProfit);
-            @:expense.push(@item.MonthlyExpense);
-        }
-
-        // Line chart
-        const ctxL = document.getElementById("lineChart").getContext('2d');
-        const myLineChart = new Chart(ctxL, {
-            type: 'line',
-            data: {
-                labels: months,
-                datasets: [
-                    {
-                        label: "PURCHASE",
-                        fillColor: "#fff",
-                        borderColor: 'rgba(76, 175, 80, 0.7)',
-                        data: purchase,
-                        borderWidth: 3
-                    },
-                    {
-                        label: "SALES",
-                        fillColor: "#fff",
-                        borderColor: 'rgba(205, 220, 57, 0.8)',
-                        data: sales,
-                        borderWidth: 3
-                    },
-                    {
-                        label: "PROFIT",
-                        fillColor: "#fff",
-                        borderColor: 'rgba(63, 81, 181, 0.8)',
-                        data: profit,
-                        borderWidth: 3
-                    },
-                    {
-                        label: "EXPENSE",
-                        fillColor: "#fff",
-                        borderColor: 'rgba(244, 67, 54, 0.8)',
-                        data: expense,
-                        borderWidth: 3
-                    }
-                ]
+        //vendor data-table
+        const vendorTable = $('#table-vendor').DataTable({
+            processing: true,
+            serverSide: true,
+            pageLength: 6,
+            dom: 't',
+            ajax: {
+                url: "/Dashboard/TopDueVendor",
+                type: "POST"
             },
-            options: {
-                legend: {
-                    labels: { fontColor: "#fff" }
+            columns:
+            [
+                { data: "VendorCompanyName" },
+                { data: "TotalAmount" },
+                { data: "VendorPaid" },
+                { data: "VendorDue" }
+            ]
+        });
+
+        //on search input
+        $('#vendor-input-find').on("input", function() {
+            vendorTable.search($(this).val()).draw();
+        })
+    });
+
+
+    let months = [];
+    let sales = [];
+    let purchase = [];
+    let profit = [];
+    let expense = [];
+
+    @foreach (var item in Model.MonthlySummary)
+    {
+        @:months.push("@item.Month.Month");
+        @:sales.push(@item.MonthlyNewPurchase);
+        @:purchase.push(@item.MonthlySale);
+        @:profit.push(@item.MonthlyProfit);
+        @:expense.push(@item.MonthlyExpense);
+    }
+
+    // Line chart
+    const ctxL = document.getElementById("lineChart").getContext('2d');
+    const myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+            labels: months,
+            datasets: [
+                {
+                    label: "PURCHASE",
+                    fillColor: "#fff",
+                    borderColor: 'rgba(76, 175, 80, 0.7)',
+                    data: purchase,
+                    borderWidth: 3
                 },
-                scales: {
-                    xAxes: [{
-                        gridLines: {
-                            display: true,
-                            color: "rgba(255,255,255,.25)"
-                        },
-                        ticks: { fontColor: "#fff" }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        gridLines: {
-                            display: true,
-                            color: "rgba(255,255,255,.25)"
-                        },
-                        ticks: { fontColor: "#fff" }
-                    }]
+                {
+                    label: "SALES",
+                    fillColor: "#fff",
+                    borderColor: 'rgba(205, 220, 57, 0.8)',
+                    data: sales,
+                    borderWidth: 3
+                },
+                {
+                    label: "PROFIT",
+                    fillColor: "#fff",
+                    borderColor: 'rgba(63, 81, 181, 0.8)',
+                    data: profit,
+                    borderWidth: 3
+                },
+                {
+                    label: "EXPENSE",
+                    fillColor: "#fff",
+                    borderColor: 'rgba(244, 67, 54, 0.8)',
+                    data: expense,
+                    borderWidth: 3
                 }
+            ]
+        },
+        options: {
+            legend: {
+                labels: { fontColor: "#fff" }
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        display: true,
+                        color: "rgba(255,255,255,.25)"
+                    },
+                    ticks: { fontColor: "#fff" }
+                }],
+                yAxes: [{
+                    display: true,
+                    gridLines: {
+                        display: true,
+                        color: "rgba(255,255,255,.25)"
+                    },
+                    ticks: { fontColor: "#fff" }
+                }]
+            }
+        }
+    });
+
+    //find by date
+    const findForm = document.getElementById("findForm");
+    findForm.addEventListener("submit", function(evt) {
+        evt.preventDefault();
+
+        const totalSale = document.querySelector("#totalSale");
+        const totalCashCollection = document.querySelector("#totalCashCollection");
+        const totalProductSold = document.querySelector("#totalProductSold");
+        const totalExpense = document.querySelector("#totalExpense");
+        const totalProfit = document.querySelector("#totalProfit");
+        const totalNetProfit = document.querySelector("#totalNetProfit");
+        const icoFind = findForm.querySelector("#icoFind");
+
+        //show loading
+        showSpinner(icoFind, true);
+
+        $.ajax({
+            type: "POST",
+            url: "/Dashboard/DailyReport",
+            data: { date: findForm.inputFindDate.value },
+            success: function(response) {
+                const { TotalSale, ProductSold, CashCollection, Expense, Profit, NetProfit } = response;
+                totalSale.textContent = TotalSale;
+                totalCashCollection.textContent = CashCollection;
+                totalProductSold.textContent = ProductSold;
+                totalExpense.textContent = Expense;
+                totalProfit.textContent = Profit;
+                totalNetProfit.textContent = NetProfit;
+
+                //hide loading
+                showSpinner(icoFind, false);
+            },
+            error: function(err) {
+                console.log(err)
             }
         });
-    </script>
+    });
+
+    //show spinner
+    function showSpinner(element, isShow) {
+        if (isShow) {
+            findForm.btnFind.disabled = true;
+            element.classList.remove("fa-search");
+            element.classList.add("fa-spinner", "fa-spin");
+        } else {
+            findForm.btnFind.disabled = false;
+            element.classList.remove("fa-spinner", "fa-spin");
+            element.classList.add("fa-search");
+        }
+    }
+    </script>       
 }

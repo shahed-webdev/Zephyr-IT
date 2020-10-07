@@ -5,7 +5,7 @@ $(function() {
 
     // Material Select Initialization
     $('.mdb-select').materialSelect();
-})
+});
 
 //global store
 let storage = [];
