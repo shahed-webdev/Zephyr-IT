@@ -128,4 +128,12 @@ namespace InventoryManagement.Repository
         public string Warranty { get; set; }
         public string[] RemainCodes { get; set; }
     }
+
+    public class DateWiseSaleSummary
+    {
+        public double SoldAmount { get; set; }
+        public double ReceivedAmount { get; set; }
+        public double DiscountAmount { get; set; }
+        public double DueAmount { get; set; }
+    }
 }
