@@ -182,6 +182,14 @@ namespace InventoryManagement.Web.Controllers
             return Json(data);
         }
 
+        //GET:// Get Amount ByDate(ajax)
+        //public IActionResult GetSaleAmountByDate(DateTime? fromDate, DateTime? toDate)
+        //{
+        //    var model = _db.Selling.DailyProductSoldAmount(fromDate, toDate);
+        //    return Json(model);
+        //}
+
+
         //Product Sold Report
         public IActionResult ProductSoldReport()
         {
@@ -193,6 +201,13 @@ namespace InventoryManagement.Web.Controllers
         {
             var data = _db.Selling.Records(request);
             return Json(data);
+        }
+        
+        //GET:// Get Sold Amount ByDate(ajax)
+        public IActionResult GetAmountByDate(DateTime? fromDate, DateTime? toDate)
+        {
+            var model = _db.Selling.ProductSoldAmountDateWise(fromDate, toDate);
+            return Json(model);
         }
 
 
@@ -210,12 +225,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
-        //GET:// GetAmountByDate(ajax)
-        //public IActionResult GetAmountByDate(DateTime? fromDate, DateTime? toDate)
-        //{
-        //    var model = _db.Selling.DateWiseSellingSummary(fromDate, toDate);
-        //    return Json(model);
-        //}
+       
 
         protected override void Dispose(bool disposing)
         {
