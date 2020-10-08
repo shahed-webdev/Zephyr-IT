@@ -17,7 +17,7 @@ namespace InventoryManagement.Repository
         double DailySaleAmount(DateTime? day);
         double SaleAmountDateWise(DateTime? sDateTime, DateTime? eDateTime);
         double DailyProductSoldAmount(DateTime? day);
-        double ProductSoldAmountDateWise(DateTime? sDateTime, DateTime? eDateTime);
+        DbResponse<DateWiseSaleSummary> ProductSoldAmountDateWise(DateTime? fromDate, DateTime? toDate);
         double DailyProfit(DateTime? day);
         double DailySoldPurchaseAmount(DateTime? day);
         ICollection<MonthlyAmount> MonthlyAmounts(int year);
