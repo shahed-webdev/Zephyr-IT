@@ -12,12 +12,10 @@
         <form id="formPost">
             <div class="d-flex align-items-center mb-4">
                 <div class="md-form m-0">
-                    <input type="text" id="inputFromDate" class="form-control datepicker m-0">
-                    <label for="inputFromDate">From Date</label>
+                    <input type="text" id="inputFromDate" class="form-control datepicker m-0" placeholder="From Date">
                 </div>
                 <div class="md-form m-0 ml-3">
-                    <input type="text" id="inputToDate" class="form-control datepicker m-0">
-                    <label for="inputToDate">To Date</label>
+                    <input type="text" id="inputToDate" class="form-control datepicker m-0" placeholder="To Date">
                 </div>
                 <button type="submit" class="btn btn-indigo py-2"><i class="fal fa-search"></i></button>
             </div>
@@ -88,11 +86,12 @@
 @section scripts{
     <script>
         $(function() {
-            $('.datepicker').pickadate();
+            $('.datepicker').pickadate()
+                //.val(moment(new Date()).format('DD MMMM, YYYY'));
 
             dataTable.getData();
 
-            //getAmountSummery();
+            getAmountSummery();
         });
 
         //get data

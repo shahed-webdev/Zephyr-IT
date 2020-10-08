@@ -183,11 +183,11 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET:// Get Amount ByDate(ajax)
-        //public IActionResult GetSaleAmountByDate(DateTime? fromDate, DateTime? toDate)
-        //{
-        //    var model = _db.Selling.DailyProductSoldAmount(fromDate, toDate);
-        //    return Json(model);
-        //}
+        public IActionResult GetSaleAmountByDate(DateTime? fromDate, DateTime? toDate)
+        {
+            var model = _db.Selling.ProductSoldAmountDateWise(fromDate, toDate);
+            return Json(model);
+        }
 
 
         //Product Sold Report
@@ -202,7 +202,7 @@ namespace InventoryManagement.Web.Controllers
             var data = _db.Selling.Records(request);
             return Json(data);
         }
-        
+
         //GET:// Get Sold Amount ByDate(ajax)
         public IActionResult GetAmountByDate(DateTime? fromDate, DateTime? toDate)
         {
