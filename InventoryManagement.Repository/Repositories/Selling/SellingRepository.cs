@@ -217,6 +217,32 @@ namespace InventoryManagement.Repository
                 .Sum(s => s.SellingTotalPrice - s.SellingDiscountAmount);
         }
 
+        public DbResponse<DateWiseSaleSummary> ProductSoldAmountDateWise(DateTime? fromDate, DateTime? toDate)
+        {
+            try
+            {
+                var sD = fromDate ?? new DateTime(1000, 1, 1);
+                var eD = toDate ?? new DateTime(3000, 12, 31);
+
+                var summary = Context.Selling
+                                  .Where(s => s.SellingDate <= eD && s.SellingDate >= sD)
+                                  .GroupBy(s => true)
+                                  .Select(g => new DateWiseSaleSummary
+                                  {
+                                      SoldAmount = g.Sum(e => e.SellingTotalPrice),
+                                      DiscountAmount = g.Sum(e => e.SellingDiscountAmount),
+                                      DueAmount = g.Sum(e => e.SellingDueAmount),
+                                      ReceivedAmount = g.Sum(e => e.SellingPaidAmount)
+                                  }).FirstOrDefault() ?? new DateWiseSaleSummary();
+
+                return new DbResponse<DateWiseSaleSummary>(true, "Success", summary);
+            }
+            catch (Exception e)
+            {
+                return new DbResponse<DateWiseSaleSummary>(false, e.Message);
+            }
+        }
+
         /// <summary>Calculate Report By (Total Amount – discount) Selling date
         /// </summary>
         public double DailyProductSoldAmount(DateTime? date)
@@ -224,16 +250,6 @@ namespace InventoryManagement.Repository
             var saleDate = date ?? DateTime.Now;
             return Context.Selling.Where(s => s.SellingDate == saleDate.Date)?
                        .Sum(s => s.SellingTotalPrice - s.SellingDiscountAmount) ?? 0;
-        }
-
-        public double ProductSoldAmountDateWise(DateTime? sDateTime, DateTime? eDateTime)
-        {
-            var sD = sDateTime ?? new DateTime(DateTime.Now.Year, 1, 1);
-            var eD = eDateTime ?? new DateTime(DateTime.Now.Year, 12, 31);
-            return Context
-                .Selling
-                .Where(r => r.SellingDate <= eD && r.SellingDate >= sD)
-                .Sum(s => s.SellingTotalPrice - s.SellingDiscountAmount);
         }
 
         public double DailyProfit(DateTime? date)
