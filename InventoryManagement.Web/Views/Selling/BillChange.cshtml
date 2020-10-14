@@ -94,7 +94,7 @@
                                         </td>
                                         <td>@item.Warranty</td>
                                         <td>@item.ProductCodes.Length</td>
-                                        <td><input type="number" required class="form-control inputUnitPrice" step="0.01" min="@item.SellingPrice" max="@item.SellingPrice" value="@item.SellingPrice" /></td>
+                                        <td><input type="number" required class="form-control inputUnitPrice" step="0.01" min="@item.PurchasePrice" value="@item.SellingPrice" /></td>
                                         <td>@(item.SellingPrice * item.ProductCodes.Length)</td>
                                     </tr>
                                 }
@@ -157,7 +157,7 @@
 </div>
 
 @section Scripts{
-    <script src="~/page-js/bill-change.js?v=12"></script>
+    <script src="~/page-js/bill-change.js?v=13"></script>
     <script>
         //save previous data
         cartProducts = @Html.Raw(Json.Serialize(Model.Products));

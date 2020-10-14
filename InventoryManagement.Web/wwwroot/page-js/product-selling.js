@@ -41,7 +41,7 @@ const storage = {
             codeExistError.textContent = `"${inputBarCode.value}" Not found!`;
             return;
         }
-        console.log(product)
+
         const found = cartProducts.some(el => el.ProductCatalogId === product.ProductCatalogId && el.ProductName === product.ProductName && el.PurchasePrice === product.PurchasePrice);
         if (!found) {
             //save to global object
@@ -171,7 +171,7 @@ const onRemoveClicked = function (evt) {
     if (!removeClicked) return;
 
     //remove product from storage
-    cartProducts = cartProducts.filter(item => item.ProductCatalogId !== id && item.ProductName !== name && item.PurchasePrice === purchasePrice);
+    cartProducts = cartProducts.filter(item => item.ProductCatalogId !== id && item.ProductName !== name && item.PurchasePrice !== purchasePrice);
 
     //save to local storage
     storage.setData();
