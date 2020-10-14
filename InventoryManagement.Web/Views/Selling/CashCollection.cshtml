@@ -9,20 +9,22 @@
     <h4 class="page-header mb-3">Cash Collection Report</h4>
 
     <div class="card card-body">
-        <form id="formPost">
-            <div class="d-flex align-items-center mb-5">
-                <div class="md-form m-0">
-                    <input type="text" id="inputFromDate" class="form-control datepicker m-0">
-                    <label for="inputFromDate">From Date</label>
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <form id="formPost">
+                <div class="d-flex align-items-center">
+                    <div class="md-form m-0">
+                        <label for="inputFromDate">From Date</label>
+                        <input type="text" id="inputFromDate" class="form-control datepicker m-0">
+                    </div>
+                    <div class="md-form m-0 ml-3">
+                        <label for="inputToDate">To Date</label>
+                        <input type="text" id="inputToDate" class="form-control datepicker m-0">
+                    </div>
+                    <button type="submit" class="btn btn-indigo py-2"><i class="fal fa-search"></i></button>
                 </div>
-                <div class="md-form m-0 ml-3">
-                    <input type="text" id="inputToDate" class="form-control datepicker m-0">
-                    <label for="inputToDate">To Date</label>
-                </div>
-                <button type="submit" class="btn btn-indigo py-2"><i class="fal fa-search"></i></button>
-            </div>
-        </form>
-
+            </form>
+            <h5 id="totalAmount" class="mb-0 font-weight-bold"></h5>
+        </div>
 
         <table id="data-table" class="table table-sm table-bordered">
             <thead>
@@ -42,11 +44,34 @@
 @section scripts{
     <script>
         $(function() {
-            $('.datepicker').pickadate();
+            $('.datepicker').pickadate({
+                format: 'd-mmmm-yyyy'
+            });
 
+            const date = "@Context.Request.RouteValues["id"]";
+
+            if (date) {
+                const from = document.querySelector("#inputFromDate");
+                const to = document.querySelector("#inputToDate");
+
+                from.value = date;
+                from.previousElementSibling.classList.add("active");
+
+                to.value = date;
+                to.previousElementSibling.classList.add("active");
+
+                dataTable.filter = [];
+                dataTable.filter.push({ Field: "PaidDate", Value: date, Operand: dataTable.operand.GreaterThanOrEqual });
+                dataTable.filter.push({ Field: "PaidDate", Value: date, Operand: dataTable.operand.LessThanOrEqual });
+
+                getAmountSummery({ fromDate: date, toDate: date });
+            } else {
+                //get amount
+                getAmountSummery();
+            }
+
+            //get data-table
             dataTable.getData();
-
-            //getAmountSummery();
         });
 
         //get data
@@ -147,23 +172,15 @@
 
         function getAmountSummery(dates) {
             //for get and set total amount
-            const setSold = document.getElementById('setSold');
-            const setDiscount = document.getElementById('setDiscount');
-            const setPaid = document.getElementById('setPaid');
-            const setDue = document.getElementById('setDue');
-
-            const url = "/Selling/GetAmountByDate";
+            const totalAmount = document.getElementById('totalAmount');
+            const url = "/Selling/GetCollectionByDate";
 
             $.ajax({
                 type: "POST",
                 url,
                 data: dates,
-                success: function(response) {
-                    const sales = response.Data;
-                    setSold.innerText = sales.SoldAmount;
-                    setDiscount.innerText = sales.DiscountAmount;
-                    setPaid.innerText = sales.ReceivedAmount;
-                    setDue.innerText = sales.DueAmount;
+                success: function (response) {
+                    totalAmount.textContent = `Total: ৳${response}`;
                 }
             });
         }

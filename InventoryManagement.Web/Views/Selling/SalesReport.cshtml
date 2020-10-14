@@ -13,12 +13,12 @@
             <form id="formPost">
                 <div class="d-flex align-items-center">
                     <div class="md-form m-0">
-                        <input type="text" id="inputFromDate" class="form-control datepicker m-0">
                         <label for="inputFromDate">From Date</label>
+                        <input type="text" id="inputFromDate" class="form-control datepicker m-0">
                     </div>
                     <div class="md-form m-0 ml-3">
-                        <input type="text" id="inputToDate" class="form-control datepicker m-0">
                         <label for="inputToDate">To Date</label>
+                        <input type="text" id="inputToDate" class="form-control datepicker m-0">
                     </div>
                     <button type="submit" class="btn btn-indigo py-2"><i class="fal fa-search"></i></button>
                 </div>
@@ -49,12 +49,36 @@
 @section scripts{
     <script>
         $(function() {
-            $('.datepicker').pickadate();
+            $('.datepicker').pickadate({
+                format: 'd-mmmm-yyyy'
+            });
 
+            const date = "@Context.Request.RouteValues["id"]";
+
+            if (date) {
+                const from = document.querySelector("#inputFromDate");
+                const to = document.querySelector("#inputToDate");
+
+                from.value = date;
+                from.previousElementSibling.classList.add("active");
+
+                to.value = date;
+                to.previousElementSibling.classList.add("active");
+
+                dataTable.filter = [];
+                dataTable.filter.push({ Field: "LastUpdateDate", Value: date, Operand: dataTable.operand.GreaterThanOrEqual });
+                dataTable.filter.push({ Field: "LastUpdateDate", Value: date, Operand: dataTable.operand.LessThanOrEqual });
+
+                getAmountSummery({ fromDate: date, toDate: date });
+            } else {
+               //get amount
+                getAmountSummery();
+            }
+
+            //get data-table
             dataTable.getData();
-
-            getAmountSummery();
         });
+
 
         //get data
         var dataTable = {
@@ -120,7 +144,7 @@
                     title: '',
                     exportOptions: {
                         //columns: [0,1] //Column value those print
-                                                                                                                                             },
+                                                                                },
                     customize: function(win) {
                         $(win.document.body).prepend(`<nav class="mb-3 navbar peach-gradient"><a class="navbar-brand ml-1"><span>Zephyr</span> IT</a></nav><h3 class="h3-responsive">${$('h4').text()}</h3>`);
                     },
@@ -136,7 +160,6 @@
 
         //selectors
         const formPost = document.getElementById("formPost");
-
         formPost.addEventListener('submit', function(evt) {
             evt.preventDefault();
 
@@ -173,8 +196,7 @@
                 url,
                 data: dates,
                 success: function(response) {
-                    console.log(response)
-                    totalAmount.textContent = `Total Sale: ৳${response.Data.SoldAmount}`;
+                    totalAmount.textContent = `Total Sale: ৳${response}`;
                 }
             });
         }

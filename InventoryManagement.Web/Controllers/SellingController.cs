@@ -185,7 +185,7 @@ namespace InventoryManagement.Web.Controllers
         //GET:// Get Amount ByDate(ajax)
         public IActionResult GetSaleAmountByDate(DateTime? fromDate, DateTime? toDate)
         {
-            var model = _db.Selling.ProductSoldAmountDateWise(fromDate, toDate);
+            var model = _db.Selling.SaleAmountDateWise(fromDate, toDate);
             return Json(model);
         }
 
@@ -224,8 +224,13 @@ namespace InventoryManagement.Web.Controllers
             return Json(data);
         }
 
+        //GET:// Get Collection Amount ByDate(ajax)
+        public IActionResult GetCollectionByDate(DateTime? fromDate, DateTime? toDate)
+        {
+            var model = _db.Selling.SaleAmountDateWise(fromDate, toDate);
+            return Json(model);
+        }
 
-       
 
         protected override void Dispose(bool disposing)
         {
