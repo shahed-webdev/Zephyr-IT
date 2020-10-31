@@ -47,7 +47,7 @@ const storage = {
             //save to global object
             product.codes = [product.ProductCode];
             product.sellingFixedValue = product.SellingPrice;
-            cartProducts.push(product);
+            cartProducts.unshift(product);
         }
         else {
             const index = cartProducts.findIndex(item => item.ProductCatalogId === product.ProductCatalogId && item.ProductName === product.ProductName && item.PurchasePrice === product.PurchasePrice);

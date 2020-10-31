@@ -7,9 +7,12 @@
 
 @section Styles{
     <style>
+        #daily-report p { font-weight: 400; color: #212121; font-size: 1rem }
+        #daily-report p a { font-weight: 400; color: #212121; font-size: 1rem }
+
         .active-cyan-2 input.form-control[type=text]:focus:not([readonly]) { border-bottom: 1px solid #3fa3e2; box-shadow: 0 1px 0 0 #3fa3e2; }
         .active-cyan-2 .fas { color: #3144a2; }
-        .fa-spinner { pointer-events: none}
+        .fa-spinner { pointer-events: none }
     </style>
 }
 
@@ -88,7 +91,7 @@
             </div>
         </section>
 
-        <section class="mb-5 mt-1">
+        <section id="daily-report" class="mb-5 mt-1">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="mb-0">Daily Report</h5>
                 <form id="findForm">
@@ -109,7 +112,7 @@
                         <i class="fas fa-tags fa-2x light-blue darken-3 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
                             <p class="mb-0">
-                                <a id="linkSales">Sales <i class="far fa-long-arrow-alt-right"></i></a>
+                                <a id="linkSales">Total Sale <i class="far fa-long-arrow-alt-right"></i></a>
                             </p>
                             <h5 class="font-weight-bold mb-0">
                                 ৳<span id="totalSale">@Model.DailySummary.TotalSale</span>
@@ -117,7 +120,19 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="media white z-depth-1 rounded">
+                        <i class="fas fa-shopping-bag fa-2x primary-color-dark z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                        <div class="media-body mt-3">
+                            <p class="mb-0">
+                                <a id="linkSold">Today’s Sold Products <i class="far fa-long-arrow-alt-right"></i></a>
+                            </p>
+                            <h5 class="font-weight-bold mb-0">
+                                ৳<span id="totalProductSold">@Model.DailySummary.ProductSold</span>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="media white z-depth-1 rounded">
                         <i class="fas fa-wallet fa-2x green darken-1 z-depth-1 p-4 rounded-left text-white mr-3"></i>
@@ -127,20 +142,6 @@
                             </p>
                             <h5 class="font-weight-bold mb-0">
                                 ৳<span id="totalCashCollection">@Model.DailySummary.CashCollection</span>
-                            </h5>
-                        </div>
-                    </div>
-                </div>  
-
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="media white z-depth-1 rounded">
-                        <i class="fas fa-shopping-bag fa-2x primary-color-dark z-depth-1 p-4 rounded-left text-white mr-3"></i>
-                        <div class="media-body mt-3">
-                            <p class="mb-0">
-                                <a id="linkSold">Product Sold <i class="far fa-long-arrow-alt-right"></i></a>
-                            </p>
-                            <h5 class="font-weight-bold mb-0">
-                                ৳<span id="totalProductSold">@Model.DailySummary.ProductSold</span>
                             </h5>
                         </div>
                     </div>
@@ -159,7 +160,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="media white z-depth-1 rounded">
                         <i class="fas fa-chart-line fa-2x deep-purple darken-3 z-depth-1 p-4 rounded-left text-white mr-3"></i>
@@ -171,13 +171,12 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="media white z-depth-1 rounded">
                         <i class="far fa-chart-bar fa-2x brown darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
                             <p class="mb-0">Net</p>
-                            <h5 class="font-weight-bold mb-0">
+                            <h5 class="font-weight-bold mb-0 @(Model.DailySummary.NetProfit > 0 ? "text-success" : "text-danger")">
                                 ৳<span id="totalNetProfit">@Model.DailySummary.NetProfit</span>
                             </h5>
                         </div>
