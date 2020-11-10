@@ -474,7 +474,17 @@
                     totalProductSold.textContent = ProductSold;
                     totalExpense.textContent = Expense;
                     totalProfit.textContent = Profit;
+
+
                     totalNetProfit.textContent = NetProfit;
+                    if (NetProfit > 0) {
+                        totalNetProfit.parentElement.classList.add("text-success");
+                        totalNetProfit.parentElement.classList.remove("text-danger");
+                    } else {
+                        totalNetProfit.parentElement.classList.remove("text-success");
+                        totalNetProfit.parentElement.classList.add("text-danger");
+                    }
+
 
                     //hide loading
                     showSpinner(icoFind, false);
