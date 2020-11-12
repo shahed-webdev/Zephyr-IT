@@ -160,12 +160,14 @@ namespace InventoryManagement.Repository
                 {
                     TotalAmount = s.Sum(c => c.SellingTotalPrice),
                     TotalDiscount = s.Sum(c => c.SellingDiscountAmount),
-                    Paid = s.Sum(c => c.SellingPaidAmount)
+                    Paid = s.Sum(c => c.SellingPaidAmount),
+                    Return = s.Sum(c => c.SellingReturnAmount)
                 }).FirstOrDefault();
 
             customer.TotalAmount = obj.TotalAmount;
             customer.TotalDiscount = obj.TotalDiscount;
             customer.Paid = obj.Paid;
+            customer.ReturnAmount = obj.Return;
 
             Update(customer);
             Context.SaveChanges();
