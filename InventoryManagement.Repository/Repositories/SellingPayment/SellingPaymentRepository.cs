@@ -158,6 +158,7 @@ namespace InventoryManagement.Repository
         public DataResult<SellingPaymentRecordModel> Records(DataRequest request)
         {
             return Context.SellingPayment
+                .Include(s=>s.SellingPaymentList)
                 .Include(s => s.Customer)
                 .Select(s => new SellingPaymentRecordModel
                 {
@@ -165,6 +166,8 @@ namespace InventoryManagement.Repository
                     CustomerId = s.CustomerId,
                     CustomerName = s.Customer.CustomerName,
                     ReceiptSn = s.ReceiptSn,
+                    SellingSn= s.SellingPaymentList.Select(p=> p.Selling.SellingSn).FirstOrDefault(),
+                    SellingId = s.SellingPaymentList.Select(p=> p.Selling.SellingId).FirstOrDefault(),
                     PaidAmount = s.PaidAmount,
                     PaymentMethod = s.PaymentMethod,
                     PaidDate = s.PaidDate

@@ -93,7 +93,11 @@
                     },
                     columns:
                     [
-                        { data: "ReceiptSn" },
+                        {
+                            data: "SellingSn", "render": function(data, type, row, meta) {
+                                return `<a class="blue-text" href="/Selling/SellingReceipt/${row.SellingId}">${data}</a>`;
+                            }
+                        },
                         { data: "CustomerName" },
                         { data: "PaidAmount", "render": dataTable.addSign },
                         { data: "PaymentMethod" },
@@ -127,7 +131,7 @@
                     title: '',
                     exportOptions: {
                         //columns: [0,1] //Column value those print
-                                                                                                                                             },
+                                                                                                                                                                                                         },
                     customize: function(win) {
                         $(win.document.body).prepend(`<nav class="mb-3 navbar peach-gradient"><a class="navbar-brand ml-1"><span>Zephyr</span> IT</a></nav><h3 class="h3-responsive">${$('h4').text()}</h3>`);
                     },
@@ -179,7 +183,7 @@
                 type: "POST",
                 url,
                 data: dates,
-                success: function (response) {
+                success: function(response) {
                     totalAmount.textContent = `Total: ৳${response}`;
                 }
             });

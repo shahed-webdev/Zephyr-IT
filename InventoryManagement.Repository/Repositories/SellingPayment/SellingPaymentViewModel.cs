@@ -49,6 +49,8 @@ namespace InventoryManagement.Repository
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public int ReceiptSn { get; set; }
+        public int SellingId { get; set; }
+        public int SellingSn { get; set; }
         public double PaidAmount { get; set; }
         public string PaymentMethod { get; set; }
         public DateTime PaidDate { get; set; }
