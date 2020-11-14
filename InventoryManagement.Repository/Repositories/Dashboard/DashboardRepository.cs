@@ -126,6 +126,5 @@ namespace InventoryManagement.Repository
 
             return result ?? new List<MonthlyDashboardSummaryViewModel>(); ;
         }
-
     }
 }

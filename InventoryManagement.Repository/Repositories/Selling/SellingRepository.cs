@@ -198,6 +198,7 @@ namespace InventoryManagement.Repository
         {
             return Context.Selling?.Sum(s => s.SellingDueAmount) ?? 0;
         }
+
         /// <summary>Calculate Report By (Total Amount – discount) Totally Payment competed date
         /// </summary>
         public double DailySaleAmount(DateTime? date)
