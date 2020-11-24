@@ -115,7 +115,7 @@
                                 <a id="linkSales">Total Sale <i class="far fa-long-arrow-alt-right"></i></a>
                             </p>
                             <h5 class="font-weight-bold mb-0">
-                                ৳<span id="totalSale">@Model.DailySummary.TotalSale</span>
+                                ৳<span id="totalSale"></span>
                             </h5>
                         </div>
                     </div>
@@ -128,7 +128,7 @@
                                 <a id="linkSold">Today’s Sold Products <i class="far fa-long-arrow-alt-right"></i></a>
                             </p>
                             <h5 class="font-weight-bold mb-0">
-                                ৳<span id="totalProductSold">@Model.DailySummary.ProductSold</span>
+                                ৳<span id="totalProductSold"></span>
                             </h5>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                                 <a id="linkCash">Cash Collection <i class="far fa-long-arrow-alt-right"></i></a>
                             </p>
                             <h5 class="font-weight-bold mb-0">
-                                ৳<span id="totalCashCollection">@Model.DailySummary.CashCollection</span>
+                                ৳<span id="totalCashCollection"></span>
                             </h5>
                         </div>
                     </div>
@@ -155,7 +155,7 @@
                         <div class="media-body mt-3">
                             <p class="mb-0">Expense</p>
                             <h5 class="font-weight-bold mb-0">
-                                ৳<span id="totalExpense">@Model.DailySummary.Expense</span>
+                                ৳<span id="totalExpense"></span>
                             </h5>
                         </div>
                     </div>
@@ -166,7 +166,7 @@
                         <div class="media-body mt-3">
                             <p class="mb-0">Profit</p>
                             <h5 class="font-weight-bold mb-0">
-                                ৳<span id="totalProfit">@Model.DailySummary.Profit</span>
+                                ৳<span id="totalProfit"></span>
                             </h5>
                         </div>
                     </div>
@@ -176,8 +176,8 @@
                         <i class="far fa-chart-bar fa-2x brown darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
                             <p class="mb-0">Net</p>
-                            <h5 class="font-weight-bold mb-0 @(Model.DailySummary.NetProfit > 0 ? "text-success" : "text-danger")">
-                                ৳<span id="totalNetProfit">@Model.DailySummary.NetProfit</span>
+                            <h5 class="font-weight-bold mb-0">
+                                ৳<span id="totalNetProfit"></span>
                             </h5>
                         </div>
                     </div>
@@ -429,6 +429,9 @@
             }
         });
 
+        //on find click
+        const findForm = document.getElementById("findForm");
+
         //add date to link
         const defaultDate = moment(new Date()).format('DD-MMMM-YYYY');
 
@@ -440,13 +443,20 @@
         linkCash.setAttribute("href", `/Selling/CashCollection/${defaultDate}`);
         linkSold.setAttribute("href", `/Selling/ProductSoldReport/${defaultDate}`);
 
-        //on find click
-        const findForm = document.getElementById("findForm");
+        //find btn click
         findForm.addEventListener("submit", function(evt) {
             evt.preventDefault();
 
             const date = findForm.inputFindDate.value;
+            getDailyData(date)
+        });
 
+        //get data on load
+        getDailyData(defaultDate);
+
+
+        //bind daily data
+        function getDailyData(date) {
             const totalSale = document.querySelector("#totalSale");
             const totalCashCollection = document.querySelector("#totalCashCollection");
             const totalProductSold = document.querySelector("#totalProductSold");
@@ -493,8 +503,7 @@
                     console.log(err)
                 }
             });
-        });
-
+        }
 
         //show spinner
         function showSpinner(element, isShow) {
