@@ -415,8 +415,8 @@ const onSellSubmitClicked = function(evt) {
         else
             console.log('Error', error.message);
     }).finally(() => {
-        btnSubmit.innerText = 'Sell Product'
-        btnSubmit.disabled = false
+        btnSubmit.innerText = 'Sell Product';
+        btnSubmit.disabled = false;
     });
 }
 

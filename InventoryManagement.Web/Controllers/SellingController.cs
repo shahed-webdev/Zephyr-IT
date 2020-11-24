@@ -227,7 +227,7 @@ namespace InventoryManagement.Web.Controllers
         //GET:// Get Collection Amount ByDate(ajax)
         public IActionResult GetCollectionByDate(DateTime? fromDate, DateTime? toDate)
         {
-            var model = _db.Selling.SaleAmountDateWise(fromDate, toDate);
+            var model = _db.SellingPayments.CollectionAmountDateWise(fromDate, toDate);
             return Json(model);
         }
 
