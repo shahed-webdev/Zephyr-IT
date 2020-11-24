@@ -50,8 +50,8 @@ namespace InventoryManagement.Repository
                 SellingDiscountAmount = model.SellingDiscountAmount,
                 SellingDiscountPercentage = model.SellingDiscountAmount,
                 SellingPaidAmount = model.SellingPaidAmount,
-                SellingDate = model.SellingDate.ToLocalTime(),
-                LastUpdateDate = model.SellingDate.ToLocalTime(),
+                SellingDate = DateTime.Now.BdTime().Date,
+                LastUpdateDate = DateTime.Now.BdTime().Date,
                 SellingList = model.ProductList.Select(l => new SellingList
                 {
                     ProductId = l.ProductId,
@@ -78,7 +78,7 @@ namespace InventoryManagement.Repository
                                 ReceiptSn = newSellingPaymentSn,
                                 PaidAmount = model.SellingPaidAmount,
                                 PaymentMethod = model.PaymentMethod,
-                                PaidDate = model.SellingDate.ToLocalTime()
+                                PaidDate = DateTime.Now.BdTime().Date
                             }
                         }
                     } : null
@@ -187,7 +187,7 @@ namespace InventoryManagement.Repository
                 .OrderBy(o => o)
                 .ToList();
 
-            var currentYear = DateTime.Now.Year;
+            var currentYear = DateTime.Now.BdTime().Year;
 
             if (!years.Contains(currentYear)) years.Add(currentYear);
 
@@ -202,15 +202,15 @@ namespace InventoryManagement.Repository
         /// </summary>
         public double DailySaleAmount(DateTime? date)
         {
-            var saleDate = date ?? DateTime.Now;
+            var saleDate = date ?? DateTime.Now.BdTime();
             return Context.Selling.Where(s => s.LastUpdateDate == saleDate.Date)?
                   .Sum(s => s.SellingTotalPrice - s.SellingDiscountAmount) ?? 0;
         }
 
         public double SaleAmountDateWise(DateTime? sDateTime, DateTime? eDateTime)
         {
-            var sD = sDateTime ?? new DateTime(DateTime.Now.Year, 1, 1);
-            var eD = eDateTime ?? new DateTime(DateTime.Now.Year, 12, 31);
+            var sD = sDateTime ?? new DateTime(DateTime.Now.BdTime().Year, 1, 1);
+            var eD = eDateTime ?? new DateTime(DateTime.Now.BdTime().Year, 12, 31);
             return Context
                 .Selling
                 .Where(r => r.LastUpdateDate <= eD && r.LastUpdateDate >= sD)
@@ -247,14 +247,14 @@ namespace InventoryManagement.Repository
         /// </summary>
         public double DailyProductSoldAmount(DateTime? date)
         {
-            var saleDate = date ?? DateTime.Now;
+            var saleDate = date ?? DateTime.Now.BdTime();
             return Context.Selling.Where(s => s.SellingDate == saleDate.Date)?
                        .Sum(s => s.SellingTotalPrice - s.SellingDiscountAmount) ?? 0;
         }
 
         public double DailyProfit(DateTime? date)
         {
-            var saleDate = date ?? DateTime.Now;
+            var saleDate = date ?? DateTime.Now.BdTime();
             return (from selling in Context.Selling
                     join sellingList in Context.SellingList on selling.SellingId equals sellingList.SellingId
                     join productStock in Context.ProductStock on sellingList.SellingListId equals productStock.SellingListId
@@ -268,7 +268,7 @@ namespace InventoryManagement.Repository
 
         public double DailySoldPurchaseAmount(DateTime? date)
         {
-            var saleDate = date ?? DateTime.Now;
+            var saleDate = date ?? DateTime.Now.BdTime();
             //return Context.Selling
             //    .Include(s => s.SellingList)
             //    .ThenInclude(l => l.ProductStock)
@@ -461,7 +461,7 @@ namespace InventoryManagement.Repository
                 selling.SellingDiscountAmount = model.SellingDiscountAmount;
                 selling.SellingReturnAmount = model.SellingReturnAmount;
                 selling.SellingPaidAmount += model.PaidAmount;
-                selling.LastUpdateDate = model.PaidDate.ToLocalTime();
+                selling.LastUpdateDate = DateTime.Now.BdTime().Date;
 
                 var due = (selling.SellingTotalPrice + selling.SellingReturnAmount) - (selling.SellingDiscountAmount + selling.SellingPaidAmount);
                 if (due < 0)
@@ -513,7 +513,7 @@ namespace InventoryManagement.Repository
                         ReceiptSn = newSellingPaymentSn,
                         PaidAmount = model.PaidAmount,
                         PaymentMethod = model.PaymentMethod,
-                        PaidDate = model.PaidDate,
+                        PaidDate = DateTime.Now.BdTime().Date,
                         SellingPaymentList = new List<SellingPaymentList>
                         {
                             new SellingPaymentList

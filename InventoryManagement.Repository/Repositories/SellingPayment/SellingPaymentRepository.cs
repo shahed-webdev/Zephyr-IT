@@ -53,7 +53,7 @@ namespace InventoryManagement.Repository
                         ReceiptSn = Sn,
                         PaidAmount = model.PaidAmount,
                         PaymentMethod = model.PaymentMethod,
-                        PaidDate = model.PaidDate.ToLocalTime(),
+                        PaidDate = DateTime.Now.BdTime().Date,
 
                         SellingPaymentList = new List<SellingPaymentList>
                         {
@@ -69,7 +69,7 @@ namespace InventoryManagement.Repository
 
                 selling.SellingDiscountAmount = model.SellingDiscountAmount;
                 selling.SellingPaidAmount += model.PaidAmount;
-                selling.LastUpdateDate = model.PaidDate.ToLocalTime();
+                selling.LastUpdateDate = DateTime.Now.BdTime().Date;
 
                 Context.Selling.Update(selling);
 
@@ -108,7 +108,7 @@ namespace InventoryManagement.Repository
                         return response;
                     }
                     sell.SellingPaidAmount += invoice.SellingPaidAmount;
-                    sell.LastUpdateDate = model.PaidDate.ToLocalTime();
+                    sell.LastUpdateDate = DateTime.Now.BdTime().Date;
                 }
 
                 var Sn = await db.SellingPayments.GetNewSnAsync().ConfigureAwait(false);
@@ -120,7 +120,7 @@ namespace InventoryManagement.Repository
                     ReceiptSn = Sn,
                     PaidAmount = model.PaidAmount,
                     PaymentMethod = model.PaymentMethod,
-                    PaidDate = model.PaidDate.ToLocalTime(),
+                    PaidDate = DateTime.Now.BdTime().Date,
                     SellingPaymentList = model.Bills.Select(i => new SellingPaymentList
                     {
                         SellingId = i.SellingId,
@@ -150,7 +150,7 @@ namespace InventoryManagement.Repository
 
         public double DailyCashCollectionAmount(DateTime? date)
         {
-            var saleDate = date ?? DateTime.Now;
+            var saleDate = date ?? DateTime.Now.BdTime().Date;
             return Context.SellingPayment.Where(s => s.PaidDate == saleDate.Date)?
                        .Sum(s => s.PaidAmount) ?? 0;
         }
@@ -158,7 +158,7 @@ namespace InventoryManagement.Repository
         public DataResult<SellingPaymentRecordModel> Records(DataRequest request)
         {
             return Context.SellingPayment
-                .Include(s=>s.SellingPaymentList)
+                .Include(s => s.SellingPaymentList)
                 .Include(s => s.Customer)
                 .Select(s => new SellingPaymentRecordModel
                 {
@@ -166,8 +166,8 @@ namespace InventoryManagement.Repository
                     CustomerId = s.CustomerId,
                     CustomerName = s.Customer.CustomerName,
                     ReceiptSn = s.ReceiptSn,
-                    SellingSn= s.SellingPaymentList.Select(p=> p.Selling.SellingSn).FirstOrDefault(),
-                    SellingId = s.SellingPaymentList.Select(p=> p.Selling.SellingId).FirstOrDefault(),
+                    SellingSn = s.SellingPaymentList.Select(p => p.Selling.SellingSn).FirstOrDefault(),
+                    SellingId = s.SellingPaymentList.Select(p => p.Selling.SellingId).FirstOrDefault(),
                     PaidAmount = s.PaidAmount,
                     PaymentMethod = s.PaymentMethod,
                     PaidDate = s.PaidDate
@@ -177,8 +177,8 @@ namespace InventoryManagement.Repository
 
         public double CollectionAmountDateWise(DateTime? sDateTime, DateTime? eDateTime)
         {
-            var sD = sDateTime ?? new DateTime(DateTime.Now.Year, 1, 1);
-            var eD = eDateTime ?? new DateTime(DateTime.Now.Year, 12, 31);
+            var sD = sDateTime ?? new DateTime(DateTime.Now.BdTime().Year, 1, 1);
+            var eD = eDateTime ?? new DateTime(DateTime.Now.BdTime().Year, 12, 31);
             return Context
                 .SellingPayment
                 .Where(r => r.PaidDate <= eD && r.PaidDate >= sD).Sum(s => s.PaidAmount);
