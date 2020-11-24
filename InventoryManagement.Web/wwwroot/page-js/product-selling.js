@@ -446,15 +446,19 @@ $('#inputCustomer').typeahead({
     },
     updater: function (item) {
         appendInfo(item);
+
         hiddenCustomerId.value = item.CustomerId;
-        customerError.innerText = ''
+        customerError.innerText = '';
+
         checkDueLimit()
         return item;
     }
 })
 
 function appendInfo(item) {
-    const html = `<span class="badge badge-pill badge-success">${item.CustomerName}</span>
+    const name = item.IsIndividual ? item.CustomerName : item.OrganizationName;
+
+    const html = `<h5 class="badge badge-pill badge-success">${name}</h5>
         <span class="badge badge-pill badge-danger">Previous Due: ৳<span id="prevDue">${item.Due}</span></span>
         <span class="badge badge-pill badge-info">Due Limit: ৳<span id="dueLimit">${item.DueLimit}</span></span>`;
 
