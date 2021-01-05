@@ -96,7 +96,7 @@
                     @if (Model.SellingDiscountAmount > 0)
                     {
                         <h5 class="border-bottom border-dark pb-1">Discount:<strong>৳@Model.SellingDiscountAmount</strong></h5>
-                        <h5 class="mt-1">Payable Amount:<strong>৳@(Model.SellingTotalPrice-Model.SellingDiscountAmount)</strong></h5>
+                        <h5 class="mt-1">Net Payable Amount:<strong>৳@(Model.SellingTotalPrice-Model.SellingDiscountAmount)</strong></h5>
                     }
                     <h5>Cash&nbspPaid:<strong>৳@Model.SellingPaidAmount</strong></h5>
                     @if (Model.SellingReturnAmount > 0)
@@ -146,7 +146,7 @@
      <script src="~/js/amount-in-word.js"></script>
      <script>
          $(function() {
-             $("#amount-word").text(`Taka (in word): ${number2text(@Model.SellingTotalPrice).toLowerCase()}`);
+             $("#amount-word").text(`Taka (in words): ${number2text(@Model.SellingTotalPrice)}`);
          });
      </script>     
  }
