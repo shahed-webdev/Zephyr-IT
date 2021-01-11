@@ -1,0 +1,107 @@
+﻿@using InventoryManagement.Repository
+@model ExpenseViewModel
+@{
+    ViewData["Title"] = "Transportation Cost";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var message = Context.Request.Query["Message"];
+}
+
+<div class="container">
+    <h4 class="page-header mb-3">Transportation Cost</h4>
+
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @message
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+
+    <div class="card card-body">
+        <div class="form-row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label>Target Client/Corporate</label>
+                    <input name="inputCustomer" type="text" class="form-control" />
+                    <input name="CustomerId" type="hidden" />
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>Expanse Date</label>
+                    <input name="ExpenseDate" type="text" class="form-control datepicker" required />
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="form-group">
+                    <label>Note</label>
+                    <input name="ExpenseNote" type="text" class="form-control" />
+                </div>
+            </div>
+        </div>
+
+        <form id="formAdd">
+            <div class="form-row mt-3">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Details</label>
+                        <input name="ExpenseFor" type="text" class="form-control" required />
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Person</label>
+                        <input name="NumberOfPerson" type="number" class="form-control" required />
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Vehicle</label>
+                        <input name="Vehicle" type="text" class="form-control" required />
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Tk</label>
+                        <div class="input-group align-items-center">
+                            <input name="ExpenseAmount" type="number" class="form-control" required />
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-success btn-md my-0">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th><strong>Details</strong></th>
+                <th><strong>Person</strong></th>
+                <th><strong>Vehicle</strong></th>
+                <th><strong>Tk</strong></th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+    <div class="mt-3 text-right">
+        <button type="button" class="btn peach-gradient mb-1 waves-effect waves-light">Submit <i class="fas fa-check ml-1"></i></button>
+    </div>
+
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $('.datepicker').pickadate({
+                clear: ''
+            }).val(new Date().toDateString());
+        })
+    </script>
+}

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
 {
-    [Authorize(Roles = "admin, expanse")]
+
     public class ExpensesController : Controller
     {
         private readonly IUnitOfWork _db;
@@ -16,7 +16,9 @@ namespace InventoryManagement.Web.Controllers
             _db = db;
         }
 
+
         // GET: Expanses
+        [Authorize(Roles = "admin, expanse")]
         public IActionResult Index()
         {
             return View();
@@ -28,39 +30,71 @@ namespace InventoryManagement.Web.Controllers
             return Json(data);
         }
 
-        // GET: Expanses/Create
-        public IActionResult Create()
+        //General Expense
+        [Authorize(Roles = "admin, generalExpense")]
+        public IActionResult GeneralExpense()
         {
             ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label");
-            return PartialView("_Create");
+            return View();
         }
 
-        // POST: Expanses/Create
+
+        // POST:General Expanses
+        [Authorize(Roles = "admin, generalExpense")]
         [HttpPost]
-        public async Task<IActionResult> Create(ExpenseViewModel model)
+        public async Task<IActionResult> GeneralExpense(ExpenseViewModel model)
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
-            if (!ModelState.IsValid) return View($"_Create", model);
+           
+            if (!ModelState.IsValid) return View(model);
 
             ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label", model.ExpenseCategoryId);
-
 
             _db.Expenses.AddCustom(model);
 
             var task = await _db.SaveChangesAsync();
 
-            if (task != 0) return Content("success");
+            if (task != 0) return RedirectToAction("GeneralExpense", new { Message = "Expense Added Successfully!" });
 
-            ModelState.AddModelError("", "Unable to insert record!");
-            return PartialView("_Create", model);
+            return View(model);
         }
+
+
+        //Transportation Cost
+        [Authorize(Roles = "admin, transportationCost")]
+        public IActionResult TransportationCost()
+        {
+            return View();
+        }
+
+
+        // POST: Transportation Cost
+        [Authorize(Roles = "admin, transportationCost")]
+        [HttpPost]
+        public async Task<IActionResult> TransportationCost(ExpenseViewModel model)
+        {
+            model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+
+            if (!ModelState.IsValid) return View(model);
+
+            _db.Expenses.AddCustom(model);
+
+            var task = await _db.SaveChangesAsync();
+
+            if (task != 0) return RedirectToAction("TransportationCost", new { Message = "Expense Added Successfully!" });
+
+            return View(model);
+        }
+
+
+
 
         // POST: Delete/5
-        public int Delete(int id)
-        {
-            _db.Expenses.RemoveCustom(id);
-            return _db.SaveChanges();
-        }
+        //public int Delete(int id)
+        //{
+        //    _db.Expenses.RemoveCustom(id);
+        //    return _db.SaveChanges();
+        //}
 
         protected override void Dispose(bool disposing)
         {
@@ -70,6 +104,5 @@ namespace InventoryManagement.Web.Controllers
             }
             base.Dispose(disposing);
         }
-
     }
 }

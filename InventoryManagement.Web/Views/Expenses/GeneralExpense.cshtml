@@ -1,0 +1,74 @@
+﻿@using InventoryManagement.Repository
+@model ExpenseViewModel
+@{
+    ViewData["Title"] = "General Expense";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var message = Context.Request.Query["Message"];
+}
+
+<div class="container">
+    <h4 class="page-header mb-3">Add Expense</h4>
+
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @message
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+
+    <div class="card card-body">
+        <form asp-action="GeneralExpense">
+            <div class="form-row">
+                <div class="col-7">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="ExpenseCategoryId" class="form-control" asp-items="ViewBag.ExpenseCategoryId" required>
+                            <option value="">SELECT</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input name="ExpenseAmount" type="number" class="form-control" required />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Expanse For</label>
+                <textarea name="ExpenseFor" class="form-control" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Expanse Date</label>
+                <input name="ExpenseDate" type="text" class="form-control datepicker" required />
+            </div>
+
+            <div class="text-center mt-1-half">
+                <button type="submit" class="btn peach-gradient mb-1 waves-effect waves-light">Submit <i class="fas fa-check ml-1"></i></button>
+            </div>
+            
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $('.datepicker').pickadate({
+                clear: ''
+            }).val(new Date().toDateString());
+        })
+    </script>
+}

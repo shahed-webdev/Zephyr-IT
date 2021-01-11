@@ -3,6 +3,7 @@
 const tableBody = document.getElementById('table-body');
 const btnCreate = document.getElementById('CreateClick');
 const insertModal = $('#InsertModal');
+const updateModal = $('#updateModal');
 
 
 //functions
@@ -26,16 +27,13 @@ const createTableRow = function (item) {
     const td2 = tr.insertCell(1);
     const textNode2 = document.createTextNode(item.ExpenseFor? item.ExpenseFor: '');
     td2.appendChild(textNode2);
+
     //column 3
-    const td3 = tr.insertCell(2);
-    const textNode3 = document.createTextNode(item.ExpensePaymentMethod);
-    td3.appendChild(textNode3);
-    //column 4
-    const td4 = tr.insertCell(3);
+    const td4 = tr.insertCell(2);
     const textNode4 = document.createTextNode(moment(item.ExpenseDate).format('DD MMM YYYY'));
     td4.appendChild(textNode4);
-    //column 5
-    const td5 = tr.insertCell(4);
+    //column 4
+    const td5 = tr.insertCell(3);
     td5.appendChild(createLink(item));
 
     return tr;
@@ -44,7 +42,7 @@ const createTableRow = function (item) {
 const displayExpense = function (data) {
     console.log(data)
     if (!data.length)
-        tableBody.innerHTML = "<tr><td colspan='5'>No record found!</td></tr>";
+        tableBody.innerHTML = "<tr><td colspan='4'>No record found!</td></tr>";
     else
         tableBody.innerHTML = '';
 
@@ -65,37 +63,36 @@ const getData = function () {
     request.then(response => displayExpense(response.data));
 }
 
-const onDeleteClicked = function (evt) {
+//update show
+tableBody.addEventListener("click", function (evt) {
     evt.preventDefault();
 
     const target = evt.target;
-    const deleteClicked = target.classList.contains('delete');
+    const onClick = target.classList.contains('updateModal');
 
-    if (!deleteClicked) return;
- 
-    const element = target.parentElement.parentElement;
+    if (!onClick) return;
+
     const url = target.getAttribute("href");
-    if (!url) return;
-
-    const isConfirm = confirm("Are you sure you want to delete?");
-    if (!isConfirm) return;
 
     axios.get(url).then(res => {
-        if (res.data === -1) {
-            target.removeAttribute("href");
-            element.insertAdjacentHTML('afterend', `<em class="used-error">"${element.innerText}" already used!</em>`);
-            return;
-        }
-        element.remove();
-    }).catch(err => console.log(err));
+        updateModal.html(res.data).modal('show');
+    });
+});
+
+function onUpdateSuccess(data) {
+    if (data !== 'success') return;
+    updateModal.modal('hide');
+    getData();
 }
 
-const onCreateClicked = function (evt) {
+
+//insert expense
+btnCreate.addEventListener('click', function (evt) {
     const url = evt.target.getAttribute("data-url");
     axios.get(url).then(res => {
         insertModal.html(res.data).modal('show');
     });
-}
+});
 
 function onCreateSuccess(data) {
     if (data !== 'success') return;
@@ -103,11 +100,6 @@ function onCreateSuccess(data) {
     getData();
 }
 
-
-
-//event listeners
-tableBody.addEventListener("click", onDeleteClicked);
-btnCreate.addEventListener('click', onCreateClicked);
 
 //call function
 getData();
