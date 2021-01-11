@@ -42,13 +42,15 @@ namespace InventoryManagement.Web.Controllers
         // POST:General Expanses
         [Authorize(Roles = "admin, generalExpense")]
         [HttpPost]
-        public async Task<IActionResult> GeneralExpense(ExpenseViewModel model)
+        public async Task<IActionResult> GeneralExpense(ExpenseAddModel model)
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
            
             if (!ModelState.IsValid) return View(model);
 
             ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label", model.ExpenseCategoryId);
+
+            var voucherNo = _db.Institutions.GetVoucherCountdown() + 1;
 
             _db.Expenses.AddCustom(model);
 
@@ -60,6 +62,8 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
+            _db.Expenses.AddCustom(model, voucherNo, User.IsInRole("admin"));
+            _db.Institutions.IncreaseVoucherCount();
         //Transportation Cost
         [Authorize(Roles = "admin, transportationCost")]
         public IActionResult TransportationCost()

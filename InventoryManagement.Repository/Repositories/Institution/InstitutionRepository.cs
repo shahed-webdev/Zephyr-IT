@@ -52,5 +52,18 @@ namespace InventoryManagement.Repository
                 Email = ins.Email
             };
         }
+
+        public int GetVoucherCountdown()
+        {
+            var ins = Context.Institution.First();
+            return ins.VoucherCountdown;
+        }
+
+        public void IncreaseVoucherCount()
+        {
+            var ins = Context.Institution.First();
+            ins.VoucherCountdown++;
+            Update(ins);
+        }
     }
 }

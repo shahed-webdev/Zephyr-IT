@@ -4,14 +4,16 @@ using InventoryManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210111150931_AddVoucherCountdownColumnAtInstitution")]
+    partial class AddVoucherCountdownColumnAtInstitution
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,13 +143,7 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
-
                     b.Property<int>("RegistrationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VoucherNo")
                         .HasColumnType("int");
 
                     b.HasKey("ExpenseId");
@@ -170,6 +166,9 @@ namespace InventoryManagement.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
+
+                    b.Property<double>("TotalExpense")
+                        .HasColumnType("float");
 
                     b.HasKey("ExpenseCategoryId");
 

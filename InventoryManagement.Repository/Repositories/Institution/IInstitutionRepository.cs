@@ -7,5 +7,7 @@ namespace InventoryManagement.Repository
         void UpdateCustom(InstitutionVM model);
         InstitutionVM FindCustom();
         HomeVM HomeInfo();
+        int GetVoucherCountdown();
+        void IncreaseVoucherCount();
     }
 }

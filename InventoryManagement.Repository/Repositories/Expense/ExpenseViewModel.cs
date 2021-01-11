@@ -12,15 +12,13 @@ namespace InventoryManagement.Repository
 
         [Required]
         public int ExpenseCategoryId { get; set; }
-        
+
         public string CategoryName { get; set; }
 
         [Required]
         public double ExpenseAmount { get; set; }
-        
-        public string ExpenseFor { get; set; }
 
-        public string ExpensePaymentMethod { get; set; }
+        public string ExpenseFor { get; set; }
 
         [Required]
         [DisplayFormat(DataFormatString = "dd MMM yyyy")]
@@ -32,5 +30,22 @@ namespace InventoryManagement.Repository
         public int ExpenseCategoryId { get; set; }
         public string CategoryName { get; set; }
         public double TotalExpense { get; set; }
+    }
+
+
+    public class ExpenseAddModel
+    {
+        public int ExpenseId { get; set; }
+        [Required]
+        public int RegistrationId { get; set; }
+        [Required]
+        public int ExpenseCategoryId { get; set; }
+        public string CategoryName { get; set; }
+        [Required]
+        public double ExpenseAmount { get; set; }
+        public string ExpenseFor { get; set; }
+        [Required]
+        [DisplayFormat(DataFormatString = "dd MMM yyyy")]
+        public DateTime ExpenseDate { get; set; }
     }
 }

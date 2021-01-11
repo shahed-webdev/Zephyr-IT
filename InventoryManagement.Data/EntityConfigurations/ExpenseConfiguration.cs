@@ -13,8 +13,6 @@ namespace InventoryManagement.Data
 
             entity.Property(e => e.ExpenseFor).HasMaxLength(256);
 
-            entity.Property(e => e.ExpensePaymentMethod).HasMaxLength(50);
-
             entity.Property(e => e.InsertDate)
                 .HasColumnType("datetime")
                 .HasDefaultValueSql("(getdate())");

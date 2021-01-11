@@ -6,6 +6,7 @@ namespace InventoryManagement.Data
     public partial class Institution
     {
         public int InstitutionId { get; set; }
+        public int VoucherCountdown { get; set; }
         public string InstitutionName { get; set; }
         public string DialogTitle { get; set; }
         public string Established { get; set; }

@@ -15,7 +15,6 @@ namespace InventoryManagement.Data
         
         [Required (ErrorMessage = "Input Category Name!")]
         public string CategoryName { get; set; }
-        public double TotalExpense { get; set; }
 
         public virtual ICollection<Expense> Expense { get; set; }
     }
