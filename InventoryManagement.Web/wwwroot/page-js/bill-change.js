@@ -56,7 +56,8 @@ const storage = {
             product.sellingFixedValue = product.SellingPrice;
             product.sellingQuantity = 1;
             product.SellingListId = 0;
-            cartProducts.push(product);
+
+            cartProducts.unshift(product);
         }
         else {
             const index = cartProducts.findIndex(item => item.ProductCatalogId === product.ProductCatalogId && item.ProductName === product.ProductName && item.PurchasePrice === product.PurchasePrice);

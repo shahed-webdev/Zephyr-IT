@@ -183,38 +183,35 @@
                     </div>
                 </div>
             </div>
-        </section>  
-    }
+        </section>
 
-    <section class="row mb-5">
-        <div class="col-xl-5 col-lg-5 mb-3">
-            <div class="card card-cascade narrower">
-                <div class="view view-cascade gradient-card-header blue-gradient lighten-1 p-3">
-                    <h3 class="h3-responsive mb-0 p-1 font-weight-light">Due Vendors</h3>
-                </div>
-
-                <div class="card-body card-body-cascade">
-                    <div class="form-inline d-flex justify-content-center align-items-center md-form form-sm active-cyan-2 mb-0 mt-2">
-                        <input id="vendor-input-find" class="form-control form-control-sm mb-0 w-75" type="text" placeholder="Search">
-                        <i class="fas fa-search" aria-hidden="true"></i>
+        <section class="row mb-5">
+            <div class="col-xl-5 col-lg-5 mb-3">
+                <div class="card card-cascade narrower">
+                    <div class="view view-cascade gradient-card-header blue-gradient lighten-1 p-3">
+                        <h3 class="h3-responsive mb-0 p-1 font-weight-light">Due Vendors</h3>
                     </div>
 
-                    <table id="table-vendor" class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th><strong>Company</strong></th>
-                                <th><strong>Amount</strong></th>
-                                <th><strong>Paid</strong></th>
-                                <th><strong>Due</strong></th>
-                            </tr>
-                        </thead>
-                    </table>
+                    <div class="card-body card-body-cascade">
+                        <div class="form-inline d-flex justify-content-center align-items-center md-form form-sm active-cyan-2 mb-0 mt-2">
+                            <input id="vendor-input-find" class="form-control form-control-sm mb-0 w-75" type="text" placeholder="Search">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </div>
+
+                        <table id="table-vendor" class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th><strong>Company</strong></th>
+                                    <th><strong>Amount</strong></th>
+                                    <th><strong>Paid</strong></th>
+                                    <th><strong>Due</strong></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        @if (User.IsInRole("admin"))
-        {
             <div class="col-xl-7 col-lg-7">
                 <div class="card card-cascade narrower">
                     <div class="view view-cascade gradient-card-header blue-gradient mb-3">
@@ -222,8 +219,9 @@
                     </div>
                 </div>
             </div>
-        }
-    </section>
+
+        </section>
+    }
 
     <section>
         <div class="row">

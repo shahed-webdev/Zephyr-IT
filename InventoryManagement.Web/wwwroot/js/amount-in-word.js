@@ -3,50 +3,50 @@
     let fullText = "";
 
     if (fraction > 0) {
-        fullText = ` AND ${convertNumber(fraction)} PAISA`;
+        fullText = ` And ${convertNumber(fraction)} Paisa`;
     }
 
-    return `${convertNumber(value)} TK${fullText} ONLY`;
+    return `${convertNumber(value)} Tk${fullText} Only`;
 }
 
 function convertNumber(number) {
     if ((number < 0) || (number > 999999999)) return "NUMBER OUT OF RANGE!";
 
-    let coreAmount = Math.floor(number / 10000000);
+    const coreAmount = Math.floor(number / 10000000);
     number -= coreAmount * 10000000;
 
-    let lakhAmount = Math.floor(number / 100000);
+    const lakhAmount = Math.floor(number / 100000);
     number -= lakhAmount * 100000;
 
-    let thousandAmount = Math.floor(number / 1000);
+    const thousandAmount = Math.floor(number / 1000);
     number -= thousandAmount * 1000;
 
-    let hundredAmount = Math.floor(number / 100);
+    const hundredAmount = Math.floor(number / 100);
     number = number % 100;
 
-    let tn = Math.floor(number / 10);
-    let one = Math.floor(number % 10);
+    const tn = Math.floor(number / 10);
+    const one = Math.floor(number % 10);
     let res = "";
 
     if (coreAmount > 0) {
-        res += (convertNumber(coreAmount) + " CRORE");
+        res += (convertNumber(coreAmount) + " Crore");
     }
     if (lakhAmount > 0) {
-        res += (((res === "") ? "" : " ") + convertNumber(lakhAmount) + " LAKH");
+        res += (((res === "") ? "" : " ") + convertNumber(lakhAmount) + " Lakh");
     }
     if (thousandAmount > 0) {
-        res += (((res === "") ? "" : " ") + convertNumber(thousandAmount) + " THOUSAND");
+        res += (((res === "") ? "" : " ") + convertNumber(thousandAmount) + " Thousand");
     }
     if (hundredAmount) {
-        res += (((res === "") ? "" : " ") + convertNumber(hundredAmount) + " HUNDRED");
+        res += (((res === "") ? "" : " ") + convertNumber(hundredAmount) + " Hundred");
     }
 
-    let ones = Array("","ONE","TWO","THREE","FOUR","FIVE", "SIX","SEVEN","EIGHT","NINE","TEN","ELEVEN","TWELVE","THIRTEEN","FOURTEEN","FIFTEEN","SIXTEEN","SEVENTEEN","EIGHTEEN","NINETEEN");
-    let tens = Array("", "", "TWENTY", "THIRTY", "FORTY", "FIFTY", "SIXTY", "SEVENTY", "EIGHTY", "NINETY");
+    const ones = Array("", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen","Nineteen");
+    const tens = Array("", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety");
 
     if (tn > 0 || one > 0) {
         if (!(res === "")) {
-            res += " AND ";
+            res += " And ";
         }
 
         if (tn < 2) {
