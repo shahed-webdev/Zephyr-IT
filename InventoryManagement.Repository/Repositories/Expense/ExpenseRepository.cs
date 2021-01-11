@@ -23,7 +23,6 @@ namespace InventoryManagement.Repository
                 CategoryName = e.ExpenseCategory.CategoryName,
                 ExpenseAmount = e.ExpenseAmount,
                 ExpenseFor = e.ExpenseFor,
-                ExpensePaymentMethod = e.ExpensePaymentMethod,
                 ExpenseDate = e.ExpenseDate
             }).ToList();
 
@@ -40,14 +39,13 @@ namespace InventoryManagement.Repository
                 CategoryName = e.ExpenseCategory.CategoryName,
                 ExpenseAmount = e.ExpenseAmount,
                 ExpenseFor = e.ExpenseFor,
-                ExpensePaymentMethod = e.ExpensePaymentMethod,
                 ExpenseDate = e.ExpenseDate
             }).ToListAsync();
 
             return expense;
         }
 
-        public void AddCustom(ExpenseViewModel model)
+        public void AddCustom(ExpenseAddModel model, int voucherNo, bool isApproved)
         {
             Add(new Expense
             {
@@ -55,22 +53,16 @@ namespace InventoryManagement.Repository
                 ExpenseCategoryId = model.ExpenseCategoryId,
                 ExpenseAmount = model.ExpenseAmount,
                 ExpenseFor = model.ExpenseFor,
-                ExpensePaymentMethod = model.ExpensePaymentMethod,
-                ExpenseDate = model.ExpenseDate
+                ExpenseDate = model.ExpenseDate,
+                VoucherNo = voucherNo,
+                IsApproved = isApproved
             });
-
-            var eCategory = Context.ExpenseCategory.Find(model.ExpenseCategoryId);
-            eCategory.TotalExpense += model.ExpenseAmount;
-            Context.ExpenseCategory.Update(eCategory);
         }
 
         public void RemoveCustom(int id)
         {
             var expense = Find(id);
             Remove(expense);
-            var eCategory = Context.ExpenseCategory.Find(expense.ExpenseCategoryId);
-            eCategory.TotalExpense = eCategory.TotalExpense - expense.ExpenseAmount;
-            Context.ExpenseCategory.Update(eCategory);
         }
 
         public ICollection<int> Years()
@@ -134,7 +126,6 @@ namespace InventoryManagement.Repository
                 CategoryName = e.ExpenseCategory.CategoryName,
                 ExpenseAmount = e.ExpenseAmount,
                 ExpenseFor = e.ExpenseFor,
-                ExpensePaymentMethod = e.ExpensePaymentMethod,
                 ExpenseDate = e.ExpenseDate
             }).ToList();
 

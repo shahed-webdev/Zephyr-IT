@@ -37,15 +37,18 @@ namespace InventoryManagement.Web.Controllers
 
         // POST: Expanses/Create
         [HttpPost]
-        public async Task<IActionResult> Create(ExpenseViewModel model)
+        public async Task<IActionResult> Create(ExpenseAddModel model)
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
             if (!ModelState.IsValid) return View($"_Create", model);
 
             ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label", model.ExpenseCategoryId);
 
+            var voucherNo = _db.Institutions.GetVoucherCountdown() + 1;
 
-            _db.Expenses.AddCustom(model);
+
+            _db.Expenses.AddCustom(model, voucherNo, User.IsInRole("admin"));
+            _db.Institutions.IncreaseVoucherCount();
 
             var task = await _db.SaveChangesAsync();
 

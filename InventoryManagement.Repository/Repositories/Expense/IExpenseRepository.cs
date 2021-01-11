@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace InventoryManagement.Repository
 {
-    public interface IExpenseRepository : IRepository<Expense>, IAddCustom<ExpenseViewModel>
+    public interface IExpenseRepository : IRepository<Expense>
     {
         ICollection<ExpenseViewModel> ToListCustom();
         Task<List<ExpenseViewModel>> ToListCustomAsync();
-        // void AddCustom(ExpenseViewModel model);
+        void AddCustom(ExpenseAddModel model, int voucherNo, bool isApproved);
         void RemoveCustom(int id);
         ICollection<int> Years();
         double DailyExpenseAmount(DateTime? day);
