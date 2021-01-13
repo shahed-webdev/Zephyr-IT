@@ -52,18 +52,19 @@ namespace InventoryManagement.Web.Controllers
 
             var voucherNo = _db.Institutions.GetVoucherCountdown() + 1;
 
-            _db.Expenses.AddCustom(model);
+            _db.Expenses.AddCustom(model, voucherNo, User.IsInRole("admin"));
+            _db.Institutions.IncreaseVoucherCount();
 
             var task = await _db.SaveChangesAsync();
 
-            if (task != 0) return RedirectToAction("GeneralExpense", new { Message = "Expense Added Successfully!" });
+            if (task != 0) 
+                return RedirectToAction("GeneralExpense", new { Message = "Expense Added Successfully!" });
 
             return View(model);
         }
 
 
-            _db.Expenses.AddCustom(model, voucherNo, User.IsInRole("admin"));
-            _db.Institutions.IncreaseVoucherCount();
+            
         //Transportation Cost
         [Authorize(Roles = "admin, transportationCost")]
         public IActionResult TransportationCost()
@@ -73,22 +74,22 @@ namespace InventoryManagement.Web.Controllers
 
 
         // POST: Transportation Cost
-        [Authorize(Roles = "admin, transportationCost")]
-        [HttpPost]
-        public async Task<IActionResult> TransportationCost(ExpenseViewModel model)
-        {
-            model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+       // [Authorize(Roles = "admin, transportationCost")]
+        //[HttpPost]
+        //public async Task<IActionResult> TransportationCost(ExpenseViewModel model)
+        //{
+        //    model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
 
-            if (!ModelState.IsValid) return View(model);
+        //    if (!ModelState.IsValid) return View(model);
 
-            _db.Expenses.AddCustom(model);
+        //    _db.Expenses.AddCustom(model);
 
-            var task = await _db.SaveChangesAsync();
+        //    var task = await _db.SaveChangesAsync();
 
-            if (task != 0) return RedirectToAction("TransportationCost", new { Message = "Expense Added Successfully!" });
+        //    if (task != 0) return RedirectToAction("TransportationCost", new { Message = "Expense Added Successfully!" });
 
-            return View(model);
-        }
+        //    return View(model);
+        //}
 
 
 
