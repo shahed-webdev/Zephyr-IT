@@ -168,14 +168,15 @@
             });
 
             function showTable() {
-                const tr = document.createElement("tr");
                 const fragment = document.createDocumentFragment();
 
                 listedData.forEach(item => {
+                    const tr = document.createElement("tr");
                     tr.innerHTML = `<td>${item.ExpenseFor}</td><td>${item.NumberOfPerson}</td><td>${item.Vehicle}</td><td>৳${item.ExpenseAmount}</td><td><i id="${item.id}" class="delete fas fa-trash"></i></td>`;
                     fragment.appendChild(tr);
                 });
 
+                tBody.innerHTML = "";
                 tBody.append(fragment);
             }
 
@@ -206,12 +207,24 @@
                 const model = {
                     CustomerId: customerId.value,
                     ExpenseDate: expenseDate.value,
-                    ExpenseNote: expenseNote.value
+                    ExpenseNote: expenseNote.value,
+                    Details: listedData
                 }
 
                 if (!model.CustomerId || !model.ExpenseDate || !model.ExpenseNote) return;
 
-                console.log(model)
+                $.ajax({
+                    type: "POST",
+                    url: `/Expense/PostTransportationCost`,
+                    data: model,
+                    success: function (res) {
+                        console.log(res)
+                        $.notify(res.Message, res.IsSuccess? "success": "error");
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                }); 
             });
         }());
     </script>

@@ -75,7 +75,7 @@ namespace InventoryManagement.Web.Controllers
         // POST: Transportation Cost
         // [Authorize(Roles = "admin, transportationCost")]
         //[HttpPost]
-        //public async Task<IActionResult> TransportationCost(ExpenseViewModel model)
+        //public async Task<IActionResult> PostTransportationCost(ExpenseViewModel model)
         //{
         //    model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
 

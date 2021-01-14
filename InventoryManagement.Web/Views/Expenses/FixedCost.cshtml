@@ -6,14 +6,107 @@
 
 <div class="container">
     <h4 class="page-header mb-3">Fixed Cost</h4>
-    
-    <div class="card card-body">
 
+    <div class="card card-body">
+        <form id="formAdd">
+            <div class="form-row mt-3">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Expense Name</label>
+                        <input name="ExpenseName" type="text" class="form-control" required />
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Total Cost</label>
+                        <input name="TotalCost" type="number" class="form-control" required />
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Interval (days)</label>
+                        <div class="input-group align-items-center">
+                            <input name="Interval" type="number" class="form-control" required />
+                            <div class="input-group-append">
+                                <button type="submit" class="btn peach-gradient btn-md my-0">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th><strong>Expense Name</strong></th>
+                    <th><strong>Total Cost</strong></th>
+                    <th><strong>Interval</strong></th>
+                    <th><strong>Avg. Cost</strong></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+        </table>
     </div>
 </div>
 
 @section Scripts{
     <script>
+        (function () {
+            const serializeForm = function (form) {
+                const obj = {};
 
+                const formData = new FormData(form);
+                for (let key of formData.keys()) {
+                    obj[key] = formData.get(key);
+                }
+                return obj;
+            };
+
+            const formAdd = document.getElementById("formAdd");
+            const tBody = document.getElementById("tbody");
+
+            //add to list
+            formAdd.addEventListener("submit", function (evt) {
+                evt.preventDefault();
+                const model = serializeForm(this);
+                showTable(model);
+
+                //$.ajax({
+                //    type: "POST",
+                //    url: `/Expense/PostFixedCost`,
+                //    data: model,
+                //    success: res => {
+                //        console.log(res)
+                //        $.notify(res.Message, res.IsSuccess ? "success" : "error");
+
+                //        if (res.IsSuccess) {
+                //            showTable(model);
+                //            this.reset();
+                //        }
+
+                //    },
+                //    error: function (response) {
+                //        console.log(response);
+                //    }
+                //});
+            });
+
+            function showTable(item) {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `<td>${item.ExpenseName}</td><td>৳${item.TotalCost}</td><td>${item.Interval}</td><td>৳${(item.TotalCost / item.Interval).toFixed(2)}</td><td><i id="${item.ExpenseName}" class="delete fas fa-trash"></i></td>`;
+                tBody.append(tr);
+            }
+
+            //delete
+            tBody.addEventListener("click", function (evt) {
+                const onDelete = evt.target.classList.contains("delete");
+                if (!onDelete) return;
+
+                const id = +evt.target.id;
+                evt.target.parentElement.parentElement.remove();
+            });
+        }());
     </script>
 }
