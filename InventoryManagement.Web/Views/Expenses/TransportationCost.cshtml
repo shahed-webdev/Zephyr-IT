@@ -32,20 +32,20 @@
             <div class="col-lg-4">
                 <div class="form-group">
                     <label>Target Client/Corporate</label>
-                    <input name="inputCustomer" type="text" class="form-control" />
-                    <input name="CustomerId" type="hidden" />
+                    <input id="inputCustomer" type="text" class="form-control" />
+                    <input id="hiddenCustomerId" type="hidden" />
                 </div>
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
                     <label>Expanse Date</label>
-                    <input name="ExpenseDate" type="text" class="form-control datepicker" required />
+                    <input id="expenseDate" type="text" class="form-control datepicker" required />
                 </div>
             </div>
             <div class="col-lg-5">
                 <div class="form-group">
                     <label>Note</label>
-                    <input name="ExpenseNote" type="text" class="form-control" />
+                    <input id="expenseNote" type="text" class="form-control" />
                 </div>
             </div>
         </div>
@@ -109,6 +109,34 @@
             $('.datepicker').pickadate({
                 clear: ''
             }).val(new Date().toDateString());
+
+            //customer autocomplete
+            hiddenCustomerId.value = "";
+            inputCustomer.addEventListener("input", function () {
+                hiddenCustomerId.value = "";
+            });
+
+            $('#inputCustomer').typeahead({
+                minLength: 1,
+                displayText: function (item) {
+                    return `${item.CustomerName}  ${item.PhonePrimary ? item.PhonePrimary : ''}  ${item.OrganizationName ? item.OrganizationName : ''}`;
+                },
+                afterSelect: function (item) {
+                    this.$element[0].value = item.CustomerName
+                },
+                source: function (request, result) {
+                    $.ajax({
+                        url: "/Selling/FindCustomers",
+                        data: { prefix: request },
+                        success: function (response) { result(response); },
+                        error: function (err) { console.log(err) }
+                    });
+                },
+                updater: function (item) {
+                    hiddenCustomerId.value = item.CustomerId;
+                    return item;
+                }
+            })
         });
 
         //private method
@@ -156,12 +184,34 @@
                 const onDelete = evt.target.classList.contains("delete");
                 if (!onDelete) return;
 
-                const id = evt.target.id;
+                const id = +evt.target.id;
                 evt.target.parentElement.parentElement.remove();
 
-                listedData = listedData.filter(function (el) { return el.id !== id });
+                listedData = listedData.filter(el => el.id !== id);
 
                 showTable();
+            });
+
+            //post data
+            btnSubmit.addEventListener("click", function (evt) {
+                evt.preventDefault();
+
+                const customerId = document.getElementById("hiddenCustomerId");
+                const expenseDate = document.getElementById("expenseDate");
+                const expenseNote = document.getElementById("expenseNote");
+
+                if (!customerId.value)
+                    inputCustomer.value = "";
+
+                const model = {
+                    CustomerId: customerId.value,
+                    ExpenseDate: expenseDate.value,
+                    ExpenseNote: expenseNote.value
+                }
+
+                if (!model.CustomerId || !model.ExpenseDate || !model.ExpenseNote) return;
+
+                console.log(model)
             });
         }());
     </script>

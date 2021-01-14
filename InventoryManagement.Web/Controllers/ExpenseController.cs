@@ -63,7 +63,6 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
-
             
         //Transportation Cost
         [Authorize(Roles = "admin, transportationCost")]
@@ -74,7 +73,7 @@ namespace InventoryManagement.Web.Controllers
 
 
         // POST: Transportation Cost
-       // [Authorize(Roles = "admin, transportationCost")]
+        // [Authorize(Roles = "admin, transportationCost")]
         //[HttpPost]
         //public async Task<IActionResult> TransportationCost(ExpenseViewModel model)
         //{
@@ -100,6 +99,15 @@ namespace InventoryManagement.Web.Controllers
         //    _db.Expenses.RemoveCustom(id);
         //    return _db.SaveChanges();
         //}
+
+
+        //General Expense
+        [Authorize(Roles = "admin, fixedCost")]
+        public IActionResult FixedCost()
+        {
+            return View();
+        }
+
 
         protected override void Dispose(bool disposing)
         {
