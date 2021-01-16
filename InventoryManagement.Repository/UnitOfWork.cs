@@ -1,4 +1,5 @@
-﻿using InventoryManagement.Data;
+﻿using AutoMapper;
+using InventoryManagement.Data;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Repository
@@ -6,10 +7,11 @@ namespace InventoryManagement.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
-
-        public UnitOfWork(ApplicationDbContext context)
+        private readonly IMapper _mapper;
+        public UnitOfWork(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
             Customers = new CustomerRepository(_context);
             PageLinks = new PageLinkRepository(_context);
             PageLinkCategories = new PageLinkCategoryRepository(_context);
@@ -23,6 +25,7 @@ namespace InventoryManagement.Repository
             Registrations = new RegistrationRepository(_context);
             ExpenseCategories = new ExpenseCategoryRepository(_context);
             Expenses = new ExpenseRepository(_context);
+            ExpenseTransportations = new ExpenseTransportationRepository(_context, _mapper);
             Institutions = new InstitutionRepository(_context);
             Selling = new SellingRepository(_context);
             SellingPayments = new SellingPaymentRepository(_context);
@@ -45,6 +48,7 @@ namespace InventoryManagement.Repository
         public IRegistrationRepository Registrations { get; private set; }
         public IExpenseCategoryRepository ExpenseCategories { get; private set; }
         public IExpenseRepository Expenses { get; }
+        public IExpenseTransportationRepository ExpenseTransportations { get; }
         public IInstitutionRepository Institutions { get; }
         public IVendorRepository Vendors { get; }
         public ISellingRepository Selling { get; }

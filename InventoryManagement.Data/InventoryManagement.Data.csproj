@@ -23,6 +23,8 @@
     <Compile Remove="Migrations\20200715065755_test.Designer.cs" />
     <Compile Remove="Migrations\20201004082911_LastUpdateDateAddToSellingTable.cs" />
     <Compile Remove="Migrations\20201004082911_LastUpdateDateAddToSellingTable.Designer.cs" />
+    <Compile Remove="Migrations\20210114165324_AddExpenseTransportationTable.cs" />
+    <Compile Remove="Migrations\20210114165324_AddExpenseTransportationTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

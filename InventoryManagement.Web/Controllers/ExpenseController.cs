@@ -45,7 +45,7 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> GeneralExpense(ExpenseAddModel model)
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
-           
+
             if (!ModelState.IsValid) return View(model);
 
             ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label", model.ExpenseCategoryId);
@@ -57,13 +57,13 @@ namespace InventoryManagement.Web.Controllers
 
             var task = await _db.SaveChangesAsync();
 
-            if (task != 0) 
+            if (task != 0)
                 return RedirectToAction("GeneralExpense", new { Message = "Expense Added Successfully!" });
 
             return View(model);
         }
 
-            
+
         //Transportation Cost
         [Authorize(Roles = "admin, transportationCost")]
         public IActionResult TransportationCost()
@@ -72,23 +72,24 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
-        // POST: Transportation Cost
-        // [Authorize(Roles = "admin, transportationCost")]
-        //[HttpPost]
-        //public async Task<IActionResult> TransportationCost(ExpenseViewModel model)
-        //{
-        //    model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+        //POST: Transportation Cost
+        [Authorize(Roles = "admin, transportationCost")]
+        [HttpPost]
+        public async Task<IActionResult> TransportationCost(ExpenseTransportationAddModel model)
+        {
+            model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
 
-        //    if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid) return View(model);
 
-        //    _db.Expenses.AddCustom(model);
+            var voucherNo = _db.Institutions.GetVoucherCountdown() + 1;
+            _db.ExpenseTransportations.AddCustom(model, voucherNo, User.IsInRole("admin"));
 
-        //    var task = await _db.SaveChangesAsync();
+            var task = await _db.SaveChangesAsync();
 
-        //    if (task != 0) return RedirectToAction("TransportationCost", new { Message = "Expense Added Successfully!" });
+            if (task != 0) return RedirectToAction("TransportationCost", new { Message = "Expense Added Successfully!" });
 
-        //    return View(model);
-        //}
+            return View(model);
+        }
 
 
 

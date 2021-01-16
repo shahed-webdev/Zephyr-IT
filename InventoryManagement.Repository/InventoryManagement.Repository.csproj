@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\InventoryManagement.Data\InventoryManagement.Data.csproj" />
     <ProjectReference Include="..\JqueryDataTables.LoopsIT\JqueryDataTables.LoopsIT.csproj" />
   </ItemGroup>

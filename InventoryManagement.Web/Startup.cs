@@ -1,3 +1,4 @@
+using AutoMapper;
 using InventoryManagement.Data;
 using InventoryManagement.Repository;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace InventoryManagement.Web
 {
@@ -47,6 +49,9 @@ namespace InventoryManagement.Web
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddMvc().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+
+            //Mapper
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -11,6 +11,7 @@ namespace InventoryManagement.Data
             SellingPayment = new HashSet<SellingPayment>();
             Service = new HashSet<Service>();
             ServiceDevice = new HashSet<ServiceDevice>();
+            ExpenseTransportation = new HashSet<ExpenseTransportation>();
         }
 
         public int CustomerId { get; set; }
@@ -34,5 +35,6 @@ namespace InventoryManagement.Data
         public virtual ICollection<Service> Service { get; set; }
         public virtual ICollection<ServiceDevice> ServiceDevice { get; set; }
         public virtual ICollection<CustomerPhone> CustomerPhone { get; set; }
+        public virtual ICollection<ExpenseTransportation> ExpenseTransportation { get; set; }
     }
 }
