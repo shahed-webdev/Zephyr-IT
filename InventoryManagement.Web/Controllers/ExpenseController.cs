@@ -79,16 +79,16 @@ namespace InventoryManagement.Web.Controllers
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
 
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid) return Json(model);
 
             var voucherNo = _db.Institutions.GetVoucherCountdown() + 1;
             _db.ExpenseTransportations.AddCustom(model, voucherNo, User.IsInRole("admin"));
 
             var task = await _db.SaveChangesAsync();
 
-            if (task != 0) return RedirectToAction("TransportationCost", new { Message = "Expense Added Successfully!" });
+            if (task != 0) return Json(model);
 
-            return View(model);
+            return Json(model);
         }
 
 
