@@ -6,16 +6,20 @@
 }
 
 <div class="container">
-    <h4 class="page-header mb-3">Expense Details</h4>
+    <div class="mb-3">
+        <h4 class="page-header">Expense Details</h4>
+        <em>Expense By: @Model.CreateBy</em>
+    </div>
 
     <form asp-action="UpdateGeneralExpense">
-        <input type="hidden" name="ExpenseId" value="@Model.ExpenseId"/>
+        <input type="hidden" name="ExpenseId" value="@Model.ExpenseId" />
+     
         <div class="card card-body">
             <div class="form-row">
                 <div class="col-7">
                     <div class="form-group">
                         <label>Category</label>
-                        <select name="ExpenseCategoryId" class="form-control" asp-items="ViewBag.ExpenseCategoryId" required>
+                        <select asp-for="ExpenseCategoryId" class="form-control" asp-items="ViewBag.ExpenseCategoryId" required>
                             <option value="">SELECT</option>
                         </select>
                     </div>
@@ -23,7 +27,7 @@
                 <div class="col-5">
                     <div class="form-group">
                         <label>Amount</label>
-                        <input asp-for="ExpenseAmount" type="number" class="form-control" required/>
+                        <input asp-for="ExpenseAmount" type="number" class="form-control" required />
                     </div>
                 </div>
             </div>
@@ -35,7 +39,7 @@
 
             <div class="form-group">
                 <label>Expanse Date</label>
-                <input asp-for="ExpenseDate" type="text" class="form-control datepicker" required/>
+                <input asp-for="ExpenseDate" type="text" class="form-control datepicker" required />
             </div>
 
             <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -46,18 +50,49 @@
 
         </div>
 
-        <div class="text-right mt-3">
-            <button type="submit" class="btn peach-gradient mb-1 waves-effect waves-light">Update <i class="fas fa-check ml-1"></i></button>
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <a href="/Expenses/Index">Back To List</a>
+            <div>
+                <strong id="grandTotal"></strong>
+                <button type="submit" class="btn peach-gradient mb-1 m-0">Update <i class="fas fa-check ml-1"></i></button>
+
+                <div class="mt-2 text-right">
+                    <input type="checkbox" class="form-check-input" id="checkApprove" @(Model.IsApproved ? "disabled" : "")>
+                    <label class="form-check-label" for="checkApprove">@(Model.IsApproved ? "Approved" : "Approve Expense")</label>
+                </div>
+            </div>
         </div>
     </form>
 </div>
 
 @section Scripts{
     <script>
-        $(function () {
-            $('.datepicker').pickadate({
-                clear: ''
+        $(function() {
+            $('.datepicker').pickadate({ clear: ''});
+        });
+
+        //approve check
+        const checkApprove = document.getElementById("checkApprove");
+        checkApprove.addEventListener("click", function() {
+            disableSubmit(true, this);
+
+            $.ajax({
+                type: "POST",
+                url: `/Expenses/ApproveGeneralExpense`,
+                data: {id: @Model.ExpenseId},
+                success: response => {
+                    disableSubmit(!response.IsSuccess, this);
+                    $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                },
+                error: response => {
+                    disableSubmit(false, this);
+                    console.log(response);
+                }
             });
-        })
+        });
+
+        function disableSubmit(isSubmit, btn) {
+            btn.disabled = isSubmit;
+        }
     </script>
 }
