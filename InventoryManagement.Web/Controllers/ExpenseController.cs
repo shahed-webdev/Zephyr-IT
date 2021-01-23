@@ -24,15 +24,15 @@ namespace InventoryManagement.Web.Controllers
         [Authorize(Roles = "admin, expanse")]
         public IActionResult Index()
         {
-            return View();
+            return View(_expense.ExpenseRecords().Data);
         }
 
         //data-table
-        public IActionResult GetExpense(DataRequest request)
-        {
-            var data = _expense.ExpenseRecords(request);
-            return Json(data);
-        }
+        //public IActionResult GetExpense(DataRequest request)
+        //{
+        //    var data = _expense.ExpenseRecords(request);
+        //    return Json(data);
+        //}
 
         //***General Expense***
         [Authorize(Roles = "admin, generalExpense")]
