@@ -13,6 +13,9 @@ namespace InventoryManagement.Repository
         List<ExpenseAllViewModel> Records();
         Task<List<ExpenseViewModel>> ToListCustomAsync();
         void AddCustom(ExpenseAddModel model, int registrationId, int voucherNo, bool isApproved);
+        void Approved(int expenseId);
+        void Edit(ExpenseAddModel model);
+        ExpenseAddModel GetDetails(int expenseId);
         void RemoveCustom(int id);
         ICollection<int> Years();
         double DailyExpenseAmount(DateTime? day);

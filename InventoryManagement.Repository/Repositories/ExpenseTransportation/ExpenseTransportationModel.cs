@@ -14,6 +14,7 @@ namespace InventoryManagement.Repository
 
     public class ExpenseTransportationListAddModel
     {
+        public int ExpenseTransportationListId { get; set; }
         public int NumberOfPerson { get; set; }
         public string ExpenseFor { get; set; }
         public string Vehicle { get; set; }
@@ -24,7 +25,9 @@ namespace InventoryManagement.Repository
     {
         public int ExpenseTransportationId { get; set; }
         public int CustomerId { get; set; }
+        public bool IsApproved { get; set; }
         public string CustomerName { get; set; }
+        public string CreateBy { get; set; }
         public int VoucherNo { get; set; }
         public double TotalExpense { get; set; }
         public string ExpenseNote { get; set; }

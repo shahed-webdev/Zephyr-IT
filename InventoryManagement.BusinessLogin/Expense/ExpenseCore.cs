@@ -59,12 +59,62 @@ namespace InventoryManagement.BusinessLogin
 
         public DbResponse ApprovedCost(int expenseId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _db.Expenses.Approved(expenseId);
+                _db.SaveChanges();
+
+                return new DbResponse(true, "Approved Successfully");
+            }
+            catch (Exception e)
+            {
+                return new DbResponse(false, e.Message);
+            }
         }
 
         public DbResponse DeleteCost(int expenseId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _db.Expenses.RemoveCustom(expenseId);
+                _db.SaveChanges();
+
+                return new DbResponse(true, "Approved Successfully");
+            }
+            catch (Exception e)
+            {
+                return new DbResponse(false, e.Message);
+            }
+        }
+
+        public DbResponse EditCost(ExpenseAddModel model)
+        {
+            try
+            {
+                _db.Expenses.Edit(model);
+                _db.SaveChanges();
+
+                return new DbResponse(true, "Changed Successfully");
+            }
+            catch (Exception e)
+            {
+                return new DbResponse(false, e.Message);
+            }
+        }
+
+        public DbResponse<ExpenseAddModel> GetCost(int expenseId)
+        {
+            try
+            {
+                var data = _db.Expenses.GetDetails(expenseId);
+
+
+                return new DbResponse<ExpenseAddModel>(true, "Success", data);
+            }
+            catch (Exception e)
+            {
+                return new DbResponse<ExpenseAddModel>(false, e.Message);
+            }
         }
 
         public DbResponse AddTransportationCost(ExpenseTransportationAddModel model, string userName, bool isApproved)

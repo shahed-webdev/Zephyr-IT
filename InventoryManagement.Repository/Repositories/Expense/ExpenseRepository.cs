@@ -55,6 +55,8 @@ namespace InventoryManagement.Repository
             var g = Context.Expense
                 .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider)
                 .ToList();
+
+
             records.AddRange(g);
             records.AddRange(t);
 
@@ -89,6 +91,38 @@ namespace InventoryManagement.Repository
                 VoucherNo = voucherNo,
                 IsApproved = isApproved
             });
+        }
+
+        public void Approved(int expenseId)
+        {
+            var expense = Find(expenseId);
+            expense.IsApproved = true;
+            Update(expense);
+        }
+
+        public void Edit(ExpenseAddModel model)
+        {
+            var expense = Find(model.ExpenseId);
+            expense.ExpenseDate = model.ExpenseDate;
+            expense.ExpenseAmount = model.ExpenseAmount;
+            expense.ExpenseCategoryId = model.ExpenseCategoryId;
+            expense.ExpenseFor = model.ExpenseFor;
+            Update(expense);
+        }
+
+        public ExpenseAddModel GetDetails(int expenseId)
+        {
+            var expense = Find(expenseId);
+
+            return new ExpenseAddModel
+            {
+                ExpenseId = expense.ExpenseId,
+                ExpenseCategoryId = expense.ExpenseCategoryId,
+                CategoryName = expense.ExpenseCategory.CategoryName,
+                ExpenseAmount = expense.ExpenseAmount,
+                ExpenseFor = expense.ExpenseFor,
+                ExpenseDate = expense.ExpenseDate
+            };
         }
 
         public void RemoveCustom(int id)

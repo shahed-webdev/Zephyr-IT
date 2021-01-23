@@ -1,5 +1,6 @@
 ﻿using InventoryManagement.BusinessLogin;
 using InventoryManagement.Repository;
+using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
