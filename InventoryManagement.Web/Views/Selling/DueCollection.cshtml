@@ -132,12 +132,12 @@
 
                     <div class="md-form">
                         <label for="inputDiscount">Discount</label>
-                        <input type="number" id="inputDiscount" value="@Model.SellingDiscountAmount" min="0" max="@(Model.SellingDiscountAmount + Model.SellingDueAmount)" class="form-control">
+                        <input type="number" id="inputDiscount" step="0.01" value="@Model.SellingDiscountAmount" min="0" max="@(Model.SellingDiscountAmount + Model.SellingDueAmount)" class="form-control">
                     </div>
 
                     <div class="md-form">
                         <label for="inputPaid">Paid Amount</label>
-                        <input type="number" id="inputPaid" min="0" required class="form-control">
+                        <input type="number" step="0.01" id="inputPaid" min="0" required class="form-control">
                     </div>
 
                     <div class="md-form">

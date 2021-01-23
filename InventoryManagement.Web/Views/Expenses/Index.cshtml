@@ -5,16 +5,7 @@
 }
 
 <div class="m-3">
-    <div class="row">
-        <div class="col justify-content-center align-self-center">
-            <h4 class="page-header mb-0">Expense</h4>
-        </div>
-        <div class="col text-right">
-            <a id="CreateClick" data-url="/Expenses/Create" class="btn-floating peach-gradient" title="Add New">
-                <i class="fa fa-plus" aria-hidden="true"></i>
-            </a>
-        </div>
-    </div>
+    <h4 class="page-header mb-3">Expense</h4>
 
     <div class="card card-body">
         <div class="table-responsive">
@@ -46,7 +37,7 @@
 
 @section Scripts {
     <partial name="_UnobtrusiveAjaxPartial" />
-    <script src="~/page-js/expense.js?v=1"></script>
+    @*<script src="~/page-js/expense.js?v=1"></script>*@
 
     <script>
         const dataTable = {
@@ -57,16 +48,17 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: "/Expense/GetExpense",
+                        url: "/Expenses/GetExpense",
                         type: "POST"
                     },
                     columns:
                         [
+                            { data: "VoucherNumber" },
                             { data: "CategoryName" },
                             { data: "ExpenseAmount" },
                             { data: "ExpenseFor" },
                             { data: "ExpenseDate", "render": function (data) { return moment(data).format('DD MMM YYYY') } },
-                            { data: "ExpenseId", "render": function (data) { return `<a class="fas fa-edit update" href="/Expense/Edit/${data}"></a>`; } }
+                            { data: "Id", "render": function (data) { return `<a class="fas fa-edit update" href="/Expense/Edit/${data}"></a>`; } }
                         ],
                     columnDefs: [
                         { 'searchable': false, 'targets': [4] },

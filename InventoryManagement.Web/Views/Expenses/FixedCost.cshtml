@@ -52,7 +52,7 @@
                 </tr>
             </thead>
             <tbody id="tbody">
-                @*@foreach (var item in Model)
+                @foreach (var item in Model)
                 {
                     <tr>
                         <td>@item.Name</td>
@@ -61,7 +61,7 @@
                         <td>৳@item.CostPerDay</td>
                         <td><i id="@item.ExpenseFixedId" class="delete fas fa-trash"></i></td>
                     </tr>
-                }*@
+                }
             </tbody>
         </table>
     </div>
@@ -97,7 +97,7 @@
                         $.notify(res.Message, res.IsSuccess ? "success" : "error");
 
                         if (res.IsSuccess) {
-                            //showTable(model);
+                            showTable(res.Data);
                             this.reset();
                         }
                     },
