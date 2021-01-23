@@ -1,4 +1,5 @@
-﻿using InventoryManagement.Repository;
+﻿using InventoryManagement.BusinessLogin;
+using InventoryManagement.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,10 +11,11 @@ namespace InventoryManagement.Web.Controllers
     public class ExpensesController : Controller
     {
         private readonly IUnitOfWork _db;
-
-        public ExpensesController(IUnitOfWork db)
+        private readonly IExpenseCore _expense;
+        public ExpensesController(IUnitOfWork db, IExpenseCore expense)
         {
             _db = db;
+            _expense = expense;
         }
 
 
@@ -75,20 +77,10 @@ namespace InventoryManagement.Web.Controllers
         //POST: Transportation Cost
         [Authorize(Roles = "admin, transportationCost")]
         [HttpPost]
-        public async Task<IActionResult> PostTransportationCost(ExpenseTransportationAddModel model)
+        public IActionResult PostTransportationCost(ExpenseTransportationAddModel model)
         {
-            model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
-
-            if (!ModelState.IsValid) return View(model);
-
-            var voucherNo = _db.Institutions.GetVoucherCountdown() + 1;
-            _db.ExpenseTransportations.AddCustom(model, voucherNo, User.IsInRole("admin"));
-
-            var task = await _db.SaveChangesAsync();
-
-            if (task != 0) return RedirectToAction("TransportationCost", new { Message = "Expense Added Successfully!" });
-
-            return View(model);
+            var response = _expense.AddTransportationCost(model, User.Identity.Name, User.IsInRole("admin"));
+            return Json(response);
         }
 
 

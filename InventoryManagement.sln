@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryManagement.Data", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryManagement.Repository", "InventoryManagement.Repository\InventoryManagement.Repository.csproj", "{367D18D2-765B-4BEB-9CAD-75B8F77DF790}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JqueryDataTables.LoopsIT", "JqueryDataTables.LoopsIT\JqueryDataTables.LoopsIT.csproj", "{5242E3B3-75AA-4BDA-B763-CA28DD809F92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JqueryDataTables.LoopsIT", "JqueryDataTables.LoopsIT\JqueryDataTables.LoopsIT.csproj", "{5242E3B3-75AA-4BDA-B763-CA28DD809F92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryManagement.BusinessLogin", "InventoryManagement.BusinessLogin\InventoryManagement.BusinessLogin.csproj", "{1BABBA1A-52FA-41B5-B7AB-D5BAEB57ED4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{5242E3B3-75AA-4BDA-B763-CA28DD809F92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5242E3B3-75AA-4BDA-B763-CA28DD809F92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5242E3B3-75AA-4BDA-B763-CA28DD809F92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BABBA1A-52FA-41B5-B7AB-D5BAEB57ED4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BABBA1A-52FA-41B5-B7AB-D5BAEB57ED4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BABBA1A-52FA-41B5-B7AB-D5BAEB57ED4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BABBA1A-52FA-41B5-B7AB-D5BAEB57ED4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

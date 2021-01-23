@@ -14,9 +14,11 @@ namespace InventoryManagement.Repository
             _mapper = mapper;
         }
 
-        public void AddCustom(ExpenseTransportationAddModel model, int voucherNo, bool isApproved)
+        public void AddCustom(ExpenseTransportationAddModel model, int reregistrationId, int voucherNo, bool isApproved)
         {
             var expenseTransportation = _mapper.Map<ExpenseTransportation>(model);
+
+            expenseTransportation.RegistrationId = reregistrationId;
             expenseTransportation.VoucherNo = voucherNo;
             expenseTransportation.IsApproved = isApproved;
 

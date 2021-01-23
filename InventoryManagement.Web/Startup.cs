@@ -1,4 +1,5 @@
 using AutoMapper;
+using InventoryManagement.BusinessLogin;
 using InventoryManagement.Data;
 using InventoryManagement.Repository;
 using Microsoft.AspNetCore.Builder;
@@ -48,6 +49,9 @@ namespace InventoryManagement.Web
             });
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IExpenseCore, ExpenseCore>();
+
+
             services.AddMvc().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             //Mapper

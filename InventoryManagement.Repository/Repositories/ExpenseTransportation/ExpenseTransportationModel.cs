@@ -6,9 +6,6 @@ namespace InventoryManagement.Repository
     public class ExpenseTransportationAddModel
     {
         public int CustomerId { get; set; }
-        public int VoucherNo { get; set; }
-        public bool IsApproved { get; set; }
-        public int RegistrationId { get; set; }
         public double TotalExpense { get; set; }
         public string ExpenseNote { get; set; }
         public DateTime ExpenseDate { get; set; }

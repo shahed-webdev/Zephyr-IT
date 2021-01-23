@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InventoryManagement.Repository\InventoryManagement.Repository.csproj" />
+    <ProjectReference Include="..\InventoryManagement.BusinessLogin\InventoryManagement.BusinessLogin.csproj" />
   </ItemGroup>
 
 </Project>
