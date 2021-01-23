@@ -32,7 +32,7 @@ namespace InventoryManagement.Web.Controllers
             return Json(data);
         }
 
-        //General Expense
+        //***General Expense***
         [Authorize(Roles = "admin, generalExpense")]
         public IActionResult GeneralExpense()
         {
@@ -40,8 +40,7 @@ namespace InventoryManagement.Web.Controllers
             return View();
         }
 
-
-        // POST:General Expanses
+        // add
         [Authorize(Roles = "admin, generalExpense")]
         [HttpPost]
         public async Task<IActionResult> GeneralExpense(ExpenseAddModel model)
@@ -66,7 +65,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
-        //Transportation Cost
+        //***Transportation Cost***
         [Authorize(Roles = "admin, transportationCost")]
         public IActionResult TransportationCost()
         {
@@ -74,7 +73,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
-        //POST: Transportation Cost
+        //add
         [Authorize(Roles = "admin, transportationCost")]
         [HttpPost]
         public IActionResult PostTransportationCost(ExpenseTransportationAddModel model)
@@ -84,24 +83,29 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
-
-        // POST: Delete/5
-        //public int Delete(int id)
-        //{
-        //    _db.Expenses.RemoveCustom(id);
-        //    return _db.SaveChanges();
-        //}
-
-
-        //General Expense
+        //**Fixed Cost***
         [Authorize(Roles = "admin, fixedCost")]
         public IActionResult FixedCost()
         {
+            //var model = _expense.FixedCostRecords();
             return View();
         }
 
+        //add
+        [Authorize(Roles = "admin, fixedCost")]
+        [HttpPost]
+        public IActionResult PostFixedCost(ExpenseFixedAddModel model)
+        {
+            var response = _expense.AddFixedCost(model);
+            return Json(response);
+        }
 
-
+        //delete
+        public IActionResult DeleteFixedCost(int id)
+        {
+            var response = _expense.DeleteFixedCost(id);
+            return Json(response);
+        }
 
 
 

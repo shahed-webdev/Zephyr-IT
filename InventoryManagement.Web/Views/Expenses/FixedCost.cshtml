@@ -1,4 +1,5 @@
-﻿
+﻿@using InventoryManagement.Repository
+@model IEnumerable<ExpenseFixedViewModel>
 @{
     ViewData["Title"] = "Fixed Cost";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -17,20 +18,20 @@
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label>Expense Name</label>
-                        <input name="ExpenseName" type="text" class="form-control" required />
+                        <input name="Name" type="text" class="form-control" required />
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label>Total Cost</label>
-                        <input name="TotalCost" type="number" class="form-control" required />
+                        <input name="Amount" type="number" class="form-control" required />
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label>Interval (days)</label>
                         <div class="input-group align-items-center">
-                            <input name="Interval" type="number" class="form-control" required />
+                            <input name="IntervalDays" type="number" class="form-control" required />
                             <div class="input-group-append">
                                 <button type="submit" class="btn peach-gradient btn-md my-0">Add</button>
                             </div>
@@ -50,7 +51,18 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody id="tbody"></tbody>
+            <tbody id="tbody">
+                @*@foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>৳@item.Amount</td>
+                        <td>@item.IntervalDays</td>
+                        <td>৳@item.CostPerDay</td>
+                        <td><i id="@item.ExpenseFixedId" class="delete fas fa-trash"></i></td>
+                    </tr>
+                }*@
+            </tbody>
         </table>
     </div>
 </div>
@@ -75,31 +87,29 @@
             formAdd.addEventListener("submit", function (evt) {
                 evt.preventDefault();
                 const model = serializeForm(this);
-                showTable(model);
 
-                //$.ajax({
-                //    type: "POST",
-                //    url: `/Expense/PostFixedCost`,
-                //    data: model,
-                //    success: res => {
-                //        console.log(res)
-                //        $.notify(res.Message, res.IsSuccess ? "success" : "error");
+                $.ajax({
+                    type: "POST",
+                    url: `/Expenses/PostFixedCost`,
+                    data: model,
+                    success: res => {
+                        console.log(res)
+                        $.notify(res.Message, res.IsSuccess ? "success" : "error");
 
-                //        if (res.IsSuccess) {
-                //            showTable(model);
-                //            this.reset();
-                //        }
-
-                //    },
-                //    error: function (response) {
-                //        console.log(response);
-                //    }
-                //});
+                        if (res.IsSuccess) {
+                            //showTable(model);
+                            this.reset();
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
             });
 
             function showTable(item) {
                 const tr = document.createElement("tr");
-                tr.innerHTML = `<td>${item.ExpenseName}</td><td>৳${item.TotalCost}</td><td>${item.Interval}</td><td>৳${(item.TotalCost / item.Interval).toFixed(2)}</td><td><i id="${item.ExpenseName}" class="delete fas fa-trash"></i></td>`;
+                tr.innerHTML = `<td>${item.Name}</td><td>৳${item.Amount}</td><td>${item.IntervalDays}</td><td>৳${item.CostPerDay}</td><td><i id="${item.ExpenseFixedId}" class="delete fas fa-trash"></i></td>`;
                 tBody.append(tr);
             }
 
@@ -109,7 +119,19 @@
                 if (!onDelete) return;
 
                 const id = +evt.target.id;
-                evt.target.parentElement.parentElement.remove();
+                $.ajax({
+                    url: `/Expenses/DeleteFixedCost`,
+                    data: { id },
+                    success: res => {
+                        $.notify(res.Message, res.IsSuccess ? "success" : "error");
+
+                        if (res.IsSuccess)
+                            evt.target.parentElement.parentElement.remove();
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
             });
         }());
     </script>
