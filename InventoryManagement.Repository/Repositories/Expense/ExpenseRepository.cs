@@ -110,18 +110,23 @@ namespace InventoryManagement.Repository
             Update(expense);
         }
 
-        public ExpenseAddModel GetDetails(int expenseId)
+        public ExpenseDetailsModel GetDetails(int expenseId)
         {
-            var expense = Find(expenseId);
+            var expense = Context.Expense
+                .Include(e => e.ExpenseCategory)
+                .Include(e => e.Registration)
+                .FirstOrDefault(e => e.ExpenseId == expenseId);
 
-            return new ExpenseAddModel
+            return new ExpenseDetailsModel
             {
                 ExpenseId = expense.ExpenseId,
                 ExpenseCategoryId = expense.ExpenseCategoryId,
                 CategoryName = expense.ExpenseCategory.CategoryName,
                 ExpenseAmount = expense.ExpenseAmount,
                 ExpenseFor = expense.ExpenseFor,
-                ExpenseDate = expense.ExpenseDate
+                ExpenseDate = expense.ExpenseDate,
+                IsApproved = expense.IsApproved,
+                CreateBy = expense.Registration.UserName
             };
         }
 
@@ -197,28 +202,72 @@ namespace InventoryManagement.Repository
 
             return expense;
         }
-        public ICollection<ExpenseCategoryWise> CategoryWistDateToDate(DateTime? sDateTime, DateTime? eDateTime)
+        public ICollection<ExpenseCategoryWise> CategoryWistSummaryDateToDate(DateTime? sDateTime, DateTime? eDateTime)
         {
             var sD = sDateTime ?? new DateTime(1000, 1, 1);
             var eD = eDateTime ?? new DateTime(3000, 1, 1);
 
-            var ex = Context.Expense.Include(e => e.ExpenseCategory).Where(e => e.ExpenseDate <= eD && e.ExpenseDate >= sD)
-                .GroupBy(e => new
-                {
-                    ExpenseCategoryID = e.ExpenseCategoryId,
-                    e.ExpenseCategory.CategoryName
+            var ex = new List<ExpenseCategoryWise>();
 
-                })
+            var exTransportation = Context.ExpenseTransportation
+                .Where(e => e.IsApproved && e.ExpenseDate <= eD && e.ExpenseDate >= sD)
+                .Select(t => new ExpenseCategoryWise
+                {
+                    ExpenseCategoryId = 0,
+                    CategoryName = "Transportation",
+                    TotalExpense = t.TotalExpense
+                }).ToList();
+
+
+            var exGeneral = Context.Expense.Include(e => e.ExpenseCategory)
+                .Where(e => e.IsApproved && e.ExpenseDate <= eD && e.ExpenseDate >= sD)
                 .Select(g => new ExpenseCategoryWise
                 {
-                    ExpenseCategoryId = g.Key.ExpenseCategoryID,
-                    CategoryName = g.Key.CategoryName,
-                    TotalExpense = g.Sum(e => e.ExpenseAmount)
+                    ExpenseCategoryId = g.ExpenseId,
+                    CategoryName = g.ExpenseCategory.CategoryName,
+                    TotalExpense = g.ExpenseAmount
+                }).ToList();
 
-                })
+
+            ex.AddRange(exGeneral);
+            ex.AddRange(exTransportation);
+
+            var report = ex.GroupBy(e => new
+            {
+                e.ExpenseCategoryId,
+                e.CategoryName
+
+            }).Select(g => new ExpenseCategoryWise
+            {
+                ExpenseCategoryId = g.Key.ExpenseCategoryId,
+                CategoryName = g.Key.CategoryName,
+                TotalExpense = g.Sum(e => e.TotalExpense)
+
+            }).ToList();
+
+            return report;
+        }
+
+        public ICollection<ExpenseAllViewModel> CategoryWistDetailsDateToDate(string category, DateTime? sDateTime, DateTime? eDateTime)
+        {
+            var sD = sDateTime ?? new DateTime(1000, 1, 1);
+            var eD = eDateTime ?? new DateTime(3000, 1, 1);
+            var records = new List<ExpenseAllViewModel>();
+            var t = Context.ExpenseTransportation
+                .Where(e => e.IsApproved && e.ExpenseDate <= eD && e.ExpenseDate >= sD)
+                .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider)
                 .ToList();
 
-            return ex;
+            var g = Context.Expense
+                .Where(e => e.IsApproved && e.ExpenseDate <= eD && e.ExpenseDate >= sD)
+                .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider)
+                .ToList();
+
+
+            records.AddRange(g);
+            records.AddRange(t);
+
+            return records.Where(r => r.ExpenseCategory == category).OrderByDescending(r => r.ExpenseDate).ToList();
         }
     }
 }

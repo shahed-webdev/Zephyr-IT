@@ -102,18 +102,18 @@ namespace InventoryManagement.BusinessLogin
             }
         }
 
-        public DbResponse<ExpenseAddModel> GetCost(int expenseId)
+        public DbResponse<ExpenseDetailsModel> GetCost(int expenseId)
         {
             try
             {
                 var data = _db.Expenses.GetDetails(expenseId);
 
 
-                return new DbResponse<ExpenseAddModel>(true, "Success", data);
+                return new DbResponse<ExpenseDetailsModel>(true, "Success", data);
             }
             catch (Exception e)
             {
-                return new DbResponse<ExpenseAddModel>(false, e.Message);
+                return new DbResponse<ExpenseDetailsModel>(false, e.Message);
             }
         }
 
@@ -233,6 +233,32 @@ namespace InventoryManagement.BusinessLogin
             catch (Exception e)
             {
                 return new DbResponse<List<ExpenseFixedViewModel>>(false, e.Message);
+            }
+        }
+
+        public DbResponse<List<ExpenseCategoryWise>> CategoryWistSummaryDateToDate(DateTime? sDateTime, DateTime? eDateTime)
+        {
+            try
+            {
+                var data = _db.Expenses.CategoryWistSummaryDateToDate(sDateTime, eDateTime);
+                return new DbResponse<List<ExpenseCategoryWise>>(true, "Success", data.ToList());
+            }
+            catch (Exception e)
+            {
+                return new DbResponse<List<ExpenseCategoryWise>>(false, e.Message);
+            }
+        }
+
+        public DbResponse<List<ExpenseAllViewModel>> CategoryWistDetailsDateToDate(string category, DateTime? sDateTime, DateTime? eDateTime)
+        {
+            try
+            {
+                var data = _db.Expenses.CategoryWistDetailsDateToDate(category, sDateTime, eDateTime);
+                return new DbResponse<List<ExpenseAllViewModel>>(true, "Success", data.ToList());
+            }
+            catch (Exception e)
+            {
+                return new DbResponse<List<ExpenseAllViewModel>>(false, e.Message);
             }
         }
     }

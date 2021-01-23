@@ -1,5 +1,6 @@
 ﻿using InventoryManagement.Repository;
 using JqueryDataTables.LoopsIT;
+using System;
 using System.Collections.Generic;
 
 namespace InventoryManagement.BusinessLogin
@@ -15,7 +16,7 @@ namespace InventoryManagement.BusinessLogin
         DbResponse DeleteCost(int expenseId);
         DbResponse EditCost(ExpenseAddModel model);
 
-        DbResponse<ExpenseAddModel> GetCost(int expenseId);
+        DbResponse<ExpenseDetailsModel> GetCost(int expenseId);
 
         DbResponse AddTransportationCost(ExpenseTransportationAddModel model, string userName, bool isApproved);
         DbResponse ApprovedTransportationCost(int expenseTransportationId);
@@ -27,7 +28,8 @@ namespace InventoryManagement.BusinessLogin
         DbResponse<ExpenseFixedViewModel> AddFixedCost(ExpenseFixedAddModel model);
         DbResponse DeleteFixedCost(int expenseFixedId);
         DbResponse<List<ExpenseFixedViewModel>> FixedCostRecords();
-
+        DbResponse<List<ExpenseCategoryWise>> CategoryWistSummaryDateToDate(DateTime? sDateTime, DateTime? eDateTime);
+        DbResponse<List<ExpenseAllViewModel>> CategoryWistDetailsDateToDate(string category, DateTime? sDateTime, DateTime? eDateTime);
 
     }
 }
