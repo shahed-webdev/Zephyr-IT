@@ -10,6 +10,7 @@ namespace InventoryManagement.Repository
     {
         ICollection<ExpenseViewModel> ToListCustom();
         DataResult<ExpenseAllViewModel> RecordsDataTable(DataRequest request);
+        List<ExpenseAllViewModel> Records();
         Task<List<ExpenseViewModel>> ToListCustomAsync();
         void AddCustom(ExpenseAddModel model, int voucherNo, bool isApproved);
         void RemoveCustom(int id);
