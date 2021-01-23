@@ -1,5 +1,5 @@
 ﻿@using InventoryManagement.Repository
-@model ExpenseAddModel
+@model ExpenseDetailsModel
 @{
     ViewData["Title"] = "General Expense Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -74,25 +74,21 @@
         //approve check
         const checkApprove = document.getElementById("checkApprove");
         checkApprove.addEventListener("click", function() {
-            disableSubmit(true, this);
+            this.disabled = true;
 
             $.ajax({
                 type: "POST",
                 url: `/Expenses/ApproveGeneralExpense`,
                 data: {id: @Model.ExpenseId},
                 success: response => {
-                    disableSubmit(!response.IsSuccess, this);
+                    this.disabled = response.IsSuccess;
                     $.notify(response.Message, response.IsSuccess ? "success" : "error");
                 },
                 error: response => {
-                    disableSubmit(false, this);
+                    this.disabled = false;
                     console.log(response);
                 }
             });
         });
-
-        function disableSubmit(isSubmit, btn) {
-            btn.disabled = isSubmit;
-        }
     </script>
 }

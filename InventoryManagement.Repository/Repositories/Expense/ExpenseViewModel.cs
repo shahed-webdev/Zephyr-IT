@@ -56,6 +56,8 @@ namespace InventoryManagement.Repository
         public string CategoryName { get; set; }
         public double ExpenseAmount { get; set; }
         public string ExpenseFor { get; set; }
+
+        [DisplayFormat(DataFormatString = "dd MMM yyyy")]
         public DateTime ExpenseDate { get; set; }
     }
 

@@ -162,6 +162,13 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
+        //Report
+        [Authorize(Roles = "admin, expenseReport")]
+        public IActionResult ExpenseReport()
+        {
+            return View();
+        }
+
 
         protected override void Dispose(bool disposing)
         {

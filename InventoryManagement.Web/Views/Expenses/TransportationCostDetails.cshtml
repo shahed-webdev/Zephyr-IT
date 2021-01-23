@@ -248,18 +248,18 @@
 
             //approve check
             checkApprove.addEventListener("click", function() {
-                disableSubmit(true, this);
+                this.disabled = true;
 
                 $.ajax({
                     type: "POST",
                     url: `/Expenses/ApproveTransportationCost`,
                     data: {id: @Model.ExpenseTransportationId},
                     success: response => {
-                        disableSubmit(!response.IsSuccess, this);
+                        this.disabled = response.IsSuccess;
                         $.notify(response.Message, response.IsSuccess ? "success" : "error");
                     },
                     error: response => {
-                        disableSubmit(false, this);
+                        this.disabled = false;
                         console.log(response);
                     }
                 });
