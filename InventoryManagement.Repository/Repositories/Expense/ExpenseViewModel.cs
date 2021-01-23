@@ -46,4 +46,17 @@ namespace InventoryManagement.Repository
         [DisplayFormat(DataFormatString = "dd MMM yyyy")]
         public DateTime ExpenseDate { get; set; }
     }
+
+    public class ExpenseDetailsModel
+    {
+        public int ExpenseId { get; set; }
+        public int ExpenseCategoryId { get; set; }
+        public bool IsApproved { get; set; }
+        public string CreateBy { get; set; }
+        public string CategoryName { get; set; }
+        public double ExpenseAmount { get; set; }
+        public string ExpenseFor { get; set; }
+        public DateTime ExpenseDate { get; set; }
+    }
+
 }

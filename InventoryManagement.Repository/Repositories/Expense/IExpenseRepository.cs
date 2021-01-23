@@ -15,7 +15,7 @@ namespace InventoryManagement.Repository
         void AddCustom(ExpenseAddModel model, int registrationId, int voucherNo, bool isApproved);
         void Approved(int expenseId);
         void Edit(ExpenseAddModel model);
-        ExpenseAddModel GetDetails(int expenseId);
+        ExpenseDetailsModel GetDetails(int expenseId);
         void RemoveCustom(int id);
         ICollection<int> Years();
         double DailyExpenseAmount(DateTime? day);
@@ -24,7 +24,8 @@ namespace InventoryManagement.Repository
 
         ICollection<ExpenseViewModel> DateToDate(DateTime? sDateTime, DateTime? eDateTime);
 
-        ICollection<ExpenseCategoryWise> CategoryWistDateToDate(DateTime? sDateTime, DateTime? eDateTime);
+        ICollection<ExpenseCategoryWise> CategoryWistSummaryDateToDate(DateTime? sDateTime, DateTime? eDateTime);
+        ICollection<ExpenseAllViewModel> CategoryWistDetailsDateToDate(string category, DateTime? sDateTime, DateTime? eDateTime);
 
 
     }
