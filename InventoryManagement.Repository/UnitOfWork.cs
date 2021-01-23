@@ -25,6 +25,7 @@ namespace InventoryManagement.Repository
             Registrations = new RegistrationRepository(_context);
             ExpenseCategories = new ExpenseCategoryRepository(_context);
             Expenses = new ExpenseRepository(_context);
+            ExpenseFixed = new ExpenseFixedRepository(_context, mapper);
             ExpenseTransportations = new ExpenseTransportationRepository(_context, _mapper);
             Institutions = new InstitutionRepository(_context);
             Selling = new SellingRepository(_context);
@@ -48,6 +49,7 @@ namespace InventoryManagement.Repository
         public IRegistrationRepository Registrations { get; private set; }
         public IExpenseCategoryRepository ExpenseCategories { get; private set; }
         public IExpenseRepository Expenses { get; }
+        public IExpenseFixedRepository ExpenseFixed { get; }
         public IExpenseTransportationRepository ExpenseTransportations { get; }
         public IInstitutionRepository Institutions { get; }
         public IVendorRepository Vendors { get; }

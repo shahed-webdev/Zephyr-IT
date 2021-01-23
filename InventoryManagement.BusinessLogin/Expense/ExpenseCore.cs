@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using InventoryManagement.Repository;
+using JqueryDataTables.LoopsIT;
 using System;
 
 namespace InventoryManagement.BusinessLogin
@@ -31,22 +32,101 @@ namespace InventoryManagement.BusinessLogin
 
         public DbResponse ApprovedTransportationCost(int expenseTransportationId)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                _db.ExpenseTransportations.Approved(expenseTransportationId);
+                _db.SaveChanges();
+
+                return new DbResponse(true, "Approved Successfully");
+            }
+            catch (Exception e)
+            {
+                return new DbResponse(false, e.Message);
+            }
         }
 
         public DbResponse DeleteTransportationCost(int expenseTransportationId)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                _db.ExpenseTransportations.Delete(expenseTransportationId);
+                _db.SaveChanges();
+
+                return new DbResponse(true, "Deleted Successfully");
+            }
+            catch (Exception e)
+            {
+                return new DbResponse(false, e.Message);
+            }
         }
 
         public DbResponse<ExpenseTransportationDetailsModel> GetTransportationCostDetails(int expenseTransportationId)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var data = _db.ExpenseTransportations.GetDetails(expenseTransportationId);
+                return new DbResponse<ExpenseTransportationDetailsModel>(true, "Success", data);
+            }
+            catch (Exception e)
+            {
+                return new DbResponse<ExpenseTransportationDetailsModel>(false, e.Message);
+            }
         }
 
         public DbResponse EditTransportationCost(ExpenseTransportationDetailsModel model)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                _db.ExpenseTransportations.Edit(model);
+                return new DbResponse(true, "Changed Successfully");
+            }
+            catch (Exception e)
+            {
+                return new DbResponse(false, e.Message);
+            }
+        }
+
+        public DbResponse AddFixedCost(ExpenseFixedAddModel model)
+        {
+            try
+            {
+                _db.ExpenseFixed.Add(model);
+                _db.SaveChanges();
+
+                return new DbResponse(true, "Added Successfully");
+            }
+            catch (Exception e)
+            {
+                return new DbResponse(false, e.Message);
+            }
+        }
+
+        public DbResponse DeleteFixedCost(int expenseFixedId)
+        {
+            try
+            {
+                _db.ExpenseFixed.Delete(expenseFixedId);
+                _db.SaveChanges();
+
+                return new DbResponse(true, "Deleted Successfully");
+            }
+            catch (Exception e)
+            {
+                return new DbResponse(false, e.Message);
+            }
+        }
+
+        public DbResponse<DataResult<ExpenseFixedViewModel>> FixedCostRecords(DataRequest request)
+        {
+            try
+            {
+                var data = _db.ExpenseFixed.RecordDataTable(request);
+                return new DbResponse<DataResult<ExpenseFixedViewModel>>(true, "Success", data);
+            }
+            catch (Exception e)
+            {
+                return new DbResponse<DataResult<ExpenseFixedViewModel>>(false, e.Message);
+            }
         }
     }
 }

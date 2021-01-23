@@ -12,6 +12,7 @@ namespace InventoryManagement.Data
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<CustomerPhone> CustomerPhone { get; set; }
         public virtual DbSet<Expense> Expense { get; set; }
+        public virtual DbSet<ExpenseFixed> ExpenseFixed { get; set; }
         public virtual DbSet<ExpenseTransportation> ExpenseTransportation { get; set; }
         public virtual DbSet<ExpenseTransportationList> ExpenseTransportationList { get; set; }
         public virtual DbSet<ExpenseCategory> ExpenseCategory { get; set; }
@@ -43,6 +44,7 @@ namespace InventoryManagement.Data
             builder.ApplyConfiguration(new CustomerConfiguration());
             builder.ApplyConfiguration(new CustomerPhoneConfiguration());
             builder.ApplyConfiguration(new ExpenseConfiguration());
+            builder.ApplyConfiguration(new ExpenseFixedConfiguration());
             builder.ApplyConfiguration(new ExpenseCategoryConfiguration());
             builder.ApplyConfiguration(new ExpenseTransportationConfiguration());
             builder.ApplyConfiguration(new ExpenseTransportationListConfiguration());

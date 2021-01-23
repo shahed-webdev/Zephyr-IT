@@ -18,6 +18,7 @@ namespace InventoryManagement.Repository
         IRegistrationRepository Registrations { get; }
         IExpenseCategoryRepository ExpenseCategories { get; }
         IExpenseRepository Expenses { get; }
+        IExpenseFixedRepository ExpenseFixed { get; }
         IExpenseTransportationRepository ExpenseTransportations { get; }
         IInstitutionRepository Institutions { get; }
         IVendorRepository Vendors { get; }
