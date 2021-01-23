@@ -157,27 +157,71 @@ namespace InventoryManagement.Repository
         public double DailyExpenseAmount(DateTime? date)
         {
             var saleDate = date ?? DateTime.Now;
-            return Context.Expense.Where(e => e.ExpenseDate.Date == saleDate.Date)?
-                       .Sum(e => e.ExpenseAmount) ?? 0;
+            double ex = 0;
+
+
+            ex += Context.Expense
+                  .Where(e => e.IsApproved && e.ExpenseDate.Date == saleDate.Date)
+                .Sum(e => e.ExpenseAmount);
+
+            ex += Context.ExpenseTransportation
+                .Where(e => e.IsApproved && e.ExpenseDate.Date == saleDate.Date)
+                .Sum(e => e.TotalExpense);
+
+            ex += Context.ExpenseFixed.Sum(f => f.CostPerDay);
+
+            return ex;
         }
 
         public double ExpenseYearly(int year)
         {
-            return ToList().Where(s => s.ExpenseDate.Year == year).Sum(s => s.ExpenseAmount);
+            double ex = 0;
+            ex += Context.Expense
+                .Where(s => s.IsApproved && s.ExpenseDate.Year == year)
+                .Sum(s => s.ExpenseAmount);
+
+            ex += Context.ExpenseTransportation
+                .Where(s => s.IsApproved && s.ExpenseDate.Year == year)
+                .Sum(s => s.TotalExpense);
+            return ex;
         }
 
         public ICollection<MonthlyAmount> MonthlyAmounts(int year)
         {
-            var months = Context.Expense.Where(e => e.ExpenseDate.Year == year)
+
+            var ex = new List<MonthlyAmount>();
+
+            var exTransportation = Context.ExpenseTransportation
+                .Where(e => e.IsApproved && e.ExpenseDate.Year == year)
+                .Select(t => new MonthlyAmount
+                {
+                    MonthNumber = t.ExpenseDate.Month,
+                    Amount = t.TotalExpense
+                }).ToList();
+
+
+            var exGeneral = Context.Expense
+                .Where(e => e.IsApproved && e.ExpenseDate.Year == year)
+                .Select(g => new MonthlyAmount
+                {
+                    MonthNumber = g.ExpenseDate.Month,
+                    Amount = g.ExpenseAmount
+                }).ToList();
+
+
+            ex.AddRange(exGeneral);
+            ex.AddRange(exTransportation);
+
+            var months = ex
                 .GroupBy(e => new
                 {
-                    number = e.ExpenseDate.Month
+                    number = e.MonthNumber
 
                 })
                 .Select(g => new MonthlyAmount
                 {
                     MonthNumber = g.Key.number,
-                    Amount = g.Sum(e => e.ExpenseAmount)
+                    Amount = g.Sum(e => e.Amount)
                 })
                 .ToList();
 
