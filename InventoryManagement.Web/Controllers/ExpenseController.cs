@@ -57,6 +57,16 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
+        //details
+        [Authorize(Roles = "admin, expanse")]
+        public IActionResult GeneralExpenseDetails(int? id)
+        {
+            if (!id.HasValue) return RedirectToAction("Index");
+
+            return View();
+        }
+
+
 
         //***Transportation Cost***
         [Authorize(Roles = "admin, transportationCost")]
@@ -75,12 +85,30 @@ namespace InventoryManagement.Web.Controllers
             return Json(response);
         }
 
-
+        //details
+        [Authorize(Roles = "admin, expanse")]
         public IActionResult TransportationCostDetails(int? id)
         {
             if (!id.HasValue) return RedirectToAction("Index");
 
-            return View();
+            return View(_expense.GetTransportationCostDetails(id.GetValueOrDefault()).Data);
+        }
+
+        //update
+        [HttpPost]
+        public IActionResult UpdateTransportationCost(ExpenseTransportationDetailsModel model)
+        {
+            var response = _expense.EditTransportationCost(model);
+            return Json(response);
+        }
+
+
+        //approve
+        [HttpPost]
+        public IActionResult ApproveTransportationCost(int id)
+        {
+            var response = _expense.ApprovedTransportationCost(id);
+            return Json(response);
         }
 
 

@@ -19,7 +19,7 @@
                         <th>Expense&nbsp;For</th>
                         <th>Expense&nbsp;Date</th>
                         <th>Posted By</th>
-                        <th>Approve?</th>
+                        <th>Details</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,9 +30,18 @@
                             <td>@item.ExpenseCategory</td>
                             <td>@item.ExpenseAmount</td>
                             <td>@item.ExpenseFor</td>
-                            <td>@item.ExpenseDate</td>
+                            <td>@item.ExpenseDate.ToString("d MMM yyyy")</td>
                             <td>@item.CreateBy</td>
-                            <td></td>
+                            <td>
+                                @if (item.IsTransportation)
+                                {
+                                    <a href="/Expenses/TransportationCostDetails/@item.Id">Details</a>
+                                }
+                                else
+                                {
+                                    <a href="/Expenses/GeneralExpenseDetails/@item.Id">Details</a>
+                                }
+                            </td>
                         </tr>
                     }
                 </tbody>
