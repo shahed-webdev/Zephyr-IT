@@ -278,12 +278,10 @@ namespace InventoryManagement.Repository
 
             var report = ex.GroupBy(e => new
             {
-                e.ExpenseCategoryId,
                 e.CategoryName
 
             }).Select(g => new ExpenseCategoryWise
             {
-                ExpenseCategoryId = g.Key.ExpenseCategoryId,
                 CategoryName = g.Key.CategoryName,
                 TotalExpense = g.Sum(e => e.TotalExpense)
 
