@@ -3,8 +3,6 @@ using InventoryManagement.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Threading.Tasks;
-using JqueryDataTables.LoopsIT;
 
 namespace InventoryManagement.Web.Controllers
 {
@@ -45,23 +43,16 @@ namespace InventoryManagement.Web.Controllers
         // add
         [Authorize(Roles = "admin, generalExpense")]
         [HttpPost]
-        public async Task<IActionResult> GeneralExpense(ExpenseAddModel model)
+        public IActionResult GeneralExpense(ExpenseAddModel model)
         {
-            model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
-
             if (!ModelState.IsValid) return View(model);
 
             ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label", model.ExpenseCategoryId);
 
-            var voucherNo = _db.Institutions.GetVoucherCountdown() + 1;
+            var response = _expense.AddCost(model, User.Identity.Name, User.IsInRole("admin"));
 
-            _db.Expenses.AddCustom(model, voucherNo, User.IsInRole("admin"));
-            _db.Institutions.IncreaseVoucherCount();
-
-            var task = await _db.SaveChangesAsync();
-
-            if (task != 0)
-                return RedirectToAction("GeneralExpense", new { Message = "Expense Added Successfully!" });
+            if (response.IsSuccess)
+                return RedirectToAction("GeneralExpense", new { Message = response.Message });
 
             return View(model);
         }

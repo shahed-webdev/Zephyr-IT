@@ -12,7 +12,7 @@ namespace InventoryManagement.Repository
         DataResult<ExpenseAllViewModel> RecordsDataTable(DataRequest request);
         List<ExpenseAllViewModel> Records();
         Task<List<ExpenseViewModel>> ToListCustomAsync();
-        void AddCustom(ExpenseAddModel model, int voucherNo, bool isApproved);
+        void AddCustom(ExpenseAddModel model, int registrationId, int voucherNo, bool isApproved);
         void RemoveCustom(int id);
         ICollection<int> Years();
         double DailyExpenseAmount(DateTime? day);

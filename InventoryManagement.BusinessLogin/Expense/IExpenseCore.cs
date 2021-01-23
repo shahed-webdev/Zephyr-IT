@@ -10,9 +10,9 @@ namespace InventoryManagement.BusinessLogin
         DbResponse<DataResult<ExpenseAllViewModel>> ExpenseRecords(DataRequest request);
         DbResponse<List<ExpenseAllViewModel>> ExpenseRecords();
 
-        //DbResponse AddCost(ExpenseAddModel model, string userName, bool isApproved);
-        //DbResponse ApprovedCost(int expenseId);
-        //DbResponse DeleteCost(int expenseId);
+        DbResponse AddCost(ExpenseAddModel model, string userName, bool isApproved);
+        DbResponse ApprovedCost(int expenseId);
+        DbResponse DeleteCost(int expenseId);
         //DbResponse EditCost(ExpenseDetailsModel model);
 
 
