@@ -70,6 +70,7 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
+        //update
         [HttpPost]
         public IActionResult UpdateGeneralExpense(ExpenseAddModel model)
         {
@@ -82,6 +83,13 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
+        //approve
+        [HttpPost]
+        public IActionResult ApproveGeneralExpense(int id)
+        {
+            var response = _expense.ApprovedCost(id);
+            return Json(response);
+        }
 
 
         //***Transportation Cost***
