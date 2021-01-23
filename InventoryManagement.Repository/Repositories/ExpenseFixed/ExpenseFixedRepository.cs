@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using InventoryManagement.Data;
-using JqueryDataTables.LoopsIT;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace InventoryManagement.Repository
 {
@@ -13,10 +14,12 @@ namespace InventoryManagement.Repository
             _mapper = mapper;
         }
 
+        public ExpenseFixed ExpenseFixed { get; set; }
+
         public void Add(ExpenseFixedAddModel model)
         {
-            var expenseFixed = _mapper.Map<ExpenseFixed>(model);
-            Context.ExpenseFixed.Add(expenseFixed);
+            ExpenseFixed = _mapper.Map<ExpenseFixed>(model);
+            Context.ExpenseFixed.Add(ExpenseFixed);
         }
 
         public void Delete(int expenseFixedId)
@@ -25,11 +28,11 @@ namespace InventoryManagement.Repository
             Context.ExpenseFixed.Remove(expense);
         }
 
-        public DataResult<ExpenseFixedViewModel> RecordDataTable(DataRequest request)
+        public ICollection<ExpenseFixedViewModel> Records()
         {
             return Context.ExpenseFixed
                 .ProjectTo<ExpenseFixedViewModel>(_mapper.ConfigurationProvider)
-                .ToDataResult(request);
+                .ToList();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using InventoryManagement.Repository;
-using JqueryDataTables.LoopsIT;
+using System.Collections.Generic;
 
 namespace InventoryManagement.BusinessLogin
 {
@@ -11,9 +11,9 @@ namespace InventoryManagement.BusinessLogin
         DbResponse<ExpenseTransportationDetailsModel> GetTransportationCostDetails(int expenseTransportationId);
         DbResponse EditTransportationCost(ExpenseTransportationDetailsModel model);
 
-        DbResponse AddFixedCost(ExpenseFixedAddModel model);
+        DbResponse<ExpenseFixedViewModel> AddFixedCost(ExpenseFixedAddModel model);
         DbResponse DeleteFixedCost(int expenseFixedId);
-        DbResponse<DataResult<ExpenseFixedViewModel>> FixedCostRecords(DataRequest request);
+        DbResponse<List<ExpenseFixedViewModel>> FixedCostRecords();
 
 
     }

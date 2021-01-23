@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using InventoryManagement.Repository;
-using JqueryDataTables.LoopsIT;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace InventoryManagement.BusinessLogin
 {
@@ -86,18 +87,18 @@ namespace InventoryManagement.BusinessLogin
             }
         }
 
-        public DbResponse AddFixedCost(ExpenseFixedAddModel model)
+        public DbResponse<ExpenseFixedViewModel> AddFixedCost(ExpenseFixedAddModel model)
         {
             try
             {
                 _db.ExpenseFixed.Add(model);
                 _db.SaveChanges();
-
-                return new DbResponse(true, "Added Successfully");
+                var data = _mapper.Map<ExpenseFixedViewModel>(_db.ExpenseFixed.ExpenseFixed);
+                return new DbResponse<ExpenseFixedViewModel>(true, "Added Successfully", data);
             }
             catch (Exception e)
             {
-                return new DbResponse(false, e.Message);
+                return new DbResponse<ExpenseFixedViewModel>(false, e.Message);
             }
         }
 
@@ -116,16 +117,16 @@ namespace InventoryManagement.BusinessLogin
             }
         }
 
-        public DbResponse<DataResult<ExpenseFixedViewModel>> FixedCostRecords(DataRequest request)
+        public DbResponse<List<ExpenseFixedViewModel>> FixedCostRecords()
         {
             try
             {
-                var data = _db.ExpenseFixed.RecordDataTable(request);
-                return new DbResponse<DataResult<ExpenseFixedViewModel>>(true, "Success", data);
+                var data = _db.ExpenseFixed.Records();
+                return new DbResponse<List<ExpenseFixedViewModel>>(true, "Success", data.ToList());
             }
             catch (Exception e)
             {
-                return new DbResponse<DataResult<ExpenseFixedViewModel>>(false, e.Message);
+                return new DbResponse<List<ExpenseFixedViewModel>>(false, e.Message);
             }
         }
     }
