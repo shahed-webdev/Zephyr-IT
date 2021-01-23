@@ -24,7 +24,7 @@ namespace InventoryManagement.Repository
             PurchasePayments = new PurchasePaymentRepository(_context);
             Registrations = new RegistrationRepository(_context);
             ExpenseCategories = new ExpenseCategoryRepository(_context);
-            Expenses = new ExpenseRepository(_context);
+            Expenses = new ExpenseRepository(_context, _mapper);
             ExpenseFixed = new ExpenseFixedRepository(_context, mapper);
             ExpenseTransportations = new ExpenseTransportationRepository(_context, _mapper);
             Institutions = new InstitutionRepository(_context);

@@ -1,10 +1,12 @@
 ﻿using InventoryManagement.Repository;
+using JqueryDataTables.LoopsIT;
 using System.Collections.Generic;
 
 namespace InventoryManagement.BusinessLogin
 {
     public interface IExpenseCore
     {
+        DbResponse<DataResult<ExpenseAllViewModel>> ExpenseRecords(DataRequest request);
         DbResponse AddTransportationCost(ExpenseTransportationAddModel model, string userName, bool isApproved);
         DbResponse ApprovedTransportationCost(int expenseTransportationId);
         DbResponse DeleteTransportationCost(int expenseTransportationId);

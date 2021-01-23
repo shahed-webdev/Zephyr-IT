@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Data;
+using System.Collections.Generic;
 
 namespace InventoryManagement.Repository
 {
@@ -8,7 +9,6 @@ namespace InventoryManagement.Repository
         void Approved(int expenseTransportationId);
         void Delete(int expenseTransportationId);
         ExpenseTransportationDetailsModel GetDetails(int expenseTransportationId);
-
         void Edit(ExpenseTransportationDetailsModel model);
     }
 }

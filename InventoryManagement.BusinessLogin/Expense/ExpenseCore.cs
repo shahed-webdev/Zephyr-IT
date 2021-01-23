@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using InventoryManagement.Repository;
+using JqueryDataTables.LoopsIT;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,19 @@ namespace InventoryManagement.BusinessLogin
     {
         public ExpenseCore(IUnitOfWork db, IMapper mapper) : base(db, mapper)
         {
+        }
+
+        public DbResponse<DataResult<ExpenseAllViewModel>> ExpenseRecords(DataRequest request)
+        {
+            try
+            {
+                var data = _db.Expenses.RecordsDataTable(request);
+                return new DbResponse<DataResult<ExpenseAllViewModel>>(true, "Success", data);
+            }
+            catch (Exception e)
+            {
+                return new DbResponse<DataResult<ExpenseAllViewModel>>(false, e.Message);
+            }
         }
 
         public DbResponse AddTransportationCost(ExpenseTransportationAddModel model, string userName, bool isApproved)
