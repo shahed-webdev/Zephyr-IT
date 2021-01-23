@@ -174,6 +174,9 @@ namespace InventoryManagement.Web.Controllers
         [Authorize(Roles = "admin, expenseReport")]
         public IActionResult ExpenseCategoryDetails(string category, DateTime? from, DateTime? to)
         {
+            if (string.IsNullOrEmpty(category))
+                return RedirectToAction("ExpenseReport");
+
             return View(_expense.CategoryWistDetailsDateToDate(category,from, to).Data);
         }
 

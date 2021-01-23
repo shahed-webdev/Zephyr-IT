@@ -3,13 +3,20 @@
 @{
     ViewData["Title"] = "Expense Report";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var from = Context.Request.Query["from"];
+    var to = Context.Request.Query["to"];
+    var separator = !string.IsNullOrEmpty(to) ? " - " : "";
 }
 
 <div class="m-md-3">
-    <h4 class="page-header mb-3">Expense Report</h4>
+    <div class="mb-3">
+        <h4 class="page-header">Expense Report</h4>
+        <em>@from @separator @to</em>
+    </div>
 
     <div class="card card-body">
-        <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-5 d-print-none">
             <form method="get" asp-action="ExpenseReport">
                 <div class="d-flex align-items-center">
                     <div class="md-form m-0">
@@ -26,25 +33,24 @@
             <h5 id="totalAmount" class="mb-0 font-weight-bold"></h5>
         </div>
 
-
         <div class="table-responsive">
             <table id="data-table" class="table table-sm table-bordered">
                 <thead>
-                    <tr>
-                        <th class="text-left">Category</th>
-                        <th>Amount</th>
-                    </tr>
+                <tr>
+                    <th class="text-left">Category</th>
+                    <th>Amount</th>
+                </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td class="text-left">@item.CategoryName</td>
-                            <td class="text-right">
-                                <a class="blue-text" href="/Expenses/ExpenseCategoryDetails?category=@item.CategoryName">৳@item.TotalExpense</a>
-                            </td>
-                        </tr>
-                    }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-left">@item.CategoryName</td>
+                        <td class="text-right">
+                            <a class="blue-text" href="/Expenses/ExpenseCategoryDetails?category=@item.CategoryName&from=@from&to=@to">৳@item.TotalExpense</a>
+                        </td>
+                    </tr>
+                }
                 </tbody>
             </table>
         </div>
