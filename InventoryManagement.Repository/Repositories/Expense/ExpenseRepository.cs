@@ -55,6 +55,8 @@ namespace InventoryManagement.Repository
             var g = Context.Expense
                 .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider)
                 .ToList();
+
+
             records.AddRange(g);
             records.AddRange(t);
 

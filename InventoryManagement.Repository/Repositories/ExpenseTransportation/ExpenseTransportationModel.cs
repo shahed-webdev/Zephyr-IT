@@ -24,6 +24,7 @@ namespace InventoryManagement.Repository
     {
         public int ExpenseTransportationId { get; set; }
         public int CustomerId { get; set; }
+        public bool IsApproved { get; set; }
         public string CustomerName { get; set; }
         public string CreateBy { get; set; }
         public int VoucherNo { get; set; }
