@@ -91,6 +91,23 @@ namespace InventoryManagement.Repository
             });
         }
 
+        public void Approved(int expenseId)
+        {
+            var expense = Find(expenseId);
+            expense.IsApproved = true;
+            Update(expense);
+        }
+
+        public void Edit(ExpenseAddModel model)
+        {
+            var expense = Find(model.ExpenseId);
+            expense.ExpenseDate = model.ExpenseDate;
+            expense.ExpenseAmount = model.ExpenseAmount;
+            expense.ExpenseCategoryId = model.ExpenseCategoryId;
+            expense.ExpenseFor = model.ExpenseFor;
+            Update(expense);
+        }
+
         public void RemoveCustom(int id)
         {
             var expense = Find(id);
