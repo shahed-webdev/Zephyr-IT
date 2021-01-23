@@ -63,8 +63,23 @@ namespace InventoryManagement.Web.Controllers
         public IActionResult GeneralExpenseDetails(int? id)
         {
             if (!id.HasValue) return RedirectToAction("Index");
+           
+            var model = _expense.GetCost(id.GetValueOrDefault()).Data;
+            ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label");
+           
+            return View(model);
+        }
 
-            return View();
+        [HttpPost]
+        public IActionResult UpdateGeneralExpense(ExpenseAddModel model)
+        {
+            ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label");
+
+            var response = _expense.EditCost(model);
+
+            if (response.IsSuccess) return RedirectToAction("Index");
+            
+            return View(model);
         }
 
 
