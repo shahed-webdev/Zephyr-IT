@@ -257,7 +257,7 @@ namespace InventoryManagement.Repository
                 .Where(e => e.IsApproved && e.ExpenseDate <= eD && e.ExpenseDate >= sD)
                 .Select(t => new ExpenseCategoryWise
                 {
-                    ExpenseCategoryId = 0,
+                    //ExpenseCategoryId = 0,
                     CategoryName = "Transportation",
                     TotalExpense = t.TotalExpense
                 }).ToList();
@@ -267,7 +267,7 @@ namespace InventoryManagement.Repository
                 .Where(e => e.IsApproved && e.ExpenseDate <= eD && e.ExpenseDate >= sD)
                 .Select(g => new ExpenseCategoryWise
                 {
-                    ExpenseCategoryId = g.ExpenseCategoryId,
+                    //ExpenseCategoryId = g.ExpenseCategoryId,
                     CategoryName = g.ExpenseCategory.CategoryName,
                     TotalExpense = g.ExpenseAmount
                 }).ToList();
