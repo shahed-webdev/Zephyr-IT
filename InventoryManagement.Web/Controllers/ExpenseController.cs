@@ -85,7 +85,6 @@ namespace InventoryManagement.Web.Controllers
 
 
 
-
         // POST: Delete/5
         //public int Delete(int id)
         //{
@@ -100,6 +99,10 @@ namespace InventoryManagement.Web.Controllers
         {
             return View();
         }
+
+
+
+
 
 
         protected override void Dispose(bool disposing)

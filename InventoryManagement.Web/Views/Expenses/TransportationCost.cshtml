@@ -9,7 +9,7 @@
 
 @section Styles{
     <style>
-        .delete { cursor: pointer; color: red }
+        .delete { cursor: pointer; color: red; }
         #grandTotal { font-size: 22px; margin-right: 15px; font-weight: bold; }
     </style>
 }
@@ -26,7 +26,6 @@
             </button>
         </div>
     }
-
 
     <div class="card card-body">
         <div class="form-row">
@@ -101,7 +100,7 @@
 
     <div class="mt-4 text-right">
         <strong id="grandTotal"></strong>
-        <button id="btnSubmit" class="btn peach-gradient mb-1 waves-effect waves-light m-0">Submit <i class="fas fa-check ml-1"></i></button>
+        <button id="btnSubmit" class="btn peach-gradient mb-1 m-0">Submit <i class="fas fa-check ml-1"></i></button>
     </div>
 </div>
 
@@ -217,17 +216,27 @@
                     ExpenseTransportationList: listedData
                 }
 
-                if (!model.CustomerId || !model.ExpenseDate || !model.ExpenseNote) return;
+
+                if (!model.CustomerId || !model.ExpenseDate || !model.ExpenseNote || !listedData.length) {
+                    $.notify("Required Info Not Provided", "error");
+                    return;
+                }
+
+                disableSubmit(true, this);
 
                 $.ajax({
                     type: "POST",
-                    url: `/Expense/PostTransportationCost`,
+                    url: `/Expenses/PostTransportationCost`,
                     data: model,
-                    success: function (res) {
-                        console.log(res)
-                        $.notify(res.Message, res.IsSuccess ? "success" : "error");
+                    success: response => {
+                        disableSubmit(false, this);
+                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
+
+                        if (response.IsSuccess)
+                            location.href = "/Expenses/Index";
                     },
-                    error: function (response) {
+                    error: response => {
+                        disableSubmit(false, this);
                         console.log(response);
                     }
                 });
@@ -235,6 +244,10 @@
 
             function sumTotal() {
                 return listedData.reduce((acc, item) => acc + +item.ExpenseAmount, 0);
+            }
+
+            function disableSubmit(isSubmit, btn) {
+                btn.disabled = isSubmit;
             }
         }());
     </script>
