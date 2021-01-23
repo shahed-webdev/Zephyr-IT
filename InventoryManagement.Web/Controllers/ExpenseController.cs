@@ -26,7 +26,8 @@ namespace InventoryManagement.Web.Controllers
             return View();
         }
 
-        public IActionResult IndexData()
+        //data-table
+        public IActionResult GetExpense()
         {
             var data = _db.Expenses.ToListCustom();
             return Json(data);
@@ -83,12 +84,20 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
+        public IActionResult TransportationCostDetails(int? id)
+        {
+            if (!id.HasValue) return RedirectToAction("Index");
+
+            return View();
+        }
+
+
         //**Fixed Cost***
         [Authorize(Roles = "admin, fixedCost")]
         public IActionResult FixedCost()
         {
-            //var model = _expense.FixedCostRecords();
-            return View();
+            var model = _expense.FixedCostRecords();
+            return View(model.Data);
         }
 
         //add
@@ -101,6 +110,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //delete
+        [Authorize(Roles = "admin, fixedCost")]
         public IActionResult DeleteFixedCost(int id)
         {
             var response = _expense.DeleteFixedCost(id);
