@@ -1,4 +1,5 @@
-﻿
+﻿@using InventoryManagement.Repository
+@model ExpenseTransportationDetailsModel
 @{
     ViewData["Title"] = "Transportation Cost Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -12,27 +13,30 @@
 }
 
 <div class="container">
-    <h4 class="page-header mb-3">Transportation Cost Details</h4>
+    <div class="mb-3">
+        <h4 class="page-header">Transportation Cost Details</h4>
+        <em>Expense By: @Model.CreateBy</em>
+    </div>
 
     <div class="card card-body">
         <div class="form-row">
             <div class="col-lg-4">
                 <div class="form-group">
                     <label>Target Client/Corporate</label>
-                    <input id="inputCustomer" type="text" class="form-control" />
-                    <input id="hiddenCustomerId" type="hidden" />
+                    <input id="inputCustomer" type="text" class="form-control" value="@Model.CustomerName"/>
+                    <input id="hiddenCustomerId" type="hidden" value="@Model.CustomerId"/>
                 </div>
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
                     <label>Expanse Date</label>
-                    <input id="expenseDate" type="text" class="form-control datepicker" required />
+                    <input id="expenseDate" type="text" class="form-control datepicker" value="@Model.ExpenseDate.ToString("d MMM yyyy")" required/>
                 </div>
             </div>
             <div class="col-lg-5">
                 <div class="form-group">
                     <label>Note</label>
-                    <input id="expenseNote" type="text" class="form-control" />
+                    <input id="expenseNote" value="@Model.ExpenseNote" type="text" class="form-control"/>
                 </div>
             </div>
         </div>
@@ -42,26 +46,26 @@
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label>Details</label>
-                        <input name="ExpenseFor" type="text" class="form-control" required />
+                        <input name="ExpenseFor" type="text" class="form-control" required/>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
                         <label>Person</label>
-                        <input name="NumberOfPerson" type="number" class="form-control" required />
+                        <input name="NumberOfPerson" type="number" class="form-control" required/>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Vehicle</label>
-                        <input name="Vehicle" type="text" class="form-control" required />
+                        <input name="Vehicle" type="text" class="form-control" required/>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Tk</label>
                         <div class="input-group align-items-center">
-                            <input name="ExpenseAmount" type="number" class="form-control" required />
+                            <input name="ExpenseAmount" type="number" class="form-control" required/>
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-success btn-md my-0">Add</button>
                             </div>
@@ -73,52 +77,59 @@
 
         <table class="table table-sm">
             <thead>
-                <tr>
-                    <th><strong>Details</strong></th>
-                    <th><strong>Person</strong></th>
-                    <th><strong>Vehicle</strong></th>
-                    <th><strong>Tk</strong></th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th><strong>Details</strong></th>
+                <th><strong>Person</strong></th>
+                <th><strong>Vehicle</strong></th>
+                <th><strong>Tk</strong></th>
+                <th><strong>Delete</strong></th>
+            </tr>
             </thead>
             <tbody id="tbody"></tbody>
         </table>
     </div>
 
-    <div class="mt-4 text-right">
-        <strong id="grandTotal"></strong>
-        <button id="btnSubmit" class="btn peach-gradient mb-1 m-0">Update <i class="fas fa-check ml-1"></i></button>
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <a href="/Expenses/Index">Back To List</a>
+        <div>
+            <strong id="grandTotal"></strong>
+            <button id="btnSubmit" class="btn peach-gradient mb-1 m-0">Update <i class="fas fa-check ml-1"></i></button>
+
+            <div class="mt-2 text-right">
+                <input type="checkbox" class="form-check-input" id="checkApprove" @(Model.IsApproved ? "disabled" : "")>
+                <label class="form-check-label" for="checkApprove">@(Model.IsApproved ? "Approved" : "Approve Expense")</label>
+            </div>
+        </div>
     </div>
 </div>
 
 @section Scripts{
     <script>
-        $(function () {
-            $('.datepicker').pickadate({clear: ''});
+        $(function() {
+            $('.datepicker').pickadate({ clear: '' });
 
             //customer autocomplete
-            hiddenCustomerId.value = "";
-            inputCustomer.addEventListener("input", function () {
+            inputCustomer.addEventListener("input", function() {
                 hiddenCustomerId.value = "";
             });
 
             $('#inputCustomer').typeahead({
                 minLength: 1,
-                displayText: function (item) {
+                displayText: function(item) {
                     return `${item.CustomerName}  ${item.PhonePrimary ? item.PhonePrimary : ''}  ${item.OrganizationName ? item.OrganizationName : ''}`;
                 },
-                afterSelect: function (item) {
+                afterSelect: function(item) {
                     this.$element[0].value = item.CustomerName
                 },
-                source: function (request, result) {
+                source: function(request, result) {
                     $.ajax({
                         url: "/Selling/FindCustomers",
                         data: { prefix: request },
-                        success: function (response) { result(response); },
-                        error: function (err) { console.log(err) }
+                        success: function(response) { result(response); },
+                        error: function(err) { console.log(err) }
                     });
                 },
-                updater: function (item) {
+                updater: function(item) {
                     hiddenCustomerId.value = item.CustomerId;
                     return item;
                 }
@@ -126,11 +137,12 @@
         });
 
         //private method
-        (function () {
-            let listedData = [];
-            const serializeForm = function (form) {
+        (function() {
+            let listedData = @Html.Raw(Json.Serialize(Model.ExpenseTransportationList));
+
+            const serializeForm = function(form) {
                 const obj = {};
-                obj.id = new Date().getTime();
+                obj.ExpenseTransportationListId = new Date().getTime();
 
                 const formData = new FormData(form);
                 for (let key of formData.keys()) {
@@ -140,11 +152,12 @@
             };
 
             const btnSubmit = document.getElementById("btnSubmit");
+            const checkApprove = document.getElementById("checkApprove");
             const formAdd = document.getElementById("formAdd");
             const tBody = document.getElementById("tbody");
 
             //add to list
-            formAdd.addEventListener("submit", function (evt) {
+            formAdd.addEventListener("submit", function(evt) {
                 evt.preventDefault();
 
                 listedData.push(serializeForm(this));
@@ -159,7 +172,7 @@
 
                 listedData.forEach(item => {
                     const tr = document.createElement("tr");
-                    tr.innerHTML = `<td>${item.ExpenseFor}</td><td>${item.NumberOfPerson}</td><td>${item.Vehicle}</td><td>৳${item.ExpenseAmount}</td><td><i id="${item.id}" class="delete fas fa-trash"></i></td>`;
+                    tr.innerHTML = `<td>${item.ExpenseFor}</td><td>${item.NumberOfPerson}</td><td>${item.Vehicle}</td><td>৳${item.ExpenseAmount}</td><td><i id="${item.ExpenseTransportationListId}" class="delete fas fa-trash"></i></td>`;
                     fragment.appendChild(tr);
                 });
 
@@ -170,20 +183,20 @@
             }
 
             //delete
-            tBody.addEventListener("click", function (evt) {
+            tBody.addEventListener("click", function(evt) {
                 const onDelete = evt.target.classList.contains("delete");
                 if (!onDelete) return;
 
                 const id = +evt.target.id;
                 evt.target.parentElement.parentElement.remove();
 
-                listedData = listedData.filter(el => el.id !== id);
+                listedData = listedData.filter(el => el.ExpenseTransportationListId !== id);
 
                 showTable();
             });
 
             //post data
-            btnSubmit.addEventListener("click", function (evt) {
+            btnSubmit.addEventListener("click", function(evt) {
                 evt.preventDefault();
 
                 const customerId = document.getElementById("hiddenCustomerId");
@@ -194,6 +207,7 @@
                     inputCustomer.value = "";
 
                 const model = {
+                    ExpenseTransportationId: @Model.ExpenseTransportationId,
                     CustomerId: customerId.value,
                     ExpenseDate: expenseDate.value,
                     ExpenseNote: expenseNote.value,
@@ -211,14 +225,11 @@
 
                 $.ajax({
                     type: "POST",
-                    url: `/Expenses/PostTransportationCost`,
+                    url: `/Expenses/UpdateTransportationCost`,
                     data: model,
                     success: response => {
                         disableSubmit(false, this);
                         $.notify(response.Message, response.IsSuccess ? "success" : "error");
-
-                        if (response.IsSuccess)
-                            location.href = "/Expenses/Index";
                     },
                     error: response => {
                         disableSubmit(false, this);
@@ -234,6 +245,28 @@
             function disableSubmit(isSubmit, btn) {
                 btn.disabled = isSubmit;
             }
+
+            //approve check
+            checkApprove.addEventListener("click", function() {
+                disableSubmit(true, this);
+
+                $.ajax({
+                    type: "POST",
+                    url: `/Expenses/ApproveTransportationCost`,
+                    data: {id: @Model.ExpenseTransportationId},
+                    success: response => {
+                        disableSubmit(!response.IsSuccess, this);
+                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                    },
+                    error: response => {
+                        disableSubmit(false, this);
+                        console.log(response);
+                    }
+                });
+            });
+
+            //bind inserted data
+            showTable();
         }());
     </script>
 }

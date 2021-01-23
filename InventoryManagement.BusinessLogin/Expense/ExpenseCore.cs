@@ -184,6 +184,7 @@ namespace InventoryManagement.BusinessLogin
             try
             {
                 _db.ExpenseTransportations.Edit(model);
+                _db.SaveChanges();
                 return new DbResponse(true, "Changed Successfully");
             }
             catch (Exception e)

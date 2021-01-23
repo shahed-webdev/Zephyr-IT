@@ -14,12 +14,12 @@
                 <thead>
                     <tr>
                         <th>Voucher No</th>
-                        <th>Category</th>
+                        <th class="text-left">Category</th>
                         <th>Amount</th>
-                        <th>Expense&nbsp;For</th>
+                        <th class="text-left">Expense&nbsp;For</th>
                         <th>Expense&nbsp;Date</th>
                         <th>Posted By</th>
-                        <th>Approve?</th>
+                        <th>Details</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,12 +27,21 @@
                     {
                         <tr>
                             <td>@item.VoucherNo</td>
-                            <td>@item.ExpenseCategory</td>
-                            <td>@item.ExpenseAmount</td>
-                            <td>@item.ExpenseFor</td>
-                            <td>@item.ExpenseDate</td>
+                            <td class="text-left">@item.ExpenseCategory</td>
+                            <td class="text-right">৳@item.ExpenseAmount</td>
+                            <td class="text-left">@item.ExpenseFor</td>
+                            <td>@item.ExpenseDate.ToString("d MMM yyyy")</td>
                             <td>@item.CreateBy</td>
-                            <td></td>
+                            <td>
+                                @if (item.IsTransportation)
+                                {
+                                    <a class="@(item.IsApproved?"text-success":"text-danger")" href="/Expenses/TransportationCostDetails/@item.Id">Details</a>
+                                }
+                                else
+                                {
+                                    <a class="@(item.IsApproved?"text-success":"text-danger")" href="/Expenses/GeneralExpenseDetails/@item.Id">Details</a>
+                                }
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -48,36 +57,36 @@
             $("#data-table").DataTable();
         });
 
-            //const dataTable = {
-            //    table: null,
-            //    filter: null,
-            //    init: function() {
-            //        dataTable.table = $("#data-table1").DataTable({
-            //            processing: true,
-            //            serverSide: true,
-            //            ajax: {
-            //                url: "/Expenses/GetExpense",
-            //                type: "POST"
-            //            },
-            //            columns:
-            //            [
-            //                { data: "VoucherNo" },
-            //                { data: "ExpenseCategory" },
-            //                { data: "ExpenseAmount" },
-            //                { data: "ExpenseFor" },
-            //                { data: "ExpenseDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
-            //                { data: "Id", "render": function(data) { return `<a class="fas fa-edit update" href="/Expense/Edit/${data}"></a>`; } }
-            //            ],
-            //            columnDefs: [
-            //                { 'searchable': false, 'targets': [4] },
-            //                { 'sortable': false, 'targets': [4] },
-            //                { 'className': "text-left", "targets": [0, 2] }
-            //            ]
-            //        });
-            //    },
-            //    getData: function() {
-            //        dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
-            //    }
-            //}
+                //const dataTable = {
+                //    table: null,
+                //    filter: null,
+                //    init: function() {
+                //        dataTable.table = $("#data-table1").DataTable({
+                //            processing: true,
+                //            serverSide: true,
+                //            ajax: {
+                //                url: "/Expenses/GetExpense",
+                //                type: "POST"
+                //            },
+                //            columns:
+                //            [
+                //                { data: "VoucherNo" },
+                //                { data: "ExpenseCategory" },
+                //                { data: "ExpenseAmount" },
+                //                { data: "ExpenseFor" },
+                //                { data: "ExpenseDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
+                //                { data: "Id", "render": function(data) { return `<a class="fas fa-edit update" href="/Expense/Edit/${data}"></a>`; } }
+                //            ],
+                //            columnDefs: [
+                //                { 'searchable': false, 'targets': [4] },
+                //                { 'sortable': false, 'targets': [4] },
+                //                { 'className': "text-left", "targets": [0, 2] }
+                //            ]
+                //        });
+                //    },
+                //    getData: function() {
+                //        dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
+                //    }
+                //}
     </script>
 }
