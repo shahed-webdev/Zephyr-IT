@@ -1,4 +1,7 @@
-﻿using InventoryManagement.Data;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using InventoryManagement.Data;
+using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,8 +12,10 @@ namespace InventoryManagement.Repository
 {
     public class ExpenseRepository : Repository<Expense>, IExpenseRepository
     {
-        public ExpenseRepository(ApplicationDbContext context) : base(context)
+        protected readonly IMapper _mapper;
+        public ExpenseRepository(ApplicationDbContext context, IMapper mapper) : base(context)
         {
+            _mapper = mapper;
         }
 
         public ICollection<ExpenseViewModel> ToListCustom()
@@ -27,6 +32,17 @@ namespace InventoryManagement.Repository
             }).ToList();
 
             return expense;
+        }
+
+        public DataResult<ExpenseAllViewModel> RecordsDataTable(DataRequest request)
+        {
+            return Context.ExpenseTransportation
+                .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider)
+                .Union(Context.Expense
+                    .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider))
+                .OrderByDescending(r => r.ExpenseDate)
+                .ToDataResult(request);
+
         }
 
         public Task<List<ExpenseViewModel>> ToListCustomAsync()
