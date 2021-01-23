@@ -14,6 +14,7 @@ namespace InventoryManagement.Repository
 
     public class ExpenseTransportationListAddModel
     {
+        public int ExpenseTransportationListId { get; set; }
         public int NumberOfPerson { get; set; }
         public string ExpenseFor { get; set; }
         public string Vehicle { get; set; }
