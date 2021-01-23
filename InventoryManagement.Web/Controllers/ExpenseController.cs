@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Threading.Tasks;
+using JqueryDataTables.LoopsIT;
 
 namespace InventoryManagement.Web.Controllers
 {
@@ -27,9 +28,9 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //data-table
-        public IActionResult GetExpense()
+        public IActionResult GetExpense(DataRequest request)
         {
-            var data = _db.Expenses.ToListCustom();
+            var data = _expense.ExpenseRecords(request);
             return Json(data);
         }
 
