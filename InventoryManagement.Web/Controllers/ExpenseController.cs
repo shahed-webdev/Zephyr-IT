@@ -26,9 +26,9 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //data-table
-        public IActionResult GetExpense()
+        public IActionResult GetExpense(DataRequest request)
         {
-            var data = _db.Expenses.ToListCustom();
+            var data = _expense.ExpenseRecords(request);
             return Json(data);
         }
 
