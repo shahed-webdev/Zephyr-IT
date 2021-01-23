@@ -15,7 +15,7 @@ namespace InventoryManagement.BusinessLogin
         DbResponse DeleteCost(int expenseId);
         DbResponse EditCost(ExpenseAddModel model);
 
-
+        DbResponse<ExpenseAddModel> GetCost(int expenseId);
 
         DbResponse AddTransportationCost(ExpenseTransportationAddModel model, string userName, bool isApproved);
         DbResponse ApprovedTransportationCost(int expenseTransportationId);

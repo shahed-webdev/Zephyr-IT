@@ -102,6 +102,21 @@ namespace InventoryManagement.BusinessLogin
             }
         }
 
+        public DbResponse<ExpenseAddModel> GetCost(int expenseId)
+        {
+            try
+            {
+                var data = _db.Expenses.GetDetails(expenseId);
+
+
+                return new DbResponse<ExpenseAddModel>(true, "Success", data);
+            }
+            catch (Exception e)
+            {
+                return new DbResponse<ExpenseAddModel>(false, e.Message);
+            }
+        }
+
         public DbResponse AddTransportationCost(ExpenseTransportationAddModel model, string userName, bool isApproved)
         {
             try

@@ -108,6 +108,21 @@ namespace InventoryManagement.Repository
             Update(expense);
         }
 
+        public ExpenseAddModel GetDetails(int expenseId)
+        {
+            var expense = Find(expenseId);
+
+            return new ExpenseAddModel
+            {
+                ExpenseId = expense.ExpenseId,
+                ExpenseCategoryId = expense.ExpenseCategoryId,
+                CategoryName = expense.ExpenseCategory.CategoryName,
+                ExpenseAmount = expense.ExpenseAmount,
+                ExpenseFor = expense.ExpenseFor,
+                ExpenseDate = expense.ExpenseDate
+            };
+        }
+
         public void RemoveCustom(int id)
         {
             var expense = Find(id);
