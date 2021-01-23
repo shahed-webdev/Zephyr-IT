@@ -55,6 +55,9 @@ namespace InventoryManagement.Repository
             var g = Context.Expense
                 .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider)
                 .ToList();
+            records.AddRange(g);
+            records.AddRange(t);
+
             return records.OrderByDescending(r => r.ExpenseDate).ToList();
         }
 
@@ -74,11 +77,11 @@ namespace InventoryManagement.Repository
             return expense;
         }
 
-        public void AddCustom(ExpenseAddModel model, int voucherNo, bool isApproved)
+        public void AddCustom(ExpenseAddModel model, int registrationId, int voucherNo, bool isApproved)
         {
             Add(new Expense
             {
-                RegistrationId = model.RegistrationId,
+                RegistrationId = registrationId,
                 ExpenseCategoryId = model.ExpenseCategoryId,
                 ExpenseAmount = model.ExpenseAmount,
                 ExpenseFor = model.ExpenseFor,

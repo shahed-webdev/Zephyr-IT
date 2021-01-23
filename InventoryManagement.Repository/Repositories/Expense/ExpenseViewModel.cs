@@ -37,8 +37,6 @@ namespace InventoryManagement.Repository
     {
         public int ExpenseId { get; set; }
         [Required]
-        public int RegistrationId { get; set; }
-        [Required]
         public int ExpenseCategoryId { get; set; }
         public string CategoryName { get; set; }
         [Required]

@@ -39,6 +39,34 @@ namespace InventoryManagement.BusinessLogin
             }
         }
 
+        public DbResponse AddCost(ExpenseAddModel model, string userName, bool isApproved)
+        {
+            try
+            {
+                var registrationId = _db.Registrations.GetRegID_ByUserName(userName);
+                var voucherNo = _db.Institutions.GetVoucherCountdown() + 1;
+
+                _db.Expenses.AddCustom(model, registrationId, voucherNo, isApproved);
+                _db.SaveChanges();
+
+                return new DbResponse(true, "Added Successfully");
+            }
+            catch (Exception e)
+            {
+                return new DbResponse(false, e.Message);
+            }
+        }
+
+        public DbResponse ApprovedCost(int expenseId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DbResponse DeleteCost(int expenseId)
+        {
+            throw new NotImplementedException();
+        }
+
         public DbResponse AddTransportationCost(ExpenseTransportationAddModel model, string userName, bool isApproved)
         {
             try
