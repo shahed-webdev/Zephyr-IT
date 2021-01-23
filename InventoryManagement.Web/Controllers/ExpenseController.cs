@@ -166,7 +166,7 @@ namespace InventoryManagement.Web.Controllers
         [Authorize(Roles = "admin, expenseReport")]
         public IActionResult ExpenseReport()
         {
-            return View();
+            return View(_expense.ExpenseRecords().Data);
         }
 
 

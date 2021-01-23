@@ -1,8 +1,39 @@
-﻿
+﻿@using InventoryManagement.Repository
+@model IEnumerable<ExpenseAllViewModel>
 @{
     ViewData["Title"] = "Expense Report";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>ExpenseReport</h1>
-
+<div class="m-md-3">
+    <h4 class="page-header mb-3">Expense Report</h4>
+    <div class="card card-body">
+        <div class="table-responsive">
+            <table id="data-table" class="table table-sm table-bordered">
+                <thead>
+                    <tr>
+                        <th>Voucher No</th>
+                        <th class="text-left">Category</th>
+                        <th>Amount</th>
+                        <th class="text-left">Expense&nbsp;For</th>
+                        <th>Expense&nbsp;Date</th>
+                        <th>Posted By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.VoucherNo</td>
+                            <td class="text-left">@item.ExpenseCategory</td>
+                            <td class="text-right">৳@item.ExpenseAmount</td>
+                            <td class="text-left">@item.ExpenseFor</td>
+                            <td>@item.ExpenseDate.ToString("d MMM yyyy")</td>
+                            <td>@item.CreateBy</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
