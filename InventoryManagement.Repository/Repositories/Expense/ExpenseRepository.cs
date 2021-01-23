@@ -45,6 +45,19 @@ namespace InventoryManagement.Repository
 
         }
 
+        public List<ExpenseAllViewModel> Records()
+        {
+            var records = new List<ExpenseAllViewModel>();
+            var t = Context.ExpenseTransportation
+                  .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider)
+                  .ToList();
+
+            var g = Context.Expense
+                .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider)
+                .ToList();
+            return records.OrderByDescending(r => r.ExpenseDate).ToList();
+        }
+
         public Task<List<ExpenseViewModel>> ToListCustomAsync()
         {
             var expense = Context.Expense.Include(e => e.ExpenseCategory).Select(e => new ExpenseViewModel

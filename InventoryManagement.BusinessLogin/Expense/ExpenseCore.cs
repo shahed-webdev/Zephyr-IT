@@ -26,6 +26,19 @@ namespace InventoryManagement.BusinessLogin
             }
         }
 
+        public DbResponse<List<ExpenseAllViewModel>> ExpenseRecords()
+        {
+            try
+            {
+                var data = _db.Expenses.Records();
+                return new DbResponse<List<ExpenseAllViewModel>>(true, "Success", data);
+            }
+            catch (Exception e)
+            {
+                return new DbResponse<List<ExpenseAllViewModel>>(false, e.Message);
+            }
+        }
+
         public DbResponse AddTransportationCost(ExpenseTransportationAddModel model, string userName, bool isApproved)
         {
             try
