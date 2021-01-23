@@ -1,4 +1,5 @@
-﻿using InventoryManagement.BusinessLogin;
+﻿using System;
+using InventoryManagement.BusinessLogin;
 using InventoryManagement.Repository;
 using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
@@ -164,11 +165,17 @@ namespace InventoryManagement.Web.Controllers
 
         //Report
         [Authorize(Roles = "admin, expenseReport")]
-        public IActionResult ExpenseReport()
+        public IActionResult ExpenseReport(DateTime? from, DateTime? to)
         {
-            return View(_expense.ExpenseRecords().Data);
+            return View(_expense.CategoryWistSummaryDateToDate(from, to).Data);
         }
 
+
+        [Authorize(Roles = "admin, expenseReport")]
+        public IActionResult ExpenseCategoryDetails(string category, DateTime? from, DateTime? to)
+        {
+            return View(_expense.CategoryWistDetailsDateToDate(category,from, to).Data);
+        }
 
         protected override void Dispose(bool disposing)
         {
