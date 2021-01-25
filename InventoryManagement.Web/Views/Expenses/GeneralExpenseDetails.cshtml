@@ -13,7 +13,7 @@
 
     <form asp-action="UpdateGeneralExpense">
         <input type="hidden" name="ExpenseId" value="@Model.ExpenseId" />
-     
+
         <div class="card card-body">
             <div class="form-row">
                 <div class="col-7">
@@ -39,7 +39,7 @@
 
             <div class="form-group">
                 <label>Expanse Date</label>
-                <input asp-for="ExpenseDate" type="text" class="form-control datepicker" required />
+                <input asp-for="ExpenseDate" class="form-control datepicker" required />
             </div>
 
             <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -68,7 +68,7 @@
 @section Scripts{
     <script>
         $(function() {
-            $('.datepicker').pickadate({ clear: ''});
+            $('.datepicker').pickadate();
         });
 
         //approve check
@@ -79,7 +79,7 @@
             $.ajax({
                 type: "POST",
                 url: `/Expenses/ApproveGeneralExpense`,
-                data: {id: @Model.ExpenseId},
+                data: { id: @Model.ExpenseId },
                 success: response => {
                     this.disabled = response.IsSuccess;
                     $.notify(response.Message, response.IsSuccess ? "success" : "error");

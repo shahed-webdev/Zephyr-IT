@@ -21,7 +21,7 @@ namespace InventoryManagement.Repository
         public string ExpenseFor { get; set; }
 
         [Required]
-        [DisplayFormat(DataFormatString = "dd MMM yyyy")]
+        [DisplayFormat(DataFormatString = "{0:d MMMM, yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ExpenseDate { get; set; }
     }
 
@@ -43,7 +43,7 @@ namespace InventoryManagement.Repository
         public double ExpenseAmount { get; set; }
         public string ExpenseFor { get; set; }
         [Required]
-        [DisplayFormat(DataFormatString = "dd MMM yyyy")]
+        [DisplayFormat(DataFormatString = "{0:d MMMM, yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ExpenseDate { get; set; }
     }
 
@@ -57,8 +57,7 @@ namespace InventoryManagement.Repository
         public double ExpenseAmount { get; set; }
         public string ExpenseFor { get; set; }
 
-        [DisplayFormat(DataFormatString = "dd MMM yyyy")]
+        [DisplayFormat(DataFormatString = "{0:d MMMM, yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ExpenseDate { get; set; }
     }
-
 }

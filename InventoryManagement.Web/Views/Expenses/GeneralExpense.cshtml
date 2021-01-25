@@ -45,7 +45,7 @@
 
             <div class="form-group">
                 <label>Expanse Date</label>
-                <input name="ExpenseDate" type="text" class="form-control datepicker" required />
+                <input name="ExpenseDate" type="text" value="@DateTime.Now.ToString("d MMMM, yyyy")" class="form-control datepicker" required />
             </div>
 
             <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -64,10 +64,8 @@
 
 @section Scripts{
     <script>
-        $(function () {
-            $('.datepicker').pickadate({
-                clear: ''
-            }).val(new Date().toDateString());
+        $(function() {
+            $('.datepicker').pickadate({ clear: '' });
         })
     </script>
 }

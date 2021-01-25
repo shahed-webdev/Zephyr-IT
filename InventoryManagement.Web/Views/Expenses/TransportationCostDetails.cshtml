@@ -30,7 +30,7 @@
             <div class="col-lg-3">
                 <div class="form-group">
                     <label>Expanse Date</label>
-                    <input id="expenseDate" type="text" class="form-control datepicker" value="@Model.ExpenseDate.ToString("d MMM yyyy")" required/>
+                    <input id="expenseDate" type="text" class="form-control datepicker" value="@Model.ExpenseDate.ToString("d MMMM, yyyy")" required/>
                 </div>
             </div>
             <div class="col-lg-5">
@@ -67,7 +67,7 @@
                         <div class="input-group align-items-center">
                             <input name="ExpenseAmount" type="number" class="form-control" required/>
                             <div class="input-group-append">
-                                <button type="submit" class="btn btn-success btn-md my-0">Add</button>
+                                <button type="submit" class="btn btn-warning btn-md my-0">Add</button>
                             </div>
                         </div>
                     </div>
