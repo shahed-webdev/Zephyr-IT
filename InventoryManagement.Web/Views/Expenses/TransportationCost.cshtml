@@ -30,7 +30,7 @@
             <div class="col-lg-4">
                 <div class="form-group">
                     <label>Target Client/Corporate</label>
-                    <input id="inputCustomer" type="text" class="form-control" />
+                    <input id="inputCustomer" type="text" class="form-control" placeholder="Internal" />
                     <input id="hiddenCustomerId" type="hidden" />
                 </div>
             </div>
@@ -212,8 +212,7 @@
                     ExpenseTransportationList: listedData
                 }
 
-
-                if (!model.CustomerId || !model.ExpenseDate || !model.ExpenseNote || !listedData.length) {
+                if (!model.ExpenseDate || !model.ExpenseNote || !listedData.length) {
                     $.notify("Required Info Not Provided", "error");
                     return;
                 }
