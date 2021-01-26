@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace InventoryManagement.Repository
 {
     public class ExpenseTransportationAddModel
     {
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public double TotalExpense { get; set; }
         public string ExpenseNote { get; set; }
         public DateTime ExpenseDate { get; set; }
@@ -25,7 +24,7 @@ namespace InventoryManagement.Repository
     public class ExpenseTransportationDetailsModel
     {
         public int ExpenseTransportationId { get; set; }
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public bool IsApproved { get; set; }
         public string CustomerName { get; set; }
         public string CreateBy { get; set; }

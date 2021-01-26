@@ -10,7 +10,7 @@ namespace InventoryManagement.Data
             ExpenseTransportationList = new HashSet<ExpenseTransportationList>();
         }
         public int ExpenseTransportationId { get; set; }
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public int VoucherNo { get; set; }
         public bool IsApproved { get; set; }
         public int RegistrationId { get; set; }
