@@ -47,6 +47,7 @@ namespace InventoryManagement.BusinessLogin
                 var voucherNo = _db.Institutions.GetVoucherCountdown() + 1;
 
                 _db.Expenses.AddCustom(model, registrationId, voucherNo, isApproved);
+                _db.Institutions.IncreaseVoucherCount();
                 _db.SaveChanges();
 
                 return new DbResponse(true, "Added Successfully");
@@ -125,6 +126,7 @@ namespace InventoryManagement.BusinessLogin
                 var voucherNo = _db.Institutions.GetVoucherCountdown() + 1;
 
                 _db.ExpenseTransportations.AddCustom(model, registrationId, voucherNo, isApproved);
+                _db.Institutions.IncreaseVoucherCount();
                 _db.SaveChanges();
 
                 return new DbResponse(true, "Added Successfully");
