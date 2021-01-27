@@ -56,7 +56,6 @@ namespace InventoryManagement.Repository
 
             expenseTransportation.ExpenseTransportationId = model.ExpenseTransportationId;
             expenseTransportation.CustomerId = model.CustomerId;
-            expenseTransportation.VoucherNo = model.VoucherNo;
             expenseTransportation.TotalExpense = model.TotalExpense;
             expenseTransportation.ExpenseNote = model.ExpenseNote;
             expenseTransportation.ExpenseDate = model.ExpenseDate;
