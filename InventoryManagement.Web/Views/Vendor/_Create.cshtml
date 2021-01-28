@@ -34,7 +34,7 @@
                 <div class="form-row">
                     <div class="col-4">
                         <div class="md-form">
-                            <input asp-for="VendorPhone" class="form-control" type="number" required />
+                            <input asp-for="VendorPhone" class="form-control" step="0.01" type="number" required />
                             <label asp-for="VendorPhone">Phone</label>
                             <span asp-validation-for="VendorPhone"></span>
                         </div>

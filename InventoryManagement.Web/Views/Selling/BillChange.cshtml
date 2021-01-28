@@ -116,7 +116,7 @@
                         </li>
                         <li class="md-form mt-4">
                             <label for="inputDiscount">Discount</label>
-                            <input id="inputDiscount" type="number" min="0" class="form-control" value="@Model.SellingDiscountAmount">
+                            <input id="inputDiscount" step="0.01" type="number" min="0" class="form-control" value="@Model.SellingDiscountAmount">
                         </li>
                         <li class="d-flex justify-content-between align-items-center text-success pb-4">
                             <strong>Prev. Paid Amount</strong>
@@ -128,12 +128,12 @@
                         </li>
                         <li class="md-form mt-4">
                             <label for="inputReturnAmount">Return Amount</label>
-                            <input id="inputReturnAmount" value="@Model.SellingReturnAmount" type="number" min="0" class="form-control">
+                            <input id="inputReturnAmount" value="@Model.SellingReturnAmount" step="0.01" type="number" min="0" class="form-control">
                         </li>
 
                         <li class="md-form mb-4">
                             <label for="inputPaid">Paid Amount</label>
-                            <input id="inputPaid" @(Model.SellingDueAmount> 0 ? "":"disabled") type="number" min="0" class="form-control">
+                            <input id="inputPaid" @(Model.SellingDueAmount> 0 ? "":"disabled") type="number" step="0.01" min="0" class="form-control">
                         </li>
                         <li class="md-form">
                             <select id="selectPaymentMethod" class="mdb-select">
