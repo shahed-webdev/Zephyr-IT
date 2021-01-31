@@ -18,7 +18,12 @@
                 </h4>
                 <em>@from @separator @to</em>
             </div>
-            <a href="/Expenses/ExpenseReport" class="d-print-none"><i class="fas fa-long-arrow-alt-left mr-1"></i>Back to Previous</a>
+            <div class="text-right">
+                <h5 id="totalAmount" class="mb-0 font-weight-bold">
+                    Total: ৳@Model.Sum(t => t.ExpenseAmount)
+                </h5>
+                <a href="/Expenses/ExpenseReport" class="d-print-none"><i class="fas fa-long-arrow-alt-left mr-1"></i>Back to Previous</a>
+            </div>
         </div>
 
         <div class="table-responsive">

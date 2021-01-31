@@ -32,7 +32,9 @@
                     <input type="reset" name="reset" value="Reset" class="btn btn-outline-warning py-2" />
                 </div>
             </form>
-            <h5 id="totalAmount" class="mb-0 font-weight-bold"></h5>
+            <h5 id="totalAmount" class="mb-0 font-weight-bold">
+               Total: ৳@Model.Sum(t=>t.TotalExpense)
+            </h5>
         </div>
 
         <div class="table-responsive">
