@@ -54,39 +54,42 @@
 @section Scripts {
     <script>
         $(function () {
-            $("#data-table").DataTable();
+            $("#data-table").DataTable({
+                aaSorting: [[4, 'asc']],
+                iDisplayLength: 50
+            });
         });
 
-                //const dataTable = {
-                //    table: null,
-                //    filter: null,
-                //    init: function() {
-                //        dataTable.table = $("#data-table1").DataTable({
-                //            processing: true,
-                //            serverSide: true,
-                //            ajax: {
-                //                url: "/Expenses/GetExpense",
-                //                type: "POST"
-                //            },
-                //            columns:
-                //            [
-                //                { data: "VoucherNo" },
-                //                { data: "ExpenseCategory" },
-                //                { data: "ExpenseAmount" },
-                //                { data: "ExpenseFor" },
-                //                { data: "ExpenseDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
-                //                { data: "Id", "render": function(data) { return `<a class="fas fa-edit update" href="/Expense/Edit/${data}"></a>`; } }
-                //            ],
-                //            columnDefs: [
-                //                { 'searchable': false, 'targets': [4] },
-                //                { 'sortable': false, 'targets': [4] },
-                //                { 'className': "text-left", "targets": [0, 2] }
-                //            ]
-                //        });
-                //    },
-                //    getData: function() {
-                //        dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
-                //    }
-                //}
+            //const dataTable = {
+            //    table: null,
+            //    filter: null,
+            //    init: function() {
+            //        dataTable.table = $("#data-table1").DataTable({
+            //            processing: true,
+            //            serverSide: true,
+            //            ajax: {
+            //                url: "/Expenses/GetExpense",
+            //                type: "POST"
+            //            },
+            //            columns:
+            //            [
+            //                { data: "VoucherNo" },
+            //                { data: "ExpenseCategory" },
+            //                { data: "ExpenseAmount" },
+            //                { data: "ExpenseFor" },
+            //                { data: "ExpenseDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
+            //                { data: "Id", "render": function(data) { return `<a class="fas fa-edit update" href="/Expense/Edit/${data}"></a>`; } }
+            //            ],
+            //            columnDefs: [
+            //                { 'searchable': false, 'targets': [4] },
+            //                { 'sortable': false, 'targets': [4] },
+            //                { 'className': "text-left", "targets": [0, 2] }
+            //            ]
+            //        });
+            //    },
+            //    getData: function() {
+            //        dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
+            //    }
+            //}
     </script>
 }

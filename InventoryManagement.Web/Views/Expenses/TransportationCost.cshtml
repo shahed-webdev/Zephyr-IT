@@ -228,7 +228,7 @@
                         $.notify(response.Message, response.IsSuccess ? "success" : "error");
 
                         if (response.IsSuccess)
-                            location.href = "/Expenses/Index";
+                            location.href = "/Expenses/TransportationCost";
                     },
                     error: response => {
                         disableSubmit(false, this);
