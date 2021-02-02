@@ -158,7 +158,7 @@
             formAdd.addEventListener("submit", function (evt) {
                 evt.preventDefault();
 
-                listedData.push(serializeForm(this));
+                listedData.unshift(serializeForm(this));
 
                 showTable();
                 this.reset();
