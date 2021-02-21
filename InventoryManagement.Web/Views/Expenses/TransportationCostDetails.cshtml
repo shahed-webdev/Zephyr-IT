@@ -240,7 +240,7 @@
             });
 
             function sumTotal() {
-                return listedData.reduce((acc, item) => acc + +item.ExpenseAmount, 0);
+                return listedData.reduce((acc, item) => acc + +item.ExpenseAmount, 0).toFixed(2);
             }
 
             function disableSubmit(isSubmit, btn) {
