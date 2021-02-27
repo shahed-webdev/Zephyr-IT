@@ -2,6 +2,11 @@
 $(function() {
     // material select initialization
     $('.mdb-select').materialSelect();
+
+    $('.datepicker').pickadate({
+        format: 'd-mmmm-yyyy',
+        min: new Date()
+    });
 });
 
 // global storage

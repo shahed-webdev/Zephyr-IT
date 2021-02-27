@@ -2,6 +2,11 @@
 $(function() {
     // material select initialization
     $('.mdb-select').materialSelect();
+
+    $('.datepicker').pickadate({
+        format: 'd-mmmm-yyyy',
+        min: new Date()
+    });
 });
 
 // global storage
@@ -28,6 +33,7 @@ const totalPayable = formPayment.querySelector('#totalPayable')
 const inputPaid = formPayment.inputPaid
 const totalDue = formPayment.querySelector('#totalDue')
 const selectPaymentMethod = formPayment.selectPaymentMethod
+const inputPromisedDate = formPayment.inputPromisedDate
 
 //customer
 const hiddenCustomerId = formPayment.hiddenCustomerId

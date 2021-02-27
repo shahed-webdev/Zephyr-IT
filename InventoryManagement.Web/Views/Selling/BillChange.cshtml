@@ -133,7 +133,7 @@
 
                         <li class="md-form mb-4">
                             <label for="inputPaid">Paid Amount</label>
-                            <input id="inputPaid" @(Model.SellingDueAmount> 0 ? "":"disabled") type="number" step="0.01" min="0" class="form-control">
+                            <input id="inputPaid" @(Model.SellingDueAmount > 0 ? "" : "disabled") type="number" step="0.01" min="0" class="form-control">
                         </li>
                         <li class="md-form">
                             <select id="selectPaymentMethod" class="mdb-select">
@@ -143,6 +143,10 @@
                                 <option>Cheque</option>
                                 <option>bkash</option>
                             </select>
+                        </li>
+                        <li class="md-form">
+                            <input id="inputPromisedDate" type="text" class="form-control datepicker">
+                            <label for="inputPromisedDate">Promised Payment Date</label>
                         </li>
                     </ul>
                     <div class="text-center">
@@ -157,7 +161,7 @@
 </div>
 
 @section Scripts{
-    <script src="~/page-js/bill-change.js?v=.02"></script>
+    <script src="~/page-js/bill-change.js?v=1.2"></script>
     <script>
         //save previous data
         cartProducts = @Html.Raw(Json.Serialize(Model.Products));

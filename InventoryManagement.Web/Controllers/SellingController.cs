@@ -67,20 +67,36 @@ namespace InventoryManagement.Web.Controllers
             return Json(data);
         }
 
-        //selling record
+        //selling invoice
         [Authorize(Roles = "admin, selling-record")]
         public IActionResult SellingRecords()
         {
             return View();
         }
 
-        //request from data-table(ajax)
+        //selling invoice data-table(ajax)
+        [HttpPost]
         public IActionResult SellingRecordsData(DataRequest request)
         {
             var data = _db.Selling.Records(request);
             return Json(data);
         }
 
+
+        //due invoice
+        [Authorize(Roles = "admin, due-invoice")]
+        public IActionResult DueInvoice()
+        {
+            return View();
+        }
+
+        //due invoice data-table(ajax)
+        [HttpPost]
+        public IActionResult DueInvoiceData(DataRequest request)
+        {
+            var data = _db.Selling.Records(request);
+            return Json(data);
+        }
 
         //GET: Due Collection
         public async Task<IActionResult> DueCollection(int? id)
@@ -116,13 +132,9 @@ namespace InventoryManagement.Web.Controllers
             var dbResponse = await _db.SellingPayments.DuePayMultipleAsync(model, _db).ConfigureAwait(false);
 
             if (dbResponse.IsSuccess)
-            {
                 Ok();
-            }
             else
-            {
                 BadRequest(dbResponse.Message);
-            }
         }
 
 
