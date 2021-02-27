@@ -9,30 +9,100 @@
 {
     <style>
         #codes span { margin: 5px; font-size: 17px; }
-    </style>
+        .code { cursor:pointer}
+        ul.striped li { padding: .6rem; font-size: 1rem; color: #000 }
+        ul.striped li span { margin-left: 5px }
+    </style>  
 }
-<div class="m-md-3">
+<div class="container">
     <a href="/Product/AddProduct"><i class="far fa-long-arrow-alt-left"></i> Back to Product</a>
 
     <div class="card d-block mt-2" id="codes">
         <div class="card-header">
             <h5 class="mb-0 font-weight-bold">@Model.ProductName (@Model.ProductStocks.Count)</h5>
-            <small class="text-muted">@Model.ProductCatalogName</small>
-            <small class="text-muted">, Selling Price: ৳@Model.SellingPrice</small>
-            <small class="text-muted">, Purchase Price: ৳@Model.PurchasePrice</small>
-            <small class="text-muted">, Warranty: @Model.Warranty</small>
-            <small class="text-muted">, Note: @Model.Note</small>
         </div>
 
-        <div class="card-body text-center">
+        <div id="code-container" class="card-body text-center">
             @foreach (var item in Model.ProductStocks)
             {
-                <span class="badge badge-pill badge-info">@item.ProductCode</span>
+                <span data-code="@item.ProductCode" class="code badge badge-pill badge-info">
+                     @item.ProductCode
+                    <i class="far fa-eye"></i>
+                </span>
             }
         </div>
     </div>
-</div>   
+</div>
+
+<!-- Modal  -->
+<div class="modal fade" id="codeDetailsModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-notify modal-warning" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong class="heading lead">@Model.ProductName (@Model.ProductStocks.Count)</strong>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="text-center">
+                    <h4 class="mb-1 font-weight-bold"><strong id="category"></strong></h4>
+                </div>
+                <ul class="striped list-unstyled mb-0">
+                    <li id="receipt"></li>
+                    <li id="purchase"></li>
+                    <li><strong>Code:</strong><span id="productCode"></span></li>
+                    <li><strong>Brand and Model:</strong><span id="productName"></span></li>
+                    <li><strong>Purchase Price:</strong><span id="purchasePrice"></span></li>
+                    <li><strong>Selling Price:</strong><span id="sellingPrice"></span></li>
+                    <li><strong>Warranty:</strong><span id="warranty"></span></li>
+                    <li><strong>Description:</strong><span id="description"></span></li>
+                    <li><strong>Note:</strong><span id="note"></span></li>
+                </ul>
+            </div>   
+        </div>
+    </div>
+</div>
 
 @section Scripts{
-    
+    <script>
+        const formCode = document.getElementById('code-container')
+
+        // on Product code submit
+        formCode.addEventListener('click', evt => {
+            const element = evt.target;
+
+            const onCode = element.classList.contains("code");
+            if (!onCode) return;
+
+            const url = '/Product/FindProductDetailsByCode'
+            const param = { params: { code: element.getAttribute("data-code") } };
+
+            axios.get(url, param).then(res => {
+                appendData(res.data)
+            }).catch(err => console.log(err))
+        })
+
+        //append data
+        function appendData(product) {
+            document.getElementById('category').textContent = product.ProductCatalogName;
+            document.getElementById('productCode').textContent = product.ProductCode;
+            document.getElementById('productName').textContent = product.ProductName;
+            document.getElementById('purchasePrice').textContent = product.PurchasePrice;
+            document.getElementById('sellingPrice').textContent = product.SellingPrice;
+            document.getElementById('warranty').textContent = product.Warranty;
+            document.getElementById('description').textContent = product.Description;
+            document.getElementById('note').textContent = product.Note;
+
+            const bill = document.getElementById('receipt');
+            const purchase = document.getElementById('purchase');
+
+            product.SellingId ? bill.innerHTML = `<strong class="green-text">Bill No: </strong><a target="_blank" href="/Selling/SellingReceipt/${product.SellingId}">#${product.SellingSn}</a>` : bill.innerHTML = '';
+            purchase.innerHTML = `<a target="_blank" href="/Purchase/PurchaseReceipt/${product.PurchaseId}">Purchase Details <i class="fal fa-long-arrow-right"></i></a>`;
+
+            $("#codeDetailsModal").modal("show");
+        }
+    </script>
 }
