@@ -25,7 +25,7 @@ namespace InventoryManagement.Web.Controllers
 
         [Authorize(Roles = "admin, selling")]
         [HttpPost]
-        public async Task<IActionResult> Selling([FromBody] SellingViewModel model)
+        public async Task<IActionResult> Selling(SellingViewModel model)
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
 
@@ -156,7 +156,7 @@ namespace InventoryManagement.Web.Controllers
 
         [Authorize(Roles = "admin, bill-change")]
         [HttpPost]
-        public async Task<IActionResult> BillChange([FromBody] SellingUpdatePostModel model)
+        public async Task<IActionResult> BillChange(SellingUpdatePostModel model)
         {
             var regId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
             model.UpdateRegistrationId = regId;

@@ -371,7 +371,7 @@ const onCheckFormValid = function (evt) {
 }
 
 //submit on server
-const onSellSubmitClicked = function(evt) {
+const onSellSubmitClicked = function (evt) {
     evt.preventDefault()
 
     const valid = validation()
@@ -397,32 +397,25 @@ const onSellSubmitClicked = function(evt) {
         SellingDiscountAmount: +inputDiscount.value | 0,
         SellingPaidAmount: +inputPaid.value | 0,
         PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
-        SellingDate: new Date(),
+        PromisedPaymentDate: inputPromisedDate.value,
         ProductList: productList
     }
 
-    const url = '/Selling/Selling'
-    const options = {
-        method: 'post',
-        url: url,
-        data: body
-    }
-
-    axios(options).then(response => {
-        if (response.data.IsSuccess) {
-            localStoreClear();
-            location.href = `/Selling/SellingReceipt/${response.data.Data}`;
+    $.ajax({
+        url: '/Selling/Selling',
+        type: "POST",
+        data: body,
+        success: function (response) {
+            if (response.data.IsSuccess) {
+                localStoreClear();
+                location.href = `/Selling/SellingReceipt/${response.data.Data}`;
+            }
+        },
+        error: function (error) {
+            console.log(error);
+            btnSubmit.innerText = 'Sell Product';
+            btnSubmit.disabled = false;
         }
-    }).catch(error => {
-        if (error.response)
-            customerError.textContent = error.response.data.Message;
-        else if (error.request)
-            console.log(error.request);
-        else
-            console.log('Error', error.message);
-    }).finally(() => {
-        btnSubmit.innerText = 'Sell Product';
-        btnSubmit.disabled = false;
     });
 }
 

@@ -33,6 +33,7 @@ const totalPrevPaid = formPayment.querySelector('#totalPrevPaid');
 const totalDue = formPayment.querySelector('#totalDue');
 const inputPaid = formPayment.inputPaid;
 const selectPaymentMethod = formPayment.selectPaymentMethod;
+const inputPromisedDate = formPayment.inputPromisedDate;
 
 //customer
  const hiddenSellingId = formPayment.hiddenSellingId;
@@ -406,31 +407,26 @@ const onSellSubmitClicked = function(evt) {
         SellingReturnAmount: +inputReturnAmount.value || 0,
         PaidAmount: +inputPaid.value,
         PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
+        PromisedPaymentDate: inputPromisedDate.value,
         AddedProductCodes: addedProductCodes,
         RemovedProductCodes: removedProductCodes,
-        PaidDate: new Date(),
         Products: products
     }
 
-    const url = '/Selling/BillChange'
-    const options = {
-        method: 'post',
-        url: url,
-        data: body
-    }
-
-    axios(options).then(response => {
-        location.href = `/Selling/SellingReceipt/${response.data}`
-    }).catch(error => {
-        if (error.response)
-            customerError.textContent = error.response.data.Message
-        else if (error.request)
-            console.log(error.request)
-        else
-            console.log('Error', error.message)
-    }).finally(() => {
-        btnSubmit.innerText = 'Sell Product'
-        btnSubmit.disabled = false
+    $.ajax({
+        url: '/Selling/BillChange',
+        type: "POST",
+        data: body,
+        success: function (response) {
+            if (response.data.IsSuccess) {
+                location.href = `/Selling/SellingReceipt/${response.data}`
+            }
+        },
+        error: function (error) {
+            console.log(error);
+            btnSubmit.innerText = 'Update Bill'
+            btnSubmit.disabled = false
+        }
     });
 }
 
