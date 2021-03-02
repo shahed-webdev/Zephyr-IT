@@ -17,6 +17,7 @@ namespace InventoryManagement.Repository
         public double SellingPaidAmount { get; set; }
         public string PaymentMethod { get; set; }
         public DateTime SellingDate { get; set; }
+        public DateTime? PromisedPaymentDate { get; set; }
         //public string[] ProductCodes { get; set; }
         public ICollection<SellingProductListViewModel> ProductList { get; set; }
     }

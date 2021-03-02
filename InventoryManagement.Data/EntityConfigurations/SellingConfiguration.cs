@@ -15,6 +15,9 @@ namespace InventoryManagement.Data
             entity.Property(e => e.LastUpdateDate)
                 .HasColumnType("date");
 
+            entity.Property(e => e.PromisedPaymentDate)
+                .HasColumnType("date");
+
             entity.Property(e => e.SellingDate)
                 .HasColumnType("date")
                 .HasDefaultValueSql("(getdate())");

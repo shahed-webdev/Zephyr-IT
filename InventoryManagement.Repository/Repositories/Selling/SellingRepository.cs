@@ -52,6 +52,7 @@ namespace InventoryManagement.Repository
                 SellingPaidAmount = model.SellingPaidAmount,
                 SellingDate = DateTime.Now.BdTime().Date,
                 LastUpdateDate = DateTime.Now.BdTime().Date,
+                PromisedPaymentDate = model.PromisedPaymentDate,
                 SellingList = model.ProductList.Select(l => new SellingList
                 {
                     ProductId = l.ProductId,

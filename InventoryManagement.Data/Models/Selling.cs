@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace InventoryManagement.Data
 {
-    public partial class Selling
+    public class Selling
     {
         public Selling()
         {
@@ -26,6 +26,13 @@ namespace InventoryManagement.Data
         public DateTime SellingDate { get; set; }
         public DateTime? LastUpdateDate { get; set; }
         public DateTime InsertDate { get; set; }
+        public DateTime? PromisedPaymentDate { get; set; }
+        public double ServiceCharge { get; set; }
+        public string ServiceChargeDescription { get; set; }
+        public double Expense { get; set; }
+        public string ExpenseDescription { get; set; }
+        
+
 
         public virtual Customer Customer { get; set; }
         public virtual Registration Registration { get; set; }
