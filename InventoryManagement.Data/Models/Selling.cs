@@ -28,6 +28,7 @@ namespace InventoryManagement.Data
         public DateTime InsertDate { get; set; }
         public DateTime? PromisedPaymentDate { get; set; }
         public double ServiceCharge { get; set; }
+        public double ServiceCost { get; set; }
         public string ServiceChargeDescription { get; set; }
         public double Expense { get; set; }
         public string ExpenseDescription { get; set; }
