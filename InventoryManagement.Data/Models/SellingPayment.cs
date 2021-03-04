@@ -24,5 +24,11 @@ namespace InventoryManagement.Data
         public virtual Registration Registration { get; set; }
         public virtual ICollection<SellingPaymentList> SellingPaymentList { get; set; }
         public virtual ICollection<ServicePaymentList> ServicePaymentList { get; set; }
+
+
+        public int AccountId { get; set; }
+        public Account Account { get; set; }
+        public decimal AccountCost { get; set; }
+        public decimal AccountCostPercentage { get; set; }
     }
 }

@@ -18,5 +18,7 @@ namespace InventoryManagement.Data
         public virtual Selling Selling { get; set; }
         public virtual Product Product { get; set; }
         public virtual ICollection<ProductStock> ProductStock { get; set; }
+        
+        public double PurchasePrice { get; set; }
     }
 }

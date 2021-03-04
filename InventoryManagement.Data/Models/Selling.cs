@@ -26,13 +26,19 @@ namespace InventoryManagement.Data
         public DateTime SellingDate { get; set; }
         public DateTime? LastUpdateDate { get; set; }
         public DateTime InsertDate { get; set; }
+
         public DateTime? PromisedPaymentDate { get; set; }
         public double ServiceCharge { get; set; }
         public double ServiceCost { get; set; }
+        //[ServiceCharge]-[ServiceCost]
+        public double ServiceProfit { get; set; }
         public string ServiceChargeDescription { get; set; }
         public double Expense { get; set; }
         public string ExpenseDescription { get; set; }
-        
+        public double BuyingTotalPrice { get; set; }
+        public decimal SellingAccountCost { get; set; }
+        //[BuyingTotalPrice]-([SellingTotalPrice]+[SellingDiscountAmount]+[Expense]+[SellingAccountCost])
+        public decimal SellingProfit { get; set; }
 
 
         public virtual Customer Customer { get; set; }
