@@ -9,6 +9,9 @@ namespace InventoryManagement.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
+        public virtual DbSet<Account> Account { get; set; }
+        public virtual DbSet<AccountDeposit> AccountDeposit { get; set; }
+        public virtual DbSet<AccountWithdraw> AccountWithdraw { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<CustomerPhone> CustomerPhone { get; set; }
         public virtual DbSet<Expense> Expense { get; set; }
@@ -41,6 +44,9 @@ namespace InventoryManagement.Data
         public virtual DbSet<Vendor> Vendor { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyConfiguration(new AccountConfiguration());
+            builder.ApplyConfiguration(new AccountDepositConfiguration());
+            builder.ApplyConfiguration(new AccountWithdrawConfiguration());
             builder.ApplyConfiguration(new CustomerConfiguration());
             builder.ApplyConfiguration(new CustomerPhoneConfiguration());
             builder.ApplyConfiguration(new ExpenseConfiguration());

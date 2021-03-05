@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace InventoryManagement.Data
 {
-    public partial class SellingPayment
+    public class SellingPayment
     {
         public SellingPayment()
         {
@@ -26,8 +26,9 @@ namespace InventoryManagement.Data
         public virtual ICollection<ServicePaymentList> ServicePaymentList { get; set; }
 
 
-        public int AccountId { get; set; }
+        public int? AccountId { get; set; }
         public Account Account { get; set; }
+        //[PaidAmount] * [AccountCostPercentage]/100
         public decimal AccountCost { get; set; }
         public decimal AccountCostPercentage { get; set; }
     }

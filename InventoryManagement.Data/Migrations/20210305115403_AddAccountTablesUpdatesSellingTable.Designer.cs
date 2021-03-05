@@ -4,14 +4,16 @@ using InventoryManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210305115403_AddAccountTablesUpdatesSellingTable")]
+    partial class AddAccountTablesUpdatesSellingTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1020,7 +1022,7 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<decimal>("SellingProfit")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("([BuyingTotalPrice]-([SellingTotalPrice]+[SellingDiscountAmount]+[Expense]+[SellingAccountCost])) PERSISTED");
+                        .HasComputedColumnSql("([BuyingTotalPrice]-([SellingTotalPrice]+[SellingDiscountAmount]+[Expense]+[SellingAccountCost]))");
 
                     b.Property<double>("SellingReturnAmount")
                         .HasColumnType("float");
@@ -1045,7 +1047,7 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<double>("ServiceProfit")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("float")
-                        .HasComputedColumnSql("([ServiceCharge]-[ServiceCost]) PERSISTED");
+                        .HasComputedColumnSql("([ServiceCharge]-[ServiceCost])");
 
                     b.HasKey("SellingId");
 
@@ -1146,7 +1148,7 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<decimal>("AccountCost")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("([PaidAmount] * ([AccountCostPercentage]/100)) PERSISTED");
+                        .HasComputedColumnSql("([PaidAmount] * ([AccountCostPercentage]/100))");
 
                     b.Property<decimal>("AccountCostPercentage")
                         .HasColumnType("decimal(18, 2)");
