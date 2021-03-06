@@ -46,6 +46,33 @@ namespace InventoryManagement.Data
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Selling_Registration");
 
+            entity.Property(e=> e.ServiceCharge)
+                .HasColumnType("decimal(18, 2)");       
+            
+            entity.Property(e=> e.ServiceCost)
+                .HasColumnType("decimal(18, 2)");  
+            
+            entity.Property(e=> e.ServiceProfit)
+                .HasComputedColumnSql("([ServiceCharge]-[ServiceCost]) PERSISTED");  
+            
+            entity.Property(e=> e.SellingProfit)
+                .HasComputedColumnSql("([BuyingTotalPrice]-([SellingTotalPrice]+[SellingDiscountAmount]+[Expense]+[SellingAccountCost])) PERSISTED");
+
+            entity.Property(e => e.ServiceChargeDescription)
+                .HasMaxLength(1024); 
+
+            entity.Property(e => e.ExpenseDescription)
+                .HasMaxLength(1024);
+
+            entity.Property(e => e.Expense)
+                .HasColumnType("decimal(18, 2)");
+
+
+            entity.Property(e => e.BuyingTotalPrice)
+                .HasColumnType("decimal(18, 2)");  
+            
+            entity.Property(e => e.SellingAccountCost)
+                .HasColumnType("decimal(18, 2)");
         }
     }
 }
