@@ -4,5 +4,111 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Withdrawal</h1>
 
+<div class="m-md-3">
+    <h4 class="page-header mb-3">Withdrawal</h4>
+
+    <div class="card card-body">
+        <form id="formAdd">
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="md-form">
+                        <select name="AccountId" asp-items="ViewBag.Account" class="mdb-select" required>
+                            <option disabled value="" selected>[ Account ]</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xl-2 col-md-6">
+                    <div class="md-form">
+                        <label for="inputWithdrawAmount">Amount</label>
+                        <input id="inputWithdrawAmount" type="number" step="0.01" min="0" name="WithdrawAmount" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="md-form">
+                        <label for="inputDescription">Description</label>
+                        <input id="inputDescription" type="text" name="Description" class="form-control">
+                    </div>
+                </div>
+                <div class="col-xl-2 col-md-3">
+                    <div class="md-form">
+                        <label for="inputWithdrawDateUtc">Withdraw Date</label>
+                        <input id="inputWithdrawDateUtc" type="text" class="form-control datepicker">                 
+                    </div>
+                </div>
+                <div class="col-xl-1 col-md-3">
+                    <div class="md-form">
+                        <input id="btnSubmit" type="submit" value="Add" class="btn btn-deep-orange btn-md" />
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><strong>Account Name</strong></th>
+                    <th><strong>Cost Parcentage</strong></th>
+                    <th><strong>Edit</strong></th>
+                    <th><strong>Delete</strong></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(function () {
+            // Material Select Initialization
+            $('.mdb-select').materialSelect();
+
+            $('.datepicker').pickadate({
+                format: 'd-mmmm-yyyy'
+            });
+        });
+
+    (function () {
+        const serializeForm = function (form) {
+            var obj = {};
+            var formData = new FormData(form);
+            for (var key of formData.keys()) {
+                obj[key] = formData.get(key);
+            }
+            return obj;
+        };
+
+        //submit form
+        const formAdd = document.getElementById("formAdd");
+        formAdd.addEventListener("submit", function (evt) {
+            evt.preventDefault();
+
+            disableBtn(this.btnSubmit, true);
+
+            const body = serializeForm(this);
+            $.ajax({
+                url: '/Transaction/PostWithdraw',
+                type: "POST",
+                data: body,
+                success: response => {
+                    console.log(response)
+                    if (response.data.IsSuccess) {
+
+                    }
+                    disableBtn(this.btnSubmit, false);
+                },
+                error: error=>{
+                    console.log(error);
+                    disableBtn(this.btnSubmit, false);
+                }
+            });
+        });
+
+        //disable btn on submitting
+        function disableBtn(btn, isDisable) {
+            btn.disabled = isDisable;
+        }
+    })();
+    </script>
+}
