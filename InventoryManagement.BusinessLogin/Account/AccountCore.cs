@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using InventoryManagement.Repository;
 using JqueryDataTables.LoopsIT;
@@ -88,9 +89,89 @@ namespace InventoryManagement.BusinessLogin
             }
         }
 
-        public DataResult<AccountCrudModel> List(DataRequest request)
+        public List<AccountCrudModel> List()
         {
-            return _db.Account.List(request);
+            return _db.Account.List();
+        }
+
+        public DbResponse<AccountDepositCrudModel> Deposit(AccountDepositCrudModel model)
+        {
+            try
+            {
+                if (model.DepositAmount< 0)
+                    return new DbResponse<AccountDepositCrudModel>(false, "Invalid Data");
+
+                if (_db.Account.IsNull(model.AccountId))
+                    return new DbResponse<AccountDepositCrudModel>(false, $"Account Not Found");
+                
+                _db.Account.BalanceAdd(model.AccountId, model.DepositAmount);
+
+                return _db.AccountDeposit.Add(model);
+
+            }
+            catch (Exception e)
+            {
+                return new DbResponse<AccountDepositCrudModel>(false, $"{e.Message}. {e.InnerException?.Message ?? ""}");
+            }
+        }
+
+        public DbResponse<AccountWithdrawCrudModel> Withdraw(AccountWithdrawCrudModel model)
+        {
+            try
+            {
+                if (model.WithdrawAmount < 0)
+                    return new DbResponse<AccountWithdrawCrudModel>(false, "Invalid Data");
+
+                if (_db.Account.IsNull(model.AccountId))
+                    return new DbResponse<AccountWithdrawCrudModel>(false, $"Account Not Found");
+
+                _db.Account.BalanceSubtract(model.AccountId, model.WithdrawAmount);
+
+                return _db.AccountWithdraw.Add(model);
+
+            }
+            catch (Exception e)
+            {
+                return new DbResponse<AccountWithdrawCrudModel>(false, $"{e.Message}. {e.InnerException?.Message ?? ""}");
+            }
+        }
+
+        public DbResponse DepositDelete(int id)
+        {
+            try
+            {
+                var accountDeposit = _db.AccountDeposit.Get(id);
+
+                if (!accountDeposit.IsSuccess) new DbResponse(false, accountDeposit.Message);
+
+                _db.Account.BalanceSubtract(accountDeposit.Data.AccountId, accountDeposit.Data.DepositAmount);
+
+                return _db.AccountDeposit.Delete(id);
+
+            }
+            catch (Exception e)
+            {
+                return new DbResponse(false, $"{e.Message}. {e.InnerException?.Message ?? ""}");
+            }
+        }
+
+        public DbResponse WithdrawDelete(int id)
+        {
+            try
+            {
+                var accountWithdraw = _db.AccountWithdraw.Get(id);
+
+                if (!accountWithdraw.IsSuccess) new DbResponse(false, accountWithdraw.Message);
+
+                _db.Account.BalanceAdd(accountWithdraw.Data.AccountId, accountWithdraw.Data.WithdrawAmount);
+
+                return _db.AccountWithdraw.Delete(id);
+
+            }
+            catch (Exception e)
+            {
+                return new DbResponse(false, $"{e.Message}. {e.InnerException?.Message ?? ""}");
+            }
         }
     }
 }
