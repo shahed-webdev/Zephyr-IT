@@ -1,5 +1,6 @@
 ﻿using InventoryManagement.BusinessLogin;
 using InventoryManagement.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
 {
-    
+    [Authorize]
     public class TransactionController : Controller
     {
         private readonly IAccountCore _accountCore;
@@ -25,14 +26,29 @@ namespace InventoryManagement.Web.Controllers
             return View();
         }
 
-        //Post New Account
+        //add
         [HttpPost]
-        public IActionResult PostNewAccount(AccountCrudModel model)
+        public IActionResult AddAccount(AccountCrudModel model)
         {
             var response = _accountCore.Add(model);
             return Json(response);
         }
 
+        //update
+        [HttpPost]
+        public IActionResult UpdateAccount(AccountCrudModel model)
+        {
+            var response = _accountCore.Edit(model);
+            return Json(response);
+        }
+
+        //delete
+        [HttpPost]
+        public IActionResult DeleteAccount(int id)
+        {
+            var response = _accountCore.Delete(id);
+            return Json(response);
+        }
 
 
         public IActionResult Withdrawal()
