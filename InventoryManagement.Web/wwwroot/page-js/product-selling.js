@@ -415,7 +415,7 @@ const onSellSubmitClicked = function (evt) {
         type: "POST",
         data: body,
         success: function (response) {
-            if (response.data.IsSuccess) {
+            if (response.IsSuccess) {
                 localStoreClear();
                 location.href = `/Selling/SellingReceipt/${response.data.Data}`;
             }

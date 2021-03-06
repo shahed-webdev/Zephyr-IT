@@ -4,5 +4,142 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>AddAccount</h1>
+@section Styles{ 
+ <style>
+     .table tr td i { cursor:pointer}
+     .table tr td i.delete { color:red}
+ </style>
+}
+
+<div class="container">
+    <h4 class="page-header mb-3">Account</h4>
+
+    <div class="card card-body">
+        <form id="formAdd">
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="md-form">
+                        <label for="inputAccountName">Account Name</label>
+                        <input id="inputAccountName" type="text" name="AccountName" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="md-form">
+                        <label for="inputCostPercentage">Cost Percentage</label>
+                        <input id="inputCostPercentage" type="number" step="0.01" min="0" max="100" name="CostPercentage" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="md-form">
+                        <input id="btnSubmit" type="submit" value="Add" class="btn btn-deep-orange btn-md" />
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><strong>Account Name</strong></th>
+                    <th><strong>Cost Parcentage</strong></th>
+                    <th class="text-center"><strong>Edit</strong></th>
+                    <th class="text-center"><strong>Delete</strong></th>
+                </tr>
+            </thead>
+            <tbody id="tBody">
+                <tr>
+                    <td>bb</td>
+                    <td>22</td>
+                    <td class="text-center"><i id="" class="edit fas fa-edit"></i></td>
+                    <td class="text-center"><i id="" class="delete fas fa-trash"></i></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal update  -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-notify" role="document">
+        <div class="modal-content">
+            <div class="modal-header deep-orange darken-1">
+                <strong class="heading lead">Update</strong>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formUpdate">
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        (function () {
+            var serializeForm = function (form) {
+                var obj = {};
+                var formData = new FormData(form);
+                for (var key of formData.keys()) {
+                    obj[key] = formData.get(key);
+                }
+                return obj;
+            };
+
+            //submit form
+            const formAdd = document.getElementById("formAdd");
+            formAdd.addEventListener("submit", function (evt) {
+                evt.preventDefault();
+
+                disableBtn(this.btnSubmit, true);
+
+                const body = serializeForm(this);
+                $.ajax({
+                    url: '/Transaction/PostNewAccount',
+                    type: "POST",
+                    data: body,
+                    success: response => {
+                        $("#formAdd").notify(response.Message, response.IsSuccess ? "success" : "error");
+                        disableBtn(this.btnSubmit, false);
+
+                        if (response.IsSuccess)
+                            this.reset();
+                    },
+                    error: error => {
+                        console.log(error);
+                        disableBtn(this.btnSubmit, false);
+                    }
+                });
+            });
+
+            //disable btn on submitting
+            function disableBtn(btn, isDisable) {
+                btn.disabled = isDisable;
+            }
+
+            //on edit/delete
+            const tBody = document.getElementById("tBody");
+            tBody.addEventListener("click", function (evt) {
+                const element = evt.target;
+
+                const onEdit = element.classlist.contains("edit");
+                const onDelete = element.classlist.contains("delete");
+
+                if (onEdit) {
+
+                }
+
+                if (onDelete) {
+
+                }
+            })
+        })();
+    </script>
+}
 
