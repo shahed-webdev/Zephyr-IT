@@ -13,6 +13,8 @@ namespace InventoryManagement.Repository
             _context = context;
             _mapper = mapper;
             Account = new AccountRepository(_context, _mapper);
+            AccountDeposit = new AccountDepositRepository(_context, _mapper);
+            AccountWithdraw = new AccountWithdrawRepository(_context, _mapper);
             Customers = new CustomerRepository(_context);
             PageLinks = new PageLinkRepository(_context);
             PageLinkCategories = new PageLinkCategoryRepository(_context);
@@ -38,6 +40,8 @@ namespace InventoryManagement.Repository
 
 
         public IAccountRepository Account { get; }
+        public IAccountDepositRepository AccountDeposit { get; }
+        public IAccountWithdrawRepository AccountWithdraw { get; }
         public ICustomerRepository Customers { get; }
         public IPageLinkRepository PageLinks { get; private set; }
         public IPageLinkCategoryRepository PageLinkCategories { get; private set; }

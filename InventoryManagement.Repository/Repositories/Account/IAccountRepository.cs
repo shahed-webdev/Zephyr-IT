@@ -13,6 +13,10 @@ namespace InventoryManagement.Repository
         bool IsExistName(string name, int updateId);
         bool IsNull(int id);
         bool IsRelatedDataExist(int id);
-        DataResult<AccountCrudModel> List(DataRequest request);
+        List<AccountCrudModel> List();
+
+        void BalanceAdd(int id, decimal amount);
+
+        void BalanceSubtract(int id, decimal amount);
     }
 }

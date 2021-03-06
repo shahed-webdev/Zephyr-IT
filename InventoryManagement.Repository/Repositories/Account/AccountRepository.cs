@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using InventoryManagement.Data;
 using JqueryDataTables.LoopsIT;
@@ -67,15 +68,32 @@ namespace InventoryManagement.Repository
 
         public bool IsRelatedDataExist(int id)
         {
-            throw new System.NotImplementedException();
+            return Context.AccountDeposit.Any(a => a.AccountId == id) ||
+                   Context.AccountWithdraw.Any(a => a.AccountId == id) ||
+                   Context.SellingPayment.Any(a => a.AccountId == id);
+
         }
 
-        public DataResult<AccountCrudModel> List(DataRequest request)
+        public List<AccountCrudModel> List()
         {
             return Context.Account              
                 .ProjectTo<AccountCrudModel>(_mapper.ConfigurationProvider)
                 .OrderBy(a => a.AccountName)
-                .ToDataResult(request);
+                .ToList();
+        }
+
+        public void BalanceAdd(int id, decimal amount)
+        {
+            var account = Context.Account.Find(id);
+            account.Balance += amount;
+            Context.Account.Update(account);
+        }
+
+        public void BalanceSubtract(int id, decimal amount)
+        {
+            var account = Context.Account.Find(id);
+            account.Balance -= amount;
+            Context.Account.Update(account); 
         }
     }
 }
