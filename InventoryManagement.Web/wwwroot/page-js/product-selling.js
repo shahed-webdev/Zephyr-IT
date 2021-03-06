@@ -35,11 +35,14 @@ const totalDue = formPayment.querySelector('#totalDue')
 const selectPaymentMethod = formPayment.selectPaymentMethod
 const inputPromisedDate = formPayment.inputPromisedDate
 
+//expense
+const inputExpense = formPayment.inputExpense
+const inputExpenseDescription = formPayment.inputExpenseDescription
+
 //service charge
 const inputServiceCharge = formPayment.inputServiceCharge
 const inputServiceChargeDescription = formPayment.inputServiceChargeDescription
 const inputServiceCost = formPayment.inputServiceCost
-const inputServiceCostDescription = formPayment.inputServiceCostDescription
 
 
 //customer
@@ -349,7 +352,7 @@ const onInputPaid = function () {
 }
 
 //reset customer Id
-hiddenCustomerId.value = '';
+hiddenCustomerId.value = "";
 
 //validation info
 const validation = function () {
@@ -497,5 +500,5 @@ function checkDueLimit() {
 
 //remove localstorage
 function localStoreClear() {
-    localStorage.removeItem('selling-cart');
+    localStorage.removeItem("selling-cart");
 }

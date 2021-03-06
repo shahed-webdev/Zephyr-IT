@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<InventoryManagement.Repository.AccountCrudModel>  
 @{
     ViewData["Title"] = "Add Account";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -41,18 +41,35 @@
             <thead>
                 <tr>
                     <th><strong>Account Name</strong></th>
-                    <th><strong>Cost Parcentage</strong></th>
+                    <th><strong>Cost Percentage</strong></th>
+                    <th><strong>Balance</strong></th>
                     <th class="text-center"><strong>Edit</strong></th>
                     <th class="text-center"><strong>Delete</strong></th>
+                    <th class="text-center"><strong>Deposit</strong></th>
+                    <th class="text-center"><strong>Withdraw</strong></th>
                 </tr>
             </thead>
             <tbody id="tBody">
+            @foreach (var item in Model)
+            {
                 <tr>
-                    <td>bb</td>
-                    <td>22</td>
-                    <td class="text-center"><i id="1" data-name="bkash" data-parcetage="2" class="edit fas fa-edit"></i></td>
-                    <td class="text-center"><i id="2" class="delete fas fa-trash"></i></td>
+                    <td>@item.AccountName</td>
+                    <td>@item.CostPercentage%</td>
+                    <td>৳@item.Balance</td>
+                    <td class="text-center"><i id="@item.AccountId" data-name="@item.AccountName" data-percentage="@item.CostPercentage" class="edit fas fa-edit"></i></td>
+                    <td class="text-center"><i id="@item.AccountId" class="delete fas fa-trash"></i></td>
+                    <td class="text-center">
+                        <a class="text-success" href="/Transaction/Deposit/@item.AccountId">
+                            <i class="fas fa-long-arrow-alt-down mr-1"></i>Deposit
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a class="text-danger" href="/Transaction/Withdrawal/@item.AccountId">
+                            <i class="fas fa-long-arrow-alt-up mr-1"></i>Withdraw
+                        </a>
+                    </td>
                 </tr>
+            }
             </tbody>
         </table>
     </div>
@@ -119,7 +136,7 @@
                         disableBtn(this.btnSubmit, false);
 
                         if (response.IsSuccess)
-                            this.reset();
+                            location.reload();
                     },
                     error: error => {
                         console.log(error);

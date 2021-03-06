@@ -22,8 +22,8 @@ namespace InventoryManagement.Web.Controllers
         //*** Account****
         public IActionResult AddAccount()
         {
-           // var response = _accountCore.List();
-            return View();
+            var response = _accountCore.List();
+            return View(response);
         }
 
         //add
@@ -50,15 +50,50 @@ namespace InventoryManagement.Web.Controllers
             return Json(response);
         }
 
-
-        public IActionResult Withdrawal()
+        //***Withdrawal****
+        public IActionResult Withdrawal(int? id)
         {
-            return View();
+            if (!id.HasValue) return RedirectToAction("AddAccount");
+            return View(_accountCore.Get(id.GetValueOrDefault()).Data);
         }
 
-        public IActionResult Deposit()
+        //Add
+        public IActionResult AddWithdrawal(AccountWithdrawCrudModel model)
         {
-            return View();
+            var response = _accountCore.Withdraw(model);
+            return Json(response);
+        }
+        
+        //delete
+        [HttpPost]
+        public IActionResult DeleteWithdrawal(int id)
+        {
+            var response = _accountCore.WithdrawDelete(id);
+            return Json(response);
+        }
+
+
+
+        //***Deposit***
+        public IActionResult Deposit(int? id)
+        {
+            if (!id.HasValue) return RedirectToAction("AddAccount");
+            return View(_accountCore.Get(id.GetValueOrDefault()).Data);
+        }
+
+        //Add
+        public IActionResult AddDeposit(AccountDepositCrudModel model)
+        {
+            var response = _accountCore.Deposit(model);
+            return Json(response);
+        }
+
+        //delete
+        [HttpPost]
+        public IActionResult DeleteDeposit(int id)
+        {
+            var response = _accountCore.DepositDelete(id);
+            return Json(response);
         }
     }
 }

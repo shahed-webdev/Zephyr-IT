@@ -1,44 +1,52 @@
 ﻿
 @{
-    ViewData["Title"] = "Withdrawal";
+    ViewData["Title"] = "Withdrawal from "+ Model.AccountName;
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-
+@section Styles{ 
+    <style>
+        .table tr td i { cursor:pointer}
+        .table tr td i.delete { color:red}
+    </style>
+}
 <div class="m-md-3">
-    <h4 class="page-header mb-3">Withdrawal</h4>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="page-header">
+                Withdrawal <small>@Model.AccountName</small>
+            </h4>
+            <a href="/Transaction/AddAccount"><i class="fal fa-long-arrow-left mr-1"></i>Back to Account</a>
+        </div>
+
+        <h5 class="font-weight-bold">Balance ৳@Model.Balance</h5>
+    </div>
 
     <div class="card card-body">
         <form id="formAdd">
+            <input type="hidden" name="AccountId" value="@Model.AccountId" />
             <div class="row">
-                <div class="col-xl-3 col-md-6">
-                    <div class="md-form">
-                        <select name="AccountId" asp-items="ViewBag.Account" class="mdb-select" required>
-                            <option disabled value="" selected>[ Account ]</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-xl-2 col-md-6">
+                <div class="col-xl-3">
                     <div class="md-form">
                         <label for="inputWithdrawAmount">Amount</label>
-                        <input id="inputWithdrawAmount" type="number" step="0.01" min="0" name="WithdrawAmount" class="form-control" required>
+                        <input id="inputWithdrawAmount" type="number" step="0.01" min="0" max="@Model.Balance" name="WithdrawAmount" class="form-control" required>
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-3">
                     <div class="md-form">
                         <label for="inputDescription">Description</label>
                         <input id="inputDescription" type="text" name="Description" class="form-control">
                     </div>
                 </div>
-                <div class="col-xl-2 col-md-3">
+                <div class="col-xl-3">
                     <div class="md-form">
                         <label for="inputWithdrawDateUtc">Withdraw Date</label>
-                        <input id="inputWithdrawDateUtc" type="text" class="form-control datepicker">                 
+                        <input id="inputWithdrawDateUtc" name="WithdrawDateUtc" type="text" class="form-control datepicker" required>
                     </div>
                 </div>
-                <div class="col-xl-1 col-md-3">
+                <div class="col-xl-3">
                     <div class="md-form">
-                        <input id="btnSubmit" type="submit" value="Add" class="btn btn-deep-orange btn-md" />
+                        <input id="btnSubmit" type="submit" value="Add" class="btn btn-deep-orange btn-md"/>
                     </div>
                 </div>
             </div>
@@ -46,13 +54,21 @@
 
         <table class="table">
             <thead>
-                <tr>
-                    <th><strong>Account Name</strong></th>
-                    <th><strong>Cost Parcentage</strong></th>
-                    <th><strong>Edit</strong></th>
-                    <th><strong>Delete</strong></th>
-                </tr>
+            <tr>
+                <th><strong>Amount</strong></th>
+                <th><strong>Description</strong></th>
+                <th><strong>Date</strong></th>
+                <th class="text-center"><strong>Delete</strong></th>
+            </tr>
             </thead>
+            <tbody id="tBody">
+                <tr>
+                    <td>200</td>
+                    <td>200</td>
+                    <td>200</td>
+                    <td class="text-center"><i id="1" class="delete fas fa-trash"></i></td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </div>
@@ -60,55 +76,81 @@
 
 @section Scripts{
     <script>
-        $(function () {
-            // Material Select Initialization
-            $('.mdb-select').materialSelect();
-
+        $(function() {
             $('.datepicker').pickadate({
                 format: 'd-mmmm-yyyy'
             });
         });
 
-    (function () {
-        const serializeForm = function (form) {
-            var obj = {};
-            var formData = new FormData(form);
-            for (var key of formData.keys()) {
-                obj[key] = formData.get(key);
-            }
-            return obj;
-        };
-
-        //submit form
-        const formAdd = document.getElementById("formAdd");
-        formAdd.addEventListener("submit", function (evt) {
-            evt.preventDefault();
-
-            disableBtn(this.btnSubmit, true);
-
-            const body = serializeForm(this);
-            $.ajax({
-                url: '/Transaction/PostWithdraw',
-                type: "POST",
-                data: body,
-                success: response => {
-                    console.log(response)
-                    if (response.data.IsSuccess) {
-
-                    }
-                    disableBtn(this.btnSubmit, false);
-                },
-                error: error=>{
-                    console.log(error);
-                    disableBtn(this.btnSubmit, false);
+        (function() {
+            const serializeForm = function(form) {
+                var obj = {};
+                var formData = new FormData(form);
+                for (var key of formData.keys()) {
+                    obj[key] = formData.get(key);
                 }
-            });
-        });
+                return obj;
+            };
 
-        //disable btn on submitting
-        function disableBtn(btn, isDisable) {
-            btn.disabled = isDisable;
-        }
-    })();
+            //submit form
+            const formAdd = document.getElementById("formAdd");
+            formAdd.addEventListener("submit",
+                function(evt) {
+                    evt.preventDefault();
+
+                    disableBtn(this.btnSubmit, true);
+
+                    const body = serializeForm(this);
+                    $.ajax({
+                        url: '/Transaction/AddWithdrawal',
+                        type: "POST",
+                        data: body,
+                        success: response => {
+                            $.notify(response.Message, response.IsSuccess ? "success" : "error");
+
+                            if (response.IsSuccess)
+                                location.reload();
+
+                            disableBtn(this.btnSubmit, false);
+                        },
+                        error: error => {
+                            console.log(error);
+                            disableBtn(this.btnSubmit, false);
+                        }
+                    });
+                });
+
+            //on edit/delete
+            const tBody = document.getElementById("tBody");
+            tBody.addEventListener("click", function (evt) {
+                const element = evt.target;
+                const onDelete = element.classList.contains("delete");
+                const id = element.id;
+
+                if (onDelete) {
+                    $.ajax({
+                        url: '/Transaction/DeleteWithdrawal',
+                        type: "POST",
+                        data: {id},
+                        success: response => {
+                            $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                          
+                            if (response.IsSuccess) {
+                                element.parentElement.parentElement.remove();
+                            }
+                               
+                        },
+                        error: error => {
+                            console.log(error);                         
+                        }
+                    });
+                }
+            })
+
+            //disable btn on submitting
+            function disableBtn(btn, isDisable) {
+                btn.disabled = isDisable;
+            }
+        })();
     </script>
 }
