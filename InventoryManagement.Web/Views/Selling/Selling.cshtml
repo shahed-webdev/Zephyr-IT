@@ -7,7 +7,6 @@
     <style>
         .remove { cursor: pointer }
         .remove:hover { color: #ff0000 }
-        #formPayment { padding: 15px 0; color: #4f4f4f; }
         #formPayment ul { list-style-type: none; padding: 0; }
         #formPayment ul li strong { font-weight: 500; }
 
@@ -66,8 +65,8 @@
         </div>
 
         <div class="col-lg-3">
-            <div class="card card-body">
-                <form id="formPayment">
+            <form id="formPayment">
+                <div class="card card-body mb-3">
                     <ul class="mb-0">
                         <li class="d-flex justify-content-between align-items-center">
                             <strong>Total Amount</strong>
@@ -101,7 +100,27 @@
                         <li class="md-form">
                             <input id="inputPromisedDate" type="text" class="form-control datepicker">
                             <label for="inputPromisedDate">Promised Payment Date</label>
-                        </li>                       
+                        </li>                    
+                    </ul>    
+                </div>
+                <div class="card card-body">
+                    <ul>
+                        <li class="md-form">
+                            <input id="inputServiceCharge" step="0.01" type="number" min="0" class="form-control">
+                            <label for="inputServiceCharge">Service Charge</label>
+                        </li>
+                        <li class="md-form">
+                            <input id="inputServiceChargeDescription" type="text" class="form-control">
+                            <label for="inputServiceChargeDescription">Service Charge Description</label>
+                        </li>
+                        <li class="md-form">
+                            <input id="inputServiceCost" step="0.01" type="number" min="0" class="form-control">
+                            <label for="inputServiceCost">Service Cost</label>
+                        </li>
+                        <li class="md-form">
+                            <input id="inputServiceCostDescription" type="text" class="form-control">
+                            <label for="inputServiceCostDescription">Service Cost Description</label>
+                        </li>
                         <li class="d-flex justify-content-between align-items-center">
                             <div class="md-form mt-4 flex-1">
                                 <input id="inputCustomer" type="text" class="form-control" autocomplete="off" />
@@ -112,13 +131,14 @@
                             <a href="/Customer/Add" target="_blank" class="btn-floating btn-sm blue-gradient"><i class="fas fa-plus" aria-hidden="true"></i></a>
                         </li>
                     </ul>
+
                     <div class="text-center">
                         <i id="customer-error" class="mt-2 text-center red-text"></i>
                         <button type="submit" id="btnSelling" class="btn peach-gradient btn-rounded btn-block mt-0">SELL PRODUCT</button>
                     </div>
-                </form>
-            </div>
-        </div>
+                </div>
+            </form>
+        </div>  
     </div>
 </div>
 

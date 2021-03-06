@@ -35,6 +35,13 @@ const totalDue = formPayment.querySelector('#totalDue')
 const selectPaymentMethod = formPayment.selectPaymentMethod
 const inputPromisedDate = formPayment.inputPromisedDate
 
+//service charge
+const inputServiceCharge = formPayment.inputServiceCharge
+const inputServiceChargeDescription = formPayment.inputServiceChargeDescription
+const inputServiceCost = formPayment.inputServiceCost
+const inputServiceCostDescription = formPayment.inputServiceCostDescription
+
+
 //customer
 const hiddenCustomerId = formPayment.hiddenCustomerId
 const customerError = formPayment.querySelector('#customer-error')
@@ -398,6 +405,8 @@ const onSellSubmitClicked = function (evt) {
         SellingPaidAmount: +inputPaid.value | 0,
         PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
         PromisedPaymentDate: inputPromisedDate.value,
+
+
         ProductList: productList
     }
 
