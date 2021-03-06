@@ -418,14 +418,14 @@ const onSellSubmitClicked = function(evt) {
         type: "POST",
         data: body,
         success: function (response) {
-            if (response.data.IsSuccess) {
-                location.href = `/Selling/SellingReceipt/${response.data}`
+            if (response.IsSuccess) {
+                location.href = `/Selling/SellingReceipt/${response.data}`;
             }
         },
         error: function (error) {
             console.log(error);
-            btnSubmit.innerText = 'Update Bill'
-            btnSubmit.disabled = false
+            btnSubmit.innerText = 'Update Bill';
+            btnSubmit.disabled = false;
         }
     });
 }
