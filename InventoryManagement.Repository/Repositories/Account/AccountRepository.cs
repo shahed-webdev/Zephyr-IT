@@ -58,7 +58,7 @@ namespace InventoryManagement.Repository
 
         public bool IsExistName(string name, int updateId)
         {
-             return Context.Account.Any(r => r.AccountName == name && r.AccountId == updateId);
+             return Context.Account.Any(r => r.AccountName == name && r.AccountId != updateId);
         }
 
         public bool IsNull(int id)

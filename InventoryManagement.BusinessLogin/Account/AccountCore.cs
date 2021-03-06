@@ -62,7 +62,7 @@ namespace InventoryManagement.BusinessLogin
                     return new DbResponse(false, "No data Found");
 
                 if (_db.Account.IsRelatedDataExist(id))
-                    return new DbResponse(false, "Failed, Area already exist in this region");
+                    return new DbResponse(false, "Failed, Related Data exist");
 
                 return _db.Account.Delete(id);
 
@@ -172,6 +172,16 @@ namespace InventoryManagement.BusinessLogin
             {
                 return new DbResponse(false, $"{e.Message}. {e.InnerException?.Message ?? ""}");
             }
+        }
+
+        public DataResult<AccountDepositCrudModel> DepositList(DataRequest request)
+        {
+            return _db.AccountDeposit.List(request);
+        }
+
+        public DataResult<AccountWithdrawCrudModel> WithdrawList(DataRequest request)
+        {
+            return _db.AccountWithdraw.List(request);
         }
     }
 }

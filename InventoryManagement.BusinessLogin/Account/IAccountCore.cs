@@ -17,5 +17,8 @@ namespace InventoryManagement.BusinessLogin
 
         DbResponse DepositDelete(int id);
         DbResponse WithdrawDelete(int id);
+
+        DataResult<AccountDepositCrudModel> DepositList(DataRequest request);
+        DataResult<AccountWithdrawCrudModel> WithdrawList(DataRequest request);
     }
 }
