@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<InventoryManagement.Repository.AccountCrudModel>  
 @{
     ViewData["Title"] = "Add Account";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -41,18 +41,35 @@
             <thead>
                 <tr>
                     <th><strong>Account Name</strong></th>
-                    <th><strong>Cost Parcentage</strong></th>
+                    <th><strong>Cost Percentage</strong></th>
+                    <th><strong>Balance</strong></th>
                     <th class="text-center"><strong>Edit</strong></th>
                     <th class="text-center"><strong>Delete</strong></th>
+                    <th class="text-center"><strong>Deposit</strong></th>
+                    <th class="text-center"><strong>Withdraw</strong></th>
                 </tr>
             </thead>
             <tbody id="tBody">
+            @foreach (var item in Model)
+            {
                 <tr>
-                    <td>bb</td>
-                    <td>22</td>
-                    <td class="text-center"><i id="" class="edit fas fa-edit"></i></td>
-                    <td class="text-center"><i id="" class="delete fas fa-trash"></i></td>
+                    <td>@item.AccountName</td>
+                    <td>@item.CostPercentage%</td>
+                    <td>৳@item.Balance</td>
+                    <td class="text-center"><i id="@item.AccountId" data-name="@item.AccountName" data-percentage="@item.CostPercentage" class="edit fas fa-edit"></i></td>
+                    <td class="text-center"><i id="@item.AccountId" class="delete fas fa-trash"></i></td>
+                    <td class="text-center">
+                        <a class="text-success" href="/Transaction/Deposit/@item.AccountId">
+                            <i class="fas fa-long-arrow-alt-down mr-1"></i>Deposit
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a class="text-danger" href="/Transaction/Withdrawal/@item.AccountId">
+                            <i class="fas fa-long-arrow-alt-up mr-1"></i>Withdraw
+                        </a>
+                    </td>
                 </tr>
+            }
             </tbody>
         </table>
     </div>
@@ -72,7 +89,17 @@
 
             <div class="modal-body">
                 <form id="formUpdate">
+                    <input type="hidden" name="AccountId">
+                    <div class="form-group">
+                        <label>Account Name</label>
+                        <input type="text" name="AccountName" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Cost Percentage</label>
+                        <input type="number" step="0.01" min="0" max="100" name="CostPercentage" class="form-control" required>
+                    </div>
 
+                    <input id="btnUpdate" type="submit" class="btn btn-deep-orange" value="Update" />
                 </form>
             </div>
         </div>
@@ -84,9 +111,9 @@
     <script>
         (function () {
             var serializeForm = function (form) {
-                var obj = {};
-                var formData = new FormData(form);
-                for (var key of formData.keys()) {
+                const obj = {};
+                const formData = new FormData(form);
+                for (let key of formData.keys()) {
                     obj[key] = formData.get(key);
                 }
                 return obj;
@@ -101,7 +128,7 @@
 
                 const body = serializeForm(this);
                 $.ajax({
-                    url: '/Transaction/PostNewAccount',
+                    url: '/Transaction/AddAccount',
                     type: "POST",
                     data: body,
                     success: response => {
@@ -109,7 +136,7 @@
                         disableBtn(this.btnSubmit, false);
 
                         if (response.IsSuccess)
-                            this.reset();
+                            location.reload();
                     },
                     error: error => {
                         console.log(error);
@@ -118,27 +145,78 @@
                 });
             });
 
+            //on edit/delete
+            const modalContainer = $("#updateModal");
+            const formUpdate = document.getElementById("formUpdate");
+            const tBody = document.getElementById("tBody");
+
+            tBody.addEventListener("click", function (evt) {
+                const element = evt.target;
+
+                const onEdit = element.classList.contains("edit");
+                const onDelete = element.classList.contains("delete");
+                const id = element.id;
+
+                if (onEdit) {
+                    const name = element.getAttribute("data-name");
+                    const percentage = element.getAttribute("data-percentage");
+
+                    formUpdate.AccountId.value = id;
+                    formUpdate.AccountName.value = name;
+                    formUpdate.CostPercentage.value = percentage;
+
+                    modalContainer.modal("show");
+                }
+
+                if (onDelete) {
+                    $.ajax({
+                        url: '/Transaction/DeleteAccount',
+                        type: "POST",
+                        data: {id},
+                        success: response => {
+                            $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                          
+                            if (response.IsSuccess) {
+                                element.parentElement.parentElement.remove();
+                            }
+                               
+                        },
+                        error: error => {
+                            console.log(error);                         
+                        }
+                    });
+                }
+            })
+
+            //update post
+            formUpdate.addEventListener("submit", function (evt) {
+                evt.preventDefault();
+
+                disableBtn(this.btnUpdate, true);
+
+                const body = serializeForm(this);
+                $.ajax({
+                    url: '/Transaction/UpdateAccount',
+                    type: "POST",
+                    data: body,
+                    success: response => {
+                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                        disableBtn(this.btnUpdate, false);
+
+                        if (response.IsSuccess)
+                            modalContainer.modal("hide");
+                    },
+                    error: error => {
+                        console.log(error);
+                        disableBtn(this.btnUpdate, false);
+                    }
+                });
+            });
+
             //disable btn on submitting
             function disableBtn(btn, isDisable) {
                 btn.disabled = isDisable;
             }
-
-            //on edit/delete
-            const tBody = document.getElementById("tBody");
-            tBody.addEventListener("click", function (evt) {
-                const element = evt.target;
-
-                const onEdit = element.classlist.contains("edit");
-                const onDelete = element.classlist.contains("delete");
-
-                if (onEdit) {
-
-                }
-
-                if (onDelete) {
-
-                }
-            })
         })();
     </script>
 }
