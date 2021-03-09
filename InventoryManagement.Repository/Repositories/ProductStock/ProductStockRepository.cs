@@ -59,7 +59,6 @@ namespace InventoryManagement.Repository
 
         public Task<ProductStockDetailsViewModel> FindforDetailsAsync(string code)
         {
-            int? sellingListId;
             var product = Context.ProductStock
                 .Include(s => s.Product)
                 .ThenInclude(p => p.ProductCatalog)
@@ -83,9 +82,6 @@ namespace InventoryManagement.Repository
                     SellingSn = s.SellingList.Selling.SellingSn,
                     PurchaseId = s.PurchaseList.PurchaseId
                 }).FirstOrDefaultAsync();
-
-
-
 
             return product;
         }

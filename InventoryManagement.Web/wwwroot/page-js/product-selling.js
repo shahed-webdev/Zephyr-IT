@@ -58,6 +58,7 @@ const storage = {
             return;
         }
 
+        //unique by name, purchase price
         const found = cartProducts.some(el => el.ProductCatalogId === product.ProductCatalogId && el.ProductName === product.ProductName && el.PurchasePrice === product.PurchasePrice);
         if (!found) {
             //save to global object
@@ -389,27 +390,31 @@ const onSellSubmitClicked = function (evt) {
 
     //disable button on submit
     const btnSubmit = formPayment.btnSelling
-    btnSubmit.innerText = 'submitting..'
+    btnSubmit.innerText = "submitting.."
     btnSubmit.disabled = true
 
     const productList = []
 
     cartProducts.forEach(product => {
-        const { ProductId, SellingPrice, Description, Warranty, codes } = product;
-        productList.push({ ProductId, SellingPrice, Description, Warranty, ProductCodes: codes })
+        const { ProductId, SellingPrice, PurchasePrice,Description, Warranty, codes } = product;
+        productList.push({ ProductId, SellingPrice, PurchasePrice, Description, Warranty, ProductCodes: codes });
     })
-
+   
     if (!productList.length) return;
 
     const body = {
         CustomerId: +hiddenCustomerId.value,
         SellingTotalPrice: +totalPrice.textContent,
-        SellingDiscountAmount: +inputDiscount.value | 0,
-        SellingPaidAmount: +inputPaid.value | 0,
-        PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
+        SellingDiscountAmount: +inputDiscount.value,
+        SellingPaidAmount: +inputPaid.value,
+
         PromisedPaymentDate: inputPromisedDate.value,
-
-
+        ServiceCharge: inputServiceCharge.value,
+        ServiceChargeDescription: inputServiceChargeDescription.value,
+        ServiceCost: inputServiceCost.value,
+        Expense:inputExpense.value,
+        ExpenseDescription:inputExpenseDescription.value,
+        AccountId: inputPaid.value ? selectPaymentMethod.value : "",
         ProductList: productList
     }
 

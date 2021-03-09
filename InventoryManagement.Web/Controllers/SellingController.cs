@@ -4,6 +4,8 @@ using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using InventoryManagement.BusinessLogin;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InventoryManagement.Web.Controllers
 {
@@ -11,15 +13,18 @@ namespace InventoryManagement.Web.Controllers
     public class SellingController : Controller
     {
         private readonly IUnitOfWork _db;
-        public SellingController(IUnitOfWork db)
+        private readonly IAccountCore _account;
+        public SellingController(IUnitOfWork db, IAccountCore account)
         {
             _db = db;
+            _account = account;
         }
 
         //selling
         [Authorize(Roles = "admin, selling")]
         public IActionResult Selling()
         {
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
             return View();
         }
 
@@ -37,10 +42,8 @@ namespace InventoryManagement.Web.Controllers
             {
                 return Ok(response);
             }
-            else
-            {
-                return UnprocessableEntity(response);
-            }
+
+            return UnprocessableEntity(response);
         }
 
         //Selling receipt
@@ -54,7 +57,7 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
-        //call from axios
+        //call from ajax
         public async Task<IActionResult> FindProductByCode(string code)
         {
             var data = await _db.ProductStocks.FindforSellAsync(code).ConfigureAwait(false);
