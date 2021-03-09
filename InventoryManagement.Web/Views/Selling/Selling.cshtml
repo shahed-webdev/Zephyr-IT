@@ -68,10 +68,36 @@
             <form id="formPayment">
                 <div class="card card-body mb-3">
                     <ul class="mb-0">
+                        <li class="md-form">
+                            <input id="inputServiceCharge" step="0.01" type="number" min="0" class="form-control">
+                            <label for="inputServiceCharge">Service Charge</label>
+                        </li>
                         <li class="d-flex justify-content-between align-items-center">
                             <strong>Total Amount</strong>
                             <strong>৳<span id="totalPrice">0</span></strong>
                         </li>
+                        <li class="md-form">
+                            <textarea id="inputServiceChargeDescription" rows="1" class="md-textarea form-control"></textarea>
+                            <label for="inputServiceChargeDescription">Service Charge Description</label>
+                        </li>
+                        <li class="md-form">
+                            <input id="inputServiceCost" step="0.01" type="number" min="0" class="form-control">
+                            <label for="inputServiceCost">Service Cost</label>
+                        </li>
+
+                        <li class="md-form">
+                            <input id="inputExpense" type="number" step="0.01" min="0" class="form-control">
+                            <label for="inputExpense">Expense</label>
+                        </li>
+                        <li class="md-form">
+                            <textarea id="inputExpenseDescription" rows="1" class="md-textarea form-control"></textarea>
+                            <label for="inputExpenseDescription">Expense Description</label>
+                        </li>
+                    </ul>    
+                </div>
+
+                <div class="card card-body">
+                    <ul>
                         <li class="md-form">
                             <input id="inputDiscount" step="0.01" type="number" min="0" class="form-control">
                             <label for="inputDiscount">Discount</label>
@@ -96,31 +122,6 @@
                         <li class="md-form">
                             <input id="inputPromisedDate" type="text" class="form-control datepicker">
                             <label for="inputPromisedDate">Promised Payment Date</label>
-                        </li>   
-                        <li class="md-form">
-                            <input id="inputExpense" type="number" step="0.01" min="0" class="form-control">
-                            <label for="inputExpense">Expense</label>
-                        </li> 
-                        <li class="md-form">
-                            <textarea id="inputExpenseDescription" rows="1" class="md-textarea form-control"></textarea>
-                            <label for="inputExpenseDescription">Expense Description</label>
-                        </li> 
-                    </ul>    
-                </div>
-
-                <div class="card card-body">
-                    <ul>
-                        <li class="md-form">
-                            <input id="inputServiceCharge" step="0.01" type="number" min="0" class="form-control">
-                            <label for="inputServiceCharge">Service Charge</label>
-                        </li>
-                        <li class="md-form">
-                            <textarea id="inputServiceChargeDescription" rows="1" class="md-textarea form-control"></textarea>
-                            <label for="inputServiceChargeDescription">Service Charge Description</label>
-                        </li>
-                        <li class="md-form">
-                            <input id="inputServiceCost" step="0.01" type="number" min="0" class="form-control">
-                            <label for="inputServiceCost">Service Cost</label>
                         </li>
                         <li class="d-flex justify-content-between align-items-center">
                             <div class="md-form mt-4 flex-1">

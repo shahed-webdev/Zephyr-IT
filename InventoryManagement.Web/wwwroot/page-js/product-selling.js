@@ -231,21 +231,21 @@ const purchaseTotalPrice = function () {
 
 //append total price to DOM
 const appendTotalPrice = function () {
-    const totalAmount = purchaseTotalPrice();
+    const totalAmount = purchaseTotalPrice() + +inputServiceCharge.value;
 
     totalPrice.innerText = totalAmount
     totalPayable.innerText = totalAmount;
     totalDue.innerText = totalAmount;
 
     if (inputDiscount.value)
-        inputDiscount.value = '';
+        inputDiscount.value = "";
 
     if (inputPaid.value)
-        inputPaid.value = '';
+        inputPaid.value = "";
 
     if (selectPaymentMethod.selectedIndex > 0) {
         clearMDBdropDownList(formPayment);
-        selectPaymentMethod.removeAttribute('required');
+        selectPaymentMethod.removeAttribute("required");
     }
 }
 
@@ -280,7 +280,7 @@ const onInputUnitPrice = function (evt) {
 }
 
 //selling price click
-formTable.addEventListener('input', onInputUnitPrice)
+formTable.addEventListener("input", onInputUnitPrice)
 
 
 // onProduct code submit
@@ -298,7 +298,7 @@ formCode.addEventListener('submit', evt => {
 })
 
 // remove product click
-tbody.addEventListener('click', onRemoveClicked)
+tbody.addEventListener("click", onRemoveClicked)
 
 
 //*****CALL FUNCTION*****//
@@ -342,15 +342,22 @@ const onInputPaid = function () {
     const isValid = validInput(payable, paid);
     const due = (payable - paid);
 
-    paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
+    paid ? selectPaymentMethod.setAttribute("required", true) : selectPaymentMethod.removeAttribute("required");
 
-    this.setAttribute('max', payable);
+    this.setAttribute("max", payable);
 
     totalDue.innerText = isValid ? due.toFixed() : payable;
+
+    //inputPromisedDate.setAttribute("disabled", due < 1);
 
     //check due limit 
     checkDueLimit();
 }
+
+//input Service Charge
+inputServiceCharge.addEventListener("input", function() {
+    appendTotalPrice();
+});
 
 //reset customer Id
 hiddenCustomerId.value = "";
@@ -419,7 +426,7 @@ const onSellSubmitClicked = function (evt) {
     }
 
     $.ajax({
-        url: '/Selling/Selling',
+        url: "/Selling/Selling",
         type: "POST",
         data: body,
         success: function (response) {
@@ -430,17 +437,17 @@ const onSellSubmitClicked = function (evt) {
         },
         error: function (error) {
             console.log(error);
-            btnSubmit.innerText = 'Sell Product';
+            btnSubmit.innerText = "Sell Product";
             btnSubmit.disabled = false;
         }
     });
 }
 
 //event listener
-formPayment.addEventListener('submit', onCheckFormValid)
-formTable.addEventListener('submit', onSellSubmitClicked)
-inputDiscount.addEventListener('input', onInputDiscount)
-inputPaid.addEventListener('input', onInputPaid)
+formPayment.addEventListener("submit", onCheckFormValid)
+formTable.addEventListener("submit", onSellSubmitClicked)
+inputDiscount.addEventListener("input", onInputDiscount)
+inputPaid.addEventListener("input", onInputPaid)
 
 //****CUSTOMER****//
 //customer autocomplete
