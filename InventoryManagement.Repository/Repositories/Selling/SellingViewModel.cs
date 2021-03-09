@@ -26,8 +26,7 @@ namespace InventoryManagement.Repository
         public string ServiceChargeDescription { get; set; }
         public double Expense { get; set; }
         public string ExpenseDescription { get; set; }
-        public double BuyingTotalPrice { get; set; }
-        public decimal SellingAccountCost { get; set; }
+        public int? AccountId { get; set; }
     }
 
     public class SellingProductListViewModel
@@ -37,6 +36,8 @@ namespace InventoryManagement.Repository
         public string Description { get; set; }
         public string Warranty { get; set; }
         public string[] ProductCodes { get; set; }
+
+        public double PurchasePrice { get; set; }
     }
 
     public class SellingReceiptProductViewModel

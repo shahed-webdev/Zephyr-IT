@@ -95,5 +95,11 @@ namespace InventoryManagement.Repository
             account.Balance -= amount;
             Context.Account.Update(account); 
         }
+
+        public decimal GetCostPercentage(int id)
+        {
+            var account = Context.Account.Find(id);
+            return account?.CostPercentage ?? 0;
+        }
     }
 }

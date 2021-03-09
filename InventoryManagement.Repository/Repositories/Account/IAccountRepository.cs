@@ -18,5 +18,7 @@ namespace InventoryManagement.Repository
         void BalanceAdd(int id, decimal amount);
 
         void BalanceSubtract(int id, decimal amount);
+        decimal GetCostPercentage(int id);
+
     }
 }

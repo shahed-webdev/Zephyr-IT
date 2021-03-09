@@ -40,7 +40,7 @@ namespace InventoryManagement.Repository
             var newSellingSn = await GetNewSnAsync().ConfigureAwait(false);
             var newSellingPaymentSn = await db.SellingPayments.GetNewSnAsync().ConfigureAwait(false);
             var sellingStock = await db.ProductStocks.SellingStockFromCodesAsync(codes);
-
+            var sellingAccountCost = db.Account.GetCostPercentage(model.AccountId.GetValueOrDefault());
             var selling = new Selling
             {
                 RegistrationId = model.RegistrationId,
@@ -52,11 +52,11 @@ namespace InventoryManagement.Repository
                 SellingPaidAmount = model.SellingPaidAmount,
                 SellingDate = DateTime.Now.BdTime().Date,
                 LastUpdateDate = DateTime.Now.BdTime().Date,
-                PromisedPaymentDate = model.PromisedPaymentDate,
                 SellingList = model.ProductList.Select(l => new SellingList
                 {
                     ProductId = l.ProductId,
                     SellingPrice = l.SellingPrice,
+                    PurchasePrice = l.PurchasePrice,
                     Description = l.Description,
                     Warranty = l.Warranty,
                     ProductStock = sellingStock.Where(s => l.ProductCodes.Contains(s.ProductCode)).Select(s =>
@@ -79,10 +79,20 @@ namespace InventoryManagement.Repository
                                 ReceiptSn = newSellingPaymentSn,
                                 PaidAmount = model.SellingPaidAmount,
                                 PaymentMethod = model.PaymentMethod,
-                                PaidDate = DateTime.Now.BdTime().Date
+                                PaidDate = DateTime.Now.BdTime().Date,
+                                AccountId = model.AccountId,
+                                AccountCost = sellingAccountCost
                             }
                         }
-                    } : null
+                    } : null,
+                BuyingTotalPrice = model.ProductList.Sum(p => p.PurchasePrice * p.ProductCodes.Length),
+                PromisedPaymentDate = model.PromisedPaymentDate,
+                Expense = model.Expense,
+                ExpenseDescription = model.ExpenseDescription,
+                ServiceCost = model.ServiceCost,
+                ServiceCharge = model.ServiceCharge,
+                ServiceChargeDescription = model.ServiceChargeDescription,
+                SellingAccountCost = sellingAccountCost
             };
 
 
