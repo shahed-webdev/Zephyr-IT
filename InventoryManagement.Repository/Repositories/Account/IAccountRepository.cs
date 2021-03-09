@@ -14,6 +14,7 @@ namespace InventoryManagement.Repository
         bool IsNull(int id);
         bool IsRelatedDataExist(int id);
         List<AccountCrudModel> List();
+        List<DDL> DdlList();
 
         void BalanceAdd(int id, decimal amount);
 

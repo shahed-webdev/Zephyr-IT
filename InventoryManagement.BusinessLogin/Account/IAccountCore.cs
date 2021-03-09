@@ -11,6 +11,7 @@ namespace InventoryManagement.BusinessLogin
         DbResponse Delete(int id);
         DbResponse<AccountCrudModel> Get(int id);
         List<AccountCrudModel> List();
+        List<DDL> DdlList();
 
         DbResponse<AccountDepositCrudModel> Deposit(AccountDepositCrudModel model);
         DbResponse<AccountWithdrawCrudModel> Withdraw(AccountWithdrawCrudModel model);

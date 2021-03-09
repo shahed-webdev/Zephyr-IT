@@ -94,6 +94,11 @@ namespace InventoryManagement.BusinessLogin
             return _db.Account.List();
         }
 
+        public List<DDL> DdlList()
+        {
+            return _db.Account.DdlList();
+        }
+
         public DbResponse<AccountDepositCrudModel> Deposit(AccountDepositCrudModel model)
         {
             try

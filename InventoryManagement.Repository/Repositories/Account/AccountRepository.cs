@@ -82,6 +82,15 @@ namespace InventoryManagement.Repository
                 .ToList();
         }
 
+        public List<DDL> DdlList()
+        {
+            return Context.Account.Select(a => new DDL
+            {
+                value = a.AccountId,
+                label = a.AccountName
+            }).ToList();
+        }
+
         public void BalanceAdd(int id, decimal amount)
         {
             var account = Context.Account.Find(id);
