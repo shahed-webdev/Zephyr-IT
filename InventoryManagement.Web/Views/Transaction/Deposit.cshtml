@@ -51,7 +51,7 @@
             </div>
         </form>
 
-        <table class="table">
+        <table id="table-data" class="table">
             <thead>
                 <tr>
                     <th><strong>Amount</strong></th>
@@ -60,14 +60,7 @@
                     <th class="text-center"><strong>Delete</strong></th>
                 </tr>
             </thead>
-            <tbody id="tBody">
-                <tr>
-                    <td>200</td>
-                    <td>200</td>
-                    <td>200</td>
-                    <td class="text-center"><i id="1" class="delete fas fa-trash"></i></td>
-                </tr>
-            </tbody>
+            <tbody id="tBody"></tbody>
         </table>
     </div>
 </div>
@@ -79,134 +72,136 @@
                 format: 'd-mmmm-yyyy'
             });
 
-            //dataTable.filter = [];
-            //dataTable.filter.push({ Field: "LastUpdateDate", Value: date, Operand: dataTable.operand.GreaterThanOrEqual });
+            dataTable.getData();
         });
 
-        //get data
-        var dataTable = {
-                table: null,
-                filter: null,
-                init: function() {
-                    dataTable.table = $("#data-table").DataTable({
-                        processing: true,
-                        serverSide: true,
-                        ajax: {
-                            url: "/Transaction/GetDepositData",
-                            type: "POST",
-                            data: function(d) {
-                                d.filters = dataTable.filter;
-                            }
+        //private method
+        (function() {
+            const serializeForm = function(form) {
+                const obj = {};
+                const formData = new FormData(form);
+                for (let key of formData.keys()) {
+                    obj[key] = formData.get(key);
+                }
+                return obj;
+            };
+
+            //submit form
+            const formAdd = document.getElementById("formAdd");
+            formAdd.addEventListener("submit",
+                function(evt) {
+                    evt.preventDefault();
+
+                    disableBtn(this.btnSubmit, true);
+
+                    const body = serializeForm(this);
+                    $.ajax({
+                        url: '/Transaction/AddDeposit',
+                        type: "POST",
+                        data: body,
+                        success: response => {
+                            $.notify(response.Message, response.IsSuccess ? "success" : "error");
+
+                            if (response.IsSuccess)
+                                location.reload();
+
+                            disableBtn(this.btnSubmit, false);
                         },
-                        columns:
-                        [
-                            { data: "CustomerName" },
-                            { data: "SellingAmount", "render": dataTable.addSign },
-                            { data: "SellingPaidAmount", "render": dataTable.addSign },
-                            { data: "SellingDiscountAmount", "render": dataTable.addSign },
-                            { data: "SellingDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
-                            {
-                                data: "SellingDueAmount",
-                                "render": function(data, type, row, meta) {
-                                    return data ? `<a class="blue-text" href="/Selling/DueCollection/${row.SellingId}">${data}/-</a>` : data;
-                                }
-                            }
-                        ],
-                        columnDefs: [
-                            { 'searchable': false, 'targets': [2, 3, 4, 5] },
-                            { 'className': "text-right", "targets": [2, 3, 4, 5] },
-                            { 'className': "text-left", "targets": [1] }
-                        ]
+                        error: error => {
+                            console.log(error);
+                            disableBtn(this.btnSubmit, false);
+                        }
                     });
-                },
-                operand: {
-                    Equal: 0,
-                    NotEqual: 1,
-                    GreaterThan: 2,
-                    LessThan: 3,
-                    GreaterThanOrEqual: 4,
-                    LessThanOrEqual: 5,
-                    Contains: 6,
-                    StartsWith: 7,
-                    EndsWith: 8
-                },
-                getData: function() {
-                    dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
-                },
-                addSign: function(data) { return `${data}/-` }
-            }
+                });
 
+            //on edit/delete
+            const tBody = document.getElementById("tBody");
+            tBody.addEventListener("click",
+                function(evt) {
+                    const element = evt.target;
+                    const onDelete = element.classList.contains("delete");
+                    const id = element.id;
 
-            //private method
-            (function() {
-                const serializeForm = function(form) {
-                    var obj = {};
-                    var formData = new FormData(form);
-                    for (var key of formData.keys()) {
-                        obj[key] = formData.get(key);
-                    }
-                    return obj;
-                };
-
-                //submit form
-                const formAdd = document.getElementById("formAdd");
-                formAdd.addEventListener("submit",
-                    function(evt) {
-                        evt.preventDefault();
-
-                        disableBtn(this.btnSubmit, true);
-
-                        const body = serializeForm(this);
+                    if (onDelete) {
                         $.ajax({
-                            url: '/Transaction/AddDeposit',
+                            url: '/Transaction/DeleteDeposit',
                             type: "POST",
-                            data: body,
+                            data: { id },
                             success: response => {
                                 $.notify(response.Message, response.IsSuccess ? "success" : "error");
 
-                                if (response.IsSuccess)
+                                if (response.IsSuccess) {
                                     location.reload();
-
-                                disableBtn(this.btnSubmit, false);
+                                }
                             },
                             error: error => {
                                 console.log(error);
-                                disableBtn(this.btnSubmit, false);
                             }
                         });
-                    });
+                    }
+                })
 
-                //on edit/delete
-                const tBody = document.getElementById("tBody");
-                tBody.addEventListener("click",
-                    function(evt) {
-                        const element = evt.target;
-                        const onDelete = element.classList.contains("delete");
-                        const id = element.id;
+            //disable btn on submitting
+            function disableBtn(btn, isDisable) {
+                btn.disabled = isDisable;
+            }
+        })();
 
-                        if (onDelete) {
-                            $.ajax({
-                                url: '/Transaction/DeleteDeposit',
-                                type: "POST",
-                                data: { id },
-                                success: response => {
-                                    $.notify(response.Message, response.IsSuccess ? "success" : "error");
-
-                                    if (response.IsSuccess) {
-                                        element.parentElement.parentElement.remove();
-                                    }
-                                },
-                                error: error => {
-                                    console.log(error);
-                                }
-                            });
+        //data table
+        const dataTable = {
+            table: null,
+            filter: null,
+            init: function() {
+                dataTable.table = $("#table-data").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "/Transaction/GetDepositData",
+                        type: "POST",
+                        data: function(d) {
+                            d.filters = dataTable.filter;
                         }
-                    })
-
-                //disable btn on submitting
-                function disableBtn(btn, isDisable) {
-                    btn.disabled = isDisable;
-                }
-            })();
+                    },
+                    columns:
+                    [
+                        { data: "DepositAmount", "render": dataTable.addSign },
+                        { data: "Description" },
+                        {
+                            data: "DepositDateUtc",
+                            "render": function(data) { return moment(data).format('DD MMM YYYY') }
+                        },
+                        {
+                            data: "AccountDepositId",
+                            "render": function(data, type, row, meta) {
+                                return `<a id=${data} class="delete red-text fas fa-trash-alt"></a>`;
+                            }
+                        }
+                    ],
+                    columnDefs: [
+                        { 'searchable': false, 'targets': [3] },
+                        { 'sortable': false, 'targets': [3] },
+                        { 'className': "text-center", "targets": [3] }
+                        //{ 'className': "text-left", "targets": [1] }
+                    ]
+                });
+            },
+            operand: {
+                Equal: 0,
+                NotEqual: 1,
+                GreaterThan: 2,
+                LessThan: 3,
+                GreaterThanOrEqual: 4,
+                LessThanOrEqual: 5,
+                Contains: 6,
+                StartsWith: 7,
+                EndsWith: 8
+            },
+            getData: function() {
+                dataTable.filter = [];
+                dataTable.filter.push({ Field: "AccountId", Value: '@Model.AccountId', Operand: dataTable.operand.Equal });
+                dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
+            },
+            addSign: function(data) { return `${data}/-` }
+        }
     </script>
 }

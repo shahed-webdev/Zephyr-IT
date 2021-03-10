@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JqueryDataTables.LoopsIT;
 
 namespace InventoryManagement.Web.Controllers
 {
@@ -63,7 +64,14 @@ namespace InventoryManagement.Web.Controllers
             var response = _accountCore.Withdraw(model);
             return Json(response);
         }
-        
+
+        //get withdraw data-table
+        public IActionResult GetWithdrawalData(DataRequest request)
+        {
+            var response = _accountCore.WithdrawList(request);
+            return Json(response);
+        }
+
         //delete
         [HttpPost]
         public IActionResult DeleteWithdrawal(int id)
@@ -85,6 +93,13 @@ namespace InventoryManagement.Web.Controllers
         public IActionResult AddDeposit(AccountDepositCrudModel model)
         {
             var response = _accountCore.Deposit(model);
+            return Json(response);
+        }
+
+        //get deposit data-table
+        public IActionResult GetDepositData(DataRequest request)
+        {
+            var response = _accountCore.DepositList(request);
             return Json(response);
         }
 
