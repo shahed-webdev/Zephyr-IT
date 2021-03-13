@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewData["Title"] = "Due Receipt";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="page-header">Purchase Due Invoice</h4>
+        <h5 class="font-weight-bold" id="totalDue"></h5>
+    </div>
+
+    <div class="card card-body">
+        <table id="table-vendor" class="table table-sm">
+            <thead>
+            <tr>
+                <th><strong>Company</strong></th>
+                <th><strong>Amount</strong></th>
+                <th><strong>Paid</strong></th>
+                <th><strong>Due</strong></th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        //vendor data-table
+        const vendorTable = $('#table-vendor').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/Dashboard/TopDueVendor",
+                type: "POST"
+            },
+            footerCallback: function(row, data, start, end, display) {
+                const totalSet = document.getElementById("totalDue");
+                let totalAmount = 0;
+                for (let i = 0; i < data.length; i++) {
+                    totalAmount += data[i]["VendorDue"];
+                }
+                totalSet.textContent = `Total Due: ৳${totalAmount}`;
+            },
+            columns:
+            [
+                {
+                    data: "VendorCompanyName",
+                    render: function(data, type, row, meta) {
+                        return `<a class="blue-text" href="/Purchase/PayDueMultiple/${row.VendorId}">${data}</a>`
+                    }
+                },
+                { data: "TotalAmount" },
+                { data: "VendorPaid" },
+                { data: "VendorDue" }
+            ]
+        });
+    </script>
+}

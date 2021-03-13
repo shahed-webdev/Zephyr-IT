@@ -1,10 +1,10 @@
 ﻿
 $(function() {
     // material select initialization
-    $('.mdb-select').materialSelect();
+    $(".mdb-select").materialSelect();
 
-    $('.datepicker').pickadate({
-        format: 'd-mmmm-yyyy',
+    $(".datepicker").pickadate({
+        format: "d-mmmm-yyyy",
         min: new Date()
     });
 });
@@ -24,6 +24,7 @@ const btnFind = formCode.btnFind
 // product table
 const formTable = document.getElementById('formTable')
 const tbody = document.getElementById('t-body')
+const productTotalPrice = document.getElementById('productTotalPrice')
 
 //payment selectors
 const formPayment = document.getElementById('formPayment')
@@ -127,7 +128,7 @@ const createTableRow = function (item) {
                 <td>${item.Warranty}</td>
                 <td>${item.codes.length}</td>
                 <td><input type="number" required class="form-control inputUnitPrice" step="0.01" min="${item.sellingFixedValue}" max="${item.SellingPrice}" value="${item.SellingPrice}" /></td>
-                <td>${item.SellingPrice * item.codes.length}</td>
+                <td class="text-right">${item.SellingPrice * item.codes.length}</td>
                 <td class="text-center"><i class="fal fa-times remove"></i></td>
             </tr>`
 }
@@ -138,7 +139,6 @@ const showProducts = function () {
     cartProducts.forEach(item => {
         table += createTableRow(item)
     });
-
     tbody.innerHTML = table
 
     //show added items count
@@ -231,8 +231,10 @@ const purchaseTotalPrice = function () {
 
 //append total price to DOM
 const appendTotalPrice = function () {
-    const totalAmount = purchaseTotalPrice() + +inputServiceCharge.value;
+    const productPrice = purchaseTotalPrice();
+    const totalAmount = productPrice + +inputServiceCharge.value;
 
+    productTotalPrice.innerText = productPrice ? `Total: ${productPrice}`: ""
     totalPrice.innerText = totalAmount
     totalPayable.innerText = totalAmount;
     totalDue.innerText = totalAmount;

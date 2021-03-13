@@ -1,0 +1,158 @@
+﻿
+@{
+    ViewData["Title"] = "Pay Due Multiple";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container">
+    <div class="card card-body">
+        <section class="my-4 d-print-none">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="page-header">
+                    @Model.CustomerName
+                    <small class="font-small">@Model.CustomerAddress</small>
+                </h4>
+                <h4 class="page-header">Sales Due: ৳@Model.SaleDue</h4>
+            </div>
+        </section>
+
+        <table id="tableReceipt" class="table table-sm table-bordered table-hover">
+            <thead class="text-center">
+                <tr>
+                    <th><strong>#Bill No</strong></th>
+                    <th><strong>Amount</strong></th>
+                    <th><strong>Transport Cost</strong></th>
+                    <th><strong>Discount</strong></th>
+                    <th><strong>Prev.Paid</strong></th>
+                    <th><strong>Due</strong></th>
+                    <th><strong>Paying</strong></th>
+                    <th><strong>Date</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var item in Model.SellingRecords)
+                    {
+                        <tr>
+                            <td class="text-center">@item.SellingSn</td>
+                            <td class="text-center">@item.SellingAmount</td>
+                            <td class="text-right">@item.TransportationCost</td>
+                            <td class="text-right">@item.SellingDiscountAmount</td>
+                            <td class="text-right">@item.SellingPaidAmount</td>
+                            <td class="text-right">@item.SellingDueAmount</td>
+                            <td data-id="@item.SellingId" class="text-right font-weight-bold">0</td>
+                            <td class="text-right">@item.SellingDate.ToString("d MMM yyyy")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        <form id="formPaid">
+            <div class="form-inline">
+                <div class="md-form">
+                    <input id="inputPaid" step="0.01" min="0" max="@Model.SaleDue" required type="number" class="form-control" placeholder="Total Paid Amount" />
+                </div>
+                <div class="md-form mx-3">
+                    <input id="inputDate" placeholder="Paid Date" type="text" class="form-control datepicker" />
+                </div>
+                <div class="md-form">
+                    <select id="selectPaymentMethod" required class="mdb-select mb-0 mt-1 mr-2">
+                        <option value="">[ Payment Method ]</option>
+                        <option>Cash</option>
+                        <option>Bank</option>
+                        <option>Cheque</option>
+                        <option>bkash</option>
+                    </select>
+                </div>
+                <div class="md-form">
+                    <input id="submitPaid" type="submit" class="btn btn-blue" value="Paid" />
+                    <span id="responseError" class="field-validation-error"></span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function() {
+            $(".mdb-select").materialSelect();
+            $(".datepicker").pickadate().val(moment(new Date()).format("DD MMMM, YYYY"));
+        });
+
+        //selectors
+        const table = document.getElementById("tableReceipt");
+        const formPaid = document.getElementById("formPaid");
+        const inputTotalPaid = formPaid.inputPaid;
+        const inputDate = formPaid.inputDate;
+        const selectPaymentMethod = formPaid.selectPaymentMethod;
+
+        //events
+        inputTotalPaid.addEventListener("input", function() {
+            const totalDue = @Model.SaleDue;
+            let totalPaid = +this.value;
+
+            for (let i = 1, row; (row = table.rows[i]); i++) {
+                const due = row.cells[5].textContent;
+
+                if (totalPaid < due && totalPaid > 0) {
+                    row.cells[6].textContent = totalPaid.toFixed();
+                } else if (totalPaid >= due) {
+                    row.cells[6].textContent = due;
+                } else {
+                    row.cells[6].textContent = 0;
+                }
+
+                totalPaid -= due;
+            }
+
+            if (totalDue < this.value) {
+                this.value = totalDue;
+                return;
+            }
+        })
+
+        //post paid
+        formPaid.addEventListener('submit', function(evt) {
+            evt.preventDefault();
+
+            //disable button on submit
+            const btnPaid = formPaid.submitPaid;
+            btnPaid.disabled = true;
+
+            const data = {
+                CustomerId: @Model.CustomerId,
+                PaidAmount: +inputTotalPaid.value,
+                PaymentMethod: selectPaymentMethod.value,
+                PaidDate: inputDate.value,
+                Bills: []
+            }
+
+            for (var i = 1, row; (row = table.rows[i]); i++) {
+                const paid = +row.cells[6].textContent;
+
+                if (paid > 0) {
+                    const invoice = { SellingId: +row.cells[6].getAttribute("data-id"), SellingPaidAmount: paid };
+                    data.Bills.push(invoice);
+                }
+            }
+
+            const url = "/Purchase/PayVendorDueMultiple";
+            $.ajax({
+                type: 'POST',
+                url,
+                data,
+                success: function(response) {
+                    location.href = `/Purchase/DueReceipt/${response}`;
+                },
+                error: function(err) {
+                    console.log(err)
+                    $("#responseError").text(err.responseText);
+                    btnPaid.disabled = false;
+                }
+            });
+        });
+    </script>
+}
+

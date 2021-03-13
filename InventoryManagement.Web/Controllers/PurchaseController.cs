@@ -93,7 +93,7 @@ namespace InventoryManagement.Web.Views
         }
 
 
-        //GET: Due Collection
+        //GET: Due Collection single
         public async Task<IActionResult> PayDue(int? id)
         {
             if (id == null) return RedirectToAction("PurchaseRecords");
@@ -116,13 +116,36 @@ namespace InventoryManagement.Web.Views
             return BadRequest(dbResponse.Message);
         }
 
-        protected override void Dispose(bool disposing)
+
+        //Due Receipt list
+        public IActionResult DueReceipt()
         {
-            if (disposing)
-            {
-                _db.Dispose();
-            }
-            base.Dispose(disposing);
+            return View();
+        }
+
+
+
+        //GET: Due Collection multiple
+        public async Task<IActionResult> PayDueMultiple(int? id)
+        {
+            if (id == null) return RedirectToAction("PurchaseRecords");
+
+            var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
+
+            if (model == null) return RedirectToAction("PurchaseRecords");
+            return View(model);
+        }
+
+        //vendor due collection(ajax)
+        [HttpPost]
+        public async Task<IActionResult> PayVendorDueMultiple(PurchaseDuePaySingleModel model)
+        {
+            model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+            var dbResponse = await _db.PurchasePayments.DuePaySingleAsync(model, _db).ConfigureAwait(false);
+
+            if (dbResponse.IsSuccess) return Ok(dbResponse);
+
+            return BadRequest(dbResponse.Message);
         }
     }
 }

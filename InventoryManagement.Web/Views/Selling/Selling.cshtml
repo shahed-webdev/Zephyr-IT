@@ -20,9 +20,9 @@
 
 <div class="m-3">
     <h4 class="mb-3 page-header d-print-none">Selling</h4>
-
+    
     <div class="row">
-        <div class="col-lg-9 mb-3">
+        <div class="col-xl-9 mb-3">
             <div class="card card-body mb-3">
                 <form id="formCode">
                     <div class="d-flex justify-content-between align-items-center">
@@ -52,19 +52,25 @@
                                     <th>WARRANTY</th>
                                     <th>QTY</th>
                                     <th>U.PRICE</th>
-                                    <th>PRICE</th>
-                                    <th style="width:30px"></th>
+                                    <th class="text-right">PRICE</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody id="t-body"></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="text-right" colspan="6"><strong id="productTotalPrice"></strong></td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
                         </table>
                         <input id="btnProduct" type="submit" style="display:none" />
                     </form>
                 </div>
             </div>
-        </div>
+        </div> 
 
-        <div class="col-lg-3">
+        <div class="col-xl-3">
             <form id="formPayment">
                 <div class="card card-body mb-3">
                     <ul class="mb-0">
