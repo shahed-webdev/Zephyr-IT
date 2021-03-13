@@ -38,8 +38,6 @@
                 dataTable.table = $("#data-table").DataTable({
                     processing: true,
                     serverSide: true,
-                    buttons: dataTable.button,
-                    dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>><"row"<"col-sm-12"<tr>>><"row"<"col-sm-5"i><"col-sm-7"p>>',
                     ajax: {
                         url: "/Selling/DueInvoiceData",
                         type: "POST"
@@ -66,29 +64,13 @@
                         { 'searchable': false, 'targets': [2,3,4,5] },
                         { 'className': "text-right", "targets": [2, 3, 4,5] },
                         { 'className': "text-left", "targets": [1] }
-                    ],
-                    order: [[5, 'desc']]
+                    ]
                 });
             },
             getData: function () {
                 dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
             },
-            addSign: function (data) { return `${data}/-` },
-            button: {
-                buttons: [{
-                    title: '',
-                    extend: 'print',
-                    text: '<i class="fa fa-print"></i> Print',
-                    exportOptions: {/*columns: [0,1] //Column value those print*/},
-                    autoPrint: true,
-                    customize: function (win) {
-                        $(win.document.body).prepend(`<nav class="mb-3 navbar peach-gradient"><a class="navbar-brand ml-1"><span>Zephyr</span> IT</a></nav><h3 class="h3-responsive">${$('h4').text()}</h3>`);
-                    }
-                }],
-                dom: {
-                    button: {className: 'btn btn-dark btn-rounded btn-sm my-0'}
-                }
-            }
+            addSign: function (data) { return `${data}/-` }
         }
     </script>
 }
