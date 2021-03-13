@@ -372,7 +372,7 @@ namespace InventoryManagement.Repository
 
                 Context.ProductStock.UpdateRange(stocks);
                 Context.Selling.Remove(selling);
-                Context.SaveChanges();
+                await Context.SaveChangesAsync();
                 db.Customers.UpdatePaidDue(selling.CustomerId);
             }
             catch (Exception e)

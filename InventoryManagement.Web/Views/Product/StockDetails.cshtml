@@ -90,8 +90,8 @@
             document.getElementById('category').textContent = product.ProductCatalogName;
             document.getElementById('productCode').textContent = product.ProductCode;
             document.getElementById('productName').textContent = product.ProductName;
-            document.getElementById('purchasePrice').textContent = product.PurchasePrice;
-            document.getElementById('sellingPrice').textContent = product.SellingPrice;
+            document.getElementById('purchasePrice').textContent = product.PurchasePrice.toFixed(2);
+            document.getElementById('sellingPrice').textContent = product.SellingPrice.toFixed(2);
             document.getElementById('warranty').textContent = product.Warranty;
             document.getElementById('description').textContent = product.Description;
             document.getElementById('note').textContent = product.Note;
