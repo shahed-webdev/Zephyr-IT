@@ -4,14 +4,16 @@ using InventoryManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210313092848_computedColumnSqlToZero")]
+    partial class computedColumnSqlToZero
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,7 +135,7 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<decimal>("Due")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("(([TotalAmount]+[ReturnAmount])-([TotalDiscount]+[Paid])) PERSISTED");
+                        .HasComputedColumnSql("0");
 
                     b.Property<decimal>("DueLimit")
                         .HasColumnType("decimal(18, 2)");
@@ -276,7 +278,7 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<decimal>("CostPerDay")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18, 2)")
-                        .HasComputedColumnSql("([Amount]/[IntervalDays]) PERSISTED");
+                        .HasComputedColumnSql("0");
 
                     b.Property<DateTime>("InsertDate")
                         .ValueGeneratedOnAdd()
@@ -706,12 +708,12 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<decimal>("PurchaseDiscountPercentage")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("(case when [PurchaseTotalPrice]=(0) then (0) else ([PurchaseDiscountAmount]*(100))/[PurchaseTotalPrice] end) PERSISTED");
+                        .HasComputedColumnSql("0");
 
                     b.Property<decimal>("PurchaseDueAmount")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18, 2)")
-                        .HasComputedColumnSql("(([PurchaseTotalPrice]+[PurchaseReturnAmount])-([PurchaseDiscountAmount]+[PurchasePaidAmount])) PERSISTED");
+                        .HasComputedColumnSql("0");
 
                     b.Property<decimal>("PurchasePaidAmount")
                         .HasColumnType("decimal(18, 2)");
@@ -720,7 +722,7 @@ namespace InventoryManagement.Data.Migrations
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("varchar(4)")
-                        .HasComputedColumnSql("(case when (([PurchaseTotalPrice]+[PurchaseReturnAmount])-([PurchaseDiscountAmount]+[PurchasePaidAmount]))<=(0) then 'Paid' else 'Due' end) PERSISTED")
+                        .HasComputedColumnSql("0")
                         .HasMaxLength(4)
                         .IsUnicode(false);
 
@@ -999,12 +1001,12 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<decimal>("SellingDiscountPercentage")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("(case when [SellingTotalPrice]=(0) then (0) else ([SellingDiscountAmount]*(100))/[SellingTotalPrice] end) PERSISTED");
+                        .HasComputedColumnSql("0");
 
                     b.Property<decimal>("SellingDueAmount")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("(([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount])) PERSISTED");
+                        .HasComputedColumnSql("0");
 
                     b.Property<decimal>("SellingPaidAmount")
                         .HasColumnType("decimal(18, 2)");
@@ -1013,14 +1015,14 @@ namespace InventoryManagement.Data.Migrations
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("varchar(4)")
-                        .HasComputedColumnSql("(case when (([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount]))<=(0) then 'Paid' else 'Due' end) PERSISTED")
+                        .HasComputedColumnSql("0")
                         .HasMaxLength(4)
                         .IsUnicode(false);
 
                     b.Property<decimal>("SellingProfit")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("([BuyingTotalPrice]-([SellingTotalPrice]+[SellingDiscountAmount]+[Expense]+[SellingAccountCost])) PERSISTED");
+                        .HasComputedColumnSql("0");
 
                     b.Property<decimal>("SellingReturnAmount")
                         .HasColumnType("decimal(18, 2)");
@@ -1045,7 +1047,7 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<decimal>("ServiceProfit")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("([ServiceCharge]-[ServiceCost]) PERSISTED");
+                        .HasComputedColumnSql("0");
 
                     b.HasKey("SellingId");
 
@@ -1146,7 +1148,7 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<decimal>("AccountCost")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("([PaidAmount] * ([AccountCostPercentage]/100)) PERSISTED");
+                        .HasComputedColumnSql("0");
 
                     b.Property<decimal>("AccountCostPercentage")
                         .HasColumnType("decimal(18, 2)");
@@ -1251,12 +1253,12 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<decimal>("ServiceDiscountPercentage")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("(case when [ServiceTotalPrice]=(0) then (0) else ([ServiceDiscountAmount]*(100))/[ServiceTotalPrice] end) PERSISTED");
+                        .HasComputedColumnSql("0");
 
                     b.Property<decimal>("ServiceDueAmount")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("([ServiceTotalPrice]-([ServiceDiscountAmount]+[ServicePaidAmount])) PERSISTED");
+                        .HasComputedColumnSql("0");
 
                     b.Property<decimal>("ServicePaidAmount")
                         .HasColumnType("decimal(18, 2)");
@@ -1265,7 +1267,7 @@ namespace InventoryManagement.Data.Migrations
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("varchar(4)")
-                        .HasComputedColumnSql("(case when ([ServiceTotalPrice]-([ServiceDiscountAmount]+[ServicePaidAmount]))<=(0) then 'Paid' else 'Due' end) PERSISTED")
+                        .HasComputedColumnSql("0")
                         .HasMaxLength(4)
                         .IsUnicode(false);
 
@@ -1408,7 +1410,7 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<decimal>("Due")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("(([TotalAmount]+[ReturnAmount])-([TotalDiscount]+[Paid])) PERSISTED");
+                        .HasComputedColumnSql("0");
 
                     b.Property<DateTime>("InsertDate")
                         .ValueGeneratedOnAdd()

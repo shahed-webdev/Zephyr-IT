@@ -7,8 +7,9 @@ namespace InventoryManagement.Data
     {
         public void Configure(EntityTypeBuilder<Vendor> entity)
         {
+
             entity.Property(e => e.Due)
-                .HasComputedColumnSql("(([TotalAmount]+[ReturnAmount])-([TotalDiscount]+[Paid]))");
+                .HasComputedColumnSql("(([TotalAmount]+[ReturnAmount])-([TotalDiscount]+[Paid])) PERSISTED");
 
             entity.Property(e => e.InsertDate)
                 .HasColumnType("datetime")
@@ -26,6 +27,15 @@ namespace InventoryManagement.Data
 
             entity.Property(e => e.Description).HasMaxLength(1000);
 
+
+            entity.Property(e => e.TotalAmount)
+                .HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.TotalDiscount)
+                .HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.ReturnAmount)
+                .HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.Paid)
+                .HasColumnType("decimal(18, 2)");
         }
     }
 }

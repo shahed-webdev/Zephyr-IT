@@ -4,14 +4,16 @@ using InventoryManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210313050150_AddServiceChargeToSellingDueColumn")]
+    partial class AddServiceChargeToSellingDueColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,13 +132,13 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<decimal>("Due")
+                    b.Property<double>("Due")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("(([TotalAmount]+[ReturnAmount])-([TotalDiscount]+[Paid])) PERSISTED");
+                        .HasColumnType("float")
+                        .HasComputedColumnSql("(([TotalAmount]+[ReturnAmount])-([TotalDiscount]+[Paid]))");
 
-                    b.Property<decimal>("DueLimit")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("DueLimit")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("InsertDate")
                         .ValueGeneratedOnAdd()
@@ -150,20 +152,20 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
-                    b.Property<decimal>("Paid")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("Paid")
+                        .HasColumnType("float");
 
                     b.Property<byte[]>("Photo")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<decimal>("ReturnAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("ReturnAmount")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("TotalAmount")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("TotalDiscount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("TotalDiscount")
+                        .HasColumnType("float");
 
                     b.HasKey("CustomerId");
 
@@ -210,8 +212,8 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("ExpenseAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("ExpenseAmount")
+                        .HasColumnType("float");
 
                     b.Property<int>("ExpenseCategoryId")
                         .HasColumnType("int");
@@ -270,13 +272,13 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("CostPerDay")
+                    b.Property<double>("CostPerDay")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18, 2)")
-                        .HasComputedColumnSql("([Amount]/[IntervalDays]) PERSISTED");
+                        .HasColumnType("float")
+                        .HasComputedColumnSql("ROUND(([Amount]/[IntervalDays]),2)");
 
                     b.Property<DateTime>("InsertDate")
                         .ValueGeneratedOnAdd()
@@ -324,8 +326,8 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<int>("RegistrationId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("TotalExpense")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("TotalExpense")
+                        .HasColumnType("float");
 
                     b.Property<int>("VoucherNo")
                         .HasColumnType("int");
@@ -346,8 +348,8 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("ExpenseAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("ExpenseAmount")
+                        .HasColumnType("float");
 
                     b.Property<string>("ExpenseFor")
                         .IsRequired()
@@ -568,9 +570,9 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
-                    b.Property<decimal>("SellingPrice")
+                    b.Property<double>("SellingPrice")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnType("float")
                         .HasDefaultValueSql("0");
 
                     b.Property<string>("Warranty")
@@ -700,39 +702,39 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("date")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<decimal>("PurchaseDiscountAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("PurchaseDiscountAmount")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("PurchaseDiscountPercentage")
+                    b.Property<double>("PurchaseDiscountPercentage")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("(case when [PurchaseTotalPrice]=(0) then (0) else ([PurchaseDiscountAmount]*(100))/[PurchaseTotalPrice] end) PERSISTED");
+                        .HasColumnType("float")
+                        .HasComputedColumnSql("(case when [PurchaseTotalPrice]=(0) then (0) else round(([PurchaseDiscountAmount]*(100))/[PurchaseTotalPrice],(2)) end)");
 
-                    b.Property<decimal>("PurchaseDueAmount")
+                    b.Property<double>("PurchaseDueAmount")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18, 2)")
-                        .HasComputedColumnSql("(([PurchaseTotalPrice]+[PurchaseReturnAmount])-([PurchaseDiscountAmount]+[PurchasePaidAmount])) PERSISTED");
+                        .HasColumnType("float")
+                        .HasComputedColumnSql("(round(([PurchaseTotalPrice]+[PurchaseReturnAmount])-([PurchaseDiscountAmount]+[PurchasePaidAmount]),(2)))");
 
-                    b.Property<decimal>("PurchasePaidAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("PurchasePaidAmount")
+                        .HasColumnType("float");
 
                     b.Property<string>("PurchasePaymentStatus")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("varchar(4)")
-                        .HasComputedColumnSql("(case when (([PurchaseTotalPrice]+[PurchaseReturnAmount])-([PurchaseDiscountAmount]+[PurchasePaidAmount]))<=(0) then 'Paid' else 'Due' end) PERSISTED")
+                        .HasComputedColumnSql("(case when (([PurchaseTotalPrice]+[PurchaseReturnAmount])-([PurchaseDiscountAmount]+[PurchasePaidAmount]))<=(0) then 'Paid' else 'Due' end)")
                         .HasMaxLength(4)
                         .IsUnicode(false);
 
-                    b.Property<decimal>("PurchaseReturnAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("PurchaseReturnAmount")
+                        .HasColumnType("float");
 
                     b.Property<int>("PurchaseSn")
                         .HasColumnName("PurchaseSN")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("PurchaseTotalPrice")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("PurchaseTotalPrice")
+                        .HasColumnType("float");
 
                     b.Property<int>("RegistrationId")
                         .HasColumnType("int");
@@ -770,14 +772,14 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<int>("PurchaseId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("PurchasePrice")
+                    b.Property<double>("PurchasePrice")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnType("float")
                         .HasDefaultValueSql("0");
 
-                    b.Property<decimal>("SellingPrice")
+                    b.Property<double>("SellingPrice")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnType("float")
                         .HasDefaultValueSql("0");
 
                     b.Property<string>("Warranty")
@@ -805,8 +807,8 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<decimal>("PaidAmount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("PaidAmount")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("PaidDate")
                         .ValueGeneratedOnAdd()
@@ -851,8 +853,8 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<int>("PurchaseId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("PurchasePaidAmount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("PurchasePaidAmount")
+                        .HasColumnType("float");
 
                     b.Property<int>("PurchasePaymentId")
                         .HasColumnType("int");
@@ -993,27 +995,27 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("date")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<decimal>("SellingDiscountAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("SellingDiscountAmount")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("SellingDiscountPercentage")
+                    b.Property<double>("SellingDiscountPercentage")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("(case when [SellingTotalPrice]=(0) then (0) else ([SellingDiscountAmount]*(100))/[SellingTotalPrice] end) PERSISTED");
+                        .HasColumnType("float")
+                        .HasComputedColumnSql("(case when [SellingTotalPrice]=(0) then (0) else round(([SellingDiscountAmount]*(100))/[SellingTotalPrice],(2)) end)");
 
-                    b.Property<decimal>("SellingDueAmount")
+                    b.Property<double>("SellingDueAmount")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("(([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount])) PERSISTED");
+                        .HasColumnType("float")
+                        .HasComputedColumnSql("(round(([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount]),(2)))");
 
-                    b.Property<decimal>("SellingPaidAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("SellingPaidAmount")
+                        .HasColumnType("float");
 
                     b.Property<string>("SellingPaymentStatus")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("varchar(4)")
-                        .HasComputedColumnSql("(case when (([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount]))<=(0) then 'Paid' else 'Due' end) PERSISTED")
+                        .HasComputedColumnSql("(case when (([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount]))<=(0) then 'Paid' else 'Due' end)")
                         .HasMaxLength(4)
                         .IsUnicode(false);
 
@@ -1022,15 +1024,15 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasComputedColumnSql("([BuyingTotalPrice]-([SellingTotalPrice]+[SellingDiscountAmount]+[Expense]+[SellingAccountCost])) PERSISTED");
 
-                    b.Property<decimal>("SellingReturnAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("SellingReturnAmount")
+                        .HasColumnType("float");
 
                     b.Property<int>("SellingSn")
                         .HasColumnName("SellingSN")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("SellingTotalPrice")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("SellingTotalPrice")
+                        .HasColumnType("float");
 
                     b.Property<decimal>("ServiceCharge")
                         .HasColumnType("decimal(18, 2)");
@@ -1042,9 +1044,9 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<decimal>("ServiceCost")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<decimal>("ServiceProfit")
+                    b.Property<double>("ServiceProfit")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18,2)")
+                        .HasColumnType("float")
                         .HasComputedColumnSql("([ServiceCharge]-[ServiceCost]) PERSISTED");
 
                     b.HasKey("SellingId");
@@ -1112,15 +1114,15 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("PurchasePrice")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("PurchasePrice")
+                        .HasColumnType("float");
 
                     b.Property<int>("SellingId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("SellingPrice")
+                    b.Property<double>("SellingPrice")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnType("float")
                         .HasDefaultValueSql("0");
 
                     b.Property<string>("Warranty")
@@ -1162,8 +1164,8 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<decimal>("PaidAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("PaidAmount")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("PaidDate")
                         .ValueGeneratedOnAdd()
@@ -1207,8 +1209,8 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<int>("SellingId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("SellingPaidAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("SellingPaidAmount")
+                        .HasColumnType("float");
 
                     b.Property<int>("SellingPaymentId")
                         .HasColumnType("int");
@@ -1245,27 +1247,27 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("date")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<decimal>("ServiceDiscountAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("ServiceDiscountAmount")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("ServiceDiscountPercentage")
+                    b.Property<double>("ServiceDiscountPercentage")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("(case when [ServiceTotalPrice]=(0) then (0) else ([ServiceDiscountAmount]*(100))/[ServiceTotalPrice] end) PERSISTED");
+                        .HasColumnType("float")
+                        .HasComputedColumnSql("(case when [ServiceTotalPrice]=(0) then (0) else round(([ServiceDiscountAmount]*(100))/[ServiceTotalPrice],(2)) end)");
 
-                    b.Property<decimal>("ServiceDueAmount")
+                    b.Property<double>("ServiceDueAmount")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("([ServiceTotalPrice]-([ServiceDiscountAmount]+[ServicePaidAmount])) PERSISTED");
+                        .HasColumnType("float")
+                        .HasComputedColumnSql("(round([ServiceTotalPrice]-([ServiceDiscountAmount]+[ServicePaidAmount]),(2)))");
 
-                    b.Property<decimal>("ServicePaidAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("ServicePaidAmount")
+                        .HasColumnType("float");
 
                     b.Property<string>("ServicePaymentStatus")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("varchar(4)")
-                        .HasComputedColumnSql("(case when ([ServiceTotalPrice]-([ServiceDiscountAmount]+[ServicePaidAmount]))<=(0) then 'Paid' else 'Due' end) PERSISTED")
+                        .HasComputedColumnSql("(case when ([ServiceTotalPrice]-([ServiceDiscountAmount]+[ServicePaidAmount]))<=(0) then 'Paid' else 'Due' end)")
                         .HasMaxLength(4)
                         .IsUnicode(false);
 
@@ -1273,8 +1275,8 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnName("ServiceSN")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("ServiceTotalPrice")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("ServiceTotalPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("ServiceId");
 
@@ -1342,8 +1344,8 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
-                    b.Property<decimal>("ServiceCharge")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("ServiceCharge")
+                        .HasColumnType("float");
 
                     b.Property<int>("ServiceDeviceId")
                         .HasColumnType("int");
@@ -1382,8 +1384,8 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("ServicePaidAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("ServicePaidAmount")
+                        .HasColumnType("float");
 
                     b.HasKey("ServicePaymentListId");
 
@@ -1405,30 +1407,30 @@ namespace InventoryManagement.Data.Migrations
                         .HasColumnType("nvarchar(1000)")
                         .HasMaxLength(1000);
 
-                    b.Property<decimal>("Due")
+                    b.Property<double>("Due")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("(([TotalAmount]+[ReturnAmount])-([TotalDiscount]+[Paid])) PERSISTED");
+                        .HasColumnType("float")
+                        .HasComputedColumnSql("(([TotalAmount]+[ReturnAmount])-([TotalDiscount]+[Paid]))");
 
                     b.Property<DateTime>("InsertDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<decimal>("Paid")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("Paid")
+                        .HasColumnType("float");
 
                     b.Property<byte[]>("Photo")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<decimal>("ReturnAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("ReturnAmount")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("TotalAmount")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("TotalDiscount")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("TotalDiscount")
+                        .HasColumnType("float");
 
                     b.Property<string>("VendorAddress")
                         .HasColumnType("nvarchar(500)")

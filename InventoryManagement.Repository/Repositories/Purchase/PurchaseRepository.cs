@@ -221,12 +221,12 @@ namespace InventoryManagement.Repository
             return years;
         }
 
-        public double TotalDue()
+        public decimal TotalDue()
         {
             return Context.Purchase?.Sum(p => p.PurchaseDueAmount) ?? 0;
         }
 
-        public double DailyPurchaseAmount(DateTime? date)
+        public decimal DailyPurchaseAmount(DateTime? date)
         {
             var saleDate = date ?? DateTime.Now;
             return Context.Purchase.Where(s => s.PurchaseDate.Date == saleDate.Date)?

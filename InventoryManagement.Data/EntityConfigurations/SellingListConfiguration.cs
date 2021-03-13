@@ -18,6 +18,13 @@ namespace InventoryManagement.Data
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_SellingList_Selling");
 
+
+            entity.Property(e => e.SellingPrice)
+                .HasColumnType("decimal(18, 2)");
+
+            entity.Property(e => e.PurchasePrice)
+                .HasColumnType("decimal(18, 2)");
+
         }
     }
 }

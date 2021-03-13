@@ -13,9 +13,9 @@ namespace InventoryManagement.Repository
         public int PurchaseId { get; set; }
         public int RegistrationId { get; set; }
         public int VendorId { get; set; }
-        public double PurchaseTotalPrice { get; set; }
-        public double PurchaseDiscountAmount { get; set; }
-        public double PurchasePaidAmount { get; set; }
+        public decimal PurchaseTotalPrice { get; set; }
+        public decimal PurchaseDiscountAmount { get; set; }
+        public decimal PurchasePaidAmount { get; set; }
         public string PaymentMethod { get; set; }
         public string MemoNumber { get; set; }
         public DateTime PurchaseDate { get; set; }
@@ -32,10 +32,10 @@ namespace InventoryManagement.Repository
         public InstitutionVM InstitutionInfo { get; set; }
         public int PurchaseSn { get; set; }
         public int PurchaseId { get; set; }
-        public double PurchaseTotalPrice { get; set; }
-        public double PurchaseDiscountAmount { get; set; }
-        public double PurchasePaidAmount { get; set; }
-        public double PurchaseDueAmount { get; set; }
+        public decimal PurchaseTotalPrice { get; set; }
+        public decimal PurchaseDiscountAmount { get; set; }
+        public decimal PurchasePaidAmount { get; set; }
+        public decimal PurchaseDueAmount { get; set; }
         public string MemoNumber { get; set; }
         public DateTime PurchaseDate { get; set; }
         public ICollection<ProductViewModel> Products { get; set; }
@@ -50,10 +50,10 @@ namespace InventoryManagement.Repository
         public int VendorId { get; set; }
         public string VendorCompanyName { get; set; }
         public int PurchaseSn { get; set; }
-        public double PurchaseAmount { get; set; }
-        public double PurchasePaidAmount { get; set; }
-        public double PurchaseDiscountAmount { get; set; }
-        public double PurchaseDueAmount { get; set; }
+        public decimal PurchaseAmount { get; set; }
+        public decimal PurchasePaidAmount { get; set; }
+        public decimal PurchaseDiscountAmount { get; set; }
+        public decimal PurchaseDueAmount { get; set; }
         public string MemoNumber { get; set; }
         public DateTime PurchaseDate { get; set; }
     }

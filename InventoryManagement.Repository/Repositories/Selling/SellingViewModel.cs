@@ -12,19 +12,19 @@ namespace InventoryManagement.Repository
         public int SellingId { get; set; }
         public int RegistrationId { get; set; }
         public int CustomerId { get; set; }
-        public double SellingTotalPrice { get; set; }
-        public double SellingDiscountAmount { get; set; }
-        public double SellingPaidAmount { get; set; }
+        public decimal SellingTotalPrice { get; set; }
+        public decimal SellingDiscountAmount { get; set; }
+        public decimal SellingPaidAmount { get; set; }
         public string PaymentMethod { get; set; }
         public DateTime SellingDate { get; set; }
         //public string[] ProductCodes { get; set; }
         public ICollection<SellingProductListViewModel> ProductList { get; set; }
 
         public DateTime? PromisedPaymentDate { get; set; }
-        public double ServiceCharge { get; set; }
-        public double ServiceCost { get; set; }
+        public decimal ServiceCharge { get; set; }
+        public decimal ServiceCost { get; set; }
         public string ServiceChargeDescription { get; set; }
-        public double Expense { get; set; }
+        public decimal Expense { get; set; }
         public string ExpenseDescription { get; set; }
         public int? AccountId { get; set; }
     }
@@ -32,12 +32,12 @@ namespace InventoryManagement.Repository
     public class SellingProductListViewModel
     {
         public int ProductId { get; set; }
-        public double SellingPrice { get; set; }
+        public decimal SellingPrice { get; set; }
         public string Description { get; set; }
         public string Warranty { get; set; }
         public string[] ProductCodes { get; set; }
 
-        public double PurchasePrice { get; set; }
+        public decimal PurchasePrice { get; set; }
     }
 
     public class SellingReceiptProductViewModel
@@ -48,8 +48,8 @@ namespace InventoryManagement.Repository
         public int ProductCatalogId { get; set; }
         public string ProductCatalogName { get; set; }
         public string ProductName { get; set; }
-        public double SellingPrice { get; set; }
-        public double PurchasePrice { get; set; }
+        public decimal SellingPrice { get; set; }
+        public decimal PurchasePrice { get; set; }
         public string Description { get; set; }
         public string Note { get; set; }
         public string Warranty { get; set; }
@@ -66,11 +66,11 @@ namespace InventoryManagement.Repository
         public InstitutionVM InstitutionInfo { get; set; }
         public int SellingSn { get; set; }
         public int SellingId { get; set; }
-        public double SellingTotalPrice { get; set; }
-        public double SellingDiscountAmount { get; set; }
-        public double SellingPaidAmount { get; set; }
-        public double SellingDueAmount { get; set; }
-        public double SellingReturnAmount { get; set; }
+        public decimal SellingTotalPrice { get; set; }
+        public decimal SellingDiscountAmount { get; set; }
+        public decimal SellingPaidAmount { get; set; }
+        public decimal SellingDueAmount { get; set; }
+        public decimal SellingReturnAmount { get; set; }
         public DateTime SellingDate { get; set; }
         public ICollection<SellingReceiptProductViewModel> Products { get; set; }
         public ICollection<SellingPaymentViewModel> Payments { get; set; }
@@ -86,10 +86,10 @@ namespace InventoryManagement.Repository
         public int CustomerId { get; set; }
         public int SellingSn { get; set; }
         public string CustomerName { get; set; }
-        public double SellingAmount { get; set; }
-        public double SellingPaidAmount { get; set; }
-        public double SellingDiscountAmount { get; set; }
-        public double SellingDueAmount { get; set; }
+        public decimal SellingAmount { get; set; }
+        public decimal SellingPaidAmount { get; set; }
+        public decimal SellingDiscountAmount { get; set; }
+        public decimal SellingDueAmount { get; set; }
         public DateTime SellingDate { get; set; }
         public DateTime LastUpdateDate { get; set; }
     }
@@ -102,11 +102,11 @@ namespace InventoryManagement.Repository
         public CustomerReceiptViewModel CustomerInfo { get; set; }
         public int SellingSn { get; set; }
         public int SellingId { get; set; }
-        public double SellingTotalPrice { get; set; }
-        public double SellingDiscountAmount { get; set; }
-        public double SellingDueAmount { get; set; }
-        public double SellingReturnAmount { get; set; }
-        public double SellingPaidAmount { get; set; }
+        public decimal SellingTotalPrice { get; set; }
+        public decimal SellingDiscountAmount { get; set; }
+        public decimal SellingDueAmount { get; set; }
+        public decimal SellingReturnAmount { get; set; }
+        public decimal SellingPaidAmount { get; set; }
         public DateTime SellingDate { get; set; }
         public string SoildBy { get; set; }
 
@@ -118,12 +118,12 @@ namespace InventoryManagement.Repository
     {
         public int SellingId { get; set; }
         public int UpdateRegistrationId { get; set; }
-        public double SellingTotalPrice { get; set; }
-        public double SellingDiscountAmount { get; set; }
-        public double SellingReturnAmount { get; set; }
+        public decimal SellingTotalPrice { get; set; }
+        public decimal SellingDiscountAmount { get; set; }
+        public decimal SellingReturnAmount { get; set; }
         public string[] AddedProductCodes { get; set; }
         public string[] RemovedProductCodes { get; set; }
-        public double PaidAmount { get; set; }
+        public decimal PaidAmount { get; set; }
         public string PaymentMethod { get; set; }
         public DateTime PaidDate { get; set; }
         public ICollection<SellingUpdateProductPostModel> Products { get; set; }
@@ -133,7 +133,7 @@ namespace InventoryManagement.Repository
     {
         public int SellingListId { get; set; }
         public int ProductId { get; set; }
-        public double SellingPrice { get; set; }
+        public decimal SellingPrice { get; set; }
         public string Description { get; set; }
         public string Warranty { get; set; }
         public string[] RemainCodes { get; set; }
@@ -141,9 +141,9 @@ namespace InventoryManagement.Repository
 
     public class DateWiseSaleSummary
     {
-        public double SoldAmount { get; set; }
-        public double ReceivedAmount { get; set; }
-        public double DiscountAmount { get; set; }
-        public double DueAmount { get; set; }
+        public decimal SoldAmount { get; set; }
+        public decimal ReceivedAmount { get; set; }
+        public decimal DiscountAmount { get; set; }
+        public decimal DueAmount { get; set; }
     }
 }

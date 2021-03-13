@@ -17,11 +17,11 @@ namespace InventoryManagement.Data
         public string VendorAddress { get; set; }
         public string VendorPhone { get; set; }
         public string Description { get; set; }
-        public double TotalAmount { get; set; }
-        public double TotalDiscount { get; set; }
-        public double ReturnAmount { get; set; }
-        public double Paid { get; set; }
-        public double Due { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal TotalDiscount { get; set; }
+        public decimal ReturnAmount { get; set; }
+        public decimal Paid { get; set; }
+        public decimal Due { get; set; }
         public byte[] Photo { get; set; }
         public DateTime InsertDate { get; set; }
 

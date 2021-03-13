@@ -11,9 +11,9 @@ namespace InventoryManagement.Repository
             DueVendors = new HashSet<VendorPaidDue>();
         }
         public DailyDashboardSummaryViewModel DailySummary { get; set; }
-        public double MarketDue { get; set; }
-        public double CustomerDue { get; set; }
-        public double StockProductPurchaseValue { get; set; }
+        public decimal MarketDue { get; set; }
+        public decimal CustomerDue { get; set; }
+        public decimal StockProductPurchaseValue { get; set; }
         public ICollection<MonthlyDashboardSummaryViewModel> MonthlySummary { get; set; }
         public ICollection<CustomerDueViewModel> TopDueCustomer { get; set; }
         public ICollection<VendorPaidDue> DueVendors { get; set; }
@@ -22,21 +22,21 @@ namespace InventoryManagement.Repository
     public class MonthlyDashboardSummaryViewModel
     {
         public MonthName Month { get; set; }
-        public double MonthlySale { get; set; }
-        public double MonthlyNewPurchase { get; set; }
-        public double MonthlyExpense { get; set; }
-        public double MonthlyProfit { get; set; }
-        public double DailyAverageProfit { get; set; }
+        public decimal MonthlySale { get; set; }
+        public decimal MonthlyNewPurchase { get; set; }
+        public decimal MonthlyExpense { get; set; }
+        public decimal MonthlyProfit { get; set; }
+        public decimal DailyAverageProfit { get; set; }
     }
 
     public class DailyDashboardSummaryViewModel
     {
-        public double TotalSale { get; set; }
-        public double ProductSold { get; set; }
-        public double CashCollection { get; set; }
-        public double Expense { get; set; }
-        public double Profit { get; set; }
-        public double NetProfit { get; set; }
+        public decimal TotalSale { get; set; }
+        public decimal ProductSold { get; set; }
+        public decimal CashCollection { get; set; }
+        public decimal Expense { get; set; }
+        public decimal Profit { get; set; }
+        public decimal NetProfit { get; set; }
     }
 
 }

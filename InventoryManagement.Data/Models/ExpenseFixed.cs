@@ -6,9 +6,9 @@ namespace InventoryManagement.Data
     {
         public int ExpenseFixedId { get; set; }
         public string Name { get; set; }
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
         public int IntervalDays { get; set; }
-        public double CostPerDay { get; set; }
+        public decimal CostPerDay { get; set; }
         public DateTime InsertDate { get; set; }
     }
 }

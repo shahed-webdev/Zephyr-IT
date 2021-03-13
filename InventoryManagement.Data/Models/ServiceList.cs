@@ -8,7 +8,7 @@ namespace InventoryManagement.Data
         public int ServiceListId { get; set; }
         public int ServiceId { get; set; }
         public int ServiceDeviceId { get; set; }
-        public double ServiceCharge { get; set; }
+        public decimal ServiceCharge { get; set; }
         public string Problem { get; set; }
         public string Solution { get; set; }
         public DateTime InsertDate { get; set; }

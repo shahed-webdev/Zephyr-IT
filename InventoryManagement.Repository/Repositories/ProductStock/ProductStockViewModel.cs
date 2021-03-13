@@ -14,8 +14,8 @@
         public string Description { get; set; }
         public string Warranty { get; set; }
         public string Note { get; set; }
-        public double SellingPrice { get; set; }
-        public double PurchasePrice { get; set; }
+        public decimal SellingPrice { get; set; }
+        public decimal PurchasePrice { get; set; }
         public int? SellingSn { get; set; }
         public int? SellingId { get; set; }
         public int? PurchaseId { get; set; }

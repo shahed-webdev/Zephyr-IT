@@ -135,7 +135,7 @@ namespace InventoryManagement.Repository
             return true;
         }
 
-        public double TotalDue()
+        public decimal TotalDue()
         {
             return Context.Vendor?.Sum(v => v.Due) ?? 0;
         }

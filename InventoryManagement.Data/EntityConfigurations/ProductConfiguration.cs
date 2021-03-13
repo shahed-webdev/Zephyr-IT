@@ -29,6 +29,10 @@ namespace InventoryManagement.Data
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Product_ProductCatalog");
 
+
+            entity.Property(e => e.SellingPrice)
+                .HasColumnType("decimal(18, 2)");
+
         }
     }
 }

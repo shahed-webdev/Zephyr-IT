@@ -23,6 +23,9 @@ namespace InventoryManagement.Data
                 .WithMany(p => p.ExpenseTransportationList)
                 .HasForeignKey(d => d.ExpenseTransportationId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Property(e => e.ExpenseAmount)
+                .HasColumnType("decimal(18, 2)");
         }
     }
 }

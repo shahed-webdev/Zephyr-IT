@@ -15,7 +15,7 @@ namespace InventoryManagement.Data
         public int RegistrationId { get; set; }
         public int CustomerId { get; set; }
         public int ReceiptSn { get; set; }
-        public double PaidAmount { get; set; }
+        public decimal PaidAmount { get; set; }
         public string PaymentMethod { get; set; }
         public DateTime PaidDate { get; set; }
         public DateTime InsertDate { get; set; }

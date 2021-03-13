@@ -15,11 +15,11 @@ namespace InventoryManagement.Data
         public int RegistrationId { get; set; }
         public int CustomerId { get; set; }
         public int ServiceSn { get; set; }
-        public double ServiceTotalPrice { get; set; }
-        public double ServiceDiscountAmount { get; set; }
-        public double ServiceDiscountPercentage { get; set; }
-        public double ServicePaidAmount { get; set; }
-        public double ServiceDueAmount { get; set; }
+        public decimal ServiceTotalPrice { get; set; }
+        public decimal ServiceDiscountAmount { get; set; }
+        public decimal ServiceDiscountPercentage { get; set; }
+        public decimal ServicePaidAmount { get; set; }
+        public decimal ServiceDueAmount { get; set; }
         public string ServicePaymentStatus { get; set; }
         public DateTime ServiceDate { get; set; }
         public DateTime InsertDate { get; set; }

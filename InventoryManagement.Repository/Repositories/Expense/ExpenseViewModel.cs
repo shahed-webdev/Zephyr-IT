@@ -16,7 +16,7 @@ namespace InventoryManagement.Repository
         public string CategoryName { get; set; }
 
         [Required]
-        public double ExpenseAmount { get; set; }
+        public decimal ExpenseAmount { get; set; }
 
         public string ExpenseFor { get; set; }
 
@@ -29,7 +29,7 @@ namespace InventoryManagement.Repository
     {
         public int ExpenseCategoryId { get; set; }
         public string CategoryName { get; set; }
-        public double TotalExpense { get; set; }
+        public decimal TotalExpense { get; set; }
     }
 
 
@@ -40,7 +40,7 @@ namespace InventoryManagement.Repository
         public int ExpenseCategoryId { get; set; }
         public string CategoryName { get; set; }
         [Required]
-        public double ExpenseAmount { get; set; }
+        public decimal ExpenseAmount { get; set; }
         public string ExpenseFor { get; set; }
         [Required]
         [DisplayFormat(DataFormatString = "{0:d MMMM, yyyy}", ApplyFormatInEditMode = true)]
@@ -54,7 +54,7 @@ namespace InventoryManagement.Repository
         public bool IsApproved { get; set; }
         public string CreateBy { get; set; }
         public string CategoryName { get; set; }
-        public double ExpenseAmount { get; set; }
+        public decimal ExpenseAmount { get; set; }
         public string ExpenseFor { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:d MMMM, yyyy}", ApplyFormatInEditMode = true)]

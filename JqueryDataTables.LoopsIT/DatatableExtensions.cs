@@ -191,12 +191,12 @@ namespace JqueryDataTables.LoopsIT
         }
 
 
-        private static double SumCreate<T>(this IQueryable<T> query, string memberName)
+        private static decimal SumCreate<T>(this IQueryable<T> query, string memberName)
         {
             var typeParams = new ParameterExpression[] { Expression.Parameter(typeof(T), "") };
             var pi = typeof(T).GetProperty(memberName);
 
-            var sumProperty = Expression.Lambda<Func<T, double>>(Expression.Property(typeParams[0], pi), typeParams);
+            var sumProperty = Expression.Lambda<Func<T, decimal>>(Expression.Property(typeParams[0], pi), typeParams);
 
             return query.Sum(sumProperty);
         }

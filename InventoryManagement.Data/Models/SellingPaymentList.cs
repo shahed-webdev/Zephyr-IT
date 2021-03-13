@@ -8,7 +8,7 @@ namespace InventoryManagement.Data
         public int SellingPaymentListId { get; set; }
         public int SellingPaymentId { get; set; }
         public int SellingId { get; set; }
-        public double SellingPaidAmount { get; set; }
+        public decimal SellingPaidAmount { get; set; }
         public DateTime InsertDate { get; set; }
 
         public virtual Selling Selling { get; set; }

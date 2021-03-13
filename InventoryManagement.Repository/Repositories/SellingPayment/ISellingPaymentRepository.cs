@@ -10,9 +10,9 @@ namespace InventoryManagement.Repository
         Task<int> GetNewSnAsync();
         Task<DbResponse> DuePaySingleAsync(SellingDuePaySingleModel model, IUnitOfWork db);
         Task<DbResponse<int>> DuePayMultipleAsync(SellingDuePayMultipleModel model, IUnitOfWork db);
-        double DailyCashCollectionAmount(DateTime? date);
+        decimal DailyCashCollectionAmount(DateTime? date);
         DataResult<SellingPaymentRecordModel> Records(DataRequest request);
-        double CollectionAmountDateWise(DateTime? sDateTime, DateTime? eDateTime);
+        decimal CollectionAmountDateWise(DateTime? sDateTime, DateTime? eDateTime);
 
     }
 }

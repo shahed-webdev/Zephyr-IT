@@ -13,6 +13,6 @@ namespace JqueryDataTables.LoopsIT
 
     public class CustomDataResult<T> : DataResult<T> where T : class
     {
-        public double GrandTotal { get; set; }
+        public decimal GrandTotal { get; set; }
     }
 }

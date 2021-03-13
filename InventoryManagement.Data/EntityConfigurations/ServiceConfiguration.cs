@@ -16,15 +16,17 @@ namespace InventoryManagement.Data
                     .HasColumnType("date")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.ServiceDiscountPercentage).HasComputedColumnSql("(case when [ServiceTotalPrice]=(0) then (0) else round(([ServiceDiscountAmount]*(100))/[ServiceTotalPrice],(2)) end)");
+                entity.Property(e => e.ServiceDiscountPercentage)
+                   .HasComputedColumnSql("(case when [ServiceTotalPrice]=(0) then (0) else ([ServiceDiscountAmount]*(100))/[ServiceTotalPrice] end) PERSISTED");
 
-                entity.Property(e => e.ServiceDueAmount).HasComputedColumnSql("(round([ServiceTotalPrice]-([ServiceDiscountAmount]+[ServicePaidAmount]),(2)))");
+                entity.Property(e => e.ServiceDueAmount)
+                    .HasComputedColumnSql("([ServiceTotalPrice]-([ServiceDiscountAmount]+[ServicePaidAmount])) PERSISTED");
 
                 entity.Property(e => e.ServicePaymentStatus)
                     .IsRequired()
                     .HasMaxLength(4)
                     .IsUnicode(false)
-                    .HasComputedColumnSql("(case when ([ServiceTotalPrice]-([ServiceDiscountAmount]+[ServicePaidAmount]))<=(0) then 'Paid' else 'Due' end)");
+                    .HasComputedColumnSql("(case when ([ServiceTotalPrice]-([ServiceDiscountAmount]+[ServicePaidAmount]))<=(0) then 'Paid' else 'Due' end) PERSISTED");
 
                 entity.Property(e => e.ServiceSn).HasColumnName("ServiceSN");
 
@@ -39,6 +41,17 @@ namespace InventoryManagement.Data
                     .HasForeignKey(d => d.RegistrationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Service_Registration");
+
+
+                entity.Property(e => e.ServiceTotalPrice)
+                    .HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.ServiceDiscountAmount)
+                    .HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.ServicePaidAmount)
+                    .HasColumnType("decimal(18, 2)");
+
 
         }
     }

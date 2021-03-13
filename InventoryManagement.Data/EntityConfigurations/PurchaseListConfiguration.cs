@@ -24,6 +24,14 @@ namespace InventoryManagement.Data
                 .HasForeignKey(pl => pl.PurchaseId)
                 .OnDelete(DeleteBehavior.NoAction)
                 .HasConstraintName("FK_PurchaseList_Purchase");
+
+
+            entity.Property(e => e.SellingPrice)
+                .HasColumnType("decimal(18, 2)");
+
+
+            entity.Property(e => e.PurchasePrice)
+                .HasColumnType("decimal(18, 2)");
         }
     }
 }

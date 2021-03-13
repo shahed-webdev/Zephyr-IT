@@ -15,7 +15,7 @@ namespace InventoryManagement.Repository
         VendorViewModel FindCustom(int? id);
         void UpdatePaidDue(int id);
         bool RemoveCustom(int id);
-        double TotalDue();
+        decimal TotalDue();
         ICollection<VendorPaidDue> TopDue(int totalVendor);
         DataResult<VendorPaidDue> TopDueDataTable(DataRequest request);
     }

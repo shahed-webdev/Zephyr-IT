@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace InventoryManagement.Data
 {
-    public partial class Customer
+    public class Customer
     {
         public Customer()
         {
@@ -19,12 +19,12 @@ namespace InventoryManagement.Data
         public string CustomerName { get; set; }
         public string Description { get; set; }
         public string CustomerAddress { get; set; }
-        public double TotalAmount { get; set; }
-        public double TotalDiscount { get; set; }
-        public double ReturnAmount { get; set; }
-        public double Paid { get; set; }
-        public double Due { get; set; }
-        public double DueLimit { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal TotalDiscount { get; set; }
+        public decimal ReturnAmount { get; set; }
+        public decimal Paid { get; set; }
+        public decimal Due { get; set; }
+        public decimal DueLimit { get; set; }
         public byte[] Photo { get; set; }
         public DateTime InsertDate { get; set; }
         public string Designation { get; set; }

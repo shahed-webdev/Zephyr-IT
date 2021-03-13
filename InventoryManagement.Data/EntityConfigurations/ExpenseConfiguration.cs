@@ -17,6 +17,9 @@ namespace InventoryManagement.Data
                 .HasColumnType("datetime")
                 .HasDefaultValueSql("(getdate())");
 
+            entity.Property(e => e.ExpenseAmount)
+                .HasColumnType("decimal(18, 2)");
+
             entity.HasOne(d => d.ExpenseCategory)
                 .WithMany(p => p.Expense)
                 .HasForeignKey(d => d.ExpenseCategoryId)

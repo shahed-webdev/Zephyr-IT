@@ -26,6 +26,9 @@ namespace InventoryManagement.Data
                 .WithMany(p => p.ExpenseTransportation)
                 .HasForeignKey(d => d.RegistrationId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Property(e => e.TotalExpense)
+                .HasColumnType("decimal(18, 2)");
         }
     }
 }

@@ -27,7 +27,11 @@ namespace InventoryManagement.Data
                     .HasForeignKey(d => d.ServiceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ServiceList_Service");
-      
+
+
+
+                entity.Property(e => e.ServiceCharge)
+                    .HasColumnType("decimal(18, 2)");
         }
     }
 }

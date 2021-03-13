@@ -23,7 +23,12 @@ namespace InventoryManagement.Data
                     .HasForeignKey(d => d.SellingPaymentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SellingPaymentList_SellingPayment");
-       
+
+                entity.Property(e => e.SellingPaidAmount)
+                    .HasColumnType("decimal(18, 2)");
+            
+
+
         }
     }
 }

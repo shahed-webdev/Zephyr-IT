@@ -51,13 +51,13 @@ namespace InventoryManagement.Repository
     public class MonthlyAmount
     {
         public int MonthNumber { get; set; }
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
     }
 
     public class MonthIncomeExpense
     {
         public string Month { get; set; }
-        public double Income { get; set; }
-        public double Expense { get; set; }
+        public decimal Income { get; set; }
+        public decimal Expense { get; set; }
     }
 }

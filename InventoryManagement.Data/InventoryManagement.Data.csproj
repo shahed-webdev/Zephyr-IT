@@ -27,6 +27,24 @@
     <Compile Remove="Migrations\20210114165324_AddExpenseTransportationTable.Designer.cs" />
     <Compile Remove="Migrations\20210305114837_AddAccountTablesUpdatesSellingTable.cs" />
     <Compile Remove="Migrations\20210305114837_AddAccountTablesUpdatesSellingTable.Designer.cs" />
+    <Compile Remove="Migrations\20210313064513_ConvertDoubleToDecimal.cs" />
+    <Compile Remove="Migrations\20210313064513_ConvertDoubleToDecimal.Designer.cs" />
+    <Compile Remove="Migrations\20210313081927_ConvertDoubleToDecimal.cs" />
+    <Compile Remove="Migrations\20210313081927_ConvertDoubleToDecimal.Designer.cs" />
+    <Compile Remove="Migrations\20210313082922_ConvertDoubleToDecimal.cs" />
+    <Compile Remove="Migrations\20210313082922_ConvertDoubleToDecimal.Designer.cs" />
+    <Compile Remove="Migrations\20210313083146_ConvertDoubleToDecimal.cs" />
+    <Compile Remove="Migrations\20210313083146_ConvertDoubleToDecimal.Designer.cs" />
+    <Compile Remove="Migrations\20210313083554_ConvertDoubleToDecimal.cs" />
+    <Compile Remove="Migrations\20210313083554_ConvertDoubleToDecimal.Designer.cs" />
+    <Compile Remove="Migrations\20210313091211_ConvertDoubleToDecimal.cs" />
+    <Compile Remove="Migrations\20210313091211_ConvertDoubleToDecimal.Designer.cs" />
+    <Compile Remove="Migrations\20210313091919_ConvertDoubleToDecimal.cs" />
+    <Compile Remove="Migrations\20210313091919_ConvertDoubleToDecimal.Designer.cs" />
+    <Compile Remove="Migrations\20210313092503_ConvertDoubleToDecimal.cs" />
+    <Compile Remove="Migrations\20210313092503_ConvertDoubleToDecimal.Designer.cs" />
+    <Compile Remove="Migrations\20210313093606_computedColumnDone.cs" />
+    <Compile Remove="Migrations\20210313093606_computedColumnDone.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

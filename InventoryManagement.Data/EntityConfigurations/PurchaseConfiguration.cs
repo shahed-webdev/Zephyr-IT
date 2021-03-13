@@ -17,15 +17,17 @@ namespace InventoryManagement.Data
                 .HasColumnType("date")
                 .HasDefaultValueSql("(getdate())");
 
-            entity.Property(e => e.PurchaseDiscountPercentage).HasComputedColumnSql("(case when [PurchaseTotalPrice]=(0) then (0) else round(([PurchaseDiscountAmount]*(100))/[PurchaseTotalPrice],(2)) end)");
+            entity.Property(e => e.PurchaseDiscountPercentage)
+                .HasComputedColumnSql("(case when [PurchaseTotalPrice]=(0) then (0) else ([PurchaseDiscountAmount]*(100))/[PurchaseTotalPrice] end) PERSISTED");
 
-            entity.Property(e => e.PurchaseDueAmount).HasComputedColumnSql("(round(([PurchaseTotalPrice]+[PurchaseReturnAmount])-([PurchaseDiscountAmount]+[PurchasePaidAmount]),(2)))");
+            entity.Property(e => e.PurchaseDueAmount)
+                .HasComputedColumnSql("(([PurchaseTotalPrice]+[PurchaseReturnAmount])-([PurchaseDiscountAmount]+[PurchasePaidAmount])) PERSISTED");
 
             entity.Property(e => e.PurchasePaymentStatus)
                 .IsRequired()
                 .HasMaxLength(4)
                 .IsUnicode(false)
-                .HasComputedColumnSql("(case when (([PurchaseTotalPrice]+[PurchaseReturnAmount])-([PurchaseDiscountAmount]+[PurchasePaidAmount]))<=(0) then 'Paid' else 'Due' end)");
+                .HasComputedColumnSql( "(case when (([PurchaseTotalPrice]+[PurchaseReturnAmount])-([PurchaseDiscountAmount]+[PurchasePaidAmount]))<=(0) then 'Paid' else 'Due' end) PERSISTED");
 
             entity.Property(e => e.PurchaseSn).HasColumnName("PurchaseSN");
 
@@ -40,6 +42,19 @@ namespace InventoryManagement.Data
                 .HasForeignKey(d => d.VendorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Purchase_Vendor");
+
+            entity.Property(e => e.PurchaseTotalPrice)
+                .HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.PurchaseDiscountAmount)
+                .HasColumnType("decimal(18, 2)");
+
+            entity.Property(e => e.PurchasePaidAmount)
+                .HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.PurchaseReturnAmount)
+                .HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.PurchaseDueAmount)
+                .HasColumnType("decimal(18, 2)");
+
         }
     }
 }

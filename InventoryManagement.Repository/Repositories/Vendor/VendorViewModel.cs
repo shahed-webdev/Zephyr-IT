@@ -19,7 +19,7 @@ namespace InventoryManagement.Repository
         public string VendorPhone { get; set; }
 
         public string Description { get; set; }
-        public double Due { get; set; }
+        public decimal Due { get; set; }
 
         [Display(Name = "Add Date")]
         public DateTime InsertDate { get; set; }
@@ -29,9 +29,9 @@ namespace InventoryManagement.Repository
     {
         public int VendorId { get; set; }
         public string VendorCompanyName { get; set; }
-        public double VendorDue { get; set; }
-        public double VendorPaid { get; set; }
-        public double TotalAmount { get; set; }
-        public double TotalDiscount { get; set; }
+        public decimal VendorDue { get; set; }
+        public decimal VendorPaid { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal TotalDiscount { get; set; }
     }
 }

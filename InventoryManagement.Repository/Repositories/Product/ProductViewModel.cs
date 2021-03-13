@@ -15,8 +15,8 @@ namespace InventoryManagement.Repository
         public string Description { get; set; }
         public string Warranty { get; set; }
         public string Note { get; set; }
-        public double PurchasePrice { get; set; }
-        public double SellingPrice { get; set; }
+        public decimal PurchasePrice { get; set; }
+        public decimal SellingPrice { get; set; }
         public ICollection<ProductStockViewModel> ProductStocks { get; set; }
     }
 
@@ -30,8 +30,8 @@ namespace InventoryManagement.Repository
         public string Description { get; set; }
         public string Warranty { get; set; }
         public string Note { get; set; }
-        public double SellingPrice { get; set; }
-        public double PurchasePrice { get; set; }
+        public decimal SellingPrice { get; set; }
+        public decimal PurchasePrice { get; set; }
         public ICollection<ProductStockViewModel> ProductStocks { get; set; }
     }
 
@@ -45,8 +45,8 @@ namespace InventoryManagement.Repository
         public string Description { get; set; }
         public string Warranty { get; set; }
         public string Note { get; set; }
-        public double SellingPrice { get; set; }
-        public double PurchasePrice { get; set; }
+        public decimal SellingPrice { get; set; }
+        public decimal PurchasePrice { get; set; }
     }
 
     public class ProductShowViewModel
@@ -57,7 +57,7 @@ namespace InventoryManagement.Repository
         public string Description { get; set; }
         public string Warranty { get; set; }
         public string Note { get; set; }
-        public double SellingPrice { get; set; }
+        public decimal SellingPrice { get; set; }
         public int Stock { get; set; }
     }
 }

@@ -148,7 +148,7 @@ namespace InventoryManagement.Repository
             }
         }
 
-        public double DailyCashCollectionAmount(DateTime? date)
+        public decimal DailyCashCollectionAmount(DateTime? date)
         {
             var saleDate = date ?? DateTime.Now.BdTime().Date;
             return Context.SellingPayment.Where(s => s.PaidDate == saleDate.Date)?
@@ -175,7 +175,7 @@ namespace InventoryManagement.Repository
                 .ToDataResult(request);
         }
 
-        public double CollectionAmountDateWise(DateTime? sDateTime, DateTime? eDateTime)
+        public decimal CollectionAmountDateWise(DateTime? sDateTime, DateTime? eDateTime)
         {
             var sD = sDateTime ?? new DateTime(DateTime.Now.BdTime().Year, 1, 1);
             var eD = eDateTime ?? new DateTime(DateTime.Now.BdTime().Year, 12, 31);

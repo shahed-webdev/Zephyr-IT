@@ -154,10 +154,10 @@ namespace InventoryManagement.Repository
             return years;
         }
 
-        public double DailyExpenseAmount(DateTime? date)
+        public decimal DailyExpenseAmount(DateTime? date)
         {
             var saleDate = date ?? DateTime.Now;
-            double ex = 0;
+            decimal ex = 0;
 
 
             ex += Context.Expense
@@ -173,9 +173,9 @@ namespace InventoryManagement.Repository
             return ex;
         }
 
-        public double ExpenseYearly(int year)
+        public decimal ExpenseYearly(int year)
         {
-            double ex = 0;
+            decimal ex = 0;
             ex += Context.Expense
                 .Where(s => s.IsApproved && s.ExpenseDate.Year == year)
                 .Sum(s => s.ExpenseAmount);

@@ -14,8 +14,8 @@ namespace InventoryManagement.Data
         public string Description { get; set; }
         public string Warranty { get; set; }
         public string Note { get; set; }
-        public double SellingPrice { get; set; }
-        public double PurchasePrice { get; set; }
+        public decimal SellingPrice { get; set; }
+        public decimal PurchasePrice { get; set; }
         public virtual Purchase Purchase { get; set; }
         public virtual Product Product { get; set; }
         public virtual ICollection<ProductStock> ProductStock { get; set; }

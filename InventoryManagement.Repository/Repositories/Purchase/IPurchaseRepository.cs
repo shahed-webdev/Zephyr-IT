@@ -13,8 +13,8 @@ namespace InventoryManagement.Repository
         Task<PurchaseReceiptViewModel> PurchaseReceiptAsync(int id, IUnitOfWork db);
         DataResult<PurchaseRecordViewModel> Records(DataRequest request);
         ICollection<int> Years();
-        double TotalDue();
-        double DailyPurchaseAmount(DateTime? date);
+        decimal TotalDue();
+        decimal DailyPurchaseAmount(DateTime? date);
         ICollection<MonthlyAmount> MonthlyAmounts(int year);
         Task<DbResponse> UpdateMemoNumberAsync(int purchaseId, string newMemoNumber);
     }

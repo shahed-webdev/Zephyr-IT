@@ -38,6 +38,9 @@ namespace InventoryManagement.Data
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_SellingPayment_Account");
 
+                entity.Property(e => e.PaidAmount)
+                    .HasColumnType("decimal(18, 2)");  
+                
                 entity.Property(e => e.AccountCostPercentage)
                     .HasColumnType("decimal(18, 2)");
 

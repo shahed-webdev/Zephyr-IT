@@ -205,21 +205,21 @@ namespace InventoryManagement.Repository
             return years;
         }
 
-        public double TotalDue()
+        public decimal TotalDue()
         {
             return Context.Selling?.Sum(s => s.SellingDueAmount) ?? 0;
         }
 
         /// <summary>Calculate Report By (Total Amount – discount) Totally Payment competed date
         /// </summary>
-        public double DailySaleAmount(DateTime? date)
+        public decimal DailySaleAmount(DateTime? date)
         {
             var saleDate = date ?? DateTime.Now.BdTime();
             return Context.Selling.Where(s => s.LastUpdateDate == saleDate.Date)?
                   .Sum(s => s.SellingTotalPrice - s.SellingDiscountAmount) ?? 0;
         }
 
-        public double SaleAmountDateWise(DateTime? sDateTime, DateTime? eDateTime)
+        public decimal SaleAmountDateWise(DateTime? sDateTime, DateTime? eDateTime)
         {
             var sD = sDateTime ?? new DateTime(DateTime.Now.BdTime().Year, 1, 1);
             var eD = eDateTime ?? new DateTime(DateTime.Now.BdTime().Year, 12, 31);
@@ -257,14 +257,14 @@ namespace InventoryManagement.Repository
 
         /// <summary>Calculate Report By (Total Amount – discount) Selling date
         /// </summary>
-        public double DailyProductSoldAmount(DateTime? date)
+        public decimal DailyProductSoldAmount(DateTime? date)
         {
             var saleDate = date ?? DateTime.Now.BdTime();
             return Context.Selling.Where(s => s.SellingDate == saleDate.Date)?
                        .Sum(s => s.SellingTotalPrice - s.SellingDiscountAmount) ?? 0;
         }
 
-        public double DailyProfit(DateTime? date)
+        public decimal DailyProfit(DateTime? date)
         {
             var saleDate = date ?? DateTime.Now.BdTime();
             return (from selling in Context.Selling
@@ -278,7 +278,7 @@ namespace InventoryManagement.Repository
 
         }
 
-        public double DailySoldPurchaseAmount(DateTime? date)
+        public decimal DailySoldPurchaseAmount(DateTime? date)
         {
             var saleDate = date ?? DateTime.Now.BdTime();
             //return Context.Selling

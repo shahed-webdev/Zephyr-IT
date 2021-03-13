@@ -6,7 +6,7 @@ namespace InventoryManagement.Repository
     public class ExpenseTransportationAddModel
     {
         public int? CustomerId { get; set; }
-        public double TotalExpense { get; set; }
+        public decimal TotalExpense { get; set; }
         public string ExpenseNote { get; set; }
         public DateTime ExpenseDate { get; set; }
         public List<ExpenseTransportationListAddModel> ExpenseTransportationList { get; set; }
@@ -18,7 +18,7 @@ namespace InventoryManagement.Repository
         public int NumberOfPerson { get; set; }
         public string ExpenseFor { get; set; }
         public string Vehicle { get; set; }
-        public double ExpenseAmount { get; set; }
+        public decimal ExpenseAmount { get; set; }
     }
 
     public class ExpenseTransportationDetailsModel
@@ -29,7 +29,7 @@ namespace InventoryManagement.Repository
         public string CustomerName { get; set; }
         public string CreateBy { get; set; }
         public int VoucherNo { get; set; }
-        public double TotalExpense { get; set; }
+        public decimal TotalExpense { get; set; }
         public string ExpenseNote { get; set; }
         public DateTime ExpenseDate { get; set; }
         public List<ExpenseTransportationListAddModel> ExpenseTransportationList { get; set; }

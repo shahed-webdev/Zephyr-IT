@@ -18,8 +18,8 @@ namespace InventoryManagement.Repository
         ExpenseDetailsModel GetDetails(int expenseId);
         void RemoveCustom(int id);
         ICollection<int> Years();
-        double DailyExpenseAmount(DateTime? day);
-        double ExpenseYearly(int year);
+        decimal DailyExpenseAmount(DateTime? day);
+        decimal ExpenseYearly(int year);
         ICollection<MonthlyAmount> MonthlyAmounts(int year);
 
         ICollection<ExpenseViewModel> DateToDate(DateTime? sDateTime, DateTime? eDateTime);

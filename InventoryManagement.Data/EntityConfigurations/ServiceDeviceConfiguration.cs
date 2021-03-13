@@ -34,6 +34,7 @@ namespace InventoryManagement.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ServiceDevice_ProductCatalog");
 
-        }
+                
+    }
     }
 }

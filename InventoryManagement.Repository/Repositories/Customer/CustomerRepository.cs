@@ -194,7 +194,7 @@ namespace InventoryManagement.Repository
                   }).Take(5).ToListAsync().ConfigureAwait(false);
         }
 
-        public double TotalDue()
+        public decimal TotalDue()
         {
             return Context.Customer?.Sum(s => s.Due) ?? 0;
         }
