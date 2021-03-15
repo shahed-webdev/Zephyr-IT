@@ -4,14 +4,16 @@ using InventoryManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210313100558_SellingProfitCalculation")]
+    partial class SellingProfitCalculation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -998,12 +1000,12 @@ namespace InventoryManagement.Data.Migrations
 
                     b.Property<decimal>("SellingDiscountPercentage")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18, 2)")
-                        .HasComputedColumnSql("(case when [SellingTotalPrice]=(0) then (0) else round(([SellingDiscountAmount]*(100))/[SellingTotalPrice],(2)) end) PERSISTED");
+                        .HasColumnType("decimal(18,2)")
+                        .HasComputedColumnSql("(case when [SellingTotalPrice]=(0) then (0) else ([SellingDiscountAmount]*(100))/[SellingTotalPrice] end) PERSISTED");
 
                     b.Property<decimal>("SellingDueAmount")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnType("decimal(18,2)")
                         .HasComputedColumnSql("(([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount])) PERSISTED");
 
                     b.Property<decimal>("SellingPaidAmount")
@@ -1019,7 +1021,7 @@ namespace InventoryManagement.Data.Migrations
 
                     b.Property<decimal>("SellingProfit")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnType("decimal(18,2)")
                         .HasComputedColumnSql("([SellingTotalPrice]-([BuyingTotalPrice]+[SellingDiscountAmount]+[Expense]+[SellingAccountCost])) PERSISTED");
 
                     b.Property<decimal>("SellingReturnAmount")
@@ -1044,7 +1046,7 @@ namespace InventoryManagement.Data.Migrations
 
                     b.Property<decimal>("ServiceProfit")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnType("decimal(18,2)")
                         .HasComputedColumnSql("([ServiceCharge]-[ServiceCost]) PERSISTED");
 
                     b.HasKey("SellingId");

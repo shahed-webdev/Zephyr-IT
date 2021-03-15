@@ -48,7 +48,6 @@ namespace InventoryManagement.Repository
                 SellingSn = newSellingSn,
                 SellingTotalPrice = model.SellingTotalPrice,
                 SellingDiscountAmount = model.SellingDiscountAmount,
-                SellingDiscountPercentage = model.SellingDiscountAmount,
                 SellingPaidAmount = model.SellingPaidAmount,
                 SellingDate = DateTime.Now.BdTime().Date,
                 LastUpdateDate = DateTime.Now.BdTime().Date,

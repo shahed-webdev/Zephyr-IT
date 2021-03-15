@@ -225,13 +225,13 @@ const clearMDBdropDownList = function (mainSelector) {
 }
 
 //calculate purchase Total
-const purchaseTotalPrice = function () {
+const sellingTotalPrice = function () {
     return cartProducts.map(item => item.SellingPrice * item.codes.length).reduce((prev, cur) => prev + cur, 0);
 }
 
 //append total price to DOM
 const appendTotalPrice = function () {
-    const productPrice = purchaseTotalPrice();
+    const productPrice = sellingTotalPrice();
     const totalAmount = productPrice + +inputServiceCharge.value;
 
     productTotalPrice.innerText = productPrice ? `Total: ${productPrice}`: ""
@@ -413,7 +413,7 @@ const onSellSubmitClicked = function (evt) {
 
     const body = {
         CustomerId: +hiddenCustomerId.value,
-        SellingTotalPrice: +totalPrice.textContent,
+        SellingTotalPrice: sellingTotalPrice(),
         SellingDiscountAmount: +inputDiscount.value,
         SellingPaidAmount: +inputPaid.value,
 
@@ -434,7 +434,7 @@ const onSellSubmitClicked = function (evt) {
         success: function (response) {
             if (response.IsSuccess) {
                 localStoreClear();
-                location.href = `/Selling/SellingReceipt/${response.data.Data}`;
+                location.href = `/Selling/SellingReceipt/${response.Data}`;
             }
         },
         error: function (error) {

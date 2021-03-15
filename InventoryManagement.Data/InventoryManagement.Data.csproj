@@ -45,6 +45,8 @@
     <Compile Remove="Migrations\20210313092503_ConvertDoubleToDecimal.Designer.cs" />
     <Compile Remove="Migrations\20210313093606_computedColumnDone.cs" />
     <Compile Remove="Migrations\20210313093606_computedColumnDone.Designer.cs" />
+    <Compile Remove="Migrations\20210313101706_SellingDiscountPercentageColumnType.cs" />
+    <Compile Remove="Migrations\20210313101706_SellingDiscountPercentageColumnType.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

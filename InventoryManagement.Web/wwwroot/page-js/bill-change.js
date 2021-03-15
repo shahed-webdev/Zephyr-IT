@@ -419,7 +419,7 @@ const onSellSubmitClicked = function(evt) {
         data: body,
         success: function (response) {
             if (response.IsSuccess) {
-                location.href = `/Selling/SellingReceipt/${response.data}`;
+                location.href = `/Selling/SellingReceipt/${response.Data}`;
             }
         },
         error: function (error) {
