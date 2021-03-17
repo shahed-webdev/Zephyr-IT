@@ -23,6 +23,7 @@ const btnFind = formCode.btnFind;
 // product table
 const formTable = document.getElementById('formTable');
 const tbody = document.getElementById('t-body');
+const productTotalPrice = document.getElementById('productTotalPrice')
 
 //payment selectors
 const formPayment = document.getElementById('formPayment');
@@ -34,6 +35,11 @@ const totalDue = formPayment.querySelector('#totalDue');
 const inputPaid = formPayment.inputPaid;
 const selectPaymentMethod = formPayment.selectPaymentMethod;
 const inputPromisedDate = formPayment.inputPromisedDate;
+
+//service charge
+const inputServiceCharge = formPayment.inputServiceCharge
+const inputServiceChargeDescription = formPayment.inputServiceChargeDescription
+const inputServiceCost = formPayment.inputServiceCost
 
 //customer
  const hiddenSellingId = formPayment.hiddenSellingId;
@@ -190,10 +196,13 @@ const loading = function (element, isLoading) {
 
 //append total price to DOM
 const appendTotalPrice = function () {
-    const totalAmount = cartProducts.map(item => {
+    const productPrice = cartProducts.map(item => {
         return item.SellingPrice * item.sellingQuantity;
     }).reduce((prev, cur) => prev + cur, 0);
 
+    const totalAmount = productPrice + +inputServiceCharge.value;
+
+    productTotalPrice.innerText = productPrice ? `Total: ${productPrice.toFixed(2)}` : "";
     totalPrice.innerText = totalAmount.toFixed(2);
 
     const discount = +inputDiscount.value;
@@ -310,7 +319,6 @@ const onInputPaid = function () {
     paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
 }
 
-
 function disablePaid(dueAmount) {
     if (dueAmount > 0) {
         inputPaid.removeAttribute('disabled');
@@ -330,6 +338,12 @@ function disablePaid(dueAmount) {
         paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
     }
 }
+
+
+//input Service Charge
+inputServiceCharge.addEventListener("input", function () {
+    appendTotalPrice();
+});
 
 //validation info
 const validation = function () {
