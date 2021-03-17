@@ -153,6 +153,7 @@ namespace InventoryManagement.Repository
         public int SellingListId { get; set; }
         public int ProductId { get; set; }
         public decimal SellingPrice { get; set; }
+        public decimal PurchasePrice { get; set; }
         public string Description { get; set; }
         public string Warranty { get; set; }
         public string[] RemainCodes { get; set; }

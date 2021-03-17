@@ -531,6 +531,7 @@ namespace InventoryManagement.Repository
                     SellingId = model.SellingId,
                     ProductId = p.ProductId,
                     SellingPrice = p.SellingPrice,
+                    PurchasePrice = p.PurchasePrice,
                     Description = p.Description,
                     Warranty = p.Warranty,
                     ProductStock = stocks.Where(s => p.RemainCodes.Contains(s.ProductCode)).ToList()
