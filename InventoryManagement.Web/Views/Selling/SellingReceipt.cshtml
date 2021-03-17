@@ -222,18 +222,26 @@
                     evt.preventDefault();
 
                     const body = serializeForm(this);
-                    body.SellingId =@Model.SellingId
+                    body.SellingId = '@Model.SellingId';
+
+                    const btn = this.btnSubmit;
+                    btnDisabled(btn, true);
 
                     $.ajax({
                         url: '/Selling/AddBillExpense',
                         type: "POST",
                         data: body,
-                        success: function(response) {
+                        success: function (response) {
+                            $.notify(response.Message, response.IsSuccess?"success":"error");
+
+                            btnDisabled(btn, false);
+
                             if (response.IsSuccess) {
                                 appendData(response.Data);
                             }
                         },
-                        error: function(error) {
+                        error: function (error) {
+                            btnDisabled(btn, false);
                             console.log(error);
                         }
                     });
@@ -252,6 +260,10 @@
                 expenseList.appendChild(li);
             }
 
+            //disable btn
+            function btnDisabled(btn, isLoading) {
+                btn.disabled = isLoading;
+            }
 
             //delete
             expenseList.addEventListener("click",
