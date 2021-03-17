@@ -117,6 +117,11 @@ namespace InventoryManagement.Repository
 
         public ICollection<SellingReceiptProductViewModel> Products { get; set; }
         public ICollection<SellingPaymentViewModel> Payments { get; set; }
+
+        public decimal ServiceCharge { get; set; }
+        public string ServiceChargeDescription { get; set; }
+        public DateTime? PromisedPaymentDate { get; set; }
+        public decimal ServiceCost { get; set; }
     }
 
     public class SellingUpdatePostModel
@@ -159,7 +164,7 @@ namespace InventoryManagement.Repository
     }
     public class SellingExpenseListModel
     {
-        public int SellingId { get; set; }
+        public int SellingExpenseId { get; set; }
         public decimal Expense { get; set; }
         public string ExpenseDescription { get; set; }
         public DateTime InsertDateUtc { get; set; }

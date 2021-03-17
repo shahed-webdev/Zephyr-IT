@@ -181,7 +181,8 @@ namespace InventoryManagement.Repository
                   ServiceCharge = s.ServiceCharge, 
                   ServiceChargeDescription = s.ServiceChargeDescription, SellingExpenses = s.SellingExpense.Select(e=> new SellingExpenseListModel
                   {
-                      Expense = e.Expense,
+                      SellingExpenseId =e.SellingExpenseId,
+                          Expense = e.Expense,
                       ExpenseDescription = e.ExpenseDescription,
                       InsertDateUtc = e.InsertDateUtc
                   }).ToList()
