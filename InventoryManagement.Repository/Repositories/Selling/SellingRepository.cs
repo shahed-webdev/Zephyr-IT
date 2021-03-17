@@ -87,7 +87,7 @@ namespace InventoryManagement.Repository
                     } : null,
                 BuyingTotalPrice = model.ProductList.Sum(p => p.PurchasePrice * p.ProductCodes.Length),
                 PromisedPaymentDate = model.PromisedPaymentDate,
-                ExpenseTotal = model.Expense,
+                Expense = model.Expense,
                 SellingExpense = model.Expense > 0 ? new List<SellingExpense>
                 {
                     new SellingExpense
@@ -581,7 +581,7 @@ namespace InventoryManagement.Repository
 
             Context.SellingExpense.Add(expense);
 
-            selling.ExpenseTotal += model.Expense;
+            selling.Expense += model.Expense;
             Context.Selling.Update(selling);
             await Context.SaveChangesAsync();
             return new DbResponse(true, $"Successfully expense added");
@@ -598,7 +598,7 @@ namespace InventoryManagement.Repository
 
             Context.SellingExpense.Remove(sellingExpense);
 
-            selling.ExpenseTotal -= sellingExpense.Expense;
+            selling.Expense -= sellingExpense.Expense;
             Context.Selling.Update(selling);
             await Context.SaveChangesAsync();
             return new DbResponse(true, $"Successfully expense deleted");
