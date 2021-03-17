@@ -52,7 +52,7 @@ namespace InventoryManagement.Repository
                     Warranty = s.PurchaseList.Warranty,
                     Note = s.PurchaseList.Note,
                     SellingPrice = s.PurchaseList.SellingPrice,
-                    PurchasePrice = s.PurchaseList.PurchasePrice - (s.PurchaseList.Purchase.PurchaseDiscountPercentage) - ((s.PurchaseList.PurchasePrice * s.PurchaseList.Purchase.PurchaseDiscountPercentage) / 100),
+                    PurchasePrice = s.PurchaseList.PurchasePrice  - (s.PurchaseList.PurchasePrice * (s.PurchaseList.Purchase.PurchaseDiscountPercentage / 100)),
                 });
             return product.FirstOrDefaultAsync();
         }
@@ -77,7 +77,7 @@ namespace InventoryManagement.Repository
                     Note = s.PurchaseList.Note,
                     SellingPrice = s.PurchaseList.SellingPrice,
                     ProductCatalogName = s.Product.ProductCatalog.CatalogName,
-                    PurchasePrice = s.PurchaseList.PurchasePrice - (s.PurchaseList.Purchase.PurchaseDiscountPercentage) - ((s.PurchaseList.PurchasePrice * s.PurchaseList.Purchase.PurchaseDiscountPercentage) / 100),
+                    PurchasePrice = s.PurchaseList.PurchasePrice  - (s.PurchaseList.PurchasePrice * (s.PurchaseList.Purchase.PurchaseDiscountPercentage / 100)),
                     SellingId = s.SellingList.SellingId,
                     SellingSn = s.SellingList.Selling.SellingSn,
                     PurchaseId = s.PurchaseList.PurchaseId
