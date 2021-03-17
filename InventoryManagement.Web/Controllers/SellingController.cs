@@ -38,11 +38,8 @@ namespace InventoryManagement.Web.Controllers
 
             var response = await _db.Selling.AddCustomAsync(model, _db).ConfigureAwait(false);
 
-            if (response.IsSuccess)
-            {
-                return Ok(response);
-            }
-
+            if (response.IsSuccess) return Ok(response);
+            
             return UnprocessableEntity(response);
         }
 
@@ -151,6 +148,8 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> BillChange(int? id)
         {
             if (id == null) return RedirectToAction("BillList");
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
+
             var data = await _db.Selling.FindUpdateBillAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
 
             if (data == null) return RedirectToAction("BillList");

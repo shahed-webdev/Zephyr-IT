@@ -234,7 +234,7 @@ const appendTotalPrice = function () {
     const productPrice = sellingTotalPrice();
     const totalAmount = productPrice + +inputServiceCharge.value;
 
-    productTotalPrice.innerText = productPrice ? `Total: ${productPrice}`: ""
+    productTotalPrice.innerText = productPrice ? `Total: ${productPrice}` : "";
     totalPrice.innerText = totalAmount
     totalPayable.innerText = totalAmount;
     totalDue.innerText = totalAmount;
@@ -350,7 +350,12 @@ const onInputPaid = function () {
 
     totalDue.innerText = isValid ? due.toFixed() : payable;
 
-    //inputPromisedDate.setAttribute("disabled", due < 1);
+    if (due < 1) {
+        inputPromisedDate.value = "";
+        inputPromisedDate.disabled = true;
+    } else {
+        inputPromisedDate.disabled = false;
+    }
 
     //check due limit 
     checkDueLimit();

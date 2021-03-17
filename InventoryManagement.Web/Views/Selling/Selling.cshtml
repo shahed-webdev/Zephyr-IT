@@ -14,7 +14,7 @@
         table tbody tr .codeSpan span:not(:last-child):after { content: ',' }
         table tbody tr .codeSpan span:hover{ cursor: pointer; color:#ff0000}
         table tbody tr .codeSpan span:hover::after {content:'x';}
-        .inputUnitPrice { width:90px; text-align:center}
+        .inputUnitPrice { min-width:110px; text-align:center}
     </style>  
 }
 
@@ -121,7 +121,7 @@
                             <strong>৳<span id="totalDue">0</span></strong>
                         </li>
                         <li class="md-form">
-                            <select id="selectPaymentMethod" asp-items="@ViewBag.Account" class="mdb-select" style="position: absolute; top: 1rem; left: 0px; height: 0px; width: 0px; opacity: 0; padding: 0px; pointer-events: none; display: inline!important;">
+                            <select id="selectPaymentMethod" asp-items="@ViewBag.Account" class="mdb-select" style="position: absolute; top: 1rem; left: 0; height: 0; width: 0; opacity: 0; padding: 0; pointer-events: none; display: inline!important;">
                                 <option value="" selected>[ Payment Method ]</option>
                             </select>
                         </li>
@@ -151,5 +151,5 @@
 </div>
 
 @section Scripts{
-    <script src="~/page-js/product-selling.js?v=2.0.0"></script>
+    <script src="~/page-js/product-selling.js?v=2.0.1"></script>
 }

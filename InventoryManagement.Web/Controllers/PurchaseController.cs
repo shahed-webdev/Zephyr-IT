@@ -124,15 +124,14 @@ namespace InventoryManagement.Web.Views
         }
 
 
-
         //GET: Due Collection multiple
         public async Task<IActionResult> PayDueMultiple(int? id)
         {
-            if (id == null) return RedirectToAction("PurchaseRecords");
+            if (id == null) return RedirectToAction("DueReceipt");
 
             var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
 
-            if (model == null) return RedirectToAction("PurchaseRecords");
+            if (model == null) return RedirectToAction("DueReceipt");
             return View(model);
         }
 

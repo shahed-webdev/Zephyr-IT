@@ -134,8 +134,8 @@ const createTableRow = function (item) {
                 </td>
                 <td>${item.Warranty}</td>
                 <td>${item.sellingQuantity}</td>
-                <td><input type="number" required class="form-control inputUnitPrice" step="0.01" min="${item.sellingFixedValue}" max="${item.SellingPrice}" value="${item.SellingPrice}" /></td>
-                <td>${item.SellingPrice * item.sellingQuantity}</td>
+                <td><input type="number" required class="form-control inputUnitPrice" step="0.01" min="${item.sellingFixedValue}" max="${item.SellingPrice}" value="${item.SellingPrice.toFixed(2)}" /></td>
+                <td>${(item.SellingPrice * item.sellingQuantity).toFixed(2)}</td>
             </tr>`
 }
 
@@ -194,7 +194,7 @@ const appendTotalPrice = function () {
         return item.SellingPrice * item.sellingQuantity;
     }).reduce((prev, cur) => prev + cur, 0);
 
-    totalPrice.innerText = totalAmount;
+    totalPrice.innerText = totalAmount.toFixed(2);
 
     const discount = +inputDiscount.value;
     const prevPaid = +totalPrevPaid.textContent;
@@ -202,7 +202,7 @@ const appendTotalPrice = function () {
 
     const sum = totalAmount - (discount + prevPaid + returnAmount);
 
-    totalDue.textContent = sum;
+    totalDue.textContent = sum.toFixed(2);
 
     disablePaid(sum);
 
@@ -342,7 +342,7 @@ const validation = function () {
 
     const due = +totalDue.textContent;
     if (due < 0) {
-        customerError.innerText = "Due Amount must be more than or equal 0!"
+        customerError.innerText = "Due Amount must be more than or equal 0."
         return false;
     }
 
