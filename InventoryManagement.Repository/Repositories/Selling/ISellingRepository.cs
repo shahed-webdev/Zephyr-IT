@@ -29,7 +29,9 @@ namespace InventoryManagement.Repository
 
         Task<DbResponse> ExpenseAdd(SellingExpenseAddModel model);
         Task<DbResponse> ExpenseDelete(int sellingExpenseId);
+
+        List<SellingExpenseListModel> ExpenseList(int sellingId);
     }
 
-   
+
 }

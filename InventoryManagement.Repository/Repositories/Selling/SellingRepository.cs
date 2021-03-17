@@ -5,14 +5,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using InventoryManagement.Data.Migrations;
 
 namespace InventoryManagement.Repository
 {
     public class SellingRepository : Repository<Selling>, ISellingRepository
     {
-        public SellingRepository(ApplicationDbContext context) : base(context)
+        protected readonly IMapper _mapper;
+        public SellingRepository(ApplicationDbContext context, IMapper mapper) : base(context)
         {
+            _mapper = mapper;
         }
 
         public async Task<int> GetNewSnAsync()
@@ -602,6 +606,15 @@ namespace InventoryManagement.Repository
             Context.Selling.Update(selling);
             await Context.SaveChangesAsync();
             return new DbResponse(true, $"Successfully expense deleted");
+        }
+
+        public List<SellingExpenseListModel> ExpenseList(int sellingId)
+        {
+            return Context.SellingExpense
+                .Where(e=> e.SellingId == sellingId)
+                .ProjectTo<SellingExpenseListModel>(_mapper.ConfigurationProvider)
+                .OrderBy(a => a.InsertDateUtc)
+                .ToList();
         }
     }
 }

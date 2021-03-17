@@ -153,4 +153,11 @@ namespace InventoryManagement.Repository
         public decimal Expense { get; set; }
         public string ExpenseDescription { get; set; }
     }
+    public class SellingExpenseListModel
+    {
+        public int SellingId { get; set; }
+        public decimal Expense { get; set; }
+        public string ExpenseDescription { get; set; }
+        public DateTime InsertDateUtc { get; set; }
+    }
 }
