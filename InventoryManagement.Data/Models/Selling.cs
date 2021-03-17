@@ -10,6 +10,7 @@ namespace InventoryManagement.Data
             SellingAdjustment = new HashSet<SellingAdjustment>();
             SellingList = new HashSet<SellingList>();
             SellingPaymentList = new HashSet<SellingPaymentList>();
+            SellingExpense = new HashSet<SellingExpense>();
         }
 
         public int SellingId { get; set; }
@@ -33,18 +34,18 @@ namespace InventoryManagement.Data
         //[ServiceCharge]-[ServiceCost]
         public decimal ServiceProfit { get; set; }
         public string ServiceChargeDescription { get; set; }
-        public decimal Expense { get; set; }
-        public string ExpenseDescription { get; set; }
+        public decimal ExpenseTotal { get; set; }
         public decimal BuyingTotalPrice { get; set; }
         public decimal SellingAccountCost { get; set; }
-        //[BuyingTotalPrice]-([SellingTotalPrice]+[SellingDiscountAmount]+[Expense]+[SellingAccountCost])
+        //[BuyingTotalPrice]-([SellingTotalPrice]+[SellingDiscountAmount]+[ExpenseTotal]+[SellingAccountCost])
         public decimal SellingProfit { get; set; }
-
 
         public virtual Customer Customer { get; set; }
         public virtual Registration Registration { get; set; }
         public virtual ICollection<SellingAdjustment> SellingAdjustment { get; set; }
         public virtual ICollection<SellingList> SellingList { get; set; }
         public virtual ICollection<SellingPaymentList> SellingPaymentList { get; set; }
+        public virtual ICollection<SellingExpense> SellingExpense { get; set; }
+
     }
 }

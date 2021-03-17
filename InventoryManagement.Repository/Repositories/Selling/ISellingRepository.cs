@@ -2,6 +2,7 @@
 using JqueryDataTables.LoopsIT;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Repository
@@ -26,5 +27,9 @@ namespace InventoryManagement.Repository
         Task<SellingUpdateGetModel> FindUpdateBillAsync(int id, IUnitOfWork db);
         Task<DbResponse> BillUpdated(SellingUpdatePostModel model, IUnitOfWork db);
 
+        Task<DbResponse> ExpenseAdd(SellingExpenseAddModel model);
+        Task<DbResponse> ExpenseDelete(int sellingExpenseId);
     }
+
+   
 }

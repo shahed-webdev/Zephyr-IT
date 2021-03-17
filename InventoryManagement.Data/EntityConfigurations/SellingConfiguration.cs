@@ -69,15 +69,12 @@ namespace InventoryManagement.Data
                 .HasColumnType("decimal(18, 2)");
             entity.Property(e=> e.SellingProfit)
                 .HasColumnType("decimal(18, 2)")
-                .HasComputedColumnSql("([SellingTotalPrice]-([BuyingTotalPrice]+[SellingDiscountAmount]+[Expense]+[SellingAccountCost])) PERSISTED");
+                .HasComputedColumnSql("([SellingTotalPrice]-([BuyingTotalPrice]+[SellingDiscountAmount]+[ExpenseTotal]+[SellingAccountCost])) PERSISTED");
 
             entity.Property(e => e.ServiceChargeDescription)
-                .HasMaxLength(1024); 
-
-            entity.Property(e => e.ExpenseDescription)
                 .HasMaxLength(1024);
 
-            entity.Property(e => e.Expense)
+            entity.Property(e => e.ExpenseTotal)
                 .HasColumnType("decimal(18, 2)");
 
 

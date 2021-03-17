@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using InventoryManagement.Data.Migrations;
 
 namespace InventoryManagement.Repository
 {
@@ -86,8 +87,16 @@ namespace InventoryManagement.Repository
                     } : null,
                 BuyingTotalPrice = model.ProductList.Sum(p => p.PurchasePrice * p.ProductCodes.Length),
                 PromisedPaymentDate = model.PromisedPaymentDate,
-                Expense = model.Expense,
-                ExpenseDescription = model.ExpenseDescription,
+                ExpenseTotal = model.Expense,
+                SellingExpense = model.Expense > 0 ? new List<SellingExpense>
+                {
+                    new SellingExpense
+                    {
+                        Expense = model.Expense,
+                        ExpenseDescription = model.ExpenseDescription,
+                        InsertDateUtc = DateTime.Now.BdTime()
+                    }
+                }:null,
                 ServiceCost = model.ServiceCost,
                 ServiceCharge = model.ServiceCharge,
                 ServiceChargeDescription = model.ServiceChargeDescription,
@@ -552,6 +561,47 @@ namespace InventoryManagement.Repository
             response.IsSuccess = true;
             response.Message = "Success";
             return response;
+        }
+
+        public async Task<DbResponse> ExpenseAdd(SellingExpenseAddModel model)
+        {
+            
+            var selling = Context.Selling.Find(model.SellingId);
+
+            if (selling == null) return new DbResponse(false, $"Selling Id not found");
+
+            if(model.Expense <= 0) return new DbResponse(false, $"ExpenseTotal must be more than zero");
+            
+            var expense = new SellingExpense
+            {
+                SellingId = model.SellingId,
+                Expense = model.Expense,
+                ExpenseDescription = model.ExpenseDescription
+            };
+
+            Context.SellingExpense.Add(expense);
+
+            selling.ExpenseTotal += model.Expense;
+            Context.Selling.Update(selling);
+            await Context.SaveChangesAsync();
+            return new DbResponse(true, $"Successfully expense added");
+        }
+
+        public async Task<DbResponse> ExpenseDelete(int sellingExpenseId)
+        {
+            var sellingExpense = Context.SellingExpense.Find(sellingExpenseId);
+            var selling = Context.Selling.Find(sellingExpense.SellingId);
+
+            if (selling == null) return new DbResponse(false, $"Selling Id not found");
+
+
+
+            Context.SellingExpense.Remove(sellingExpense);
+
+            selling.ExpenseTotal -= sellingExpense.Expense;
+            Context.Selling.Update(selling);
+            await Context.SaveChangesAsync();
+            return new DbResponse(true, $"Successfully expense deleted");
         }
     }
 }

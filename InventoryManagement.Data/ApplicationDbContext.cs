@@ -33,6 +33,7 @@ namespace InventoryManagement.Data
         public virtual DbSet<PurchasePaymentList> PurchasePaymentList { get; set; }
         public virtual DbSet<Registration> Registration { get; set; }
         public virtual DbSet<Selling> Selling { get; set; }
+        public virtual DbSet<SellingExpense> SellingExpense { get; set; }
         public virtual DbSet<SellingAdjustment> SellingAdjustment { get; set; }
         public virtual DbSet<SellingList> SellingList { get; set; }
         public virtual DbSet<SellingPayment> SellingPayment { get; set; }
@@ -68,6 +69,7 @@ namespace InventoryManagement.Data
             builder.ApplyConfiguration(new PurchasePaymentListConfiguration());
             builder.ApplyConfiguration(new RegistrationConfiguration());
             builder.ApplyConfiguration(new SellingConfiguration());
+            builder.ApplyConfiguration(new SellingExpenseConfiguration());
             builder.ApplyConfiguration(new SellingAdjustmentConfiguration());
             builder.ApplyConfiguration(new SellingListConfiguration());
             builder.ApplyConfiguration(new SellingPaymentConfiguration());

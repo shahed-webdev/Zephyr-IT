@@ -146,4 +146,11 @@ namespace InventoryManagement.Repository
         public decimal DiscountAmount { get; set; }
         public decimal DueAmount { get; set; }
     }
+
+    public class SellingExpenseAddModel
+    {
+        public int SellingId { get; set; }
+        public decimal Expense { get; set; }
+        public string ExpenseDescription { get; set; }
+    }
 }
