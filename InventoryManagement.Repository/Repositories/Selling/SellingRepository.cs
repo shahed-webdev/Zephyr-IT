@@ -512,6 +512,10 @@ namespace InventoryManagement.Repository
                 selling.SellingReturnAmount = model.SellingReturnAmount;
                 selling.SellingPaidAmount += model.PaidAmount;
                 selling.LastUpdateDate = DateTime.Now.BdTime().Date;
+                selling.ServiceCharge = model.ServiceCharge;
+                selling.ServiceCost = model.ServiceCost;
+                selling.ServiceChargeDescription = model.ServiceChargeDescription;
+                selling.PromisedPaymentDate = model.PromisedPaymentDate.Value.BdTime().Date;
 
                 var due = (selling.SellingTotalPrice + selling.SellingReturnAmount) - (selling.SellingDiscountAmount + selling.SellingPaidAmount);
                 if (due < 0)
@@ -562,7 +566,7 @@ namespace InventoryManagement.Repository
                         CustomerId = selling.CustomerId,
                         ReceiptSn = newSellingPaymentSn,
                         PaidAmount = model.PaidAmount,
-                        PaymentMethod = model.PaymentMethod,
+                        AccountId = model.AccountId,
                         PaidDate = DateTime.Now.BdTime().Date,
                         SellingPaymentList = new List<SellingPaymentList>
                         {
