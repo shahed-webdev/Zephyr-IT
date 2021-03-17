@@ -12,6 +12,8 @@ namespace InventoryManagement.Repository
         {
             //CreateMap<SellingViewModel, Selling>();
             //CreateMap<SellingProductListViewModel, SellingList>();
+            CreateMap<SellingExpense, SellingExpenseListModel>().ReverseMap();
+
         }
     }
 }

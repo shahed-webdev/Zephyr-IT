@@ -4,14 +4,16 @@ using InventoryManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210317050535_SellingTabelChangeExpenseToExpenseTotal")]
+    partial class SellingTabelChangeExpenseToExpenseTotal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -967,11 +969,6 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<decimal>("ExpenseTotal")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<decimal>("GrandProfit")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18, 2)")
-                        .HasComputedColumnSql("(([SellingTotalPrice]-([BuyingTotalPrice]+[SellingDiscountAmount]+[SellingAccountCost]+[ExpenseTotal]))+([ServiceCharge]-[ServiceCost])) PERSISTED");
-
                     b.Property<DateTime>("InsertDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
@@ -1000,17 +997,12 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<decimal>("SellingDiscountPercentage")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18, 2)")
-                        .HasComputedColumnSql("(case when [SellingTotalPrice]=(0.00) then (0.00) else ([SellingDiscountAmount]*(100.00))/[SellingTotalPrice] end) PERSISTED");
+                        .HasComputedColumnSql("(case when [SellingTotalPrice]=(0) then (0) else round(([SellingDiscountAmount]*(100))/[SellingTotalPrice],(2)) end) PERSISTED");
 
                     b.Property<decimal>("SellingDueAmount")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18, 2)")
                         .HasComputedColumnSql("(([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount])) PERSISTED");
-
-                    b.Property<decimal>("SellingNetProfit")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18, 2)")
-                        .HasComputedColumnSql("([SellingTotalPrice]-([BuyingTotalPrice]+[SellingDiscountAmount]+[SellingAccountCost]+[ExpenseTotal])) PERSISTED");
 
                     b.Property<decimal>("SellingPaidAmount")
                         .HasColumnType("decimal(18, 2)");
@@ -1019,14 +1011,14 @@ namespace InventoryManagement.Data.Migrations
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("varchar(4)")
-                        .HasComputedColumnSql("(case when (([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount]))<=(0.00) then 'Paid' else 'Due' end) PERSISTED")
+                        .HasComputedColumnSql("(case when (([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount]))<=(0) then 'Paid' else 'Due' end) PERSISTED")
                         .HasMaxLength(4)
                         .IsUnicode(false);
 
                     b.Property<decimal>("SellingProfit")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18, 2)")
-                        .HasComputedColumnSql("([SellingTotalPrice]-([BuyingTotalPrice]+[SellingDiscountAmount])) PERSISTED");
+                        .HasComputedColumnSql("([SellingTotalPrice]-([BuyingTotalPrice]+[SellingDiscountAmount]+[SellingAccountCost])) PERSISTED");
 
                     b.Property<decimal>("SellingReturnAmount")
                         .HasColumnType("decimal(18, 2)");

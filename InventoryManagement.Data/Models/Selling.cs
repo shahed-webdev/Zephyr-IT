@@ -31,14 +31,18 @@ namespace InventoryManagement.Data
         public DateTime? PromisedPaymentDate { get; set; }
         public decimal ServiceCharge { get; set; }
         public decimal ServiceCost { get; set; }
-        //[ServiceCharge]-[ServiceCost]
-        public decimal ServiceProfit { get; set; }
         public string ServiceChargeDescription { get; set; }
         public decimal ExpenseTotal { get; set; }
         public decimal BuyingTotalPrice { get; set; }
         public decimal SellingAccountCost { get; set; }
-        //[BuyingTotalPrice]-([SellingTotalPrice]+[SellingDiscountAmount]+[ExpenseTotal]+[SellingAccountCost])
+        //[ServiceCharge]-[ServiceCost]
+        public decimal ServiceProfit { get; set; }
+        //[BuyingTotalPrice]-([SellingTotalPrice]+[SellingDiscountAmount])
         public decimal SellingProfit { get; set; }
+        //[SellingProfit] - ([ExpenseTotal]+[SellingAccountCost])
+        public decimal SellingNetProfit { get; set; }
+        //[SellingNetProfit]-[ServiceProfit]
+        public decimal GrandProfit { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual Registration Registration { get; set; }

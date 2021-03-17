@@ -31,7 +31,7 @@ namespace InventoryManagement.Repository
             ExpenseFixed = new ExpenseFixedRepository(_context, mapper);
             ExpenseTransportations = new ExpenseTransportationRepository(_context, _mapper);
             Institutions = new InstitutionRepository(_context);
-            Selling = new SellingRepository(_context);
+            Selling = new SellingRepository(_context, _mapper);
             SellingPayments = new SellingPaymentRepository(_context);
             Vendors = new VendorRepository(_context);
 
