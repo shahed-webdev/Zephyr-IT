@@ -1,13 +1,12 @@
-﻿using InventoryManagement.Data;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using InventoryManagement.Data;
 using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using InventoryManagement.Data.Migrations;
 
 namespace InventoryManagement.Repository
 {
@@ -100,7 +99,7 @@ namespace InventoryManagement.Repository
                         ExpenseDescription = model.ExpenseDescription,
                         InsertDateUtc = DateTime.Now.BdTime()
                     }
-                }:null,
+                } : null,
                 ServiceCost = model.ServiceCost,
                 ServiceCharge = model.ServiceCharge,
                 ServiceChargeDescription = model.ServiceChargeDescription,
@@ -140,7 +139,8 @@ namespace InventoryManagement.Repository
               .ThenInclude(pd => pd.ProductCatalog)
               .Include(s => s.SellingPaymentList)
               .ThenInclude(sp => sp.SellingPayment)
-              .Include(s=> s.SellingExpense)
+              .ThenInclude(a => a.Account)
+              .Include(s => s.SellingExpense)
               .Select(s => new SellingReceiptViewModel
               {
                   SellingSn = s.SellingSn,
@@ -164,7 +164,7 @@ namespace InventoryManagement.Repository
                   }).ToList(),
                   Payments = s.SellingPaymentList.Select(pp => new SellingPaymentViewModel
                   {
-                      PaymentMethod = pp.SellingPayment.PaymentMethod,
+                      PaymentMethod = pp.SellingPayment.Account.AccountName,
                       PaidAmount = pp.SellingPaidAmount,
                       PaidDate = pp.SellingPayment.PaidDate
                   }).ToList(),
@@ -176,13 +176,14 @@ namespace InventoryManagement.Repository
                       CustomerPhone = s.Customer.CustomerPhone.FirstOrDefault().Phone
                   },
                   InstitutionInfo = db.Institutions.FindCustom(),
-                  SoldBy = s.Registration.Name, 
-                  PromisedPaymentDate = s.PromisedPaymentDate, 
-                  ServiceCharge = s.ServiceCharge, 
-                  ServiceChargeDescription = s.ServiceChargeDescription, SellingExpenses = s.SellingExpense.Select(e=> new SellingExpenseListModel
+                  SoldBy = s.Registration.Name,
+                  PromisedPaymentDate = s.PromisedPaymentDate,
+                  ServiceCharge = s.ServiceCharge,
+                  ServiceChargeDescription = s.ServiceChargeDescription,
+                  SellingExpenses = s.SellingExpense.Select(e => new SellingExpenseListModel
                   {
-                      SellingExpenseId =e.SellingExpenseId,
-                          Expense = e.Expense,
+                      SellingExpenseId = e.SellingExpenseId,
+                      Expense = e.Expense,
                       ExpenseDescription = e.ExpenseDescription,
                       InsertDateUtc = e.InsertDateUtc
                   }).ToList()
@@ -423,6 +424,8 @@ namespace InventoryManagement.Repository
               .ThenInclude(pd => pd.ProductCatalog)
               .Include(s => s.SellingPaymentList)
               .ThenInclude(sp => sp.SellingPayment)
+              .ThenInclude(a => a.Account)
+              .Include(s => s.SellingExpense)
               .Select(s => new SellingUpdateGetModel
               {
                   SellingSn = s.SellingSn,
@@ -450,7 +453,7 @@ namespace InventoryManagement.Repository
                   }).ToList(),
                   Payments = s.SellingPaymentList.Select(pp => new SellingPaymentViewModel
                   {
-                      PaymentMethod = pp.SellingPayment.PaymentMethod,
+                      PaymentMethod = pp.SellingPayment.Account.AccountName,
                       PaidAmount = pp.SellingPaidAmount,
                       PaidDate = pp.SellingPayment.PaidDate
                   }).ToList(),
@@ -461,7 +464,19 @@ namespace InventoryManagement.Repository
                       CustomerAddress = s.Customer.CustomerAddress,
                       CustomerPhone = s.Customer.CustomerPhone.FirstOrDefault().Phone
                   },
-                  SoildBy = s.Registration.Name
+                  SoildBy = s.Registration.Name,
+                  PromisedPaymentDate = s.PromisedPaymentDate,
+                  ServiceCharge = s.ServiceCharge,
+                  ServiceChargeDescription = s.ServiceChargeDescription,
+                  SellingExpenses = s.SellingExpense.Select(e => new SellingExpenseListModel
+                  {
+                      SellingExpenseId = e.SellingExpenseId,
+                      Expense = e.Expense,
+                      ExpenseDescription = e.ExpenseDescription,
+                      InsertDateUtc = e.InsertDateUtc
+                  }).ToList(),
+                  ExpenseTotal = s.ExpenseTotal,
+                  ServiceCost = s.ServiceCost
               }).FirstOrDefaultAsync(s => s.SellingId == id);
 
             return sellingReceipt;
@@ -580,13 +595,13 @@ namespace InventoryManagement.Repository
 
         public async Task<DbResponse> ExpenseAdd(SellingExpenseAddModel model)
         {
-            
+
             var selling = Context.Selling.Find(model.SellingId);
 
             if (selling == null) return new DbResponse(false, $"Selling Id not found");
 
-            if(model.Expense <= 0) return new DbResponse(false, $"ExpenseTotal must be more than zero");
-            
+            if (model.Expense <= 0) return new DbResponse(false, $"ExpenseTotal must be more than zero");
+
             var expense = new SellingExpense
             {
                 SellingId = model.SellingId,
@@ -622,7 +637,7 @@ namespace InventoryManagement.Repository
         public List<SellingExpenseListModel> ExpenseList(int sellingId)
         {
             return Context.SellingExpense
-                .Where(e=> e.SellingId == sellingId)
+                .Where(e => e.SellingId == sellingId)
                 .ProjectTo<SellingExpenseListModel>(_mapper.ConfigurationProvider)
                 .OrderBy(a => a.InsertDateUtc)
                 .ToList();

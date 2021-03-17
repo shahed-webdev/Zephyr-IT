@@ -103,6 +103,9 @@ namespace InventoryManagement.Repository
     {
         public SellingUpdateGetModel()
         {
+            this.Products = new HashSet<SellingReceiptProductViewModel>();
+            this.Payments = new HashSet<SellingPaymentViewModel>();
+            this.SellingExpenses = new HashSet<SellingExpenseListModel>();
         }
         public CustomerReceiptViewModel CustomerInfo { get; set; }
         public int SellingSn { get; set; }
@@ -118,10 +121,12 @@ namespace InventoryManagement.Repository
         public ICollection<SellingReceiptProductViewModel> Products { get; set; }
         public ICollection<SellingPaymentViewModel> Payments { get; set; }
 
+        public ICollection<SellingExpenseListModel> SellingExpenses { get; set; }
         public decimal ServiceCharge { get; set; }
         public string ServiceChargeDescription { get; set; }
         public DateTime? PromisedPaymentDate { get; set; }
         public decimal ServiceCost { get; set; }
+        public decimal ExpenseTotal { get; set; }
     }
 
     public class SellingUpdatePostModel
