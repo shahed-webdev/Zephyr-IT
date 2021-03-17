@@ -488,15 +488,18 @@ namespace InventoryManagement.Repository
             try
             {
                 var stocks = new List<ProductStock>();
-                if (model.AddedProductCodes.Any())
+                if (model.AddedProductCodes != null)
                 {
-                    var addedStocks = await db.ProductStocks.SellingStockFromCodesAsync(model.AddedProductCodes);
-                    addedStocks = addedStocks.Select(s =>
+                    if (model.AddedProductCodes.Any())
                     {
-                        s.IsSold = true;
-                        return s;
-                    }).ToList();
-                    stocks.AddRange(addedStocks);
+                        var addedStocks = await db.ProductStocks.SellingStockFromCodesAsync(model.AddedProductCodes);
+                        addedStocks = addedStocks.Select(s =>
+                        {
+                            s.IsSold = true;
+                            return s;
+                        }).ToList();
+                        stocks.AddRange(addedStocks);
+                    }
                 }
 
                 var selling = Context.Selling.Include(s => s.SellingList).FirstOrDefault(s => s.SellingId == model.SellingId);
@@ -537,24 +540,27 @@ namespace InventoryManagement.Repository
                     ProductStock = stocks.Where(s => p.RemainCodes.Contains(s.ProductCode)).ToList()
                 }).ToList();
 
-
-                if (model.RemovedProductCodes.Any())
+                if (model.RemovedProductCodes != null)
                 {
-                    var removedStocks = await db.ProductStocks.SellingStockFromCodesAsync(model.RemovedProductCodes);
-
-                    removedStocks = removedStocks.Select(s =>
+                    if (model.RemovedProductCodes.Any())
                     {
-                        s.IsSold = false;
-                        s.SellingListId = null;
-                        return s;
-                    }).ToList();
+                        var removedStocks =
+                            await db.ProductStocks.SellingStockFromCodesAsync(model.RemovedProductCodes);
 
-                    if (removedStocks.Any())
-                    {
-                        Context.ProductStock.UpdateRange(removedStocks);
+                        removedStocks = removedStocks.Select(s =>
+                        {
+                            s.IsSold = false;
+                            s.SellingListId = null;
+                            return s;
+                        }).ToList();
+
+                        if (removedStocks.Any())
+                        {
+                            Context.ProductStock.UpdateRange(removedStocks);
+                        }
                     }
-                }
 
+                }
 
                 Context.Selling.Update(selling);
 
