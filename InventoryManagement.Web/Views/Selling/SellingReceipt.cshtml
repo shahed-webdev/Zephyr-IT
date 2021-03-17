@@ -18,7 +18,7 @@
             <div>
                 <a class="btn btn-success btn-rounded" href="/Selling/Selling"><i class="fal fa-cart-plus mr-1"></i>Selling</a>
                 <a class="btn btn-deep-purple btn-rounded" href="/Selling/BillChange/@Model.SellingId"><i class="fal fa-cart-plus mr-1"></i>Update Bill</a>
-                <a data-toggle="modal" data-target="#modalExpense" class="btn btn-danger btn-rounded"><i class="fas fa-wallet mr-1"></i>Expense</a>
+                <a id="showExpenseModal" class="btn btn-danger btn-rounded"><i class="fas fa-wallet mr-1"></i>Expense</a>
             </div>
             <div>
                 <a class="btn btn-blue-grey btn-rounded" href="/Selling/SellingRecords"><i class="fas fa-file-invoice mr-1"></i>Selling Invoice</a>
@@ -50,6 +50,7 @@
         </tbody>
     </table>
 
+
     <table class="product-tb table table-sm table-bordered mt-5">
         <thead>
             <tr>
@@ -59,12 +60,23 @@
                 <th><strong>Warranty</strong></th>
                 <th><strong>Qty.</strong></th>
                 <th><strong>U.Price</strong></th>
-                <th><strong>Price</strong></th>
+                <th class="text-right"><strong>Price</strong></th>
             </tr>
         </thead>
         <tbody>
             @{
                 var index = 1;
+                @if (Model.ServiceCharge > 0)
+                {
+            <tr>
+                <td class="text-center">@index</td>
+                <td>Service</td>
+                <td colspan="4">@Model.ServiceChargeDescription</td>
+                <td class="text-right">৳@Model.ServiceCharge</td>
+            </tr>
+                    index++;
+                }
+
                 foreach (var item in Model.Products)
                 {
                     <tr>
@@ -111,7 +123,7 @@
                 </td>
             </tr>
         </tbody>
-    </table>   
+    </table>
 
     <div class="paid-record row">
         @if (Model.Payments.Count > 0)
@@ -142,7 +154,7 @@
             </fieldset>
         </div>
     </div>
-    
+
     <p class="mb-0 mt-1">Served By: @Model.SoldBy</p>
 </div>
 
@@ -152,7 +164,7 @@
     <div class="modal-dialog modal-notify modal-danger modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <p class="heading">Expense</p>
+                <p class="heading">Expense <strong id="sumExpense"></strong></p>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" class="white-text">&times;</span>
                 </button>
@@ -170,7 +182,7 @@
                         <div class="col-lg-7">
                             <div class="form-group">
                                 <label for="inputExpenseDescription">Expense Description</label>
-                                <input id="inputExpenseDescription" name="Expense" type="text" class="form-control" required>
+                                <input id="inputExpenseDescription" name="ExpenseDescription" type="text" class="form-control" required>
                             </div>
                         </div>
                         <div class="col">
@@ -181,15 +193,7 @@
                     </div>
                 </form>
 
-                <ul id="expenseList" class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong class="d-block">৳500</strong>
-                            <em>the expense</em>
-                        </div>
-                        <i id="" class="delete fas fa-trash"></i>
-                    </li>
-                </ul>
+                <ul id="expenseList" class="list-group list-group-flush"></ul>
             </div>
         </div>
     </div>
@@ -214,6 +218,7 @@
             };
 
             const formAdd = document.getElementById("formAdd");
+            const showExpenseModal = document.getElementById("showExpenseModal");
             const expenseList = document.getElementById("expenseList");
 
             //post data
@@ -231,16 +236,18 @@
                         url: '/Selling/AddBillExpense',
                         type: "POST",
                         data: body,
-                        success: function (response) {
-                            $.notify(response.Message, response.IsSuccess?"success":"error");
+                        success: response => {
+                            $.notify(response.Message, response.IsSuccess ? "success" : "error");
 
                             btnDisabled(btn, false);
 
                             if (response.IsSuccess) {
-                                appendData(response.Data);
+                                // expenseList.appendChild(appendData(response.Data));
+                                this.reset();
+                                sumExpense();
                             }
                         },
-                        error: function (error) {
+                        error: function(error) {
                             btnDisabled(btn, false);
                             console.log(error);
                         }
@@ -252,12 +259,12 @@
                 const li = document.createElement("tr");
                 li.className = "list-group-item d-flex justify-content-between align-items-center";
                 li.innerHTML = `<div>
-                                   <strong class="d-block">৳${item.Expense}</strong>
+                                   <strong class="d-block">৳<span class="expenseAmount">${item.Expense}</span></strong>
                                    <em>${item.ExpenseDescription}</em>
                                 </div>
-                                <i id="${item.ExpenseId}" class="delete fas fa-trash"></i>`;
+                                <i id="${item.SellingExpenseId}" class="delete fas fa-trash"></i>`;
 
-                expenseList.appendChild(li);
+                return li;
             }
 
             //disable btn
@@ -275,11 +282,12 @@
                             url: '/Selling/DeleteBillExpense',
                             type: "POST",
                             data: { id: element.id },
-                            success: function (response) {
-                                $.notify(response.Message, response.IsSuccess?"success":"error");
+                            success: function(response) {
+                                $.notify(response.Message, response.IsSuccess ? "success" : "error");
 
                                 if (response.IsSuccess) {
                                     element.parentElement.remove();
+                                    sumExpense();
                                 }
                             },
                             error: function(error) {
@@ -288,6 +296,41 @@
                         });
                     }
                 });
+
+            //on show modal
+            showExpenseModal.addEventListener("click",
+                function() {
+                    expenseList.innerHTML = "";
+
+                    $.ajax({
+                        url: '/Selling/GetBillExpense',
+                        data: { id: @Model.SellingId },
+                        success: function(response) {
+                            response.forEach(item => {
+                                expenseList.appendChild(appendData(item));
+                            });
+
+                            $("#modalExpense").modal("show");
+                            sumExpense();
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                });
+
+            //sum total expense
+            function sumExpense() {
+                const expense = document.getElementById("sumExpense");
+                const expenseElement = document.querySelectorAll(".expenseAmount");
+                let sum = 0;
+
+                for (let i = 0; i < expenseElement.length; i++) {
+                    sum += +expenseElement[i].textContent;
+                }
+
+                expense.innerHTML = `: ৳${sum.toFixed(2)}`;
+            }
         })();
     </script>
 }

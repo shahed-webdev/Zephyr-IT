@@ -12,7 +12,7 @@
 
         .remove { cursor: pointer }
         .remove:hover { color: #ff0000 }
-        #formPayment { padding: 15px 0; color: #4f4f4f; }
+        #formPayment { color: #4f4f4f; }
         #formPayment ul { list-style-type: none; padding: 0; }
         #formPayment ul li strong { font-weight: 500; }
 
@@ -99,6 +99,16 @@
                                     </tr>
                                 }
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="text-right" colspan="6">
+                                        <strong id="productTotalPrice">
+                                            Total: @Model.SellingTotalPrice
+                                        </strong>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
                         </table>
                         <input id="btnProduct" type="submit" style="display: none" />
                     </form>
@@ -107,13 +117,30 @@
         </div>
 
         <div class="col-lg-3">
-            <div class="card card-body">
-                <form id="formPayment">
+            <form id="formPayment">
+                <div class="card card-body mb-3">
                     <ul class="mb-0">
+                        <li class="md-form">
+                            <input id="inputServiceCharge" step="0.01" type="number" min="0" class="form-control">
+                            <label for="inputServiceCharge">Service Charge</label>
+                        </li>
                         <li class="d-flex justify-content-between align-items-center">
                             <strong>Total Amount</strong>
                             <strong><span id="totalPrice">@Model.SellingTotalPrice</span>/-</strong>
                         </li>
+                        <li class="md-form">
+                            <textarea id="inputServiceChargeDescription" rows="1" class="md-textarea form-control"></textarea>
+                            <label for="inputServiceChargeDescription">Service Charge Description</label>
+                        </li>
+                        <li class="md-form">
+                            <input id="inputServiceCost" step="0.01" type="number" min="0" class="form-control">
+                            <label for="inputServiceCost">Service Cost</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card card-body mb-3">
+                    <ul class="mb-0">
                         <li class="md-form mt-4">
                             <label for="inputDiscount">Discount</label>
                             <input id="inputDiscount" step="0.01" type="number" min="0" class="form-control" value="@Model.SellingDiscountAmount">
@@ -136,7 +163,7 @@
                             <input id="inputPaid" @(Model.SellingDueAmount > 0 ? "" : "disabled") type="number" step="0.01" min="0" class="form-control">
                         </li>
                         <li class="md-form">
-                            <select id="selectPaymentMethod" asp-items="@ViewBag.Account" class="mdb-select" style="position: absolute; top: 1rem; left: 0; height: 0; width: 0; opacity: 0; padding: 0; pointer-events: none; display: inline!important;">
+                            <select id="selectPaymentMethod" asp-items="@ViewBag.Account" class="mdb-select" style="position: absolute; top: 1rem; left: 0; height: 0; width: 0; opacity: 0; padding: 0; pointer-events: none; display: inline !important;">
                                 <option value="" selected>[ Payment Method ]</option>
                             </select>
                         </li>
@@ -145,19 +172,20 @@
                             <label for="inputPromisedDate">Promised Payment Date</label>
                         </li>
                     </ul>
-                    <div class="text-center">
-                        <i id="customer-error" class="mt-2 text-center red-text"></i>
-                        <input type="hidden" id="hiddenSellingId" value="@Model.SellingId" />
-                        <button type="submit" id="btnSelling" class="btn purple-gradient btn-rounded btn-block mt-0">UPDATE BILL</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+
+                <div class="text-center">
+                    <i id="customer-error" class="mt-2 text-center red-text"></i>
+                    <input type="hidden" id="hiddenSellingId" value="@Model.SellingId" />
+                    <button type="submit" id="btnSelling" class="btn purple-gradient btn-rounded btn-block mt-0">UPDATE BILL</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 @section Scripts{
-    <script src="~/page-js/bill-change.js?v=2.2"></script>
+    <script src="~/page-js/bill-change.js?v=2.0.1"></script>
     <script>
         //save previous data
         cartProducts = @Html.Raw(Json.Serialize(Model.Products));
