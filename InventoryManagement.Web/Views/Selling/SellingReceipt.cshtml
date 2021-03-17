@@ -6,7 +6,10 @@
 }
 
 @section Styles{
-    <link href="~/css/selling-receipt.css?v=.002" rel="stylesheet" />
+    <link href="~/css/selling-receipt.css?v=.002" rel="stylesheet"/>
+    <style>
+        #expenseList .delete { color: red; cursor: pointer }
+    </style>
 }
 
 <div id="receipt">
@@ -15,6 +18,7 @@
             <div>
                 <a class="btn btn-success btn-rounded" href="/Selling/Selling"><i class="fal fa-cart-plus mr-1"></i>Selling</a>
                 <a class="btn btn-deep-purple btn-rounded" href="/Selling/BillChange/@Model.SellingId"><i class="fal fa-cart-plus mr-1"></i>Update Bill</a>
+                <a data-toggle="modal" data-target="#modalExpense" class="btn btn-danger btn-rounded"><i class="fas fa-wallet mr-1"></i>Expense</a>
             </div>
             <div>
                 <a class="btn btn-blue-grey btn-rounded" href="/Selling/SellingRecords"><i class="fas fa-file-invoice mr-1"></i>Selling Invoice</a>
@@ -142,11 +146,136 @@
     <p class="mb-0 mt-1">Served By: @Model.SoldBy</p>
 </div>
 
- @section scripts{
-     <script src="~/js/amount-in-word.js"></script>
-     <script>
-         $(function() {
-             $("#amount-word").text(`Taka (in words): ${number2text(@Model.SellingTotalPrice)}`);
-         });
-     </script>     
- }
+
+<!--Modal: expense-->
+<div class="modal fade" id="modalExpense" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-notify modal-danger modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="heading">Expense</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formAdd">
+                    <div class="row">
+                        <div class="col lg-3">
+                            <div class="form-group">
+                                <label for="inputExpense">Expense</label>
+                                <input id="inputExpense" name="Expense" type="number" step="0.01" min="0" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="form-group">
+                                <label for="inputExpenseDescription">Expense Description</label>
+                                <input id="inputExpenseDescription" name="Expense" type="text" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group pt-lg-4">
+                                <input id="btnSubmit" type="submit" value="Submit" class="btn btn-danger btn-md" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <ul id="expenseList" class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong class="d-block">৳500</strong>
+                            <em>the expense</em>
+                        </div>
+                        <i id="" class="delete fas fa-trash"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/js/amount-in-word.js"></script>
+    <script>
+        $(function() {
+            $("#amount-word").text(`Taka (in words): ${number2text(@Model.SellingTotalPrice)}`);
+        });
+
+        (function() {
+            const serializeForm = function(form) {
+                const obj = {};
+                const formData = new FormData(form);
+                for (let key of formData.keys()) {
+                    obj[key] = formData.get(key);
+                }
+                return obj;
+            };
+
+            const formAdd = document.getElementById("formAdd");
+            const expenseList = document.getElementById("expenseList");
+
+            //post data
+            formAdd.addEventListener("submit",
+                function(evt) {
+                    evt.preventDefault();
+
+                    const body = serializeForm(this);
+                    body.SellingId =@Model.SellingId
+
+                    $.ajax({
+                        url: '/Selling/AddBillExpense',
+                        type: "POST",
+                        data: body,
+                        success: function(response) {
+                            if (response.IsSuccess) {
+                                appendData(response.Data);
+                            }
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                });
+
+            //append inserted expense
+            function appendData(item) {
+                const li = document.createElement("tr");
+                li.className = "list-group-item d-flex justify-content-between align-items-center";
+                li.innerHTML = `<div>
+                                   <strong class="d-block">৳${item.Expense}</strong>
+                                   <em>${item.ExpenseDescription}</em>
+                                </div>
+                                <i id="${item.ExpenseId}" class="delete fas fa-trash"></i>`;
+
+                expenseList.appendChild(li);
+            }
+
+
+            //delete
+            expenseList.addEventListener("click",
+                function(evt) {
+                    const element = evt.target;
+
+                    if (element.classList.contains("delete")) {
+                        $.ajax({
+                            url: '/Selling/DeleteBillExpense',
+                            type: "POST",
+                            data: { id: element.id },
+                            success: function (response) {
+                                $.notify(response.Message, response.IsSuccess?"success":"error");
+
+                                if (response.IsSuccess) {
+                                    element.parentElement.remove();
+                                }
+                            },
+                            error: function(error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+                });
+        })();
+    </script>
+}
