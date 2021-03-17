@@ -140,6 +140,7 @@ namespace InventoryManagement.Repository
               .ThenInclude(pd => pd.ProductCatalog)
               .Include(s => s.SellingPaymentList)
               .ThenInclude(sp => sp.SellingPayment)
+              .Include(s=> s.SellingExpense)
               .Select(s => new SellingReceiptViewModel
               {
                   SellingSn = s.SellingSn,
@@ -175,7 +176,16 @@ namespace InventoryManagement.Repository
                       CustomerPhone = s.Customer.CustomerPhone.FirstOrDefault().Phone
                   },
                   InstitutionInfo = db.Institutions.FindCustom(),
-                  SoldBy = s.Registration.Name
+                  SoldBy = s.Registration.Name, 
+                  PromisedPaymentDate = s.PromisedPaymentDate, 
+                  ServiceCharge = s.ServiceCharge, 
+                  ServiceChargeDescription = s.ServiceChargeDescription, SellingExpenses = s.SellingExpense.Select(e=> new SellingExpenseListModel
+                  {
+                      Expense = e.Expense,
+                      ExpenseDescription = e.ExpenseDescription,
+                      InsertDateUtc = e.InsertDateUtc
+                  }).ToList()
+
               }).FirstOrDefaultAsync(s => s.SellingId == id);
 
             return sellingReceipt;
