@@ -10,7 +10,7 @@ using JqueryDataTables.LoopsIT;
 
 namespace InventoryManagement.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin, account")]
     public class TransactionController : Controller
     {
         private readonly IAccountCore _accountCore;
@@ -50,6 +50,8 @@ namespace InventoryManagement.Web.Controllers
             var response = _accountCore.Delete(id);
             return Json(response);
         }
+
+
 
         //***Withdrawal****
         public IActionResult Withdrawal(int? id)

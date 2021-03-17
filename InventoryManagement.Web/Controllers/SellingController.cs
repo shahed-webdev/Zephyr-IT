@@ -53,6 +53,23 @@ namespace InventoryManagement.Web.Controllers
 
             return View(model);
         }
+        
+        //post bill expense
+        [HttpPost]
+        public async Task<IActionResult> AddBillExpense(SellingExpenseAddModel model)
+        {
+            var response = await _db.Selling.ExpenseAdd(model);
+            return Json(response);
+        }
+
+        //delete bill expense
+        [HttpPost]
+        public async Task<IActionResult> DeleteBillExpense(int id)
+        {
+            var response = await _db.Selling.ExpenseDelete(id);
+            return Json(response);
+        }
+
 
         //call from ajax
         public async Task<IActionResult> FindProductByCode(string code)
