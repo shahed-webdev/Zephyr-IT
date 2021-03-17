@@ -9,6 +9,7 @@
     <link href="~/css/selling-receipt.css?v=.002" rel="stylesheet"/>
     <style>
         #expenseList .delete { color: red; cursor: pointer }
+        #expenseList strong { font-weight: bold;}
     </style>
 }
 
@@ -256,14 +257,16 @@
 
             //append inserted expense
             function appendData(item) {
+                const isAdmin = '@User.IsInRole("admin")';
+                const deleteElement = isAdmin === "True"? ` <i id="${item.SellingExpenseId}" class="delete fas fa-trash"></i>` : "";
                 const li = document.createElement("tr");
+
                 li.className = "list-group-item d-flex justify-content-between align-items-center";
                 li.innerHTML = `<div>
-                                   <strong class="d-block">৳<span class="expenseAmount">${item.Expense}</span></strong>
-                                   <em>${item.ExpenseDescription}</em>
+                                   <div><strong>৳<span class="expenseAmount">${item.Expense}</span></strong><small class="text-muted ml-3"><i class="far fa-clock text-muted"></i> ${moment(item.InsertDateUtc).format('DD MMM YYYY')}</small></div>
+                                  <span>${item.ExpenseDescription}</span>
                                 </div>
-                                <i id="${item.SellingExpenseId}" class="delete fas fa-trash"></i>`;
-
+                                ${deleteElement}`;
                 return li;
             }
 

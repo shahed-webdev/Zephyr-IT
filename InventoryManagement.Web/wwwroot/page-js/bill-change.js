@@ -4,8 +4,8 @@ $(function() {
     $('.mdb-select').materialSelect();
 
     $('.datepicker').pickadate({
-        format: 'd-mmmm-yyyy',
-        min: new Date()
+        format: 'd-mmmm-yyyy'
+        //min: new Date()
     });
 });
 
@@ -193,13 +193,14 @@ const loading = function (element, isLoading) {
     element.disabled = isLoading ? true : false;
 }
 
+//calculate selling Total
+const sellingTotalPrice = function () {
+    return cartProducts.map(item => item.SellingPrice * item.sellingQuantity).reduce((prev, cur) => prev + cur, 0);
+}
 
 //append total price to DOM
 const appendTotalPrice = function () {
-    const productPrice = cartProducts.map(item => {
-        return item.SellingPrice * item.sellingQuantity;
-    }).reduce((prev, cur) => prev + cur, 0);
-
+    const productPrice = sellingTotalPrice();
     const totalAmount = productPrice + +inputServiceCharge.value;
 
     productTotalPrice.innerText = productPrice ? `Total: ${productPrice.toFixed(2)}` : "";
@@ -416,15 +417,19 @@ const onSellSubmitClicked = function(evt) {
 
     const body = {
         SellingId: +hiddenSellingId.value,
-        SellingTotalPrice: +totalPrice.textContent,
+        SellingTotalPrice: sellingTotalPrice(),
         SellingDiscountAmount: +inputDiscount.value || 0,
         SellingReturnAmount: +inputReturnAmount.value || 0,
-        PaidAmount: +inputPaid.value,
-        PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
-        PromisedPaymentDate: inputPromisedDate.value,
+        PaidAmount: +inputPaid.value || 0,
         AddedProductCodes: addedProductCodes,
         RemovedProductCodes: removedProductCodes,
-        Products: products
+        Products: products,
+
+        AccountId: inputPaid.value ? selectPaymentMethod.value : '',
+        PromisedPaymentDate: inputPromisedDate.value,
+        ServiceCharge: inputServiceCharge.value,
+        ServiceChargeDescription: inputServiceChargeDescription.value,
+        ServiceCost: inputServiceCost.value
     }
 
     $.ajax({
@@ -432,12 +437,12 @@ const onSellSubmitClicked = function(evt) {
         type: "POST",
         data: body,
         success: function (response) {
-            if (response.IsSuccess) {
-                location.href = `/Selling/SellingReceipt/${response.Data}`;
-            }
+            location.href = `/Selling/SellingReceipt/${response.Data}`;
         },
         error: function (error) {
             console.log(error);
+            $.notify(error,  "error");
+
             btnSubmit.innerText = 'Update Bill';
             btnSubmit.disabled = false;
         }

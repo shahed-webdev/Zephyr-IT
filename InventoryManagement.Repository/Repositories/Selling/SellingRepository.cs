@@ -518,7 +518,9 @@ namespace InventoryManagement.Repository
                 selling.ServiceCharge = model.ServiceCharge;
                 selling.ServiceCost = model.ServiceCost;
                 selling.ServiceChargeDescription = model.ServiceChargeDescription;
-                selling.PromisedPaymentDate = model.PromisedPaymentDate.Value.BdTime().Date;
+                
+                if (model.PromisedPaymentDate != null)
+                    selling.PromisedPaymentDate = model.PromisedPaymentDate.Value.BdTime().Date;
 
                 var due = (selling.SellingTotalPrice + selling.SellingReturnAmount) - (selling.SellingDiscountAmount + selling.SellingPaidAmount);
                 if (due < 0)
@@ -585,7 +587,7 @@ namespace InventoryManagement.Repository
                         }
                     };
 
-                    Context.SellingPayment.Add(payment);
+                    await Context.SellingPayment.AddAsync(payment);
                 }
 
                 await Context.SaveChangesAsync();
@@ -601,13 +603,14 @@ namespace InventoryManagement.Repository
 
             response.IsSuccess = true;
             response.Message = "Success";
+     
             return response;
         }
 
         public async Task<DbResponse> ExpenseAdd(SellingExpenseAddModel model)
         {
 
-            var selling = Context.Selling.Find(model.SellingId);
+            var selling = await Context.Selling.FindAsync(model.SellingId);
 
             if (selling == null) return new DbResponse(false, $"Selling Id not found");
 
@@ -620,7 +623,7 @@ namespace InventoryManagement.Repository
                 ExpenseDescription = model.ExpenseDescription
             };
 
-            Context.SellingExpense.Add(expense);
+            await Context.SellingExpense.AddAsync(expense);
 
             selling.ExpenseTotal += model.Expense;
             Context.Selling.Update(selling);
@@ -630,12 +633,10 @@ namespace InventoryManagement.Repository
 
         public async Task<DbResponse> ExpenseDelete(int sellingExpenseId)
         {
-            var sellingExpense = Context.SellingExpense.Find(sellingExpenseId);
-            var selling = Context.Selling.Find(sellingExpense.SellingId);
+            var sellingExpense = await Context.SellingExpense.FindAsync(sellingExpenseId);
+            var selling = await Context.Selling.FindAsync(sellingExpense.SellingId);
 
             if (selling == null) return new DbResponse(false, $"Selling Id not found");
-
-
 
             Context.SellingExpense.Remove(sellingExpense);
 

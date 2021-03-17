@@ -224,7 +224,7 @@ const clearMDBdropDownList = function (mainSelector) {
     });
 }
 
-//calculate purchase Total
+//calculate selling Total
 const sellingTotalPrice = function () {
     return cartProducts.map(item => item.SellingPrice * item.codes.length).reduce((prev, cur) => prev + cur, 0);
 }
@@ -440,7 +440,10 @@ const onSellSubmitClicked = function (evt) {
             if (response.IsSuccess) {
                 localStoreClear();
                 location.href = `/Selling/SellingReceipt/${response.Data}`;
+                return;
             }
+
+            $.notify(response.Message, response.IsSuccess ? "success" : "error");
         },
         error: function (error) {
             console.log(error);

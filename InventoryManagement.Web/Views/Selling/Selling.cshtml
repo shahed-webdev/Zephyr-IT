@@ -9,13 +9,14 @@
         .remove:hover { color: #ff0000 }
         #formPayment ul { list-style-type: none; padding: 0; }
         #formPayment ul li strong { font-weight: 500; }
+        .md-form textarea.md-textarea {padding: .1rem 0; }
 
-        table tbody tr .codeSpan span { margin-right:5px;}
+        table tbody tr .codeSpan span { margin-right: 5px; }
         table tbody tr .codeSpan span:not(:last-child):after { content: ',' }
-        table tbody tr .codeSpan span:hover{ cursor: pointer; color:#ff0000}
-        table tbody tr .codeSpan span:hover::after {content:'x';}
-        .inputUnitPrice { min-width:110px; text-align:center}
-    </style>  
+        table tbody tr .codeSpan span:hover { cursor: pointer; color: #ff0000}
+        table tbody tr .codeSpan span:hover::after { content: 'x'; }
+        .inputUnitPrice { min-width: 110px; text-align: center}
+    </style>
 }
 
 <div class="m-3">
@@ -130,7 +131,7 @@
                             <label for="inputPromisedDate">Promised Payment Date</label>
                         </li>
                         <li class="d-flex justify-content-between align-items-center">
-                            <div class="md-form mt-4 flex-1">
+                            <div class="md-form mt-2 flex-1">
                                 <input id="inputCustomer" type="text" class="form-control" autocomplete="off" />
                                 <label for="inputCustomer">Find Customer</label>
                                 <div id="customerInfo" class="text-center"></div>
