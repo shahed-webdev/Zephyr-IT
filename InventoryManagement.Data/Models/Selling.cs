@@ -34,7 +34,7 @@ namespace InventoryManagement.Data
         //[ServiceCharge]-[ServiceCost]
         public decimal ServiceProfit { get; set; }
         public string ServiceChargeDescription { get; set; }
-        public decimal Expense { get; set; }
+        public decimal ExpenseTotal { get; set; }
         public decimal BuyingTotalPrice { get; set; }
         public decimal SellingAccountCost { get; set; }
         //[BuyingTotalPrice]-([SellingTotalPrice]+[SellingDiscountAmount]+[Expense]+[SellingAccountCost])

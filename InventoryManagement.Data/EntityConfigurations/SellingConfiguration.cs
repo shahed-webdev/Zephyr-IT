@@ -74,7 +74,7 @@ namespace InventoryManagement.Data
             entity.Property(e => e.ServiceChargeDescription)
                 .HasMaxLength(1024);
 
-            entity.Property(e => e.Expense)
+            entity.Property(e => e.ExpenseTotal)
                 .HasColumnType("decimal(18, 2)");
 
 
