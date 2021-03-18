@@ -109,11 +109,14 @@
                     <span id="amount-word"></span>
                 </td>
                 <td class="text-right">
-                    <h5>Total&nbspAmount:<strong>৳@Model.SellingTotalPrice</strong></h5>
+                    @{
+                        var totalAmount = Model.SellingTotalPrice + Model.ServiceCharge;
+                    }
+                    <h5>Total&nbspAmount:<strong>৳@totalAmount</strong></h5>
                     @if (Model.SellingDiscountAmount > 0)
                     {
                         <h5 class="border-bottom border-dark pb-1">Discount:<strong>৳@Model.SellingDiscountAmount</strong></h5>
-                        <h5 class="mt-1">Net Payable Amount:<strong>৳@(Model.SellingTotalPrice-Model.SellingDiscountAmount)</strong></h5>
+                        <h5 class="mt-1">Net Payable Amount:<strong>৳@(totalAmount - Model.SellingDiscountAmount)</strong></h5>
                     }
                     <h5>Cash&nbspPaid:<strong>৳@Model.SellingPaidAmount</strong></h5>
                     @if (Model.SellingReturnAmount > 0)

@@ -23,7 +23,7 @@
     <!-- custom -->
     <link href="~/css/custom-admin.css?v=.001" rel="stylesheet" />
 
-    @RenderSection("Styles", false)
+    @await RenderSectionAsync("Styles", false)
 </head>
 <body>
     <div id="header">
@@ -90,10 +90,13 @@
     <script src="~/js/menu-links.js"></script>
     <script src="~/js/sidedrawer-show-hide.js"></script>
 
-    @RenderSection("Scripts", required: false)
+@await RenderSectionAsync("Scripts", required: false)
 
-    <script type="text/javascript">
-        $(function () {
+<script type="text/javascript">
+    $(function () {
+            //tooltip
+            $('[data-toggle="tooltip"]').tooltip();
+
             //User login Info
             const url = "@Url.Action($"GetUserLoggedInInfo", $"Dashboard")";
             $.get(url, response => {

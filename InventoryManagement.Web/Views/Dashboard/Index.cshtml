@@ -34,13 +34,16 @@
                                 </div>
                             </div>
                             <div class="col-md-9 col-9 text-right pr-5">
-                                <p class="text-dark mb-2">Business Status</p>
+                                <p class="text-dark mb-2">
+                                    Business Status<small data-toggle="tooltip"
+                                                          title="(Customer Due + Stock Product Price) - Market Due"
+                                                          class="far fa-question-circle text-muted ml-2"></small></p> 
                                 <h4 class="ml-4 font-weight-bold h4-responsive @(businessStatus > 0 ? "text-success" : "text-danger")">৳@businessStatus</h4>
                             </div>
                         </div>
                     </div>
                 </div>
-
+             
                 <div class="col-lg-3 col-md-6 mb-4">
                     <div class="card">
                         <div class="row mt-4 mb-3">
@@ -112,7 +115,13 @@
                         <i class="fas fa-tags fa-2x light-blue darken-3 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
                             <p class="mb-0">
-                                <a id="linkSales">Total Sale <i class="far fa-long-arrow-alt-right"></i></a>
+                                <a id="linkSales">
+                                    Total Sale
+                                    <small data-toggle="tooltip"
+                                           title="Selling Price - Selling Discount (Bill will be calculated if any transaction occurs the reporting date)"
+                                           class="far fa-question-circle text-muted ml-1">
+                                    </small>
+                                </a>
                             </p>
                             <h5 class="font-weight-bold mb-0">
                                 ৳<span id="totalSale"></span>
@@ -125,7 +134,13 @@
                         <i class="fas fa-shopping-bag fa-2x primary-color-dark z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
                             <p class="mb-0">
-                                <a id="linkSold">Today’s Sold Products <i class="far fa-long-arrow-alt-right"></i></a>
+                                <a id="linkSold">
+                                    Today’s Sold Products
+                                    <small data-toggle="tooltip"
+                                           title="Selling Price - Selling Discount (Bill will be calculated by the date of selling)"
+                                           class="far fa-question-circle text-muted ml-1">
+                                    </small>
+                                </a>
                             </p>
                             <h5 class="font-weight-bold mb-0">
                                 ৳<span id="totalProductSold"></span>
@@ -138,7 +153,13 @@
                         <i class="fas fa-wallet fa-2x green darken-1 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
                             <p class="mb-0">
-                                <a id="linkCash">Cash Collection <i class="far fa-long-arrow-alt-right"></i></a>
+                                <a id="linkCash">
+                                    Cash Collection
+                                    <small data-toggle="tooltip"
+                                           title="Paid Amount collected by the reporting date"
+                                           class="far fa-question-circle text-muted ml-1">
+                                    </small>
+                                </a>
                             </p>
                             <h5 class="font-weight-bold mb-0">
                                 ৳<span id="totalCashCollection"></span>
@@ -153,7 +174,13 @@
                     <div class="media white z-depth-1 rounded">
                         <i class="fas fa-chart-pie fa-2x pink z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
-                            <p class="mb-0">Expense</p>
+                            <p class="mb-0">
+                                Expense
+                                <small data-toggle="tooltip"
+                                       title="Genuine Expense + Fixed Cost"
+                                       class="far fa-question-circle text-muted ml-1">
+                                </small>
+                            </p>
                             <h5 class="font-weight-bold mb-0">
                                 ৳<span id="totalExpense"></span>
                             </h5>
@@ -164,7 +191,13 @@
                     <div class="media white z-depth-1 rounded">
                         <i class="fas fa-chart-line fa-2x deep-purple darken-3 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
-                            <p class="mb-0">Profit</p>
+                            <p class="mb-0">
+                                Profit
+                                <small data-toggle="tooltip"
+                                       title="Grand profit (*product net profit(product profit(Purchase Price - Selling Price) - Bill Expense - Selling Account Cost) + service net profit(Service Charge - service cost))"
+                                       class="far fa-question-circle text-muted ml-1">
+                                </small>
+                            </p>
                             <h5 class="font-weight-bold mb-0">
                                 ৳<span id="totalProfit"></span>
                             </h5>
@@ -175,7 +208,13 @@
                     <div class="media white z-depth-1 rounded">
                         <i class="far fa-chart-bar fa-2x brown darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
-                            <p class="mb-0">Net</p>
+                            <p class="mb-0">
+                                Net
+                                <small data-toggle="tooltip"
+                                       title="Profit - Genuine Expense"
+                                       class="far fa-question-circle text-muted ml-1">
+                                </small>
+                            </p>
                             <h5 class="font-weight-bold mb-0">
                                 ৳<span id="totalNetProfit"></span>
                             </h5>
@@ -183,7 +222,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> 
 
         <section class="row mb-5">
             <div class="col-xl-5 col-lg-5 mb-3">
