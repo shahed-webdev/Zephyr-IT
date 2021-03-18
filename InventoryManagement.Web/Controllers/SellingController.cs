@@ -37,10 +37,7 @@ namespace InventoryManagement.Web.Controllers
             if (!ModelState.IsValid) UnprocessableEntity(ModelState);
 
             var response = await _db.Selling.AddCustomAsync(model, _db).ConfigureAwait(false);
-
-            if (response.IsSuccess) return Ok(response);
-            
-            return UnprocessableEntity(response);
+            return Json(response);
         }
 
         //Selling receipt
@@ -189,10 +186,7 @@ namespace InventoryManagement.Web.Controllers
             model.UpdateRegistrationId = regId;
 
             var dbResponse = await _db.Selling.BillUpdated(model, _db);
-
-            if (dbResponse.IsSuccess) return Ok(model.SellingId);
-
-            return UnprocessableEntity(dbResponse.Message);
+            return Json(dbResponse);
         }
 
 
