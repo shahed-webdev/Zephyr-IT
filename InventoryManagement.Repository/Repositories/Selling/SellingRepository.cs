@@ -362,16 +362,11 @@ namespace InventoryManagement.Repository
         public ICollection<MonthlyAmount> MonthlyProfit(int year)
         {
             var months = (from selling in Context.Selling
-                          join sellingList in Context.SellingList on selling.SellingId equals sellingList.SellingId
-                          join productStock in Context.ProductStock on sellingList.SellingListId equals productStock.SellingListId
-                          join purchaseList in Context.PurchaseList on productStock.PurchaseListId equals purchaseList
-                              .PurchaseListId
                           where selling.LastUpdateDate.Value.Year == year && selling.SellingPaymentStatus == "Paid"
                           select new
                           {
                               MonthNumer = selling.LastUpdateDate.Value.Month,
-                              profit = (sellingList.SellingPrice - (sellingList.SellingPrice * sellingList.Selling.SellingDiscountPercentage) / 100) -
-                                       (purchaseList.PurchasePrice - ((purchaseList.PurchasePrice * purchaseList.Purchase.PurchaseDiscountPercentage) / 100))
+                              profit = selling.GrandProfit
                           }
                      ).GroupBy(e => new
                      {
