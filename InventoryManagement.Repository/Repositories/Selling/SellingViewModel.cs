@@ -97,6 +97,7 @@ namespace InventoryManagement.Repository
         public decimal SellingDueAmount { get; set; }
         public DateTime SellingDate { get; set; }
         public DateTime LastUpdateDate { get; set; }
+        public DateTime? PromisedPaymentDate { get; set; }
     }
 
     public class SellingUpdateGetModel

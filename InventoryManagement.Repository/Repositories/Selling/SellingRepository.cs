@@ -206,8 +206,32 @@ namespace InventoryManagement.Repository
                 SellingDiscountAmount = s.SellingDiscountAmount,
                 SellingDueAmount = s.SellingDueAmount,
                 SellingDate = s.SellingDate,
-                LastUpdateDate = s.LastUpdateDate.Value
+                LastUpdateDate = s.LastUpdateDate.Value,
+                PromisedPaymentDate = s.PromisedPaymentDate
             });
+            return r.ToDataResult(request);
+        }
+
+        public DataResult<SellingRecordViewModel> DueRecords(DataRequest request)
+        {
+            var r = Context.Selling
+                .Include(s => s.Customer)
+                .Where(s => s.SellingDueAmount > 0)
+                .OrderBy(s => s.PromisedPaymentDate)
+                .Select(s => new SellingRecordViewModel
+                {
+                    SellingId = s.SellingId,
+                    CustomerId = s.CustomerId,
+                    CustomerName = s.Customer.CustomerName,
+                    SellingSn = s.SellingSn,
+                    SellingAmount = s.SellingTotalPrice,
+                    SellingPaidAmount = s.SellingPaidAmount,
+                    SellingDiscountAmount = s.SellingDiscountAmount,
+                    SellingDueAmount = s.SellingDueAmount,
+                    SellingDate = s.SellingDate,
+                    LastUpdateDate = s.LastUpdateDate.Value,
+                    PromisedPaymentDate = s.PromisedPaymentDate
+                });
             return r.ToDataResult(request);
         }
 
@@ -525,7 +549,7 @@ namespace InventoryManagement.Repository
                 if (model.PromisedPaymentDate != null)
                     selling.PromisedPaymentDate = model.PromisedPaymentDate.Value.BdTime().Date;
 
-                var due = (selling.SellingTotalPrice + selling.SellingReturnAmount+ selling.ServiceCharge) - (selling.SellingDiscountAmount + selling.SellingPaidAmount);
+                var due = (selling.SellingTotalPrice + selling.SellingReturnAmount + selling.ServiceCharge) - (selling.SellingDiscountAmount + selling.SellingPaidAmount);
                 if (due < 0)
                 {
                     response.IsSuccess = false;
@@ -607,7 +631,7 @@ namespace InventoryManagement.Repository
             response.IsSuccess = true;
             response.Message = "Success";
             response.Data = model.SellingId;
-     
+
             return response;
         }
 

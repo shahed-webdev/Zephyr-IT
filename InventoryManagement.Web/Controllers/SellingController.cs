@@ -1,11 +1,11 @@
-﻿using System;
+﻿using InventoryManagement.BusinessLogin;
 using InventoryManagement.Repository;
 using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using InventoryManagement.BusinessLogin;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
 {
@@ -116,7 +116,7 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public IActionResult DueInvoiceData(DataRequest request)
         {
-            var data = _db.Selling.Records(request);
+            var data = _db.Selling.DueRecords(request);
             return Json(data);
         }
 
@@ -195,7 +195,7 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> DeleteBill(int id)
         {
             var dbResponse = await _db.Selling.DeleteBillAsync(id, _db).ConfigureAwait(false);
-           
+
             if (dbResponse.IsSuccess) return Ok();
 
             return UnprocessableEntity(dbResponse.Message);
@@ -228,7 +228,7 @@ namespace InventoryManagement.Web.Controllers
         {
             return View();
         }
-        
+
         //request from data-table(ajax)
         public IActionResult ProductSoldReportData(DataRequest request)
         {

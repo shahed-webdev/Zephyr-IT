@@ -2,7 +2,6 @@
 using JqueryDataTables.LoopsIT;
 using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Repository
@@ -13,6 +12,7 @@ namespace InventoryManagement.Repository
         Task<DbResponse<int>> AddCustomAsync(SellingViewModel model, IUnitOfWork db);
         Task<SellingReceiptViewModel> SellingReceiptAsync(int id, IUnitOfWork db);
         DataResult<SellingRecordViewModel> Records(DataRequest request);
+        DataResult<SellingRecordViewModel> DueRecords(DataRequest request);
         ICollection<int> Years();
         decimal TotalDue();
         decimal DailySaleAmount(DateTime? day);
