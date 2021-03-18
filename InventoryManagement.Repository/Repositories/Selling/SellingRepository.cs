@@ -292,13 +292,16 @@ namespace InventoryManagement.Repository
         {
             var saleDate = date ?? DateTime.Now.BdTime();
             return (from selling in Context.Selling
-                    join sellingList in Context.SellingList on selling.SellingId equals sellingList.SellingId
-                    join productStock in Context.ProductStock on sellingList.SellingListId equals productStock.SellingListId
-                    join purchaseList in Context.PurchaseList on productStock.PurchaseListId equals purchaseList
-                        .PurchaseListId
                     where selling.LastUpdateDate == saleDate.Date && selling.SellingPaymentStatus == "Paid"
-                    select (sellingList.SellingPrice - (sellingList.SellingPrice * sellingList.Selling.SellingDiscountPercentage) / 100) -
-                           (purchaseList.PurchasePrice - ((purchaseList.PurchasePrice * purchaseList.Purchase.PurchaseDiscountPercentage) / 100)))?.Sum() ?? 0;
+                    select selling.GrandProfit)?.Sum() ?? 0;
+
+            //join sellingList in Context.SellingList on selling.SellingId equals sellingList.SellingId
+            //join productStock in Context.ProductStock on sellingList.SellingListId equals productStock.SellingListId
+            //join purchaseList in Context.PurchaseList on productStock.PurchaseListId equals purchaseList
+            //    .PurchaseListId
+            // where selling.LastUpdateDate == saleDate.Date && selling.SellingPaymentStatus == "Paid"
+            // select (sellingList.SellingPrice - (sellingList.SellingPrice * sellingList.Selling.SellingDiscountPercentage) / 100) -
+            //   (purchaseList.PurchasePrice - ((purchaseList.PurchasePrice * purchaseList.Purchase.PurchaseDiscountPercentage) / 100)))?.Sum() ?? 0;
 
         }
 
@@ -518,7 +521,7 @@ namespace InventoryManagement.Repository
                 selling.ServiceCharge = model.ServiceCharge;
                 selling.ServiceCost = model.ServiceCost;
                 selling.ServiceChargeDescription = model.ServiceChargeDescription;
-                
+
                 if (model.PromisedPaymentDate != null)
                     selling.PromisedPaymentDate = model.PromisedPaymentDate.Value.BdTime().Date;
 
@@ -603,7 +606,7 @@ namespace InventoryManagement.Repository
 
             response.IsSuccess = true;
             response.Message = "Success";
-     
+
             return response;
         }
 

@@ -21,7 +21,6 @@ namespace InventoryManagement.Repository
             var years = _db.Expenses.Years();
             years = years.Union(_db.Selling.Years()).ToList();
             years = years.Union(_db.Purchases.Years()).ToList();
-            years = years.Union(_db.Selling.Years()).ToList();
 
             return years.Select(y => new DDL
             {
@@ -55,7 +54,7 @@ namespace InventoryManagement.Repository
             var productSold = _db.Selling.DailyProductSoldAmount(_reportDay);
             var cashCollection = _db.SellingPayments.DailyCashCollectionAmount(_reportDay);
             var profit = _db.Selling.DailyProfit(_reportDay);
-            var expense = _db.Expenses.DailyExpenseAmount(_reportDay);
+            var expense = _db.Expenses.DailyExpenseAmount(_reportDay) + _db.Expenses.FixedExpensePerDay();
             var dailySummary = new DailyDashboardSummaryViewModel
             {
                 TotalSale = Math.Round(sale, 2),
@@ -63,7 +62,7 @@ namespace InventoryManagement.Repository
                 CashCollection = Math.Round(cashCollection, 2),
                 Expense = Math.Round(expense, 2),
                 Profit = Math.Round(profit, 2),
-                NetProfit = Math.Round(profit - expense, 2)
+                NetProfit = Math.Round(profit - _db.Expenses.DailyExpenseAmount(_reportDay), 2)
             };
             return dailySummary;
 
