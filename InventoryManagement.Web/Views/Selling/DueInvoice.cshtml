@@ -18,7 +18,8 @@
                     <th>Paid</th>
                     <th>Discount</th>
                     <th>Due</th>
-                    <th>Date</th>
+                    <th>Selling Date</th>
+                    <th>PPD</th>
                 </tr>
             </thead>
         </table>
@@ -27,14 +28,14 @@
 
 @section scripts{
     <script>
-        $(function () {
+        $(function() {
             dataTable.getData();
         });
 
         //get data
         var dataTable = {
             table: null,
-            init: function () {
+            init: function() {
                 dataTable.table = $("#data-table").DataTable({
                     processing: true,
                     serverSide: true,
@@ -43,34 +44,42 @@
                         type: "POST"
                     },
                     columns:
-                        [
-                            {
-                                data: "SellingSn", "render": function (data, type, row, meta) {
-                                    return `<a class="blue-text" href="/Selling/SellingReceipt/${row.SellingId}">${data}</a>`;
-                                }
-                            },
-                            { data: "CustomerName" },
-                            { data: "SellingAmount", "render": dataTable.addSign },
-                            { data: "SellingPaidAmount", "render": dataTable.addSign },
-                            { data: "SellingDiscountAmount", "render": dataTable.addSign },
-                            {
-                                data: "SellingDueAmount", "render": function (data, type, row, meta) {
-                                    return `<a class="blue-text" href="/Selling/DueCollection/${row.SellingId}">${data}/-</a>`;
-                                }
-                            },
-                            { data: "SellingDate", "render": function (data) { return moment(data).format('DD MMM YYYY') } }
-                        ],
+                    [
+                        {
+                            data: "SellingSn",
+                            "render": function(data, type, row, meta) {
+                                return `<a class="blue-text" href="/Selling/SellingReceipt/${row.SellingId}">${data}</a>`;
+                            }
+                        },
+                        { data: "CustomerName" },
+                        { data: "SellingAmount", "render": dataTable.addSign },
+                        { data: "SellingPaidAmount", "render": dataTable.addSign },
+                        { data: "SellingDiscountAmount", "render": dataTable.addSign },
+                        {
+                            data: "SellingDueAmount",
+                            "render": function(data, type, row, meta) {
+                                return `<a class="blue-text" href="/Selling/DueCollection/${row.SellingId}">${data}/-</a>`;
+                            }
+                        },
+                        { data: "SellingDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
+                        {
+                            data: "PromisedPaymentDate",
+                            "render": function(data) {
+                                return data? moment(data).format('DD MMM YYYY'):""
+                            }
+                        }
+                    ],
                     columnDefs: [
-                        { 'searchable': false, 'targets': [2,3,4,5] },
-                        { 'className': "text-right", "targets": [2, 3, 4,5] },
+                        { 'searchable': false, 'targets': [2, 3, 4, 5] },
+                        { 'className': "text-right", "targets": [2, 3, 4, 5] },
                         { 'className': "text-left", "targets": [1] }
                     ]
                 });
             },
-            getData: function () {
+            getData: function() {
                 dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
             },
-            addSign: function (data) { return `${data}/-` }
+            addSign: function(data) { return `${data}/-` }
         }
     </script>
 }

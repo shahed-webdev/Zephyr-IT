@@ -302,9 +302,23 @@
                                     <th class="font-weight-bold dark-grey-text"><strong>Sales</strong></th>
                                     <th class="font-weight-bold dark-grey-text"><strong>Purchase</strong></th>
                                     <th class="font-weight-bold dark-grey-text"><strong>Expense</strong></th>
-                                    <th class="font-weight-bold dark-grey-text"><strong>Profit</strong></th>
-                                    <th class="font-weight-bold dark-grey-text"><strong>Avg. Profit</strong></th>
-                                </tr>
+                                    <th class="font-weight-bold dark-grey-text">
+                                        <strong>
+                                            Profit<small data-toggle="tooltip"
+                                                         title="Grand profit - Genuine expense"
+                                                         class="far fa-question-circle text-muted ml-1">
+                                            </small>
+                                        </strong>
+                                    </th>
+                                    <th class="font-weight-bold dark-grey-text">
+                                        <strong>
+                                            Avg. Profit<small data-toggle="tooltip"
+                                                              title="Monthly profit/26"
+                                                              class="far fa-question-circle text-muted ml-1">
+                                            </small>
+                                        </strong>
+                                    </th>
+                                </tr> 
                             </thead>
                             <tbody>
                                 @foreach (var item in Model.MonthlySummary)
@@ -397,8 +411,8 @@
         @foreach (var item in Model.MonthlySummary)
         {
             @:months.push("@item.Month.Month");
-            @:profit.push(@item.MonthlyNewPurchase);
-            @:expense.push(@item.MonthlySale);
+            @:profit.push(@(item.MonthlyProfit- item.MonthlyExpense));
+            @:expense.push(@item.MonthlyExpense);
         }
 
         // Line chart
@@ -409,14 +423,14 @@
                 labels: months,
                 datasets: [
                     {
-                        label: "PROFIT",
+                        label: "GRAND PROFIT",
                         fillColor: "#fff",
                         borderColor: 'rgba(76, 175, 80, 0.8)',
                         data: profit,
                         borderWidth: 3
                     },
                     {
-                        label: "EXPENSE",
+                        label: "GENUINE EXPENSE",
                         fillColor: "#fff",
                         borderColor: 'rgba(244, 67, 54, 0.8)',
                         data: expense,
