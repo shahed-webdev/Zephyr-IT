@@ -437,12 +437,14 @@ const onSellSubmitClicked = function(evt) {
         type: "POST",
         data: body,
         success: function (response) {
-            location.href = `/Selling/SellingReceipt/${response.Data}`;
+            $.notify(response.Message, response.IsSuccess?"success":"error");
+
+            if (response.IsSuccess) {
+                location.href = `/Selling/SellingReceipt/${response.Data}`;
+            }
         },
         error: function (error) {
             console.log(error);
-            $.notify(error,  "error");
-
             btnSubmit.innerText = 'Update Bill';
             btnSubmit.disabled = false;
         }

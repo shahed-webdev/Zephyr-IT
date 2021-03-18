@@ -482,9 +482,9 @@ namespace InventoryManagement.Repository
             return sellingReceipt;
         }
 
-        public async Task<DbResponse> BillUpdated(SellingUpdatePostModel model, IUnitOfWork db)
+        public async Task<DbResponse<int>> BillUpdated(SellingUpdatePostModel model, IUnitOfWork db)
         {
-            var response = new DbResponse();
+            var response = new DbResponse<int>();
             try
             {
                 var stocks = new List<ProductStock>();
@@ -522,7 +522,7 @@ namespace InventoryManagement.Repository
                 if (model.PromisedPaymentDate != null)
                     selling.PromisedPaymentDate = model.PromisedPaymentDate.Value.BdTime().Date;
 
-                var due = (selling.SellingTotalPrice + selling.SellingReturnAmount) - (selling.SellingDiscountAmount + selling.SellingPaidAmount);
+                var due = (selling.SellingTotalPrice + selling.SellingReturnAmount+ selling.ServiceCharge) - (selling.SellingDiscountAmount + selling.SellingPaidAmount);
                 if (due < 0)
                 {
                     response.IsSuccess = false;
@@ -603,6 +603,7 @@ namespace InventoryManagement.Repository
 
             response.IsSuccess = true;
             response.Message = "Success";
+            response.Data = model.SellingId;
      
             return response;
         }
