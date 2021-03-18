@@ -19,6 +19,7 @@ namespace InventoryManagement.Repository
         void RemoveCustom(int id);
         ICollection<int> Years();
         decimal DailyExpenseAmount(DateTime? day);
+        decimal FixedExpensePerDay();
         decimal ExpenseYearly(int year);
         ICollection<MonthlyAmount> MonthlyAmounts(int year);
 

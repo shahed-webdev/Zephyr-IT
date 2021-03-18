@@ -168,9 +168,12 @@ namespace InventoryManagement.Repository
                 .Where(e => e.IsApproved && e.ExpenseDate.Date == saleDate.Date)
                 .Sum(e => e.TotalExpense);
 
-            ex += Context.ExpenseFixed.Sum(f => f.CostPerDay);
-
             return ex;
+        }
+
+        public decimal FixedExpensePerDay()
+        {
+            return Context.ExpenseFixed?.Sum(f => f.CostPerDay) ?? 0;
         }
 
         public decimal ExpenseYearly(int year)
