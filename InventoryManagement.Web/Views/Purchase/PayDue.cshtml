@@ -191,7 +191,8 @@
                 paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
             });
 
-        formPayment.addEventListener('submit', function(evt) {
+        formPayment.addEventListener('submit',
+            function(evt) {
                 evt.preventDefault();
 
                 const body = {
@@ -215,7 +216,7 @@
                             location.href = `/Purchase/PurchaseRecords`;
                         }
 
-                        this.btnSubmit.disabled = true;
+                        this.btnSubmit.disabled = false;
                     },
                     error: error => {
                         console.log(error);

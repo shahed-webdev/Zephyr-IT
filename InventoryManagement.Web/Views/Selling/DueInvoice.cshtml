@@ -4,23 +4,34 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+@section Styles
+{
+    <style>
+        .past-row-color { background-color: #ff8a65 }
+        .today-row-color { background-color: #a5d6a7 }
+    </style>
+}
 
 <div class="m-md-3">
-    <h4 class="mb-3 page-header">Due Invoice</h4>
+    <div class="d-flex justify-content-between align-items-center">
+        <h4 class="mb-3 page-header">Due Invoice</h4>
+        <h4 id="sumTotal" class="font-weight-bold mb-0"></h4>
+    </div>
+
     <div class="card card-body">
 
         <table id="data-table" class="table table-sm table-bordered">
             <thead>
-                <tr>
-                    <th>#Bill No</th>
-                    <th>Customer Name</th>
-                    <th>Amount</th>
-                    <th>Paid</th>
-                    <th>Discount</th>
-                    <th>Due</th>
-                    <th>Selling Date</th>
-                    <th>PPD</th>
-                </tr>
+            <tr>
+                <th>#Bill No</th>
+                <th>Customer Name</th>
+                <th>Amount</th>
+                <th>Paid</th>
+                <th>Discount</th>
+                <th>Due</th>
+                <th>Selling Date</th>
+                <th>PPD</th>
+            </tr>
             </thead>
         </table>
     </div>
@@ -65,15 +76,29 @@
                         {
                             data: "PromisedPaymentDate",
                             "render": function(data) {
-                                return data? moment(data).format('DD MMM YYYY'):""
+                                return data ? moment(data).format('DD MMM YYYY') : ""
                             }
                         }
                     ],
                     columnDefs: [
-                        { 'searchable': false, 'targets': [2, 3, 4, 5] },
+                        //{ 'searchable': false, 'targets': [2, 3, 4, 5] },
                         { 'className': "text-right", "targets": [2, 3, 4, 5] },
                         { 'className': "text-left", "targets": [1] }
-                    ]
+                    ],
+                    order: [[7, "desc"]],
+                    rowCallback: function(row, data, index) {
+                        const date = moment(data["PromisedPaymentDate"]);
+                        const now = moment();
+                        //document.getElementById("sumTotal").textContent = `Total: ${sum}`
+
+                        if (now > date) {
+                            $(row).addClass("past-row-color");
+                        }
+
+                        if (moment(date).isSame(moment(), 'day')) {
+                            $(row).addClass("today-row-color");
+                        }
+                    }
                 });
             },
             getData: function() {
