@@ -134,34 +134,24 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
-        //customer due collection(ajax)
+        //Customer due collection(ajax)
         [HttpPost]
-        public async Task<IActionResult> DueCollection([FromBody] SellingDuePaySingleModel model)
+        public async Task<IActionResult> DueCollection(SellingDuePaySingleModel model)
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
             var dbResponse = await _db.SellingPayments.DuePaySingleAsync(model, _db).ConfigureAwait(false);
 
-
-
-            if (dbResponse.IsSuccess) return Ok(dbResponse);
-
-            return BadRequest(dbResponse.Message);
+            return Json(dbResponse);
         }
 
 
         [HttpPost]
-        public async void DueCollectionMultiple(SellingDuePayMultipleModel model)
+        public async Task<IActionResult> DueCollectionMultiple(SellingDuePayMultipleModel model)
         {
-            if (model.PaidAmount <= 0) BadRequest("");
-
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
-
             var dbResponse = await _db.SellingPayments.DuePayMultipleAsync(model, _db).ConfigureAwait(false);
 
-            if (dbResponse.IsSuccess)
-                Ok();
-            else
-                BadRequest(dbResponse.Message);
+            return Json(dbResponse);
         }
 
 

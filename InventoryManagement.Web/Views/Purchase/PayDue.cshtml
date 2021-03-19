@@ -157,7 +157,7 @@
                     <div class="md-form">
                         <input id="inputPaidDate" type="text" class="form-control datepicker">
                     </div>
-                    <input type="submit" @(Model.PurchaseDueAmount > 0 ? "" : "disabled") value="Pay" class="btn btn-brown"/>
+                    <input id="btnSubmit" type="submit" @(Model.PurchaseDueAmount > 0 ? "" : "disabled") value="Pay" class="btn btn-brown"/>
                     <a href="/Purchase/PurchaseRecords">Back to Previous</a>
                 </form>
             </div>
@@ -185,35 +185,44 @@
         const inputPaidDate = formPayment.inputPaidDate;
 
         //input paid amount
-        inputPaid.addEventListener('input', function() {
-            const paid = +this.value;
-            paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
-        });
+        inputPaid.addEventListener('input',
+            function() {
+                const paid = +this.value;
+                paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
+            });
 
         formPayment.addEventListener('submit', function(evt) {
-            evt.preventDefault();
+                evt.preventDefault();
 
-            const body = {
-                PurchaseId: @Model.PurchaseId,
-                VendorId: @Model.VendorInfo.VendorId,
-                PaidAmount: +inputPaid.value,
-                AccountId: inputPaid.value ? selectPaymentMethod.value : '',
-                PaidDate: new Date(inputPaidDate.value)
-            }
+                const body = {
+                    PurchaseId: @Model.PurchaseId,
+                    VendorId: @Model.VendorInfo.VendorId,
+                    PaidAmount: +inputPaid.value,
+                    AccountId: inputPaid.value ? selectPaymentMethod.value : '',
+                    PaidDate: inputPaidDate.value
+                }
 
-            const url = '/Purchase/DueCollection';
-            const options = {
-                method: 'POST',
-                url: url,
-                data: body
-            }
+                this.btnSubmit.disabled = true;
 
-            axios(options).then(response => {
-                location.href = `/Purchase/PurchaseRecords`;
-            }).catch(error => {
-                console.log(error);
-            })
-        });
+                $.ajax({
+                    url: '/Purchase/DueCollection',
+                    type: "POST",
+                    data: body,
+                    success: response => {
+                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
+
+                        if (response.IsSuccess) {
+                            location.href = `/Purchase/PurchaseRecords`;
+                        }
+
+                        this.btnSubmit.disabled = true;
+                    },
+                    error: error => {
+                        console.log(error);
+                        this.btnSubmit.disabled = true;
+                    }
+                });
+            });
     </script>
 }
 
