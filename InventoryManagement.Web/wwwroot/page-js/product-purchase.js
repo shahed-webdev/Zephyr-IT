@@ -732,7 +732,7 @@ const onPurchaseSubmitClicked = function(evt) {
         PurchaseTotalPrice: +totalPrice.textContent,
         PurchaseDiscountAmount: +inputDiscount.value | 0,
         PurchasePaidAmount: +inputPaid.value | 0,
-        PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
+        AccountId: inputPaid.value ? selectPaymentMethod.value : '',
         MemoNumber: inputMemoNumber.value,
         PurchaseDate: inputPurchaseDate.value,
         Products: storage
