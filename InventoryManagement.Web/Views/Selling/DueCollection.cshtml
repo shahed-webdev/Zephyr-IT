@@ -146,7 +146,7 @@
                         </select>
                     </div>
 
-                    <input type="submit" value="Submit" class="btn btn-deep-orange" @(Model.SellingDueAmount > 0 ? "" : "disabled")>
+                    <input id="btnSubmit" type="submit" value="Submit" class="btn btn-deep-orange" @(Model.SellingDueAmount > 0 ? "" : "disabled")>
                 </form>
             </div>
         </div>
@@ -208,7 +208,7 @@
         formPayment.addEventListener('submit', function(evt) {
             evt.preventDefault();
 
-            const data = {
+            const body = {
                 SellingId: @Model.SellingId,
                 CustomerId: @Model.CustomerInfo.CustomerId,
                 PaidAmount: +inputPaid.value,
@@ -217,16 +217,25 @@
                 PaidDate: new Date()
             }
 
-            const url = '/Selling/DueCollection';
-            const options = {
-                method: 'POST',
-                url: url,
-                data: data
-            }
+            this.btnSubmit.disabled = true;
+            $.ajax({
+                url: '/Selling/DueCollection',
+                type: "POST",
+                data: body,
+                success: function (response) {
+                    $.notify(response.Message, response.IsSuccess?"success":"error");
 
-            axios(options).then(response => {
-                location.href = "/Customer/Details/@Model.CustomerInfo.CustomerId";
-            }).catch(error => console.log(error))
+                    if (response.IsSuccess) {
+                        location.href = "/Customer/Details/@Model.CustomerInfo.CustomerId";
+                    }
+
+                    this.btnSubmit.disabled = false;
+                },
+                error: error=> {
+                    console.log(error);
+                    this.btnSubmit.disabled = false;
+                }
+            });
         });
     </script>
 }

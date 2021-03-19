@@ -22,6 +22,7 @@ const inputPurchasePrice = formCart.inputPurchasePrice;
 const inputSellingPrice = formCart.inputSellingPrice;
 const inputWarranty = formCart.inputWarranty;
 const inputDescription = formCart.inputDescription;
+const inputNote = formCart.inputNote;
 const productError = document.querySelector("#product-error")
 
 //payment selectors
@@ -325,7 +326,7 @@ const onProductChanged = function() {
 
 
 //click remove or stock
-const ontableRowElementClicked = function (evt) {
+const onTableRowElementClicked = function (evt) {
     const element = evt.target;
     const removeClicked = element.classList.contains('remove');
     const row = element.parentElement.parentElement;
@@ -570,7 +571,7 @@ showAddedCode.addEventListener('click', onProductCodeClicked);
 
 selectCategory.addEventListener('change', onCategoryChanged);
 selectProductId.addEventListener('change', onProductChanged);
-tbody.addEventListener('click', ontableRowElementClicked);
+tbody.addEventListener('click', onTableRowElementClicked);
 
 //call function
 showCartedProduct();
@@ -730,25 +731,34 @@ const onPurchaseSubmitClicked = function(evt) {
     const body = {
         VendorId: +hiddenVendorId.value,
         PurchaseTotalPrice: +totalPrice.textContent,
-        PurchaseDiscountAmount: +inputDiscount.value | 0,
-        PurchasePaidAmount: +inputPaid.value | 0,
+        PurchaseDiscountAmount: +inputDiscount.value || 0,
+        PurchasePaidAmount: +inputPaid.value || 0,
         AccountId: inputPaid.value ? selectPaymentMethod.value : '',
         MemoNumber: inputMemoNumber.value,
         PurchaseDate: inputPurchaseDate.value,
         Products: storage
     }
 
-    const url = '/Purchase/Purchase';
-    $.post(url, { model: body }, function(data) {
-        if (data.IsSuccess) {
-            localStoreClear();
+    $.ajax({
+        url: '/Purchase/Purchase',
+        type: "POST",
+        data: body,
+        success: function (response) {
+            $.notify(response.Message, response.IsSuccess ? "success" : "error");
+
+            if (response.IsSuccess) {
+                location.href = `/Purchase/PurchaseReceipt/${response.Data}`;
+            }
 
             btnSubmit.innerText = 'PURCHASE';
             btnSubmit.disabled = false;
-
-            location.href = `/Purchase/PurchaseReceipt/${data.Data}`;
+        },
+        error: function (error) {
+            console.log(error);
+            btnSubmit.innerText = 'PURCHASE';
+            btnSubmit.disabled = false;
         }
-    })
+    });
 }
 
 //event listener

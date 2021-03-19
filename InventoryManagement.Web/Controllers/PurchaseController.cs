@@ -40,13 +40,7 @@ namespace InventoryManagement.Web.Views
             if (!ModelState.IsValid) UnprocessableEntity(ModelState);
 
             var response = await _db.Purchases.AddCustomAsync(model, _db).ConfigureAwait(false);
-
-            if (response.IsSuccess)
-            {
-                return Ok(response);
-            }
-            else
-                return UnprocessableEntity(response);
+            return Json(response);
         }
 
         [HttpPost]
@@ -112,14 +106,12 @@ namespace InventoryManagement.Web.Views
 
         //vendor due collection(ajax)
         [HttpPost]
-        public async Task<IActionResult> DueCollection([FromBody] PurchaseDuePaySingleModel model)
+        public async Task<IActionResult> DueCollection(PurchaseDuePaySingleModel model)
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
             var dbResponse = await _db.PurchasePayments.DuePaySingleAsync(model, _db).ConfigureAwait(false);
 
-            if (dbResponse.IsSuccess) return Ok(dbResponse);
-
-            return BadRequest(dbResponse.Message);
+            return Json(dbResponse);
         }
 
 

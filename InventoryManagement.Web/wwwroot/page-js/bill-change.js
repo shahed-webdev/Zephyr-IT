@@ -414,7 +414,6 @@ const onSellSubmitClicked = function(evt) {
     //added product without quantity
     const products = cartProducts.filter(item => item.sellingQuantity);
 
-
     const body = {
         SellingId: +hiddenSellingId.value,
         SellingTotalPrice: sellingTotalPrice(),
@@ -436,21 +435,20 @@ const onSellSubmitClicked = function(evt) {
         url: '/Selling/BillChange',
         type: "POST",
         data: body,
-        success: function (response) {
-            $.notify(response.Message, response.IsSuccess?"success":"error");
+        success: function(response) {
+            $.notify(response.Message, response.IsSuccess ? "success" : "error");
 
             if (response.IsSuccess) {
                 location.href = `/Selling/SellingReceipt/${response.Data}`;
             }
         },
-        error: function (error) {
+        error: function(error) {
             console.log(error);
             btnSubmit.innerText = 'Update Bill';
             btnSubmit.disabled = false;
         }
     });
 }
-
 
 //event listener
 formPayment.addEventListener('submit', onCheckFormValid)
