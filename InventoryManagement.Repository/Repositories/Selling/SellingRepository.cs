@@ -114,6 +114,10 @@ namespace InventoryManagement.Repository
 
                 db.Customers.UpdatePaidDue(model.CustomerId);
 
+                //Account add balance
+                if (model.SellingPaidAmount > 0 && model.AccountId != null)
+                    db.Account.BalanceAdd(model.AccountId.Value, model.SellingPaidAmount);
+
                 response.IsSuccess = true;
                 response.Message = "Success";
                 response.Data = selling.SellingId;

@@ -37,6 +37,7 @@ namespace InventoryManagement.Web.Controllers
             if (!ModelState.IsValid) UnprocessableEntity(ModelState);
 
             var response = await _db.Selling.AddCustomAsync(model, _db).ConfigureAwait(false);
+
             return Json(response);
         }
 
@@ -139,6 +140,8 @@ namespace InventoryManagement.Web.Controllers
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
             var dbResponse = await _db.SellingPayments.DuePaySingleAsync(model, _db).ConfigureAwait(false);
+
+
 
             if (dbResponse.IsSuccess) return Ok(dbResponse);
 

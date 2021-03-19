@@ -36,7 +36,7 @@ namespace InventoryManagement.Repository
 
 
 
-                var due = (selling.SellingTotalPrice + selling.SellingReturnAmount) -
+                var due = (selling.SellingTotalPrice + selling.ServiceCharge + selling.SellingReturnAmount) -
                     (model.SellingDiscountAmount + selling.SellingPaidAmount);
                 if (model.PaidAmount > due)
                 {
@@ -54,6 +54,7 @@ namespace InventoryManagement.Repository
                         PaidAmount = model.PaidAmount,
                         PaymentMethod = model.PaymentMethod,
                         PaidDate = DateTime.Now.BdTime().Date,
+                        AccountId = model.AccountId,
 
                         SellingPaymentList = new List<SellingPaymentList>
                         {
@@ -76,6 +77,10 @@ namespace InventoryManagement.Repository
                 await db.SaveChangesAsync().ConfigureAwait(false);
 
                 db.Customers.UpdatePaidDue(model.CustomerId);
+
+                //Account add balance
+                if (model.PaidAmount > 0 && model.AccountId != null)
+                    db.Account.BalanceAdd(model.AccountId.Value, model.PaidAmount);
 
                 response.IsSuccess = true;
                 response.Message = "Success";
@@ -100,7 +105,7 @@ namespace InventoryManagement.Repository
                 {
                     var sell = sells.FirstOrDefault(s => s.SellingId == invoice.SellingId);
                     sell.SellingDiscountAmount = invoice.SellingDiscountAmount;
-                    var due = (sell.SellingTotalPrice + sell.SellingReturnAmount) - (invoice.SellingDiscountAmount + sell.SellingPaidAmount);
+                    var due = (sell.SellingTotalPrice + sell.ServiceCharge + sell.SellingReturnAmount) - (invoice.SellingDiscountAmount + sell.SellingPaidAmount);
                     if (due < invoice.SellingPaidAmount)
                     {
                         response.IsSuccess = false;
@@ -119,6 +124,7 @@ namespace InventoryManagement.Repository
                     CustomerId = model.CustomerId,
                     ReceiptSn = Sn,
                     PaidAmount = model.PaidAmount,
+                    AccountId = model.AccountId,
                     PaymentMethod = model.PaymentMethod,
                     PaidDate = DateTime.Now.BdTime().Date,
                     SellingPaymentList = model.Bills.Select(i => new SellingPaymentList
@@ -134,6 +140,9 @@ namespace InventoryManagement.Repository
                 await db.SaveChangesAsync().ConfigureAwait(false);
 
                 db.Customers.UpdatePaidDue(model.CustomerId);
+                //Account add balance
+                if (model.PaidAmount > 0 && model.AccountId != null)
+                    db.Account.BalanceAdd(model.AccountId.Value, model.PaidAmount);
 
                 response.IsSuccess = true;
                 response.Message = "Success";
