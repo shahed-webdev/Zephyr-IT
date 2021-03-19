@@ -110,13 +110,15 @@ namespace InventoryManagement.Repository
             await Context.Selling.AddAsync(selling).ConfigureAwait(false);
             try
             {
+                //Account add balance
+                if (model.SellingPaidAmount > 0 && model.AccountId != null)
+                    db.Account.BalanceAdd(model.AccountId.Value, model.SellingPaidAmount);
+
                 await Context.SaveChangesAsync().ConfigureAwait(false);
 
                 db.Customers.UpdatePaidDue(model.CustomerId);
 
-                //Account add balance
-                if (model.SellingPaidAmount > 0 && model.AccountId != null)
-                    db.Account.BalanceAdd(model.AccountId.Value, model.SellingPaidAmount);
+
 
                 response.IsSuccess = true;
                 response.Message = "Success";
@@ -616,9 +618,14 @@ namespace InventoryManagement.Repository
                     await Context.SellingPayment.AddAsync(payment);
                 }
 
+                //Account add balance
+                if (model.PaidAmount > 0 && model.AccountId != null)
+                    db.Account.BalanceAdd(model.AccountId.Value, model.PaidAmount);
+
                 await Context.SaveChangesAsync();
 
                 db.Customers.UpdatePaidDue(selling.CustomerId);
+
             }
             catch (Exception e)
             {

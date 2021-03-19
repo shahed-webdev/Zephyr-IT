@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using InventoryManagement.Data;
 using JqueryDataTables.LoopsIT;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace InventoryManagement.Repository
 {
-    public class AccountRepository: Repository<Account>,IAccountRepository
+    public class AccountRepository : Repository<Account>, IAccountRepository
     {
         protected readonly IMapper _mapper;
         public AccountRepository(ApplicationDbContext context, IMapper mapper) : base(context)
@@ -58,7 +58,7 @@ namespace InventoryManagement.Repository
 
         public bool IsExistName(string name, int updateId)
         {
-             return Context.Account.Any(r => r.AccountName == name && r.AccountId != updateId);
+            return Context.Account.Any(r => r.AccountName == name && r.AccountId != updateId);
         }
 
         public bool IsNull(int id)
@@ -76,7 +76,7 @@ namespace InventoryManagement.Repository
 
         public List<AccountCrudModel> List()
         {
-            return Context.Account              
+            return Context.Account
                 .ProjectTo<AccountCrudModel>(_mapper.ConfigurationProvider)
                 .OrderBy(a => a.AccountName)
                 .ToList();
@@ -102,7 +102,7 @@ namespace InventoryManagement.Repository
         {
             var account = Context.Account.Find(id);
             account.Balance -= amount;
-            Context.Account.Update(account); 
+            Context.Account.Update(account);
         }
 
         public decimal GetCostPercentage(int id)

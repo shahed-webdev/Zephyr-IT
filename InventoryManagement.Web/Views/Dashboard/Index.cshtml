@@ -411,7 +411,7 @@
         @foreach (var item in Model.MonthlySummary)
         {
             @:months.push("@item.Month.Month");
-            @:profit.push(@(item.MonthlyProfit- item.MonthlyExpense));
+            @:profit.push(@(item.MonthlyProfit + item.MonthlyExpense));
             @:expense.push(@item.MonthlyExpense);
         }
 

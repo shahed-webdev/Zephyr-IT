@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using InventoryManagement.Data;
 using JqueryDataTables.LoopsIT;
 using System.Linq;
-using AutoMapper.QueryableExtensions;
 
 namespace InventoryManagement.Repository
 {
-    public class AccountDepositRepository:Repository<AccountDeposit>, IAccountDepositRepository
+    public class AccountDepositRepository : Repository<AccountDeposit>, IAccountDepositRepository
     {
 
         protected readonly IMapper _mapper;
