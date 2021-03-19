@@ -22,5 +22,7 @@ namespace InventoryManagement.Data
         public virtual Registration Registration { get; set; }
         public virtual Vendor Vendor { get; set; }
         public virtual ICollection<PurchasePaymentList> PurchasePaymentList { get; set; }
+        public int? AccountId { get; set; }
+        public Account Account { get; set; }
     }
 }

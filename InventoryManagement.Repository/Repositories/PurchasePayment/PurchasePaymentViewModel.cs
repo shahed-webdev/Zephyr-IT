@@ -22,5 +22,7 @@ namespace InventoryManagement.Repository
         public string PaymentMethod { get; set; }
         public decimal PaidAmount { get; set; }
         public DateTime PaidDate { get; set; }
+
+        public int? AccountId { get; set; }
     }
 }

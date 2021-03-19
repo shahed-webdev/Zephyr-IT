@@ -20,6 +20,7 @@ namespace InventoryManagement.Repository
         public string MemoNumber { get; set; }
         public DateTime PurchaseDate { get; set; }
         public ICollection<ProductPurchaseViewModel> Products { get; set; }
+        public int? AccountId { get; set; }
     }
 
     public class PurchaseReceiptViewModel
