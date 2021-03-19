@@ -4,8 +4,7 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-@section Styles
-{
+@section Styles{
     <style>
         .past-row-color { background-color: #ff8a65 }
         .today-row-color { background-color: #a5d6a7 }
@@ -81,7 +80,7 @@
                         }
                     ],
                     columnDefs: [
-                        //{ 'searchable': false, 'targets': [2, 3, 4, 5] },
+                        { 'searchable': false, 'targets': [2, 3, 4,6,7] },
                         { 'className': "text-right", "targets": [2, 3, 4, 5] },
                         { 'className': "text-left", "targets": [1] }
                     ],

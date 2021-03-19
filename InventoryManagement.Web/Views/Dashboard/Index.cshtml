@@ -7,12 +7,16 @@
 
 @section Styles{
     <style>
+        #business-status h4 { font-size: 1.3rem; }
         #daily-report p { font-weight: 400; color: #212121; font-size: 1rem }
         #daily-report p a { font-weight: 400; color: #212121; font-size: 1rem }
 
         .active-cyan-2 input.form-control[type=text]:focus:not([readonly]) { border-bottom: 1px solid #3fa3e2; box-shadow: 0 1px 0 0 #3fa3e2; }
         .active-cyan-2 .fas { color: #3144a2; }
         .fa-spinner { pointer-events: none }
+
+        .past-row-color { background-color: #ff8a65 }
+        .today-row-color { background-color: #a5d6a7 }
     </style>
 }
 
@@ -23,9 +27,9 @@
 <div class="container-fluid">
     @if (User.IsInRole("admin"))
     {
-        <section class="mt-4">
+        <section id="business-status" class="mt-4">
             <div class="row">
-                <div class="col-lg-3 col-md-6 mb-4">
+                <div class="col-xl-3 col-lg-6 mb-4">
                     <div class="card">
                         <div class="row mt-4 mb-3">
                             <div class="col-md-3 col-3 text-left pl-4">
@@ -44,7 +48,7 @@
                     </div>
                 </div>
              
-                <div class="col-lg-3 col-md-6 mb-4">
+                <div class="col-xl-3 col-lg-6 mb-4">
                     <div class="card">
                         <div class="row mt-4 mb-3">
                             <div class="col-md-3 col-3 text-left pl-4">
@@ -60,7 +64,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-6 mb-4">
+                <div class="col-xl-3 col-lg-6 mb-4">
                     <div class="card">
                         <div class="row mt-4 mb-3">
                             <div class="col-md-3 col-3 text-left pl-4">
@@ -76,7 +80,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-6 mb-4">
+                <div class="col-xl-3 col-lg-6 mb-4">
                     <div class="card">
                         <div class="row mt-4 mb-3">
                             <div class="col-md-3 col-3 text-left pl-4">
@@ -282,8 +286,9 @@
                         <table id="table-customer" class="table table-sm">
                             <thead>
                                 <tr>
-                                    <th><strong>Name</strong></th>
+                                    <th><strong>#Bill No</strong></th>
                                     <th><strong>Due</strong></th>
+                                    <th style="width: 100px"><strong>PPD</strong></th>
                                 </tr>
                             </thead>
                         </table>
@@ -349,7 +354,6 @@
                 format: 'd-mmmm-yyyy'
             }).val(moment(new Date()).format('DD-MMMM-YYYY'));
 
-
             //vendor data-table
             const customerTable = $('#table-customer').DataTable({
                 processing: true,
@@ -357,26 +361,49 @@
                 pageLength: 12,
                 dom: 't',
                 ajax: {
-                    url: "/Dashboard/TopDueCustomer",
+                    url: "/Selling/DueInvoiceData",
                     type: "POST"
                 },
                 columns:
                 [
                     {
-                        data: "Name", "render": function(data, type, row, meta) {
-                            return `<a class="blue-text" href="/Customer/Details/${row.CustomerId}">${data}</a>`;
+                        data: "SellingSn",
+                        "render": function(data, type, row, meta) {
+                            return `<a class="blue-text" href="/Selling/DueCollection/${row.SellingId}">${data}</a>`;
                         }
                     },
-                    { data: "Due" }
+                    { data: "SellingDueAmount" },
+                    {
+                        data: "PromisedPaymentDate",
+                        "render": function(data) {
+                            return data ? moment(data).format('DD MMM YYYY') : ""
+                        }
+                    }
+                    ],
+                columnDefs: [
+                    { 'searchable': false, 'targets': [2] },
+                    //{ 'className': "text-center", "targets": [0,2] }
                 ],
-                order: [[1, 'desc']]
+                order: [[2, 'desc']],
+                rowCallback: function(row, data, index) {
+                    const date = moment(data["PromisedPaymentDate"]);
+                    const now = moment();
+                        
+                    if (now > date) {
+                        $(row).addClass("past-row-color");
+                    }
+
+                    if (moment(date).isSame(moment(), 'day')) {
+                        $(row).addClass("today-row-color");
+                    }
+                }
             });
 
             //on search input
-            $('#input-find').on("input", function() {
-                customerTable.search($(this).val()).draw();
-            });
-
+            $('#input-find').on("input",
+                function() {
+                    customerTable.search($(this).val()).draw();
+                });
 
             //vendor data-table
             const vendorTable = $('#table-vendor').DataTable({
@@ -398,11 +425,11 @@
             });
 
             //on search input
-            $('#vendor-input-find').on("input", function() {
-                vendorTable.search($(this).val()).draw();
-            })
+            $('#vendor-input-find').on("input",
+                function() {
+                    vendorTable.search($(this).val()).draw();
+                })
         });
-
 
         let months = [];
         let profit = [];
@@ -417,50 +444,55 @@
 
         // Line chart
         const ctxL = document.getElementById("lineChart").getContext('2d');
-        const myLineChart = new Chart(ctxL, {
-            type: 'line',
-            data: {
-                labels: months,
-                datasets: [
-                    {
-                        label: "GRAND PROFIT",
-                        fillColor: "#fff",
-                        borderColor: 'rgba(76, 175, 80, 0.8)',
-                        data: profit,
-                        borderWidth: 3
-                    },
-                    {
-                        label: "GENUINE EXPENSE",
-                        fillColor: "#fff",
-                        borderColor: 'rgba(244, 67, 54, 0.8)',
-                        data: expense,
-                        borderWidth: 3
-                    }
-                ]
-            },
-            options: {
-                legend: {
-                    labels: { fontColor: "#fff" }
+        const myLineChart = new Chart(ctxL,
+            {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: "GRAND PROFIT",
+                            fillColor: "#fff",
+                            borderColor: 'rgba(76, 175, 80, 0.8)',
+                            data: profit,
+                            borderWidth: 3
+                        },
+                        {
+                            label: "GENUINE EXPENSE",
+                            fillColor: "#fff",
+                            borderColor: 'rgba(244, 67, 54, 0.8)',
+                            data: expense,
+                            borderWidth: 3
+                        }
+                    ]
                 },
-                scales: {
-                    xAxes: [{
-                        gridLines: {
-                            display: true,
-                            color: "rgba(255,255,255,.25)"
-                        },
-                        ticks: { fontColor: "#fff" }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        gridLines: {
-                            display: true,
-                            color: "rgba(255,255,255,.25)"
-                        },
-                        ticks: { fontColor: "#fff" }
-                    }]
+                options: {
+                    legend: {
+                        labels: { fontColor: "#fff" }
+                    },
+                    scales: {
+                        xAxes: [
+                            {
+                                gridLines: {
+                                    display: true,
+                                    color: "rgba(255,255,255,.25)"
+                                },
+                                ticks: { fontColor: "#fff" }
+                            }
+                        ],
+                        yAxes: [
+                            {
+                                display: true,
+                                gridLines: {
+                                    display: true,
+                                    color: "rgba(255,255,255,.25)"
+                                },
+                                ticks: { fontColor: "#fff" }
+                            }
+                        ]
+                    }
                 }
-            }
-        });
+            });
 
         //on find click
         const findForm = document.getElementById("findForm");
@@ -477,16 +509,16 @@
         linkSold.setAttribute("href", `/Selling/ProductSoldReport/${defaultDate}`);
 
         //find btn click
-        findForm.addEventListener("submit", function(evt) {
-            evt.preventDefault();
+        findForm.addEventListener("submit",
+            function(evt) {
+                evt.preventDefault();
 
-            const date = findForm.inputFindDate.value;
-            getDailyData(date)
-        });
+                const date = findForm.inputFindDate.value;
+                getDailyData(date)
+            });
 
         //get data on load
         getDailyData(defaultDate);
-
 
         //bind daily data
         function getDailyData(date) {
@@ -518,7 +550,6 @@
                     totalExpense.textContent = Expense;
                     totalProfit.textContent = Profit;
 
-
                     totalNetProfit.textContent = NetProfit;
                     if (NetProfit > 0) {
                         totalNetProfit.parentElement.classList.add("text-success");
@@ -527,7 +558,6 @@
                         totalNetProfit.parentElement.classList.remove("text-success");
                         totalNetProfit.parentElement.classList.add("text-danger");
                     }
-
 
                     //hide loading
                     showSpinner(icoFind, false);
