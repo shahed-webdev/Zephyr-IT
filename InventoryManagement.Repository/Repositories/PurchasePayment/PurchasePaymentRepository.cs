@@ -52,6 +52,7 @@ namespace InventoryManagement.Repository
                         PaidAmount = model.PaidAmount,
                         PaymentMethod = model.PaymentMethod,
                         PaidDate = model.PaidDate.BdTime().Date,
+                        AccountId = model.AccountId,
 
                         PurchasePaymentList = new List<PurchasePaymentList>
                         {
@@ -68,6 +69,10 @@ namespace InventoryManagement.Repository
                 purchase.PurchasePaidAmount += model.PaidAmount;
 
                 Context.Purchase.Update(purchase);
+
+                //Account substract balance
+                if (model.PaidAmount > 0 && model.AccountId != null)
+                    db.Account.BalanceSubtract(model.AccountId.Value, model.PaidAmount);
 
                 await db.SaveChangesAsync().ConfigureAwait(false);
 

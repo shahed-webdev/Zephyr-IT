@@ -81,7 +81,8 @@ namespace InventoryManagement.Repository
                                 ReceiptSn = newPurchasePaymentSn,
                                 PaidAmount = model.PurchasePaidAmount,
                                 PaymentMethod = model.PaymentMethod,
-                                PaidDate = model.PurchaseDate.BdTime().Date
+                                PaidDate = model.PurchaseDate.BdTime().Date,
+                                AccountId = model.AccountId
                             }
                         }
                     } : null
@@ -105,6 +106,11 @@ namespace InventoryManagement.Repository
 
             try
             {
+
+                //Account substract balance
+                if (model.PurchasePaidAmount > 0 && model.AccountId != null)
+                    db.Account.BalanceSubtract(model.AccountId.Value, model.PurchasePaidAmount);
+
                 await Context.SaveChangesAsync().ConfigureAwait(false);
 
                 db.Vendors.UpdatePaidDue(model.VendorId);
