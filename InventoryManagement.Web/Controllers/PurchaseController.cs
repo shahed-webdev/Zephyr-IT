@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using InventoryManagement.BusinessLogin;
 
 namespace InventoryManagement.Web.Views
 {
@@ -12,9 +13,11 @@ namespace InventoryManagement.Web.Views
     public class PurchaseController : Controller
     {
         private readonly IUnitOfWork _db;
-        public PurchaseController(IUnitOfWork db)
+        private readonly IAccountCore _account;
+        public PurchaseController(IUnitOfWork db, IAccountCore account)
         {
             _db = db;
+            _account = account;
         }
 
         //GET: Purchase
@@ -22,6 +25,8 @@ namespace InventoryManagement.Web.Views
         public IActionResult Purchase()
         {
             ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
+
             return View();
         }
 
@@ -98,6 +103,7 @@ namespace InventoryManagement.Web.Views
         {
             if (id == null) return RedirectToAction("PurchaseRecords");
 
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
             var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
 
             if (model == null) return RedirectToAction("PurchaseRecords");
@@ -129,6 +135,7 @@ namespace InventoryManagement.Web.Views
         {
             if (id == null) return RedirectToAction("DueReceipt");
 
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
             var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
 
             if (model == null) return RedirectToAction("DueReceipt");

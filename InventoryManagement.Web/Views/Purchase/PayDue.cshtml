@@ -150,12 +150,8 @@
                         <input id="inputPaid" type="number" required class="form-control" min="0" max="@Model.PurchaseDueAmount">
                     </div>
                     <div class="md-form">
-                        <select id="selectPaymentMethod" class="mdb-select" style="position: absolute; top: 1rem; left: 0; height: 0; width: 0; opacity: 0; padding: 0; pointer-events: none; display: inline !important;">
+                        <select id="selectPaymentMethod" asp-items="ViewBag.Account" class="mdb-select" style="position: absolute; top: 1rem; left: 0; height: 0; width: 0; opacity: 0; padding: 0; pointer-events: none; display: inline !important;">
                             <option value="" selected>[ Payment Method ]</option>
-                            <option>Cash</option>
-                            <option>Bank</option>
-                            <option>Cheque</option>
-                            <option>bkash</option>
                         </select>
                     </div>
                     <div class="md-form">
@@ -201,7 +197,7 @@
                 PurchaseId: @Model.PurchaseId,
                 VendorId: @Model.VendorInfo.VendorId,
                 PaidAmount: +inputPaid.value,
-                PaymentMethod: inputPaid.value ? selectPaymentMethod.value : '',
+                AccountId: inputPaid.value ? selectPaymentMethod.value : '',
                 PaidDate: new Date(inputPaidDate.value)
             }
 

@@ -57,12 +57,8 @@
                     <input id="inputDate" placeholder="Paid Date" type="text" class="form-control datepicker" />
                 </div>
                 <div class="md-form">
-                    <select id="selectPaymentMethod" required class="mdb-select mb-0 mt-1 mr-2">
+                    <select id="selectPaymentMethod" asp-items="ViewBag.Account" required class="mdb-select mb-0 mt-1 mr-2">
                         <option value="">[ Payment Method ]</option>
-                        <option>Cash</option>
-                        <option>Bank</option>
-                        <option>Cheque</option>
-                        <option>bkash</option>
                     </select>
                 </div>
                 <div class="md-form">
@@ -124,7 +120,7 @@
             const data = {
                 CustomerId: @Model.CustomerId,
                 PaidAmount: +inputTotalPaid.value,
-                PaymentMethod: selectPaymentMethod.value,
+                AccountId: selectPaymentMethod.value,
                 PaidDate: inputDate.value,
                 Bills: []
             }

@@ -165,12 +165,8 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <strong>Payment Method</strong>
                                 <div class="flex-1 ml-3">
-                                    <select id="selectPaymentMethod" class="mdb-select" style="position: absolute; top: 1rem; left: 0px; height: 0px; width: 0px; opacity: 0; padding: 0px; pointer-events: none; display: inline!important;">
+                                    <select id="selectPaymentMethod" asp-items="ViewBag.Account" class="mdb-select" style="position: absolute; top: 1rem; left: 0px; height: 0px; width: 0px; opacity: 0; padding: 0px; pointer-events: none; display: inline!important;">
                                         <option value="" selected>[ SELECT ]</option>
-                                        <option>Cash</option>
-                                        <option>Bank</option>
-                                        <option>Cheque</option>
-                                        <option>bkash</option>
                                     </select>
                                 </div>
                             </li>
@@ -244,6 +240,6 @@
 
 @section Scripts {
     <partial name="_UnobtrusiveAjaxPartial"/>
-    <script src="~/page-js/product-purchase.js?v=.9021" ></script>
+    <script src="~/page-js/product-purchase.js?v=2.0.0" ></script>
 }
 
