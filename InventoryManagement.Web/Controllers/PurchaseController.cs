@@ -36,10 +36,8 @@ namespace InventoryManagement.Web.Views
         public async Task<IActionResult> Purchase(PurchaseViewModel model)
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
-
-            if (!ModelState.IsValid) UnprocessableEntity(ModelState);
-
             var response = await _db.Purchases.AddCustomAsync(model, _db).ConfigureAwait(false);
+            
             return Json(response);
         }
 

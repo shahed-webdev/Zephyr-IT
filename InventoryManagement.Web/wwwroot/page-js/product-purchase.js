@@ -747,6 +747,7 @@ const onPurchaseSubmitClicked = function(evt) {
             $.notify(response.Message, response.IsSuccess ? "success" : "error");
 
             if (response.IsSuccess) {
+                localStoreClear();
                 location.href = `/Purchase/PurchaseReceipt/${response.Data}`;
             }
 

@@ -94,7 +94,7 @@ namespace InventoryManagement.Repository
             //Update Product Info
             foreach (var item in model.Products)
             {
-                var product = Context.Product.Find(item.ProductId);
+                var product = await Context.Product.FindAsync(item.ProductId);
                 product.ProductId = item.ProductId;
                 product.Description = item.Description;
                 product.Warranty = item.Warranty;
@@ -107,7 +107,7 @@ namespace InventoryManagement.Repository
             try
             {
 
-                //Account substract balance
+                //Account subtract balance
                 if (model.PurchasePaidAmount > 0 && model.AccountId != null)
                     db.Account.BalanceSubtract(model.AccountId.Value, model.PurchasePaidAmount);
 
@@ -170,7 +170,7 @@ namespace InventoryManagement.Repository
                     }).ToList(),
                     Payments = p.PurchasePaymentList.Select(pp => new PurchasePaymentListViewModel
                     {
-                        PaymentMethod = pp.PurchasePayment.PaymentMethod,
+                        PaymentMethod = pp.PurchasePayment.Account.AccountName,
                         PaidAmount = pp.PurchasePaidAmount,
                         PaidDate = pp.PurchasePayment.PaidDate
                     }).ToList(),

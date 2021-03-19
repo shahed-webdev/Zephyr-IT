@@ -89,8 +89,7 @@
                     rowCallback: function(row, data, index) {
                         const date = moment(data["PromisedPaymentDate"]);
                         const now = moment();
-                        //document.getElementById("sumTotal").textContent = `Total: ${sum}`
-
+                        
                         if (now > date) {
                             $(row).addClass("past-row-color");
                         }
