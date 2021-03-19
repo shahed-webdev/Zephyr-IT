@@ -34,7 +34,7 @@ namespace InventoryManagement.Repository
 
                 var selling = await Context.Selling.FindAsync(model.SellingId).ConfigureAwait(false);
 
-
+                var accountCostPercentage = db.Account.GetCostPercentage(model.AccountId.GetValueOrDefault());
 
                 var due = (selling.SellingTotalPrice + selling.ServiceCharge + selling.SellingReturnAmount) -
                     (model.SellingDiscountAmount + selling.SellingPaidAmount);
@@ -55,6 +55,7 @@ namespace InventoryManagement.Repository
                         PaymentMethod = model.PaymentMethod,
                         PaidDate = DateTime.Now.BdTime().Date,
                         AccountId = model.AccountId,
+                        AccountCostPercentage = accountCostPercentage,
 
                         SellingPaymentList = new List<SellingPaymentList>
                         {
@@ -70,6 +71,7 @@ namespace InventoryManagement.Repository
 
                 selling.SellingDiscountAmount = model.SellingDiscountAmount;
                 selling.SellingPaidAmount += model.PaidAmount;
+                selling.SellingAccountCost += model.PaidAmount * accountCostPercentage / 100;
                 selling.LastUpdateDate = DateTime.Now.BdTime().Date;
 
                 Context.Selling.Update(selling);

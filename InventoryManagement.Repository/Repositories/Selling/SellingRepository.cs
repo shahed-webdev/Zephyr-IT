@@ -44,7 +44,7 @@ namespace InventoryManagement.Repository
             var newSellingSn = await GetNewSnAsync().ConfigureAwait(false);
             var newSellingPaymentSn = await db.SellingPayments.GetNewSnAsync().ConfigureAwait(false);
             var sellingStock = await db.ProductStocks.SellingStockFromCodesAsync(codes);
-            var sellingAccountCost = db.Account.GetCostPercentage(model.AccountId.GetValueOrDefault());
+            var accountCostPercentage = db.Account.GetCostPercentage(model.AccountId.GetValueOrDefault());
             var selling = new Selling
             {
                 RegistrationId = model.RegistrationId,
@@ -84,7 +84,7 @@ namespace InventoryManagement.Repository
                                 PaymentMethod = model.PaymentMethod,
                                 PaidDate = DateTime.Now.BdTime().Date,
                                 AccountId = model.AccountId,
-                                AccountCost = sellingAccountCost
+                                AccountCost = accountCostPercentage
                             }
                         }
                     } : null,
@@ -103,7 +103,7 @@ namespace InventoryManagement.Repository
                 ServiceCost = model.ServiceCost,
                 ServiceCharge = model.ServiceCharge,
                 ServiceChargeDescription = model.ServiceChargeDescription,
-                SellingAccountCost = sellingAccountCost
+                SellingAccountCost = model.SellingPaidAmount * accountCostPercentage / 100
             };
 
 
@@ -516,6 +516,8 @@ namespace InventoryManagement.Repository
             try
             {
                 var stocks = new List<ProductStock>();
+
+                var accountCostPercentage = db.Account.GetCostPercentage(model.AccountId.GetValueOrDefault());
                 if (model.AddedProductCodes != null)
                 {
                     if (model.AddedProductCodes.Any())
@@ -542,6 +544,7 @@ namespace InventoryManagement.Repository
                 selling.SellingDiscountAmount = model.SellingDiscountAmount;
                 selling.SellingReturnAmount = model.SellingReturnAmount;
                 selling.SellingPaidAmount += model.PaidAmount;
+                selling.SellingAccountCost += model.PaidAmount * accountCostPercentage / 100;
                 selling.LastUpdateDate = DateTime.Now.BdTime().Date;
                 selling.ServiceCharge = model.ServiceCharge;
                 selling.ServiceCost = model.ServiceCost;
@@ -605,6 +608,7 @@ namespace InventoryManagement.Repository
                         PaidAmount = model.PaidAmount,
                         AccountId = model.AccountId,
                         PaidDate = DateTime.Now.BdTime().Date,
+                        AccountCostPercentage = accountCostPercentage,
                         SellingPaymentList = new List<SellingPaymentList>
                         {
                             new SellingPaymentList

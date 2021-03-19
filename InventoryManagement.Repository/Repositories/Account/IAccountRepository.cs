@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using JqueryDataTables.LoopsIT;
 
 namespace InventoryManagement.Repository
 {
