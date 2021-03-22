@@ -7,7 +7,7 @@
 
 @section Styles{
     <style>
-        #business-status h4 { font-size: 1.3rem; }
+        #business-status h4 { font-size: 1.2rem; }
         #daily-report p { font-weight: 400; color: #212121; font-size: 1rem }
         #daily-report p a { font-weight: 400; color: #212121; font-size: 1rem }
 
@@ -292,6 +292,14 @@
                                     <th style="width: 100px"><strong>PPD</strong></th>
                                 </tr>
                             </thead>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -374,7 +382,11 @@
                         }
                         },
                     { data: "CustomerName" },
-                    { data: "SellingDueAmount" },
+                        {
+                            data: "SellingDueAmount", "render": function (data) {
+                                return `${data}/-`
+                            }
+                        },
                     {
                         data: "PromisedPaymentDate",
                         "render": function(data) {
@@ -384,7 +396,7 @@
                     ],
                 columnDefs: [
                     { 'searchable': false, 'targets': [3] },
-                    //{ 'className': "text-center", "targets": [0,2] }
+                    { 'className': "text-right", "targets": [2] }
                 ],
                 order: [[2, 'desc']],
                 rowCallback: function(row, data, index) {
@@ -550,9 +562,9 @@
                     totalCashCollection.textContent = CashCollection;
                     totalProductSold.textContent = ProductSold;
                     totalExpense.textContent = Expense;
-                    totalProfit.textContent = Profit;
-
+                    totalProfit.textContent = (Profit - Expense);
                     totalNetProfit.textContent = NetProfit;
+
                     if (NetProfit > 0) {
                         totalNetProfit.parentElement.classList.add("text-success");
                         totalNetProfit.parentElement.classList.remove("text-danger");

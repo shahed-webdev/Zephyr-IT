@@ -105,7 +105,7 @@ namespace InventoryManagement.Web.Controllers
             return Json(data);
         }
 
-
+        #region Due Invoice
         //due invoice
         [Authorize(Roles = "admin, due-invoice")]
         public IActionResult DueInvoice()
@@ -153,8 +153,10 @@ namespace InventoryManagement.Web.Controllers
 
             return Json(dbResponse);
         }
+        #endregion Due Invoice
 
 
+        #region Update Bill
         //Post: Change Bill
         [Authorize(Roles = "admin, bill-change")]
         public IActionResult BillList()
@@ -195,8 +197,10 @@ namespace InventoryManagement.Web.Controllers
 
             return UnprocessableEntity(dbResponse.Message);
         }
+        #endregion Update bill
 
 
+        #region Sales Report from Dashboard
         //Sales report
         public IActionResult SalesReport()
         {
@@ -216,8 +220,10 @@ namespace InventoryManagement.Web.Controllers
             var model = _db.Selling.SaleAmountDateWise(fromDate, toDate);
             return Json(model);
         }
+        #endregion Sales report
 
 
+        #region Product Sold Report
         //Product Sold Report
         public IActionResult ProductSoldReport()
         {
@@ -237,8 +243,10 @@ namespace InventoryManagement.Web.Controllers
             var model = _db.Selling.ProductSoldAmountDateWise(fromDate, toDate);
             return Json(model);
         }
+        #endregion Product Sold Report
 
 
+        #region Cash Collection
         //Cash Collection
         public IActionResult CashCollection()
         {
@@ -258,7 +266,31 @@ namespace InventoryManagement.Web.Controllers
             var model = _db.SellingPayments.CollectionAmountDateWise(fromDate, toDate);
             return Json(model);
         }
+        #endregion Cash Collection
 
+        #region Bill Wise Profite 
+
+        //Bill Profite
+        [Authorize(Roles = "admin, bii-profite")]
+        public IActionResult BillProfite()
+        {
+            return View();
+        }
+
+        //request from data-table(ajax)
+        public IActionResult BillProfiteData(DataRequest request)
+        {
+            var data = _db.Selling.Records(request);
+            return Json(data);
+        }
+
+        //GET:// Get Amount ByDate(ajax)
+        public IActionResult BillProfiteByDate(DateTime? fromDate, DateTime? toDate)
+        {
+            var model = _db.Selling.SaleAmountDateWise(fromDate, toDate);
+            return Json(model);
+        }
+        #endregion Sales report
 
         protected override void Dispose(bool disposing)
         {

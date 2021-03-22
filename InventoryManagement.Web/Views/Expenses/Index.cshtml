@@ -30,7 +30,7 @@
                             <td class="text-left">@item.ExpenseCategory</td>
                             <td class="text-right">৳@item.ExpenseAmount.ToString("#.##")</td>
                             <td class="text-left">@item.ExpenseFor</td>
-                            <td>@item.ExpenseDate.ToString("d MMM yyyy")</td>
+                            <td>@item.ExpenseDate.ToString("dd MMM yyyy")</td>
                             <td>@item.CreateBy</td>
                             <td>
                                 @if (item.IsTransportation)
@@ -54,10 +54,7 @@
 @section Scripts {
     <script>
         $(function () {
-            $("#data-table").DataTable({
-                aaSorting: [[4, 'asc']],
-                iDisplayLength: 50
-            });
+            //$("#data-table").DataTable();
         });
 
             //const dataTable = {

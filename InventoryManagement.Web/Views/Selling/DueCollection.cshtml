@@ -68,6 +68,17 @@
             <tbody>
                 @{
                     var index = 1;
+                    @if (Model.ServiceCharge > 0)
+                    {
+                        <tr>
+                            <td class="text-center">@index</td>
+                            <td>Service</td>
+                            <td colspan="4">@Model.ServiceChargeDescription</td>
+                            <td class="text-right">৳@Model.ServiceCharge</td>
+                        </tr>
+                        index++;
+                    }
+
                     foreach (var item in Model.Products)
                     {
                         <tr>
@@ -95,13 +106,21 @@
                         <span id="amount-word"></span>
                     </td>
                     <td class="text-right">
+                        @{
+                            var totalAmount = Model.SellingTotalPrice + Model.ServiceCharge;
+                        }
+                        <h5>Total&nbspAmount:<strong>৳@totalAmount</strong></h5>
                         @if (Model.SellingDiscountAmount > 0)
                         {
-                            <h5>Discount:<strong>৳@Model.SellingDiscountAmount</strong> </h5>
+                            <h5 class="border-bottom border-dark pb-1">Discount:<strong>৳@Model.SellingDiscountAmount</strong></h5>
+                            <h5 class="mt-1">Net Payable Amount:<strong>৳@(totalAmount - Model.SellingDiscountAmount)</strong></h5>
                         }
-                        <h5>Total Taka:<strong>৳@Model.SellingTotalPrice</strong> </h5>
-                        <h5>Cash Paid:<strong>৳@Model.SellingPaidAmount</strong> </h5>
-                        <h5>Due:<strong>৳@Model.SellingDueAmount</strong> </h5>
+                        <h5>Cash&nbspPaid:<strong>৳@Model.SellingPaidAmount</strong></h5>
+                        @if (Model.SellingReturnAmount > 0)
+                        {
+                            <h5>Return&nbspAmount:<strong>৳@Model.SellingReturnAmount</strong></h5>
+                        }
+                        <h5>Due Amount:<strong>৳@Model.SellingDueAmount</strong></h5>
                     </td>
                 </tr>
             </tbody>
