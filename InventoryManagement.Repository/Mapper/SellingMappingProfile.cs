@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using InventoryManagement.Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace InventoryManagement.Repository 
+namespace InventoryManagement.Repository
 {
     class SellingMappingProfile : Profile
     {
@@ -13,6 +10,9 @@ namespace InventoryManagement.Repository
             //CreateMap<SellingViewModel, Selling>();
             //CreateMap<SellingProductListViewModel, SellingList>();
             CreateMap<SellingExpense, SellingExpenseListModel>().ReverseMap();
+            CreateMap<Selling, SellingBillProfitModel>()
+                .ForMember(d => d.CustomerName, opt => opt.MapFrom(c => c.Customer.CustomerName))
+                ;
 
         }
     }

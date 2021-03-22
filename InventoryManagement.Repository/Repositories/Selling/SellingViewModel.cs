@@ -180,4 +180,28 @@ namespace InventoryManagement.Repository
         public string ExpenseDescription { get; set; }
         public DateTime InsertDateUtc { get; set; }
     }
+
+    public class SellingBillProfitModel
+    {
+        public int SellingId { get; set; }
+        public int CustomerId { get; set; }
+        public int SellingSn { get; set; }
+        public string CustomerName { get; set; }
+        public decimal SellingTotalPrice { get; set; }
+        public decimal SellingPaidAmount { get; set; }
+        public decimal SellingDiscountAmount { get; set; }
+        public decimal SellingDueAmount { get; set; }
+        public DateTime SellingDate { get; set; }
+        public DateTime LastUpdateDate { get; set; }
+        public DateTime? PromisedPaymentDate { get; set; }
+        public decimal ServiceCharge { get; set; }
+        public decimal ServiceCost { get; set; }
+        public decimal ExpenseTotal { get; set; }
+        public decimal BuyingTotalPrice { get; set; }
+        public decimal SellingAccountCost { get; set; }
+        public decimal ServiceProfit { get; set; }
+        public decimal SellingProfit { get; set; }
+        public decimal SellingNetProfit { get; set; }
+        public decimal GrandProfit { get; set; }
+    }
 }

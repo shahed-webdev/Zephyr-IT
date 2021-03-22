@@ -241,6 +241,16 @@ namespace InventoryManagement.Repository
             return r.ToDataResult(request);
         }
 
+        public DataResult<SellingBillProfitModel> BillWiseProfits(DataRequest request)
+        {
+            return Context.Selling
+                .Include(s => s.Customer)
+                .Where(s => s.SellingPaymentStatus == "Paid")
+                .OrderBy(s => s.SellingSn)
+                .ProjectTo<SellingBillProfitModel>(_mapper.ConfigurationProvider)
+                .ToDataResult(request);
+        }
+
         public ICollection<int> Years()
         {
             var years = Context.Selling

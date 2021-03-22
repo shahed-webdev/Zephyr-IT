@@ -125,7 +125,7 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> DueCollection(int? id)
         {
             if (id == null) return RedirectToAction("List", "Customer");
-          
+
             ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
 
             var model = await _db.Selling.SellingReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
