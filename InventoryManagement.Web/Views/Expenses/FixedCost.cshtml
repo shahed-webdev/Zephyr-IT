@@ -58,7 +58,7 @@
                         <td>@item.Name</td>
                         <td>৳@item.Amount</td>
                         <td>@item.IntervalDays</td>
-                        <td>৳@item.CostPerDay</td>
+                        <td>৳@item.CostPerDay.ToString("#.00")</td>
                         <td><i id="@item.ExpenseFixedId" class="delete fas fa-trash"></i></td>
                     </tr>
                 }
@@ -109,7 +109,7 @@
 
             function showTable(item) {
                 const tr = document.createElement("tr");
-                tr.innerHTML = `<td>${item.Name}</td><td>৳${item.Amount}</td><td>${item.IntervalDays}</td><td>৳${item.CostPerDay}</td><td><i id="${item.ExpenseFixedId}" class="delete fas fa-trash"></i></td>`;
+                tr.innerHTML = `<td>${item.Name}</td><td>৳${item.Amount}</td><td>${item.IntervalDays}</td><td>৳${item.CostPerDay.toFixed(2)}</td><td><i id="${item.ExpenseFixedId}" class="delete fas fa-trash"></i></td>`;
                 tBody.append(tr);
             }
 

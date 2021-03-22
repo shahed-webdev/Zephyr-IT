@@ -31,7 +31,7 @@
                 <th>Selling Date</th>
                 <th>PPD</th>
             </tr>
-            </thead>
+            </thead>    
         </table>
     </div>
 </div>
@@ -45,7 +45,7 @@
         //get data
         var dataTable = {
             table: null,
-            init: function() {
+            init: function () {
                 dataTable.table = $("#data-table").DataTable({
                     processing: true,
                     serverSide: true,
@@ -54,41 +54,41 @@
                         type: "POST"
                     },
                     columns:
-                    [
-                        {
-                            data: "SellingSn",
-                            "render": function(data, type, row, meta) {
-                                return `<a class="blue-text" href="/Selling/SellingReceipt/${row.SellingId}">${data}</a>`;
+                        [
+                            {
+                                data: "SellingSn",
+                                "render": function (data, type, row, meta) {
+                                    return `<a class="blue-text" href="/Selling/SellingReceipt/${row.SellingId}">${data}</a>`;
+                                }
+                            },
+                            { data: "CustomerName" },
+                            { data: "SellingAmount", "render": dataTable.addSign },
+                            { data: "SellingPaidAmount", "render": dataTable.addSign },
+                            { data: "SellingDiscountAmount", "render": dataTable.addSign },
+                            {
+                                data: "SellingDueAmount",
+                                "render": function (data, type, row, meta) {
+                                    return `<a class="blue-text" href="/Selling/DueCollection/${row.SellingId}">${data}/-</a>`;
+                                }
+                            },
+                            { data: "SellingDate", "render": function (data) { return moment(data).format('DD MMM YYYY') } },
+                            {
+                                data: "PromisedPaymentDate",
+                                "render": function (data) {
+                                    return data ? moment(data).format('DD MMM YYYY') : ""
+                                }
                             }
-                        },
-                        { data: "CustomerName" },
-                        { data: "SellingAmount", "render": dataTable.addSign },
-                        { data: "SellingPaidAmount", "render": dataTable.addSign },
-                        { data: "SellingDiscountAmount", "render": dataTable.addSign },
-                        {
-                            data: "SellingDueAmount",
-                            "render": function(data, type, row, meta) {
-                                return `<a class="blue-text" href="/Selling/DueCollection/${row.SellingId}">${data}/-</a>`;
-                            }
-                        },
-                        { data: "SellingDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
-                        {
-                            data: "PromisedPaymentDate",
-                            "render": function(data) {
-                                return data ? moment(data).format('DD MMM YYYY') : ""
-                            }
-                        }
-                    ],
+                        ],
                     columnDefs: [
-                        { 'searchable': false, 'targets': [2, 3, 4,6,7] },
+                        { 'searchable': false, 'targets': [2, 3, 4, 6, 7] },
                         { 'className': "text-right", "targets": [2, 3, 4, 5] },
                         { 'className': "text-left", "targets": [1] }
                     ],
                     order: [[7, "desc"]],
-                    rowCallback: function(row, data, index) {
+                    rowCallback: function (row, data, index) {
                         const date = moment(data["PromisedPaymentDate"]);
                         const now = moment();
-                        
+
                         if (now > date) {
                             $(row).addClass("past-row-color");
                         }
@@ -96,7 +96,7 @@
                         if (moment(date).isSame(moment(), 'day')) {
                             $(row).addClass("today-row-color");
                         }
-                    }
+                    },
                 });
             },
             getData: function() {
