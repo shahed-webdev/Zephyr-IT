@@ -9,7 +9,7 @@
     <style>
         #business-status h4 { font-size: 1.2rem; }
         #daily-report p { font-weight: 400; color: #212121; font-size: 1rem }
-        #daily-report p a { font-weight: 400; color: #212121; font-size: 1rem }
+            #daily-report p a { font-weight: 400; color: #212121; font-size: 1rem }
 
         .active-cyan-2 input.form-control[type=text]:focus:not([readonly]) { border-bottom: 1px solid #3fa3e2; box-shadow: 0 1px 0 0 #3fa3e2; }
         .active-cyan-2 .fas { color: #3144a2; }
@@ -41,13 +41,14 @@
                                 <p class="text-dark mb-2">
                                     Business Status<small data-toggle="tooltip"
                                                           title="(Customer Due + Stock Product Price) - Market Due"
-                                                          class="far fa-question-circle text-muted ml-2"></small></p> 
+                                                          class="far fa-question-circle text-muted ml-2"></small>
+                                </p>
                                 <h4 class="ml-4 font-weight-bold h4-responsive @(businessStatus > 0 ? "text-success" : "text-danger")">৳@businessStatus</h4>
                             </div>
                         </div>
                     </div>
                 </div>
-             
+
                 <div class="col-xl-3 col-lg-6 mb-4">
                     <div class="card">
                         <div class="row mt-4 mb-3">
@@ -100,7 +101,7 @@
 
         <section id="daily-report" class="mb-5 mt-1">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Daily Report</h5>
+                <h5 class="mb-0">Daily Report<small  data-toggle="modal" data-target="#helpModal" class="far fa-question-circle text-muted ml-1"></small></h5>
                 <form id="findForm">
                     <div class="input-group">
                         <input id="inputFindDate" class="form-control my-0 py-1 datepicker" type="text" placeholder="Search By Date">
@@ -119,13 +120,7 @@
                         <i class="fas fa-tags fa-2x light-blue darken-3 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
                             <p class="mb-0">
-                                <a id="linkSales">
-                                    Total Sale
-                                    <small data-toggle="tooltip"
-                                           title="Selling Price - Selling Discount (Bill will be calculated if any transaction occurs the reporting date)"
-                                           class="far fa-question-circle text-muted ml-1">
-                                    </small>
-                                </a>
+                                <a id="linkSales">Total Sale</a>
                             </p>
                             <h5 class="font-weight-bold mb-0">
                                 ৳<span id="totalSale"></span>
@@ -138,13 +133,7 @@
                         <i class="fas fa-shopping-bag fa-2x primary-color-dark z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
                             <p class="mb-0">
-                                <a id="linkSold">
-                                    Today’s Sold Products
-                                    <small data-toggle="tooltip"
-                                           title="Selling Price - Selling Discount (Bill will be calculated by the date of selling)"
-                                           class="far fa-question-circle text-muted ml-1">
-                                    </small>
-                                </a>
+                                <a id="linkSold">Today’s Sold Products</a>
                             </p>
                             <h5 class="font-weight-bold mb-0">
                                 ৳<span id="totalProductSold"></span>
@@ -157,13 +146,7 @@
                         <i class="fas fa-wallet fa-2x green darken-1 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
                             <p class="mb-0">
-                                <a id="linkCash">
-                                    Cash Collection
-                                    <small data-toggle="tooltip"
-                                           title="Paid Amount collected by the reporting date"
-                                           class="far fa-question-circle text-muted ml-1">
-                                    </small>
-                                </a>
+                                <a id="linkCash">Cash Collection</a>
                             </p>
                             <h5 class="font-weight-bold mb-0">
                                 ৳<span id="totalCashCollection"></span>
@@ -178,13 +161,7 @@
                     <div class="media white z-depth-1 rounded">
                         <i class="fas fa-chart-pie fa-2x pink z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
-                            <p class="mb-0">
-                                Expense
-                                <small data-toggle="tooltip"
-                                       title="Genuine Expense + Fixed Cost"
-                                       class="far fa-question-circle text-muted ml-1">
-                                </small>
-                            </p>
+                            <p class="mb-0">Expense</p>
                             <h5 class="font-weight-bold mb-0">
                                 ৳<span id="totalExpense"></span>
                             </h5>
@@ -195,13 +172,7 @@
                     <div class="media white z-depth-1 rounded">
                         <i class="fas fa-chart-line fa-2x deep-purple darken-3 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
-                            <p class="mb-0">
-                                Profit
-                                <small data-toggle="tooltip"
-                                       title="Grand profit (*product net profit(product profit(Purchase Price - Selling Price) - Bill Expense - Selling Account Cost) + service net profit(Service Charge - service cost))"
-                                       class="far fa-question-circle text-muted ml-1">
-                                </small>
-                            </p>
+                            <p class="mb-0">Profit</p>
                             <h5 class="font-weight-bold mb-0">
                                 ৳<span id="totalProfit"></span>
                             </h5>
@@ -212,13 +183,7 @@
                     <div class="media white z-depth-1 rounded">
                         <i class="far fa-chart-bar fa-2x brown darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                         <div class="media-body mt-3">
-                            <p class="mb-0">
-                                Net
-                                <small data-toggle="tooltip"
-                                       title="Profit - Genuine Expense"
-                                       class="far fa-question-circle text-muted ml-1">
-                                </small>
-                            </p>
+                            <p class="mb-0">Net</p>
                             <h5 class="font-weight-bold mb-0">
                                 ৳<span id="totalNetProfit"></span>
                             </h5>
@@ -226,7 +191,7 @@
                     </div>
                 </div>
             </div>
-        </section> 
+        </section>
 
         <section class="row mb-5">
             <div class="col-xl-5 col-lg-5 mb-3">
@@ -332,7 +297,7 @@
                                             </small>
                                         </strong>
                                     </th>
-                                </tr> 
+                                </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in Model.MonthlySummary)
@@ -353,6 +318,51 @@
             }
         </div>
     </section>
+</div>
+
+
+<!--report help Modal -->
+<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <ul class="list-group list-group-flush mb-4">
+                    <li class="list-group-item">
+                        <strong>Product profit =</strong> (Purchase  Price - Discount) - (Selling price - Discount)
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Product net profit =</strong> Product profit - (Bill Expense + SellingAccountCost)
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Service profit =</strong> Service Charge - Service cost
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Grand profit =</strong> Product net profit + Service profit
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Genuine expense =</strong> Inputed Expense
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Net profit =</strong> Grand profit - Genuine expense
+                    </li>
+                </ul>
+
+                <h5 class="font-weight-bold m-3">Daily Report</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>Daily Expense =</strong> Genuine expense + Fixed Cost
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Daily profit =</strong> Grand profit - Daily Expense
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Daily Net =</strong> Grand profit - Genuine expense
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
@@ -402,7 +412,7 @@
                 rowCallback: function(row, data, index) {
                     const date = moment(data["PromisedPaymentDate"]);
                     const now = moment();
-                        
+
                     if (now > date) {
                         $(row).addClass("past-row-color");
                     }
@@ -558,12 +568,12 @@
                 data: { date },
                 success: function(response) {
                     const { TotalSale, ProductSold, CashCollection, Expense, Profit, NetProfit } = response;
-                    totalSale.textContent = TotalSale;
-                    totalCashCollection.textContent = CashCollection;
-                    totalProductSold.textContent = ProductSold;
-                    totalExpense.textContent = Expense;
-                    totalProfit.textContent = (Profit - Expense);
-                    totalNetProfit.textContent = NetProfit;
+                    totalSale.textContent = TotalSale.toFixed(2);
+                    totalCashCollection.textContent = CashCollection.toFixed(2);
+                    totalProductSold.textContent = ProductSold.toFixed(2);
+                    totalExpense.textContent = Expense.toFixed(2);
+                    totalProfit.textContent = (Profit - Expense).toFixed(2);
+                    totalNetProfit.textContent = NetProfit.toFixed(2);
 
                     if (NetProfit > 0) {
                         totalNetProfit.parentElement.classList.add("text-success");
@@ -571,6 +581,14 @@
                     } else {
                         totalNetProfit.parentElement.classList.remove("text-success");
                         totalNetProfit.parentElement.classList.add("text-danger");
+                    }
+
+                    if (Profit > 0) {
+                        totalProfit.parentElement.classList.add("text-success");
+                        totalProfit.parentElement.classList.remove("text-danger");
+                    } else {
+                        totalProfit.parentElement.classList.remove("text-success");
+                        totalProfit.parentElement.classList.add("text-danger");
                     }
 
                     //hide loading

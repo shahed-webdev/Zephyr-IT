@@ -3,6 +3,11 @@
     ViewData["Title"] = "Bill Profite";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+@section styles{ 
+<style>
+    .lose-row-color { background-color: rgba(244, 67, 54, 0.4) }
+</style>
+}
 
 <div class="m-md-3">
     <h4 class="page-header mb-3">Bill Wise Profit Report</h4>
@@ -31,11 +36,19 @@
                     <th>#Bill No</th>
                     <th>Customer Name</th>
                     <th>Amount</th>
-                    <th>Paid</th>
+                    @*<th>Paid</th>
                     <th>Discount</th>
-                    <th>Due</th>
+                    <th>Due</th>*@
                     <th>Selling Date</th>
-                    <th>Full Paid Date</th>
+                    <th>Service Charge</th>
+                    <th>Service Cost</th>
+                    <th>Expense</th>
+                    <th>Buying Price</th>
+                    <th>Account Cost</th>
+                    <th>Service Profit</th>
+                    <th>Selling Profit</th>
+                    <th>Selling Net Profit</th>
+                    <th>Grand Profit</th>
                 </tr>
             </thead>
         </table>
@@ -59,7 +72,7 @@
         var dataTable = {
             table: null,
             filter: null,
-            init: function() {
+            init: function () {
                 dataTable.table = $("#data-table").DataTable({
                     processing: true,
                     serverSide: true,
@@ -68,33 +81,49 @@
                     ajax: {
                         url: "/Selling/BillProfiteData",
                         type: "POST",
-                        data: function(d) {
+                        data: function (d) {
                             d.filters = dataTable.filter;
                         }
                     },
                     columns:
-                    [
-                        {
-                            data: "SellingSn", "render": function(data, type, row, meta) {
-                                return `<a class="blue-text" href="/Selling/SellingReceipt/${row.SellingId}">${data}</a>`;
-                            }
-                        },
-                        { data: "CustomerName" },
-                        { data: "SellingAmount", "render": dataTable.addSign },
-                        { data: "SellingPaidAmount", "render": dataTable.addSign },
-                        { data: "SellingDiscountAmount", "render": dataTable.addSign },
-                        { data: "SellingDueAmount", "render": function(data, type, row, meta) {
-                                return data ? `<a class="blue-text" href="/Selling/DueCollection/${row.SellingId}">${data}/-</a>` : data;
-                            }
-                        },
-                        { data: "SellingDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
-                        { data: "LastUpdateDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } }
-                    ],
+                        [
+                            {
+                                data: "SellingSn", "render": function (data, type, row, meta) {
+                                    return `<a class="blue-text" href="/Selling/SellingReceipt/${row.SellingId}">${data}</a>`;
+                                }
+                            },
+                            { data: "CustomerName" },
+                            { data: "SellingTotalPrice", "render": dataTable.addSign },
+                            //{ data: "SellingPaidAmount", "render": dataTable.addSign },
+                            //{ data: "SellingDiscountAmount", "render": dataTable.addSign },
+                            //{
+                            //    data: "SellingDueAmount", "render": function (data, type, row, meta) {
+                            //        return data ? `<a class="blue-text" href="/Selling/DueCollection/${row.SellingId}">${data}/-</a>` : data;
+                            //    }
+                            //},
+                            { data: "SellingDate", "render": function (data) { return moment(data).format('DD MMM YYYY') } },
+                            { data: "ServiceCharge", "render": dataTable.addSign },
+                            { data: "ServiceCost", "render": dataTable.addSign },
+                            { data: "ExpenseTotal", "render": dataTable.addSign },
+                            { data: "BuyingTotalPrice", "render": dataTable.addSign },
+                            { data: "SellingAccountCost", "render": dataTable.addSign },
+                            { data: "ServiceProfit", "render": dataTable.addSign },
+                            { data: "SellingProfit", "render": dataTable.addSign },
+                            { data: "SellingNetProfit", "render": dataTable.addSign },
+                            { data: "GrandProfit", "render": dataTable.addSign },  
+                        ],
                     columnDefs: [
-                        { 'searchable': false, 'targets': [2, 3, 4, 5] },
-                        { 'className': "text-right", "targets": [2, 3, 4, 5] },
+                        //{ 'searchable': false, 'targets': [2, 3, 4, 5] },
+                        { 'className': "text-right", "targets": [2, 4, 5,6,7,8,9,10,11,12] },
                         { 'className': "text-left", "targets": [1] }
-                    ]
+                    ],
+                    rowCallback: function (row, data, index) {
+                        const grandProfit = data["GrandProfit"];
+          
+                        if (grandProfit < 1) {
+                            $(row).addClass("lose-row-color");
+                        }
+                    }
                 });
             },
             operand: {
@@ -144,10 +173,10 @@
             dataTable.filter = [];
 
             if (inputFromDate)
-                dataTable.filter.push({ Field: "LastUpdateDate", Value: inputFromDate, Operand: dataTable.operand.GreaterThanOrEqual });
+                dataTable.filter.push({ Field: "SellingDate", Value: inputFromDate, Operand: dataTable.operand.GreaterThanOrEqual });
 
             if (inputToDate)
-                dataTable.filter.push({ Field: "LastUpdateDate", Value: inputToDate, Operand: dataTable.operand.LessThanOrEqual });
+                dataTable.filter.push({ Field: "SellingDate", Value: inputToDate, Operand: dataTable.operand.LessThanOrEqual });
 
 
             dataTable.getData();
@@ -166,14 +195,14 @@
             //for get and set total amount
             const totalAmount = document.getElementById('totalAmount');
        
-            $.ajax({
-                type: "POST",
-                url: "/Selling/BillProfiteByDate",
-                data: dates,
-                success: function(response) {
-                    totalAmount.textContent = `Total Profit: ৳${response}`;
-                }
-            });
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/Selling/BillProfiteByDate",
+            //    data: dates,
+            //    success: function(response) {
+            //        totalAmount.textContent = `Total Profit: ৳${response}`;
+            //    }
+            //});
         }
     </script>
 }

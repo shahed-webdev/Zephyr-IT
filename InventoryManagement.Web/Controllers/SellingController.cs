@@ -280,7 +280,7 @@ namespace InventoryManagement.Web.Controllers
         //request from data-table(ajax)
         public IActionResult BillProfiteData(DataRequest request)
         {
-            var data = _db.Selling.Records(request);
+            var data = _db.Selling.BillWiseProfits(request);
             return Json(data);
         }
 
@@ -292,13 +292,5 @@ namespace InventoryManagement.Web.Controllers
         }
         #endregion Sales report
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }
