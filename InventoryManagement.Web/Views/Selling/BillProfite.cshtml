@@ -5,7 +5,8 @@
 }
 @section styles{ 
 <style>
-    .lose-row-color { background-color: rgba(244, 67, 54, 0.4) }
+    td.profit-row-color { color: #00C851 }
+    td.loss-row-color { color: #CC0000 }
 </style>
 }
 
@@ -34,21 +35,19 @@
             <thead>
                 <tr>
                     <th>#Bill No</th>
-                    <th>Customer Name</th>
-                    <th>Amount</th>
-                    @*<th>Paid</th>
-                    <th>Discount</th>
-                    <th>Due</th>*@
+                    <th>Cus. Name</th>
                     <th>Selling Date</th>
+                    <th>Sale Price</th>
+                    <th>Pur. Price</th>
+                    <th>Product Profit</th>
+                    <th>Discount</th>
+                    <th>Account Cost</th>
+                    <th>Expense</th>
+                    <th>Pro. Net Profit</th>
                     <th>Service Charge</th>
                     <th>Service Cost</th>
-                    <th>Expense</th>
-                    <th>Buying Price</th>
-                    <th>Account Cost</th>
-                    <th>Service Profit</th>
-                    <th>Selling Profit</th>
-                    <th>Selling Net Profit</th>
-                    <th>Grand Profit</th>
+                    <th>Service net Profit</th>
+                    <th>TB Profit/Loss</th>
                 </tr>
             </thead>
         </table>
@@ -93,35 +92,38 @@
                                 }
                             },
                             { data: "CustomerName" },
-                            { data: "SellingTotalPrice", "render": dataTable.addSign },
-                            //{ data: "SellingPaidAmount", "render": dataTable.addSign },
-                            //{ data: "SellingDiscountAmount", "render": dataTable.addSign },
-                            //{
-                            //    data: "SellingDueAmount", "render": function (data, type, row, meta) {
-                            //        return data ? `<a class="blue-text" href="/Selling/DueCollection/${row.SellingId}">${data}/-</a>` : data;
-                            //    }
-                            //},
                             { data: "SellingDate", "render": function (data) { return moment(data).format('DD MMM YYYY') } },
+                            { data: "SellingTotalPrice", "render": dataTable.addSign },
+                            { data: "BuyingTotalPrice", "render": dataTable.addSign },
+                            { data: "SellingProfit", "render": dataTable.addSign },
+                            { data: "SellingDiscountAmount", "render": dataTable.addSign },
+                            { data: "SellingAccountCost", "render": dataTable.addSign },
+                            { data: "ExpenseTotal", "render": dataTable.addSign },
+                            { data: "SellingNetProfit", "render": dataTable.addSign },
                             { data: "ServiceCharge", "render": dataTable.addSign },
                             { data: "ServiceCost", "render": dataTable.addSign },
-                            { data: "ExpenseTotal", "render": dataTable.addSign },
-                            { data: "BuyingTotalPrice", "render": dataTable.addSign },
-                            { data: "SellingAccountCost", "render": dataTable.addSign },
                             { data: "ServiceProfit", "render": dataTable.addSign },
-                            { data: "SellingProfit", "render": dataTable.addSign },
-                            { data: "SellingNetProfit", "render": dataTable.addSign },
-                            { data: "GrandProfit", "render": dataTable.addSign },  
+                            { data: "GrandProfit", "render": dataTable.addSign },
                         ],
                     columnDefs: [
                         //{ 'searchable': false, 'targets': [2, 3, 4, 5] },
-                        { 'className': "text-right", "targets": [2, 4, 5,6,7,8,9,10,11,12] },
+                        { 'className': "text-right", "targets": [2, 4, 5, 6, 7, 8, 9, 10, 11, 12,13] },
                         { 'className': "text-left", "targets": [1] }
                     ],
-                    rowCallback: function (row, data, index) {
+                    rowCallback: function (row, data, index, cells) {
+                        const sellingProfit = data["SellingProfit"];
                         const grandProfit = data["GrandProfit"];
-          
+
+
+                        if (sellingProfit < 1) {
+                            $(row).find('td:eq(9)').addClass("loss-row-color");
+                        }
+
+
                         if (grandProfit < 1) {
-                            $(row).addClass("lose-row-color");
+                            $(row).find('td:eq(13)').addClass("loss-row-color");
+                        } else {
+                            $(row).find('td:eq(13)').addClass("profit-row-color");
                         }
                     }
                 });

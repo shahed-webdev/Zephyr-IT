@@ -268,8 +268,8 @@ namespace InventoryManagement.Web.Controllers
         }
         #endregion Cash Collection
 
-        #region Bill Wise Profite 
 
+        #region Bill Wise Profite 
         //Bill Profite
         [Authorize(Roles = "admin, bii-profite")]
         public IActionResult BillProfite()
@@ -291,6 +291,5 @@ namespace InventoryManagement.Web.Controllers
             return Json(model);
         }
         #endregion Sales report
-
     }
 }
