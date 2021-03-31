@@ -158,7 +158,7 @@ namespace InventoryManagement.Repository
             var obj = Context.Selling.Where(s => s.CustomerId == customer.CustomerId).GroupBy(s => s.CustomerId).Select(s =>
                 new
                 {
-                    TotalAmount = s.Sum(c => c.SellingTotalPrice),
+                    TotalAmount = s.Sum(c => c.ServiceCharge + c.SellingTotalPrice),
                     TotalDiscount = s.Sum(c => c.SellingDiscountAmount),
                     Paid = s.Sum(c => c.SellingPaidAmount),
                     Return = s.Sum(c => c.SellingReturnAmount)
