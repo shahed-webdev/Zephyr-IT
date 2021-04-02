@@ -7,6 +7,9 @@
 <style>
     td.profit-row-color { color: #00C851 }
     td.loss-row-color { color: #CC0000 }
+
+    #summery p{ margin-bottom: 5px;}
+    #summery .net-amount{ font-weight: bold; border-top: 1px solid #333}
 </style>
 }
 
@@ -29,6 +32,32 @@
                 </div>
             </form>
             <h5 id="totalAmount" class="mb-0 font-weight-bold"></h5>
+        </div>
+
+        <div id="summery" class="row text-right mb-4">
+            <div class="col-lg-4">
+                <div class="card card-body h-100">
+                    <p>Sale Price: ৳<span id="setSellingTotalPrice"></span></p>
+                    <p>-Purchase Price: ৳<span id="setBuyingTotalPrice"></span></p>
+                    <p class="net-amount">Product Profit: ৳<span id="setSellingProfit"></span></p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card card-body">
+                    <p>Selling Discount Amount: ৳<span id="setSellingDiscountAmount"></span></p>
+                    <p>-Selling Account Cost: ৳<span id="setSellingAccountCost"></span></p>
+                    <p>-Expense Total: ৳<span id="setExpenseTotal"></span></p>
+                    <p class="net-amount">Selling Net Profit: ৳<span id="setSellingNetProfit"></span></p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card card-body">
+                    <p>Service Charge: ৳<span id="setServiceCharge"></span></p>
+                    <p>-Service Cost: ৳<span id="setServiceCost"></span></p>
+                    <p>+Service Profit: ৳<span id="setServiceProfit"></span></p>
+                    <p class="net-amount">Grand Profit: ৳<span id="setGrandProfit"></span></p>
+                </div>
+            </div>
         </div>
 
         <table id="data-table" class="table table-sm table-bordered">
@@ -56,7 +85,7 @@
 
 @section scripts{
     <script>
-        $(function () {
+        $(function() {
             $('.datepicker').pickadate({ format: 'd-mmmm-yyyy' });
 
             //get amount
@@ -66,12 +95,11 @@
             dataTable.getData();
         });
 
-
         //get data
         var dataTable = {
             table: null,
             filter: null,
-            init: function () {
+            init: function() {
                 dataTable.table = $("#data-table").DataTable({
                     processing: true,
                     serverSide: true,
@@ -80,45 +108,44 @@
                     ajax: {
                         url: "/Selling/BillProfiteData",
                         type: "POST",
-                        data: function (d) {
+                        data: function(d) {
                             d.filters = dataTable.filter;
                         }
                     },
                     columns:
-                        [
-                            {
-                                data: "SellingSn", "render": function (data, type, row, meta) {
-                                    return `<a class="blue-text" href="/Selling/SellingReceipt/${row.SellingId}">${data}</a>`;
-                                }
-                            },
-                            { data: "CustomerName" },
-                            { data: "SellingDate", "render": function (data) { return moment(data).format('DD MMM YYYY') } },
-                            { data: "SellingTotalPrice", "render": dataTable.addSign },
-                            { data: "BuyingTotalPrice", "render": dataTable.addSign },
-                            { data: "SellingProfit", "render": dataTable.addSign },
-                            { data: "SellingDiscountAmount", "render": dataTable.addSign },
-                            { data: "SellingAccountCost", "render": dataTable.addSign },
-                            { data: "ExpenseTotal", "render": dataTable.addSign },
-                            { data: "SellingNetProfit", "render": dataTable.addSign },
-                            { data: "ServiceCharge", "render": dataTable.addSign },
-                            { data: "ServiceCost", "render": dataTable.addSign },
-                            { data: "ServiceProfit", "render": dataTable.addSign },
-                            { data: "GrandProfit", "render": dataTable.addSign },
-                        ],
+                    [
+                        {
+                            data: "SellingSn",
+                            "render": function(data, type, row, meta) {
+                                return `<a class="blue-text" href="/Selling/SellingReceipt/${row.SellingId}">${data}</a>`;
+                            }
+                        },
+                        { data: "CustomerName" },
+                        { data: "SellingDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
+                        { data: "SellingTotalPrice", "render": dataTable.addSign },
+                        { data: "BuyingTotalPrice", "render": dataTable.addSign },
+                        { data: "SellingProfit", "render": dataTable.addSign },
+                        { data: "SellingDiscountAmount", "render": dataTable.addSign },
+                        { data: "SellingAccountCost", "render": dataTable.addSign },
+                        { data: "ExpenseTotal", "render": dataTable.addSign },
+                        { data: "SellingNetProfit", "render": dataTable.addSign },
+                        { data: "ServiceCharge", "render": dataTable.addSign },
+                        { data: "ServiceCost", "render": dataTable.addSign },
+                        { data: "ServiceProfit", "render": dataTable.addSign },
+                        { data: "GrandProfit", "render": dataTable.addSign },
+                    ],
                     columnDefs: [
                         //{ 'searchable': false, 'targets': [2, 3, 4, 5] },
-                        { 'className': "text-right", "targets": [2, 4, 5, 6, 7, 8, 9, 10, 11, 12,13] },
+                        { 'className': "text-right", "targets": [2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] },
                         { 'className': "text-left", "targets": [1] }
                     ],
-                    rowCallback: function (row, data, index, cells) {
+                    rowCallback: function(row, data, index, cells) {
                         const sellingProfit = data["SellingProfit"];
                         const grandProfit = data["GrandProfit"];
-
 
                         if (sellingProfit < 1) {
                             $(row).find('td:eq(9)').addClass("loss-row-color");
                         }
-
 
                         if (grandProfit < 1) {
                             $(row).find('td:eq(13)').addClass("loss-row-color");
@@ -144,18 +171,21 @@
             },
             addSign: function(data) { return `${data}/-` },
             button: {
-                buttons: [{
-                    extend: 'print',
-                    text: '<i class="fa fa-print"></i> Print',
-                    title: '',
-                    exportOptions: {
-                        //columns: [0,1] //Column value those print
-                                                                                },
-                    customize: function(win) {
-                        $(win.document.body).prepend(`<nav class="mb-3 navbar peach-gradient"><a class="navbar-brand ml-1"><span>Zephyr</span> IT</a></nav><h3 class="h3-responsive">${$('h4').text()}</h3>`);
-                    },
-                    autoPrint: true
-                }],
+                buttons: [
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        title: '',
+                        exportOptions: {
+                            //columns: [0,1] //Column value those print
+                        
+                        },
+                        customize: function(win) {
+                            $(win.document.body).prepend(`<nav class="mb-3 navbar peach-gradient"><a class="navbar-brand ml-1"><span>Zephyr</span> IT</a></nav><h3 class="h3-responsive">${$('h4').text()}</h3>`);
+                        },
+                        autoPrint: true
+                    }
+                ],
                 dom: {
                     button: {
                         className: 'btn btn-dark btn-rounded btn-sm my-0'
@@ -166,45 +196,82 @@
 
         //on post date
         const formPost = document.getElementById("formPost");
-        formPost.addEventListener('submit', function(evt) {
-            evt.preventDefault();
+        formPost.addEventListener('submit',
+            function(evt) {
+                evt.preventDefault();
 
-            const inputFromDate = formPost.inputFromDate.value;
-            const inputToDate = formPost.inputToDate.value;
+                const inputFromDate = formPost.inputFromDate.value;
+                const inputToDate = formPost.inputToDate.value;
 
-            dataTable.filter = [];
+                dataTable.filter = [];
 
-            if (inputFromDate)
-                dataTable.filter.push({ Field: "SellingDate", Value: inputFromDate, Operand: dataTable.operand.GreaterThanOrEqual });
+                if (inputFromDate)
+                    dataTable.filter.push({ Field: "LastUpdateDate", Value: inputFromDate, Operand: dataTable.operand.GreaterThanOrEqual });
 
-            if (inputToDate)
-                dataTable.filter.push({ Field: "SellingDate", Value: inputToDate, Operand: dataTable.operand.LessThanOrEqual });
+                if (inputToDate)
+                    dataTable.filter.push({ Field: "LastUpdateDate", Value: inputToDate, Operand: dataTable.operand.LessThanOrEqual });
 
+                dataTable.getData();
 
-            dataTable.getData();
+                const data = {
+                    fromDate: inputFromDate,
+                    toDate: inputToDate
+                };
 
-
-            const data = {
-                fromDate: inputFromDate,
-                toDate: inputToDate
-            };
-
-            getAmountSummery(data);
-        });
+                getAmountSummery(data);
+            });
 
         //get total profit sum
         function getAmountSummery(dates) {
             //for get and set total amount
-            const totalAmount = document.getElementById('totalAmount');
-       
-            //$.ajax({
-            //    type: "POST",
-            //    url: "/Selling/BillProfiteByDate",
-            //    data: dates,
-            //    success: function(response) {
-            //        totalAmount.textContent = `Total Profit: ৳${response}`;
-            //    }
-            //});
+            const setSellingTotalPrice = document.getElementById('setSellingTotalPrice');
+            const setBuyingTotalPrice = document.getElementById('setBuyingTotalPrice');
+            const setSellingProfit = document.getElementById('setSellingProfit');
+
+            const setSellingDiscountAmount = document.getElementById('setSellingDiscountAmount');
+            const setSellingAccountCost = document.getElementById('setSellingAccountCost');
+            const setExpenseTotal = document.getElementById('setExpenseTotal');
+            const setSellingNetProfit = document.getElementById('setSellingNetProfit');
+
+            const setServiceCharge = document.getElementById('setServiceCharge');
+            const setServiceCost = document.getElementById('setServiceCost');
+            const setServiceProfit = document.getElementById('setServiceProfit');
+            const setGrandProfit = document.getElementById('setGrandProfit');
+
+            $.ajax({
+                type: "POST",
+                url: "/Selling/BillProfitByDate",
+                data: dates,
+                success: function(response) {
+                    const {
+                        BuyingTotalPrice,
+                        ExpenseTotal,
+                        GrandProfit,
+                        SellingAccountCost,
+                        SellingDiscountAmount,
+                        SellingNetProfit,
+                        SellingProfit,
+                        SellingTotalPrice,
+                        ServiceCharge,
+                        ServiceCost,
+                        ServiceProfit
+                    } = response.Data;
+
+                    setSellingTotalPrice.textContent = SellingTotalPrice;
+                    setBuyingTotalPrice.textContent = BuyingTotalPrice;
+                    setSellingProfit.textContent = SellingProfit;
+
+                    setSellingDiscountAmount.textContent = SellingDiscountAmount;
+                    setSellingAccountCost.textContent = SellingAccountCost;
+                    setExpenseTotal.textContent = ExpenseTotal;
+                    setSellingNetProfit.textContent = SellingNetProfit;
+
+                    setServiceCharge.textContent = ServiceCharge;
+                    setServiceCost.textContent = ServiceCost;
+                    setServiceProfit.textContent = ServiceProfit;
+                    setGrandProfit.textContent = GrandProfit;
+                }
+            });
         }
     </script>
 }
