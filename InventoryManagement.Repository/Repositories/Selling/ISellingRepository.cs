@@ -20,6 +20,7 @@ namespace InventoryManagement.Repository
         decimal SaleAmountDateWise(DateTime? sDateTime, DateTime? eDateTime);
         decimal DailyProductSoldAmount(DateTime? day);
         DbResponse<DateWiseSaleSummary> ProductSoldAmountDateWise(DateTime? fromDate, DateTime? toDate);
+        DbResponse<SellingBillProfitSummary> SellingBillProfitSummaryDateWise(DateTime? fromDate, DateTime? toDate);
         decimal DailyProfit(DateTime? day);
         decimal DailySoldPurchaseAmount(DateTime? day);
         ICollection<MonthlyAmount> MonthlyAmounts(int year);
