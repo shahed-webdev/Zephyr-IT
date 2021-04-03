@@ -270,7 +270,7 @@ namespace InventoryManagement.Web.Controllers
 
 
         #region Bill Wise Profite 
-        //Bill Profite
+        //Bill Profit
         [Authorize(Roles = "admin, bii-profite")]
         public IActionResult BillProfite()
         {
@@ -285,9 +285,10 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET:// Get Amount ByDate(ajax)
-        public IActionResult BillProfiteByDate(DateTime? fromDate, DateTime? toDate)
+        [HttpPost]
+        public IActionResult BillProfitByDate(DateTime? fromDate, DateTime? toDate)
         {
-            var model = _db.Selling.SaleAmountDateWise(fromDate, toDate);
+            var model = _db.Selling.SellingBillProfitSummaryDateWise(fromDate, toDate);
             return Json(model);
         }
         #endregion Sales report

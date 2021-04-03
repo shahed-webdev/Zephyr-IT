@@ -572,7 +572,9 @@
                     totalCashCollection.textContent = CashCollection.toFixed(2);
                     totalProductSold.textContent = ProductSold.toFixed(2);
                     totalExpense.textContent = Expense.toFixed(2);
-                    totalProfit.textContent = (Profit - Expense).toFixed(2);
+
+                    const sumProfit = (Profit - Expense);
+                    totalProfit.textContent = sumProfit.toFixed(2);
                     totalNetProfit.textContent = NetProfit.toFixed(2);
 
                     if (NetProfit > 0) {
@@ -583,7 +585,7 @@
                         totalNetProfit.parentElement.classList.add("text-danger");
                     }
 
-                    if (Profit > 0) {
+                    if (sumProfit > 0) {
                         totalProfit.parentElement.classList.add("text-success");
                         totalProfit.parentElement.classList.remove("text-danger");
                     } else {
