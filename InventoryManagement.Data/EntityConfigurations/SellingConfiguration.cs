@@ -43,7 +43,7 @@ namespace InventoryManagement.Data
             entity.Property(e => e.SellingDiscountAmount)
                 .HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SellingPaidAmount)
-                .HasColumnType("decimal(18, 2)");  
+                .HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SellingReturnAmount)
                 .HasColumnType("decimal(18, 2)");
 
@@ -59,10 +59,10 @@ namespace InventoryManagement.Data
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Selling_Registration");
 
-            entity.Property(e=> e.ServiceCharge)
-                .HasColumnType("decimal(18, 2)");       
-            
-            entity.Property(e=> e.ServiceCost)
+            entity.Property(e => e.ServiceCharge)
+                .HasColumnType("decimal(18, 2)");
+
+            entity.Property(e => e.ServiceCost)
                 .HasColumnType("decimal(18, 2)");
 
             entity.Property(e => e.ServiceChargeDescription)
@@ -73,8 +73,8 @@ namespace InventoryManagement.Data
 
 
             entity.Property(e => e.BuyingTotalPrice)
-                .HasColumnType("decimal(18, 2)");  
-            
+                .HasColumnType("decimal(18, 2)");
+
             entity.Property(e => e.SellingAccountCost)
                 .HasColumnType("decimal(18, 2)");
 
@@ -84,7 +84,7 @@ namespace InventoryManagement.Data
 
             entity.Property(e => e.SellingProfit)
                 .HasColumnType("decimal(18, 2)")
-                .HasComputedColumnSql("([SellingTotalPrice]-([BuyingTotalPrice]+[SellingDiscountAmount])) PERSISTED");
+                .HasComputedColumnSql("([SellingTotalPrice]-[BuyingTotalPrice]) PERSISTED");
 
             entity.Property(e => e.SellingNetProfit)
                 .HasColumnType("decimal(18, 2)")
