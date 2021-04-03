@@ -331,18 +331,19 @@ namespace InventoryManagement.Repository
                     .GroupBy(s => true)
                     .Select(g => new SellingBillProfitSummary
                     {
-                        SellingTotalPrice = g.Sum(e => e.SellingTotalPrice),
-                        SellingDiscountAmount = g.Sum(e => e.SellingDiscountAmount),
-                        ServiceCharge = g.Sum(e => e.ServiceCharge),
-                        ServiceCost = g.Sum(e => e.ServiceCost),
-                        ExpenseTotal = g.Sum(e => e.ExpenseTotal),
-                        BuyingTotalPrice = g.Sum(e => e.BuyingTotalPrice),
-                        SellingAccountCost = g.Sum(e => e.SellingAccountCost),
                         ServiceProfit = g.Sum(e => e.ServiceProfit),
-                        SellingProfit = g.Sum(e => e.SellingProfit),
-                        SellingNetProfit = g.Sum(e => e.SellingNetProfit),
                         GrandProfit = g.Sum(e => e.GrandProfit)
                     }).FirstOrDefault() ?? new SellingBillProfitSummary();
+
+
+                var exTransportation = Context.ExpenseTransportation
+                    .Where(e => e.IsApproved && e.ExpenseDate <= eD && e.ExpenseDate >= sD).Sum(e => e.TotalExpense);
+
+                var exGeneral = Context.Expense.Include(e => e.ExpenseCategory)
+                    .Where(e => e.IsApproved && e.ExpenseDate <= eD && e.ExpenseDate >= sD).Sum(e => e.ExpenseAmount);
+
+                summary.GenuineExpense = exTransportation + exGeneral;
+                summary.NetProfit = summary.GrandProfit - summary.GenuineExpense;
 
                 return new DbResponse<SellingBillProfitSummary>(true, "Success", summary);
             }

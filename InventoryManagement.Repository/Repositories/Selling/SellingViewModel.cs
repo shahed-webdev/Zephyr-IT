@@ -207,16 +207,10 @@ namespace InventoryManagement.Repository
 
     public class SellingBillProfitSummary
     {
-        public decimal SellingTotalPrice { get; set; }
-        public decimal SellingDiscountAmount { get; set; }
-        public decimal ServiceCharge { get; set; }
-        public decimal ServiceCost { get; set; }
-        public decimal ExpenseTotal { get; set; }
-        public decimal BuyingTotalPrice { get; set; }
-        public decimal SellingAccountCost { get; set; }
         public decimal ServiceProfit { get; set; }
-        public decimal SellingProfit { get; set; }
-        public decimal SellingNetProfit { get; set; }
         public decimal GrandProfit { get; set; }
+        public decimal GenuineExpense { get; set; }
+        //GrandProfit - GenuineExpense
+        public decimal NetProfit { get; set; }
     }
 }
