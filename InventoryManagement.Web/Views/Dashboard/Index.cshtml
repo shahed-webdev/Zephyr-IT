@@ -329,10 +329,10 @@
             <div class="modal-body">
                 <ul class="list-group list-group-flush mb-4">
                     <li class="list-group-item">
-                        <strong>Product profit =</strong> (Purchase  Price - Discount) - (Selling price - Discount)
+                        <strong>Product profit =</strong> Selling price - (Purchase Price - Discount) 
                     </li>
                     <li class="list-group-item">
-                        <strong>Product net profit =</strong> Product profit - (Bill Expense + SellingAccountCost)
+                        <strong>Product net profit =</strong> Product profit - (Bill Expense + SellingAccountCost + Discount)
                     </li>
                     <li class="list-group-item">
                         <strong>Service profit =</strong> Service Charge - Service cost
@@ -341,7 +341,7 @@
                         <strong>Grand profit =</strong> Product net profit + Service profit
                     </li>
                     <li class="list-group-item">
-                        <strong>Genuine expense =</strong> Inputed Expense
+                        <strong>Genuine expense =</strong> Inputted Expense
                     </li>
                     <li class="list-group-item">
                         <strong>Net profit =</strong> Grand profit - Genuine expense
@@ -408,7 +408,7 @@
                     { 'searchable': false, 'targets': [3] },
                     { 'className': "text-right", "targets": [2] }
                 ],
-                order: [[2, 'desc']],
+                order: [[3, 'desc']],
                 rowCallback: function(row, data, index) {
                     const date = moment(data["PromisedPaymentDate"]);
                     const now = moment();

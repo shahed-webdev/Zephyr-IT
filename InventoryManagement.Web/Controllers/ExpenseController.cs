@@ -34,6 +34,7 @@ namespace InventoryManagement.Web.Controllers
         //    return Json(data);
         //}
 
+        #region General Expense
         //***General Expense***
         [Authorize(Roles = "admin, generalExpense")]
         public IActionResult GeneralExpense()
@@ -81,7 +82,7 @@ namespace InventoryManagement.Web.Controllers
 
             if (response.IsSuccess) return RedirectToAction("Index");
             
-            return View(model);
+            return Json(model);
         }
 
         //approve
@@ -92,7 +93,16 @@ namespace InventoryManagement.Web.Controllers
             return Json(response);
         }
 
+        //delete
+        [HttpPost]
+        public IActionResult DeleteGeneralExpense(int id)
+        {
+            var response = _expense.DeleteCost(id);
+            return Json(response);
+        }
+        #endregion
 
+        #region Transportation Cost
         //***Transportation Cost***
         [Authorize(Roles = "admin, transportationCost")]
         public IActionResult TransportationCost()
@@ -136,7 +146,16 @@ namespace InventoryManagement.Web.Controllers
             return Json(response);
         }
 
+        //delete
+        [HttpPost]
+        public IActionResult DeleteTransportationCost(int id)
+        {
+            var response = _expense.DeleteTransportationCost(id);
+            return Json(response);
+        }
+        #endregion
 
+        #region Fixed Cost
         //**Fixed Cost***
         [Authorize(Roles = "admin, fixedCost")]
         public IActionResult FixedCost()
@@ -161,7 +180,7 @@ namespace InventoryManagement.Web.Controllers
             var response = _expense.DeleteFixedCost(id);
             return Json(response);
         }
-
+        #endregion
 
         //Report
         [Authorize(Roles = "admin, expenseReport")]

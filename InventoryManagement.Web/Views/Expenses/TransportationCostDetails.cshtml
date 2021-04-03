@@ -90,7 +90,14 @@
     </div>
 
     <div class="d-flex justify-content-between align-items-center mt-4">
-        <a href="/Expenses/Index">Back To List</a>
+        <div>
+            @if (!Model.IsApproved)
+            {
+                <button id="btnDelete" type="button" class="btn btn-danger mb-1 m-0">Delete</button>
+            }
+            <a class="d-block" href="/Expenses/Index">Back To List</a>
+        </div>
+
         <div>
             <strong id="grandTotal"></strong>
             <button id="btnSubmit" class="btn peach-gradient mb-1 m-0">Update <i class="fas fa-check ml-1"></i></button>
@@ -265,6 +272,32 @@
                     }
                 });
             });
+
+            //delete
+            const btnDelete = document.getElementById("btnDelete");
+            if (btnDelete) {
+                btnDelete.onclick = function(evt) {
+                    this.disabled = true;
+                    $.ajax({
+                        type: "POST",
+                        url: `/Expenses/DeleteTransportationCost`,
+                        data: { id: @Model.ExpenseTransportationId},
+                        success: response => {
+                            $.notify(response.Message, response.IsSuccess ? "success" : "error");
+
+                            if (response.IsSuccess) {
+                                location.href = "/Expenses/Index";
+                                return;
+                            }
+                            this.disabled = false;
+                        },
+                        error: response => {
+                            this.disabled = false;
+                            console.log(response);
+                        }
+                    });
+                }
+            }
 
             //bind inserted data
             showTable();

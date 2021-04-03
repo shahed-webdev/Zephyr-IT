@@ -1,8 +1,9 @@
 ﻿
 @{
-    ViewData["Title"] = "Bill Profite";
+    ViewData["Title"] = "Bill Profit";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+
 @section styles{ 
 <style>
     td.profit-row-color { color: #00C851 }
@@ -28,34 +29,50 @@
                         <label for="inputToDate">To Date</label>
                         <input type="text" id="inputToDate" class="form-control datepicker m-0">
                     </div>
-                    <button type="submit" class="btn btn-indigo py-2"><i class="fal fa-search"></i></button>
+                    <button type="submit" class="btn btn-danger py-2"><i class="fal fa-search"></i></button>
+                    <input type="reset" name="reset" value="Reset" class="btn btn-outline-danger btn-sm py-2" />
                 </div>
             </form>
-            <h5 id="totalAmount" class="mb-0 font-weight-bold"></h5>
         </div>
 
-        <div id="summery" class="row text-right mb-4">
-            <div class="col-lg-4">
-                <div class="card card-body h-100">
-                    <p>Sale Price: ৳<span id="setSellingTotalPrice"></span></p>
-                    <p>-Purchase Price: ৳<span id="setBuyingTotalPrice"></span></p>
-                    <p class="net-amount">Product Profit: ৳<span id="setSellingProfit"></span></p>
+        <div class="row">
+            <div class="col-xl-3 col-lg-6 mb-4">
+                <div class="media white z-depth-1 rounded">
+                    <i class="far fa-money-bill-alt fa-lg blue z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <div class="media-body p-1">
+                        <p class="text-uppercase text-muted mb-1"><small>Service Profit</small></p>
+                        <h5 class="font-weight-bold mb-0">৳<span id="serviceProfit">2000</span></h5>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="card card-body">
-                    <p>Selling Discount Amount: ৳<span id="setSellingDiscountAmount"></span></p>
-                    <p>-Selling Account Cost: ৳<span id="setSellingAccountCost"></span></p>
-                    <p>-Expense Total: ৳<span id="setExpenseTotal"></span></p>
-                    <p class="net-amount">Selling Net Profit: ৳<span id="setSellingNetProfit"></span></p>
+
+            <div class="col-xl-3 col-lg-6 mb-4">
+                <div class="media white z-depth-1 rounded">
+                    <i class="fas fa-chart-bar fa-lg deep-purple z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <div class="media-body p-1">
+                        <p class="text-uppercase text-muted mb-1"><small>Bill Profit</small></p>
+                        <h5 class="font-weight-bold mb-0">৳<span id="billProfit">2000</span></h5>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="card card-body">
-                    <p>Service Charge: ৳<span id="setServiceCharge"></span></p>
-                    <p>-Service Cost: ৳<span id="setServiceCost"></span></p>
-                    <p>+Service Profit: ৳<span id="setServiceProfit"></span></p>
-                    <p class="net-amount">Grand Profit: ৳<span id="setGrandProfit"></span></p>
+
+            <div class="col-xl-3 col-lg-6 mb-4">
+                <div class="media white z-depth-1 rounded">
+                    <i class="fas fa-chart-pie fa-lg teal z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <div class="media-body p-1">
+                        <p class="text-uppercase text-muted mb-1"><small>Total Expense</small></p>
+                        <h5 class="font-weight-bold mb-0">৳<span id="totalExpense">2000</span></h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-6 mb-4">
+                <div class="media white z-depth-1 rounded">
+                    <i class="fas fa-chart-line fa-lg pink z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <div class="media-body p-1">
+                        <p class="text-uppercase text-muted mb-1"><small>Profit/Loss</small></p>
+                        <h5 class="font-weight-bold mb-0">৳<span id="grandProfit">2000</span></h5>
+                    </div>
                 </div>
             </div>
         </div>
@@ -135,7 +152,7 @@
                         { data: "GrandProfit", "render": dataTable.addSign },
                     ],
                     columnDefs: [
-                        //{ 'searchable': false, 'targets': [2, 3, 4, 5] },
+                        { 'searchable': false, 'targets': [2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] },
                         { 'className': "text-right", "targets": [2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] },
                         { 'className': "text-left", "targets": [1] }
                     ],
@@ -221,22 +238,19 @@
                 getAmountSummery(data);
             });
 
+        //reset
+        formPost.addEventListener('reset', function () {
+            location.href = "/Selling/BillProfite";
+        });
+
+
         //get total profit sum
         function getAmountSummery(dates) {
             //for get and set total amount
-            const setSellingTotalPrice = document.getElementById('setSellingTotalPrice');
-            const setBuyingTotalPrice = document.getElementById('setBuyingTotalPrice');
-            const setSellingProfit = document.getElementById('setSellingProfit');
-
-            const setSellingDiscountAmount = document.getElementById('setSellingDiscountAmount');
-            const setSellingAccountCost = document.getElementById('setSellingAccountCost');
-            const setExpenseTotal = document.getElementById('setExpenseTotal');
-            const setSellingNetProfit = document.getElementById('setSellingNetProfit');
-
-            const setServiceCharge = document.getElementById('setServiceCharge');
-            const setServiceCost = document.getElementById('setServiceCost');
-            const setServiceProfit = document.getElementById('setServiceProfit');
-            const setGrandProfit = document.getElementById('setGrandProfit');
+            const serviceProfit = document.getElementById('serviceProfit');
+            const billProfit = document.getElementById('billProfit');
+            const totalExpense = document.getElementById('totalExpense');
+            const grandProfit = document.getElementById('grandProfit');
 
             $.ajax({
                 type: "POST",
@@ -245,31 +259,15 @@
                 success: function(response) {
                     const {
                         BuyingTotalPrice,
-                        ExpenseTotal,
-                        GrandProfit,
-                        SellingAccountCost,
                         SellingDiscountAmount,
-                        SellingNetProfit,
                         SellingProfit,
                         SellingTotalPrice,
-                        ServiceCharge,
-                        ServiceCost,
-                        ServiceProfit
                     } = response.Data;
 
-                    setSellingTotalPrice.textContent = SellingTotalPrice;
-                    setBuyingTotalPrice.textContent = BuyingTotalPrice;
-                    setSellingProfit.textContent = SellingProfit;
-
-                    setSellingDiscountAmount.textContent = SellingDiscountAmount;
-                    setSellingAccountCost.textContent = SellingAccountCost;
-                    setExpenseTotal.textContent = ExpenseTotal;
-                    setSellingNetProfit.textContent = SellingNetProfit;
-
-                    setServiceCharge.textContent = ServiceCharge;
-                    setServiceCost.textContent = ServiceCost;
-                    setServiceProfit.textContent = ServiceProfit;
-                    setGrandProfit.textContent = GrandProfit;
+                    serviceProfit.textContent = SellingTotalPrice;
+                    billProfit.textContent = BuyingTotalPrice;
+                    totalExpense.textContent = SellingProfit;
+                    grandProfit.textContent = SellingDiscountAmount;
                 }
             });
         }
