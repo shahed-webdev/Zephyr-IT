@@ -80,7 +80,7 @@ namespace InventoryManagement.BusinessLogin
                 _db.Expenses.RemoveCustom(expenseId);
                 _db.SaveChanges();
 
-                return new DbResponse(true, "Approved Successfully");
+                return new DbResponse(true, "Deleted Successfully");
             }
             catch (Exception e)
             {
