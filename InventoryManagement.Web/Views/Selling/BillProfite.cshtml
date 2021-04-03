@@ -41,7 +41,7 @@
                     <i class="far fa-money-bill-alt fa-lg blue z-depth-1 p-4 rounded-left text-white mr-3"></i>
                     <div class="media-body p-1">
                         <p class="text-uppercase text-muted mb-1"><small>Service Profit</small></p>
-                        <h5 class="font-weight-bold mb-0">৳<span id="serviceProfit">2000</span></h5>
+                        <h5 class="font-weight-bold mb-0">৳<span id="serviceProfit"></span></h5>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                     <i class="fas fa-chart-bar fa-lg deep-purple z-depth-1 p-4 rounded-left text-white mr-3"></i>
                     <div class="media-body p-1">
                         <p class="text-uppercase text-muted mb-1"><small>Bill Profit</small></p>
-                        <h5 class="font-weight-bold mb-0">৳<span id="billProfit">2000</span></h5>
+                        <h5 class="font-weight-bold mb-0">৳<span id="billProfit"></span></h5>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                     <i class="fas fa-chart-pie fa-lg teal z-depth-1 p-4 rounded-left text-white mr-3"></i>
                     <div class="media-body p-1">
                         <p class="text-uppercase text-muted mb-1"><small>Total Expense</small></p>
-                        <h5 class="font-weight-bold mb-0">৳<span id="totalExpense">2000</span></h5>
+                        <h5 class="font-weight-bold mb-0">৳<span id="totalExpense"></span></h5>
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                     <i class="fas fa-chart-line fa-lg pink z-depth-1 p-4 rounded-left text-white mr-3"></i>
                     <div class="media-body p-1">
                         <p class="text-uppercase text-muted mb-1"><small>Profit/Loss</small></p>
-                        <h5 class="font-weight-bold mb-0">৳<span id="grandProfit">2000</span></h5>
+                        <h5 class="font-weight-bold mb-0">৳<span id="grandProfit"></span></h5>
                     </div>
                 </div>
             </div>
@@ -220,6 +220,9 @@
                 const inputFromDate = formPost.inputFromDate.value;
                 const inputToDate = formPost.inputToDate.value;
 
+                //get summary
+                getAmountSummery({fromDate: inputFromDate, toDate: inputToDate});
+
                 dataTable.filter = [];
 
                 if (inputFromDate)
@@ -229,13 +232,6 @@
                     dataTable.filter.push({ Field: "LastUpdateDate", Value: inputToDate, Operand: dataTable.operand.LessThanOrEqual });
 
                 dataTable.getData();
-
-                const data = {
-                    fromDate: inputFromDate,
-                    toDate: inputToDate
-                };
-
-                getAmountSummery(data);
             });
 
         //reset
@@ -256,18 +252,22 @@
                 type: "POST",
                 url: "/Selling/BillProfitByDate",
                 data: dates,
-                success: function(response) {
-                    const {
-                        BuyingTotalPrice,
-                        SellingDiscountAmount,
-                        SellingProfit,
-                        SellingTotalPrice,
-                    } = response.Data;
+                success: function (response) {
+                    const {ServiceProfit, GrandProfit,GenuineExpense,NetProfit,} = response.Data;
 
-                    serviceProfit.textContent = SellingTotalPrice;
-                    billProfit.textContent = BuyingTotalPrice;
-                    totalExpense.textContent = SellingProfit;
-                    grandProfit.textContent = SellingDiscountAmount;
+                    serviceProfit.textContent = ServiceProfit;
+                    billProfit.textContent = GrandProfit;
+                    totalExpense.textContent = GenuineExpense;
+                    grandProfit.textContent = NetProfit;
+
+                    if (NetProfit > 0) {
+                        grandProfit.parentElement.classList.add("text-success");
+                        grandProfit.parentElement.classList.remove("text-danger");
+                    } else {
+                        grandProfit.parentElement.classList.remove("text-success");
+                        grandProfit.parentElement.classList.add("text-danger");
+                    }
+                    
                 }
             });
         }
