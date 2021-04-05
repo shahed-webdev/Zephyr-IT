@@ -327,7 +327,7 @@ namespace InventoryManagement.Repository
                 var eD = toDate ?? new DateTime(3000, 12, 31);
 
                 var summary = Context.Selling
-                    .Where(s => s.SellingPaymentStatus == "Paid" && s.LastUpdateDate <= eD && s.SellingDate >= sD)
+                    .Where(s => s.SellingPaymentStatus == "Paid" && s.LastUpdateDate <= eD && s.LastUpdateDate >= sD)
                     .GroupBy(s => true)
                     .Select(g => new SellingBillProfitSummary
                     {
