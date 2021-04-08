@@ -208,7 +208,7 @@
     <script src="~/js/amount-in-word.js"></script>
     <script>
         $(function() {
-            $("#amount-word").text(`Taka (in words): ${number2text(@Model.SellingTotalPrice)}`);
+            $("#amount-word").text(`Taka (in words): ${number2text(@totalAmount)}`);
         });
 
         (function() {
