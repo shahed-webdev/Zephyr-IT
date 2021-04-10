@@ -350,8 +350,10 @@ inputServiceCharge.addEventListener("input", function () {
 const validation = function () {
     customerError.innerText = ''
 
-    if (!cartProducts.length) {
-        customerError.innerText = 'Product Not found!'
+    if (cartProducts.length || inputServiceCharge.value) {
+
+    } else {
+        customerError.innerText = 'Add product or add service!';
         return false;
     }
 
@@ -376,10 +378,6 @@ const onSellSubmitClicked = function(evt) {
     const valid = validation()
     if (!valid) return;
 
-    //disable button on submit
-    const btnSubmit = formPayment.btnSelling
-    btnSubmit.innerText = 'submitting..'
-    btnSubmit.disabled = true
 
     //get remove and new code
     const addedProductCodes = [];
@@ -430,6 +428,11 @@ const onSellSubmitClicked = function(evt) {
         ServiceChargeDescription: inputServiceChargeDescription.value,
         ServiceCost: inputServiceCost.value
     }
+
+    //disable button on submit
+    const btnSubmit = formPayment.btnSelling;
+    btnSubmit.innerText = 'submitting..';
+    btnSubmit.disabled = true;
 
     $.ajax({
         url: '/Selling/BillChange',

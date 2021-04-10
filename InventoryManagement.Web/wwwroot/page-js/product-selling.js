@@ -10,7 +10,7 @@ $(function() {
 });
 
 // global storage
-let cartProducts = []
+let cartProducts = [];
 
 
 //*****SELECTORS*****/
@@ -371,15 +371,17 @@ hiddenCustomerId.value = "";
 
 //validation info
 const validation = function () {
-    customerError.innerText = ''
+    customerError.innerText = '';
 
-    if (!cartProducts.length) {
-        customerError.innerText = 'Add product to sell!'
+    if (cartProducts.length || inputServiceCharge.value) {
+       
+    } else {
+        customerError.innerText = 'Add product or add service!';
         return false;
     }
 
     if (!hiddenCustomerId.value) {
-        customerError.innerText = 'Select or add customer!'
+        customerError.innerText = 'Select or add customer!';
         return false;
     }
 
@@ -402,19 +404,13 @@ const onSellSubmitClicked = function (evt) {
     const valid = validation()
     if (!valid) return;
 
-    //disable button on submit
-    const btnSubmit = formPayment.btnSelling
-    btnSubmit.innerText = "submitting.."
-    btnSubmit.disabled = true
-
-    const productList = []
+    const productList = [];
 
     cartProducts.forEach(product => {
         const { ProductId, SellingPrice, PurchasePrice,Description, Warranty, codes } = product;
         productList.push({ ProductId, SellingPrice, PurchasePrice, Description, Warranty, ProductCodes: codes });
     })
-   
-    if (!productList.length) return;
+
 
     const body = {
         CustomerId: +hiddenCustomerId.value,
@@ -431,6 +427,11 @@ const onSellSubmitClicked = function (evt) {
         AccountId: inputPaid.value ? selectPaymentMethod.value : "",
         ProductList: productList
     }
+
+    //disable button on submit
+    const btnSubmit = formPayment.btnSelling
+    btnSubmit.innerText = "submitting.."
+    btnSubmit.disabled = true
 
     $.ajax({
         url: "/Selling/Selling",
