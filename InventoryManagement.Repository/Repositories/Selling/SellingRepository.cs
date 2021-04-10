@@ -605,17 +605,20 @@ namespace InventoryManagement.Repository
                     return response;
                 }
 
-                selling.SellingList = model.Products.Select(p => new SellingList
+                if (model.Products != null)
                 {
-                    SellingListId = p.SellingListId,
-                    SellingId = model.SellingId,
-                    ProductId = p.ProductId,
-                    SellingPrice = p.SellingPrice,
-                    PurchasePrice = p.PurchasePrice,
-                    Description = p.Description,
-                    Warranty = p.Warranty,
-                    ProductStock = stocks.Where(s => p.RemainCodes.Contains(s.ProductCode)).ToList()
-                }).ToList();
+                    selling.SellingList = model.Products.Select(p => new SellingList
+                    {
+                        SellingListId = p.SellingListId,
+                        SellingId = model.SellingId,
+                        ProductId = p.ProductId,
+                        SellingPrice = p.SellingPrice,
+                        PurchasePrice = p.PurchasePrice,
+                        Description = p.Description,
+                        Warranty = p.Warranty,
+                        ProductStock = stocks.Where(s => p.RemainCodes.Contains(s.ProductCode)).ToList()
+                    }).ToList();
+                }
 
                 if (model.RemovedProductCodes != null)
                 {
