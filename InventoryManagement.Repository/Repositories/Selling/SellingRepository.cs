@@ -618,7 +618,11 @@ namespace InventoryManagement.Repository
                         Warranty = p.Warranty,
                         ProductStock = stocks.Where(s => p.RemainCodes.Contains(s.ProductCode)).ToList()
                     }).ToList();
+
+                    selling.BuyingTotalPrice = model.Products.Sum(p => p.PurchasePrice * p.RemainCodes.Length);
                 }
+
+
 
                 if (model.RemovedProductCodes != null)
                 {
@@ -639,7 +643,6 @@ namespace InventoryManagement.Repository
                             Context.ProductStock.UpdateRange(removedStocks);
                         }
                     }
-
                 }
 
                 Context.Selling.Update(selling);
