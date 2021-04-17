@@ -93,15 +93,17 @@ namespace InventoryManagement.Repository
 
         public Task<List<ProductStockReportModel>> StockReport()
         {
-            return (from catalog in Context.ProductCatalog
-                    join product in Context.Product on catalog.ProductCatalogId equals product.ProductCatalogId
-                    join productStock in Context.ProductStock on product.ProductId equals productStock.ProductId
-                    where !productStock.IsSold
-                    select new ProductStockReportModel
-                    {
-                        ProductCatalogId = catalog.ProductCatalogId,
-                        ProductCatalogName = catalog.CatalogName,
-                        ProductList = catalog.Product.Select(p => new ProductStockListModel
+            return Context
+                .ProductCatalog
+                .Where(c => c.Product.Any(p => p.ProductStock.Any(s => !s.IsSold)))
+                .Select(c => new ProductStockReportModel
+                {
+                    ProductCatalogId = c.ProductCatalogId,
+                    ProductCatalogName = c.CatalogName,
+                    ProductList = c.Product
+                        .Where(p => p.ProductStock.Any(s => !s.IsSold))
+                        .OrderBy(p => p.ProductName)
+                        .Select(p => new ProductStockListModel
                         {
                             ProductId = p.ProductId,
                             ProductName = p.ProductName,
@@ -109,9 +111,9 @@ namespace InventoryManagement.Repository
                             Warranty = p.Warranty,
                             Note = p.Note,
                             SellingPrice = p.SellingPrice,
-                            ProductCodes = p.ProductStock.Select(s => s.ProductCode).ToArray()
+                            ProductCodes = p.ProductStock.Where(s => !s.IsSold).OrderBy(s => s.ProductCode).Select(s => s.ProductCode).ToArray()
                         }).ToList()
-                    }).Distinct().ToListAsync();
+                }).OrderBy(c => c.ProductCatalogName).ToListAsync();
         }
 
         public decimal StockProductPurchaseValue()
