@@ -15,9 +15,9 @@
         .active-cyan-2 .fas { color: #3144a2; }
         .fa-spinner { pointer-events: none }
 
-        .past-row-color { background-color: #ff8a65 }
-        .today-row-color { background-color: #a5d6a7 }
-    </style>
+        .past-row-color td { color: #ff1818; }
+        .today-row-color td { color: #00b107; }
+    </style>   
 }
 
 @{
@@ -90,8 +90,10 @@
                                 </div>
                             </div>
                             <div class="col-md-9 col-9 text-right pr-5">
-                                <p class="text-dark mb-2">Product(taka)</p>
-                                <h4 class="ml-4 font-weight-bold h4-responsive">৳@Model.StockProductPurchaseValue</h4>
+                                <a href="/Purchase/StockReport">
+                                    <p class="text-dark mb-2">Product(taka)</p>
+                                    <h4 class="ml-4 font-weight-bold h4-responsive">৳@Model.StockProductPurchaseValue</h4>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -373,7 +375,7 @@
                 format: 'd-mmmm-yyyy'
             }).val(moment(new Date()).format('DD-MMMM-YYYY'));
 
-            //vendor data-table
+            //customer data-table
             const customerTable = $('#table-customer').DataTable({
                 processing: true,
                 serverSide: true,

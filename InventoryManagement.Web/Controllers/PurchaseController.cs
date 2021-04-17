@@ -55,7 +55,6 @@ namespace InventoryManagement.Web.Views
             return Json(data);
         }
 
-
         public async Task<IActionResult> PurchaseReceipt(int? id)
         {
             if (id == null) return RedirectToAction("Purchase");
@@ -65,6 +64,8 @@ namespace InventoryManagement.Web.Views
             if (model == null) return RedirectToAction("Purchase");
             return View(model);
         }
+
+        #region Purchase Record
 
         //purchase Records
         [Authorize(Roles = "admin, purchase-record")]
@@ -88,7 +89,9 @@ namespace InventoryManagement.Web.Views
 
             return UnprocessableEntity(response.Message);
         }
+        #endregion
 
+        #region Due Collection
 
         //GET: Due Collection single
         public async Task<IActionResult> PayDue(int? id)
@@ -143,5 +146,15 @@ namespace InventoryManagement.Web.Views
 
             return BadRequest(dbResponse.Message);
         }
+        #endregion
+
+        #region Stock Report
+
+        public IActionResult StockReport()
+        {
+            return View();
+        }
+
+        #endregion
     }
 }
