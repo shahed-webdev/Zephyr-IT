@@ -150,9 +150,10 @@ namespace InventoryManagement.Web.Views
 
         #region Stock Report
 
-        public IActionResult StockReport()
+        public async Task<IActionResult> StockReport()
         {
-            return View();
+            var model = await _db.ProductStocks.StockReport();
+            return View(model);
         }
 
         #endregion

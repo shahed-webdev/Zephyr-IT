@@ -1,24 +1,46 @@
-﻿
+﻿@model IEnumerable<InventoryManagement.Repository.ProductStockReportModel>
 @{
     ViewData["Title"] = "Stock Report";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+@section Styles{
+    <style>
+        body { background-color: #fff; }
+        table td span { border: 1px solid #b7b7b7; padding: 1px 5px; border-radius: 3px; margin: 3px; display: inline-block; }
+    </style>
+}
 
+<h4 class="page-header mb-3">Stock Report</h4>
 
-    <h4 class="page-header mb-3">Stock Report</h4>
-    
+@foreach (var category in Model)
+{
+    <h5 class="font-weight-bold">@category.ProductCatalogName</h5>
+
     <table class="table table-sm">
         <thead>
-        <tr>
-            <th><strong>Brand & Model</strong></th>
-            <th><strong>Stock</strong></th>
-            <th><strong></strong></th>
-        </tr>
+            <tr>
+                <th style="width: 250px">Brand & Model</th>
+                <th style="width: 30px" class="text-center">Quantity</th>
+                <th>Serial</th>
+            </tr>
         </thead>
         <tbody>
-        <tr></tr>
+            @foreach (var product in category.ProductList)
+            {
+                <tr>
+                    <td>@product.ProductName</td>
+                    <td class="text-center">@product.ProductCodes.Length</td>
+                    <td>
+                        @foreach (var code in product.ProductCodes)
+                        {
+                            <span>@code</span>
+                        }
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
+}
 
 
