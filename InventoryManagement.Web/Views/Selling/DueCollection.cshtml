@@ -83,7 +83,7 @@
                     {
                         <tr>
                             <td class="text-center">@index</td>
-                            <td class="text-center">@item.ProductCatalogName</td>
+                            <td>@item.ProductCatalogName</td>
                             <td>
                                 @item.ProductName,
                                 @if (item.Description != null)
@@ -176,7 +176,7 @@
     <script src="~/js/amount-in-word.js"></script>
     <script>
         $(function() {
-            $("#amount-word").text(`Taka(in words): ${number2text(@Model.SellingTotalPrice)}`);
+            $("#amount-word").text(`Taka(in words): ${number2text(@totalAmount)}`);
 
             // material select initialization
             $('.mdb-select').materialSelect();

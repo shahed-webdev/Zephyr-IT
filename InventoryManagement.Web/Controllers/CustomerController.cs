@@ -47,7 +47,7 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> Add(CustomerAddUpdateViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            var phone = model.PhoneNumbers.FirstOrDefault().Phone;
+            var phone = model.PhoneNumbers.FirstOrDefault()?.Phone;
             var checkPhone = await _db.Customers.IsPhoneNumberExistAsync(phone).ConfigureAwait(false);
 
             if (checkPhone) return View(model);
@@ -94,14 +94,12 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
-
-        protected override void Dispose(bool disposing)
+        //customer invoice data-table(ajax)
+        [HttpPost]
+        public IActionResult SellingRecordsData(DataRequest request)
         {
-            if (disposing)
-            {
-                _db.Dispose();
-            }
-            base.Dispose(disposing);
+            var data = _db.Customers.SellingRecord(request);
+            return Json(data);
         }
     }
 }

@@ -108,41 +108,18 @@
             <div class="col-lg-7">
                 <div class="card">
                     <div class="card-body">
-                        <table class="table table-hover">
+                        <table id="receipt-data" class="table table-hover">
                             <thead>
                             <tr>
                                 <th><strong>#Bill No</strong></th>
                                 <th><strong>Amount</strong></th>
+                                <th><strong>Service</strong></th>
                                 <th><strong>Discount</strong></th>
                                 <th><strong>Paid</strong></th>
                                 <th><strong>Due</strong></th>
                                 <th><strong>Date</strong></th>
                             </tr>
                             </thead>
-                            <tbody>
-                            @foreach (var item in Model.SellingRecords)
-                            {
-                                <tr>
-                                    <td>
-                                        <a class="blue-text" href="/Selling/SellingReceipt/@item.SellingId">@item.SellingSn</a>
-                                    </td>
-                                    <td>@item.SellingAmount</td>
-                                    <td>@item.SellingDiscountAmount</td>
-                                    <td>@item.SellingPaidAmount</td>
-                                    <td>
-                                        @if (item.SellingDueAmount > 0)
-                                        {
-                                            <a class="blue-text" href="/Selling/DueCollection/@item.SellingId">@item.SellingDueAmount</a>
-                                        }
-                                        else
-                                        {
-                                           @item.SellingDueAmount 
-                                        }
-                                    </td>
-                                    <td>@item.SellingDate.ToString("d MMM yyyy")</td>
-                                </tr>
-                            }
-                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -153,6 +130,10 @@
 
 @section Scripts{
     <script>
+        $(function() {
+            dataTable.getData();
+        });
+
         //customer autocomplete
         $('#inputCustomer').typeahead({
             minLength: 1,
@@ -171,9 +152,54 @@
                 });
             },
             updater: function(item) {
-                location.href=`/Customer/Details/${item.CustomerId}`
+                location.href = `/Customer/Details/${item.CustomerId}`
                 return item;
             }
         })
+
+        //get data
+        var dataTable = {
+            table: null,
+            init: function() {
+                dataTable.table = $("#receipt-data").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "/Customer/SellingRecordsData",
+                        type: "POST"
+                    },
+                    columns:
+                    [
+                        {
+                            data: "SellingSn",
+                            "render": function(data, type, row, meta) {
+                                return `<a class="blue-text" href="/Selling/SellingReceipt/${row.SellingId}">${data}</a>`;
+                            }
+                        },
+                        { data: "SellingTotalPrice", "render": dataTable.addSign },
+                        { data: "ServiceCharge", "render": dataTable.addSign },
+                        { data: "SellingDiscountAmount", "render": dataTable.addSign },
+                        { data: "SellingPaidAmount", "render": dataTable.addSign },
+                        {
+                            data: "SellingDueAmount",
+                            "render": function(data, type, row, meta) {
+                                return data ? `<a class="blue-text" href="/Selling/DueCollection/${row.SellingId}">${data}</a><small class="d-block">${row.PromisedPaymentDate ? moment(row.PromisedPaymentDate).format('DD MMM YYYY') : ""}</small>` : data;
+                            }
+                        },
+                        { data: "SellingDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } }
+                    ],
+                    columnDefs: [
+                        { 'searchable': false, 'targets': [1, 2, 3, 4, 5] },
+                        { 'className': "text-right", "targets": [1, 2, 3, 4, 5] },
+                        //{ 'className': "text-left", "targets": [1] }
+                    ],
+                    order: [[5, 'desc']]
+                });
+            },
+            getData: function() {
+                dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
+            },
+            addSign: function(data) { return `${data}/-` }
+        }
     </script>
 }
