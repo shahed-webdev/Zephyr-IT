@@ -12,6 +12,7 @@ namespace InventoryManagement.Repository
         Task<bool> IsPhoneNumberExistAsync(string number, int id = 0);
         CustomerAddUpdateViewModel FindCustom(int id);
         CustomerProfileViewModel ProfileDetails(int id);
+        DataResult<CustomerSellingViewModel> SellingRecord(DataRequest request);
         void CustomUpdate(CustomerAddUpdateViewModel model);
         void UpdatePaidDue(int id);
         Task<ICollection<CustomerListViewModel>> SearchAsync(string key);

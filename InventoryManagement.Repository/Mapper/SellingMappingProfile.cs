@@ -14,6 +14,9 @@ namespace InventoryManagement.Repository
                 .ForMember(d => d.CustomerName, opt => opt.MapFrom(c => c.Customer.CustomerName))
                 ;
 
+
+            CreateMap<Selling, CustomerSellingViewModel>();
+
         }
     }
 }

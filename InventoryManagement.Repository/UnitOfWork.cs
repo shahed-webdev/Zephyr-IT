@@ -15,7 +15,7 @@ namespace InventoryManagement.Repository
             Account = new AccountRepository(_context, _mapper);
             AccountDeposit = new AccountDepositRepository(_context, _mapper);
             AccountWithdraw = new AccountWithdrawRepository(_context, _mapper);
-            Customers = new CustomerRepository(_context);
+            Customers = new CustomerRepository(_context, _mapper);
             PageLinks = new PageLinkRepository(_context);
             PageLinkCategories = new PageLinkCategoryRepository(_context);
             PageLinkAssigns = new PageLinkAssignRepository(_context);

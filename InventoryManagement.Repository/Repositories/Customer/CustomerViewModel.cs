@@ -58,7 +58,6 @@ namespace InventoryManagement.Repository
         public CustomerProfileViewModel()
         {
             PhoneNumbers = new HashSet<CustomerPhoneViewModel>();
-            SellingRecords = new HashSet<CustomerSellingViewModel>();
         }
         public int CustomerId { get; set; }
         public string OrganizationName { get; set; }
@@ -71,7 +70,6 @@ namespace InventoryManagement.Repository
         public byte[] Photo { get; set; }
         public DateTime SignUpDate { get; set; }
         public ICollection<CustomerPhoneViewModel> PhoneNumbers { get; set; }
-        public ICollection<CustomerSellingViewModel> SellingRecords { get; set; }
         public decimal SoldAmount { get; set; }
         public decimal ReceivedAmount { get; set; }
         public decimal DiscountAmount { get; set; }
@@ -82,10 +80,13 @@ namespace InventoryManagement.Repository
         public int SellingId { get; set; }
         public int SellingSn { get; set; }
         public decimal SellingAmount { get; set; }
+        public decimal ServiceCharge { get; set; }
         public decimal SellingPaidAmount { get; set; }
         public decimal SellingDiscountAmount { get; set; }
         public decimal SellingDueAmount { get; set; }
         public DateTime SellingDate { get; set; }
+        public DateTime LastUpdateDate { get; set; }
+        public DateTime? PromisedPaymentDate { get; set; }
     }
 
     public class CustomerDueViewModel
