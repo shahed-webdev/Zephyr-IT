@@ -1,4 +1,6 @@
-﻿using InventoryManagement.Data;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using InventoryManagement.Data;
 using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,8 +12,10 @@ namespace InventoryManagement.Repository
 {
     public class CustomerRepository : Repository<Customer>, ICustomerRepository
     {
-        public CustomerRepository(ApplicationDbContext context) : base(context)
+        protected readonly IMapper _mapper;
+        public CustomerRepository(ApplicationDbContext context, IMapper mapper) : base(context)
         {
+            _mapper = mapper;
         }
 
         public ICollection<CustomerListViewModel> ListCustom(bool customerType)
@@ -90,7 +94,6 @@ namespace InventoryManagement.Repository
         public CustomerProfileViewModel ProfileDetails(int id)
         {
             var customer = Context.Customer
-                .Include(c => c.Selling)
                 .Select(c => new CustomerProfileViewModel
                 {
                     CustomerId = c.CustomerId,
@@ -108,16 +111,6 @@ namespace InventoryManagement.Repository
                         Phone = p.Phone,
                         IsPrimary = p.IsPrimary
                     }).ToList(),
-                    SellingRecords = c.Selling.Select(s => new CustomerSellingViewModel
-                    {
-                        SellingId = s.SellingId,
-                        SellingSn = s.SellingSn,
-                        SellingAmount = s.SellingTotalPrice,
-                        SellingPaidAmount = s.SellingPaidAmount,
-                        SellingDiscountAmount = s.SellingDiscountAmount,
-                        SellingDueAmount = s.SellingDueAmount,
-                        SellingDate = s.SellingDate
-                    }).ToList(),
                     SignUpDate = c.InsertDate,
                     SoldAmount = c.TotalAmount,
                     DiscountAmount = c.TotalDiscount,
@@ -125,6 +118,13 @@ namespace InventoryManagement.Repository
                     ReceivedAmount = c.Paid
                 });
             return customer.FirstOrDefault(c => c.CustomerId == id);
+        }
+
+        public DataResult<CustomerSellingViewModel> SellingRecord(DataRequest request)
+        {
+            return Context.Selling
+                .ProjectTo<CustomerSellingViewModel>(_mapper.ConfigurationProvider)
+                .ToDataResult(request);
         }
 
         public void CustomUpdate(CustomerAddUpdateViewModel model)
