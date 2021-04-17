@@ -52,7 +52,7 @@ namespace InventoryManagement.Repository
                     Warranty = s.PurchaseList.Warranty,
                     Note = s.PurchaseList.Note,
                     SellingPrice = s.PurchaseList.SellingPrice,
-                    PurchasePrice = s.PurchaseList.PurchasePrice  - (s.PurchaseList.PurchasePrice * (s.PurchaseList.Purchase.PurchaseDiscountPercentage / 100)),
+                    PurchasePrice = s.PurchaseList.PurchasePrice - (s.PurchaseList.PurchasePrice * (s.PurchaseList.Purchase.PurchaseDiscountPercentage / 100)),
                 });
             return product.FirstOrDefaultAsync();
         }
@@ -77,7 +77,7 @@ namespace InventoryManagement.Repository
                     Note = s.PurchaseList.Note,
                     SellingPrice = s.PurchaseList.SellingPrice,
                     ProductCatalogName = s.Product.ProductCatalog.CatalogName,
-                    PurchasePrice = s.PurchaseList.PurchasePrice  - (s.PurchaseList.PurchasePrice * (s.PurchaseList.Purchase.PurchaseDiscountPercentage / 100)),
+                    PurchasePrice = s.PurchaseList.PurchasePrice - (s.PurchaseList.PurchasePrice * (s.PurchaseList.Purchase.PurchaseDiscountPercentage / 100)),
                     SellingId = s.SellingList.SellingId,
                     SellingSn = s.SellingList.Selling.SellingSn,
                     PurchaseId = s.PurchaseList.PurchaseId
@@ -89,6 +89,29 @@ namespace InventoryManagement.Repository
         public Task<List<ProductStock>> SellingStockFromCodesAsync(string[] codes)
         {
             return Context.ProductStock.Include(s => s.Product).Where(s => codes.Contains(s.ProductCode)).ToListAsync();
+        }
+
+        public Task<List<ProductStockReportModel>> StockReport()
+        {
+            return (from catalog in Context.ProductCatalog
+                    join product in Context.Product on catalog.ProductCatalogId equals product.ProductCatalogId
+                    join productStock in Context.ProductStock on product.ProductId equals productStock.ProductId
+                    where !productStock.IsSold
+                    select new ProductStockReportModel
+                    {
+                        ProductCatalogId = catalog.ProductCatalogId,
+                        ProductCatalogName = catalog.CatalogName,
+                        ProductList = catalog.Product.Select(p => new ProductStockListModel
+                        {
+                            ProductId = p.ProductId,
+                            ProductName = p.ProductName,
+                            Description = p.Description,
+                            Warranty = p.Warranty,
+                            Note = p.Note,
+                            SellingPrice = p.SellingPrice,
+                            ProductCodes = p.ProductStock.Select(s => s.ProductCode).ToArray()
+                        }).ToList()
+                    }).Distinct().ToListAsync();
         }
 
         public decimal StockProductPurchaseValue()
