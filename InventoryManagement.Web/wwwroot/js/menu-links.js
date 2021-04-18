@@ -137,7 +137,7 @@
 //    }];
 
 //selectors
-const menuItem = document.getElementById("menuItem")
+const menuItem = document.getElementById("menuItem");
 
 //functions
 
@@ -258,7 +258,7 @@ const linkCategoryClicked = function (evt) {
 }
 
 //event listener
-menuItem.addEventListener("click", linkCategoryClicked)
+menuItem.addEventListener("click", linkCategoryClicked);
 
 //on load
-getMenuData()
+getMenuData();

@@ -8,18 +8,10 @@
         <ul class="p-0 mt-1">
             <li class="nav-item font-weight-bold mb-2" id="loginUserName"></li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-decoration-none p-0" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle text-decoration-none p-0 text-white" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     @UserManager.GetUserName(User)
                 </a>
                 <div class="dropdown-menu dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="/Dashboard/Profile">
-                        <i class="fal fa-user"></i>
-                        Profile
-                    </a>
-                    <a class="dropdown-item" href="/Dashboard/StoreInfo">
-                        <i class="fal fa-store"></i>
-                        Store Info
-                    </a>
                     <a class="dropdown-item" href="/Account/ChangePassword">
                         <i class="fal fa-lock"></i>
                         Change Password

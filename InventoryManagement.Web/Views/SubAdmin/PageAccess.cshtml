@@ -16,12 +16,23 @@
     <h4 class="page-header mb-3">Page Access</h4>
 
     <div class="card card-body">
-        <form id="formAssign" onsubmit="">
-            <select id="selectSubAdmin" class="form-control mb-3" asp-items="ViewBag.SubAdmins" required>
-                <option value="">SELECT</option>
-            </select>
-
-            <div id="table-container"></div>
+        <form id="formAssign">
+            <div id="table-container">
+                <table class="data-table table table-sm table-bordered nowrap">
+                    <thead>
+                        <tr>
+                            <th><strong><i class="fas fa-angle-right"></i> Customer</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="checkbox" checked="" data-role="customer-list" value="1" class="form-check-input" id="1"><label class="form-check-label" for="1">Customers</label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>  
+            </div>
 
             <input id="btnAssign" value="Assign" type="submit" class="btn peach-gradient btn-rounded" />
             <div id="SuccessMessage" class="alert alert-success mt-2" style="display: none;">Assign Successfully!</div>
@@ -31,62 +42,46 @@
 
 
 @section Scripts {
-    @*<script src="~/page-js/subAdmin-page-access.js"></script>*@
-<script>
-    $('#selectSubAdmin').change(function () {
-        const regId = $(this).val();
-        const url = "/SubAdmin/GetLinks";
-        var tableContainer = $("#table-container");
-
-        tableContainer.children().remove();
-        $("#SuccessMessage").hide();
-
-        if (!regId) return;
-
-        $.get(url, { regId }, function (response) {
-            if (response)
-                tableContainer.append(AddTable(response));
-        });
-    });
-
-    function AddTable(data) {
-        var table = '';
-        $.each(data, function (i, item) {
-            table += `<table class="data-table table table-sm table-bordered nowrap">
+    <script>
+        function AddTable(data) {
+            var table = '';
+            $.each(data,
+                function(i, item) {
+                    table += `<table class="data-table table table-sm table-bordered nowrap">
               <thead><tr><th><strong><i class="fas fa-angle-right"></i> ${item.Category}</strong></th></tr></thead>
               <tbody>${AddRows(item.Links)}</tbody>
             </table>`;
+                });
+
+            return table;
+        }
+
+        function AddRows(data) {
+            var row = '';
+            $.each(data,
+                function(i, item) {
+                    row += `<tr><td><input type="checkbox" ${item.IsAssign ? 'checked' : ''} data-role="${item.RoleName}" value="${item.LinkId}" class="form-check-input" id="${item.LinkId}"><label class="form-check-label" for="${item.LinkId}">${item.Title}</label></td></tr>`;
+                });
+            return row;
+        }
+
+        //Assign Click event to Button.
+        $('form#formAssign').submit(function(e) {
+            e.preventDefault();
+
+            const regId = parseInt($('#selectSubAdmin').val());
+            var links = [];
+            const url = "/SubAdmin/postLinks";
+            if (!regId) return;
+
+            $(".data-table input[type=checkbox]:checked").each(function(i, element) {
+                links[i] = { LinkId: parseInt(this.value), RoleName: $(this).data("role") };
+            });
+
+            $.post(url, { regId, links }, function(data) {
+                if (data) $("#SuccessMessage").show();
+            });
         });
-
-        return table;
-    }
-
-    function AddRows(data) {
-        var row = '';
-        $.each(data, function (i, item) {
-            row += `<tr><td><input type="checkbox" ${item.IsAssign ? 'checked' : ''} data-role="${item.RoleName}" value="${item.LinkId}" class="form-check-input" id="${item.LinkId}"><label class="form-check-label" for="${item.LinkId}">${item.Title}</label></td></tr>`;
-        });
-        return row;
-    }
-
-    //Assign Click event to Button.
-    $('form#formAssign').submit(function (e) {
-        e.preventDefault();
-
-        const regId = parseInt($('#selectSubAdmin').val());
-        var links = [];
-        const url = "/SubAdmin/postLinks";
-        if (!regId) return;
-
-        $(".data-table input[type=checkbox]:checked").each(function (i, element) {
-            links[i] = { LinkId: parseInt(this.value), RoleName: $(this).data("role") };
-        });
-
-        $.post(url, { regId, links }, function (data) {
-            if (data)
-                $("#SuccessMessage").show();
-        })
-    });
-</script>
+    </script>
 }
 

@@ -22,6 +22,11 @@
     <link href="~/css/croper.css" rel="stylesheet" />
     <!-- custom -->
     <link href="~/css/custom-admin.css?v=1.0.0" rel="stylesheet" />
+    <style>
+        .manu-top-wraper { background-color: #2d2d2d; }
+        #sidedrawer { background-color: #f3f3f3; }
+    </style>  
+    
 
     @await RenderSectionAsync("Styles", false)
 </head>
@@ -39,8 +44,16 @@
     </div>
 
     <div id="sidedrawer" class="d-print-none z-depth-1">
-        <Partial Name="_AdminLoginPartial" />
-        <ul id="menuItem"></ul>
+        <Partial Name="_SalesmanLoginPartial" />
+        <ul id="menuItem">
+            <li>
+                <strong>
+                    <span class="fas fa-tachometer-alt">
+
+                    </span><a class="links link-active" href="/Salesman/Dashboard">Dashboard</a>
+                </strong>
+            </li>
+        </ul>
     </div>
 
     <main id="content-wrapper" style="min-height:801px">
@@ -87,18 +100,18 @@
     <!-- sidebar-->
     <script src="https://cdn.muicss.com/mui-latest/js/mui.min.js"></script>
     <!-- menu-links -->
-    <script src="~/js/menu-links.js"></script>
+    <script src="~/js/menu-links-salesman.js"></script>
     <script src="~/js/sidedrawer-show-hide.js"></script>
 
-@await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 
-<script type="text/javascript">
+    <script type="text/javascript">
     $(function () {
             //tooltip
             $('[data-toggle="tooltip"]').tooltip();
 
             //User login Info
-            const url = "@Url.Action($"GetUserLoggedInInfo", $"Dashboard")";
+            @*const url = "@Url.Action($"GetUserLoggedInInfo", $"Dashboard")";
             $.get(url, response => {
                 const data = JSON.parse(response);
                 if (!data) return;
@@ -107,7 +120,7 @@
                     $("#loginUserPhoto").attr("src", `data:image/png;base64,${data.Image}`);
 
                 $("#loginUserName").html(`<strong class="p-0"><i class="fas fa-user"></i> ${data.Name}</strong>`);
-            });
+            });*@
 
 
             //Back to top
@@ -142,15 +155,15 @@
             });
         });
 
-        //disable wheel in number type input
-        document.addEventListener("wheel", () => {
-            if (document.activeElement.type === "number")
-                document.activeElement.blur();
-        });
+    //disable wheel in number type input
+    document.addEventListener("wheel", () => {
+        if (document.activeElement.type === "number")
+            document.activeElement.blur();
+    });
 
-        //select-picker error
-        if ($.fn.selectpicker)
-            $.fn.selectpicker.Constructor.BootstrapVersion = '4';
-</script>  
+    //select-picker error
+    if ($.fn.selectpicker)
+        $.fn.selectpicker.Constructor.BootstrapVersion = '4';
+    </script>
 </body>
 </html>

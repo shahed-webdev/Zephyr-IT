@@ -17,6 +17,7 @@
                         <th>Username</th>
                         <th>Mobile</th>
                         <th>Email</th>
+                        <th>Page Access</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,6 +28,9 @@
                             <td>@item.UserName</td>
                             <td>@item.Phone</td>
                             <td>@item.Email</td>
+                            <td>
+                                <a href="/SubAdmin/PageAccess/@item.RegistrationId">Page Access</a>
+                            </td>
                         </tr>
                     }
                 </tbody>

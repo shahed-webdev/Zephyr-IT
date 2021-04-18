@@ -83,17 +83,12 @@ namespace InventoryManagement.Web.Controllers
 
         //page access
         [Authorize(Roles = "admin, sub-admin-page-access")]
-        public IActionResult PageAccess()
+        public IActionResult PageAccess(int? id)
         {
-            ViewBag.SubAdmins = new SelectList(_db.Registrations.SubAdmins(), "value", "label");
-            var model = _db.PageLinkAssigns.SubAdminLinks(0);
-            return View(model);
-        }
+            if (!id.HasValue) return RedirectToAction("List");
 
-        public IActionResult GetLinks(int regId)
-        {
-            var model = _db.PageLinkAssigns.SubAdminLinks(regId);
-            return Json(model);
+            var model = _db.PageLinkAssigns.SubAdminLinks(id.GetValueOrDefault());
+            return View(model);
         }
 
         [HttpPost]
@@ -120,6 +115,8 @@ namespace InventoryManagement.Web.Controllers
                 return false;
             }
         }
+       
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

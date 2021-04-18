@@ -91,7 +91,7 @@ namespace InventoryManagement.Web.Controllers
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
 
-            return RedirectToAction("Index", "Dashboard", new { Message = "Your password has been changed." });
+            return RedirectToAction("ChangePassword", "Account", new { Message = "Your password has been changed." });
         }
 
         //POST: logout
