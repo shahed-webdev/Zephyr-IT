@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -94,5 +95,14 @@ namespace InventoryManagement.Repository
             Update(r);
         }
 
+        public UserType UserTypeByUserName(string userName)
+        {
+            var type = Context.Registration.FirstOrDefault(r => r.UserName == userName).Type;
+
+            UserType userType;
+            Enum.TryParse(type, out userType);
+
+            return userType;
+        }
     }
 }

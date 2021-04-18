@@ -11,5 +11,6 @@ namespace InventoryManagement.Repository
         AdminBasic GetAdminBasic(string userName);
         AdminInfo GetAdminInfo(string userName);
         void UpdateCustom(string userName, AdminInfo reg);
+        UserType UserTypeByUserName(string userName);
     }
 }
