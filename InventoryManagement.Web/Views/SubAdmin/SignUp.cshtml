@@ -1,4 +1,5 @@
 ﻿@using InventoryManagement.Repository
+@using InventoryManagement.Data
 @model RegisterViewModel
 @{
     ViewData["Title"] = "Sign Up Employee";
@@ -20,6 +21,17 @@
                     </h5>
 
                     <form class="form-signin" asp-controller="SubAdmin" asp-action="SignUp" method="post">
+                        <div class="text-center">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" class="custom-control-input" id="s1" value="@UserType.Admin.ToString()" name="Type" required>
+                                <label class="custom-control-label" for="s1">Sub-Admin</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" class="custom-control-input" id="s2" value="@UserType.SalesPerson.ToString()" name="Type" required>
+                                <label class="custom-control-label" for="s2">Sales Person</label>
+                            </div>
+                        </div>
+
                         <div class="md-form">
                             <input asp-for="Name" class="form-control">
                             <label for="Name">Name</label>
@@ -51,7 +63,7 @@
                         </div>
                         <div class="md-form mb-5">
                             <input asp-for="ConfirmPassword" class="form-control" type="password">
-                            <label for="ConfirmPassword">ConfirmPassword</label>
+                            <label for="ConfirmPassword">Confirm Password</label>
                             <span asp-validation-for="ConfirmPassword"></span>
                         </div>
                         <button class="btn btn-block btn-rounded z-depth-1a waves-effect waves-light peach-gradient mb-3" type="submit">Sign Up</button>

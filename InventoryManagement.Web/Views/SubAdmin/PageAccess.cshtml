@@ -1,4 +1,5 @@
-﻿
+﻿@model IEnumerable<InventoryManagement.Repository.PageCategoryVM>  
+
 @{
     ViewData["Title"] = "Page Access";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -16,70 +17,59 @@
     <h4 class="page-header mb-3">Page Access</h4>
 
     <div class="card card-body">
-        <form id="formAssign">
-            <div id="table-container">
-                <table class="data-table table table-sm table-bordered nowrap">
-                    <thead>
-                        <tr>
-                            <th><strong><i class="fas fa-angle-right"></i> Customer</strong></th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        <div id="table-container">
+            @foreach (var item in Model)
+            {
+            <table class="data-table table table-sm table-bordered nowrap">
+                <thead>
+                    <tr>
+                        <th><strong><i class="fas fa-angle-right"></i> @item.Category</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var link in item.Links)
+                    {
                         <tr>
                             <td>
-                                <input type="checkbox" checked="" data-role="customer-list" value="1" class="form-check-input" id="1"><label class="form-check-label" for="1">Customers</label>
+                                <input type="checkbox" @(link.IsAssign ? "checked" : "") data-role="@link.RoleName" value="@link.LinkId" class="form-check-input" id="@link.LinkId"><label class="form-check-label" for="@link.LinkId">@link.Title</label>
                             </td>
                         </tr>
-                    </tbody>
-                </table>  
-            </div>
+                    }
+                </tbody>
+            </table>       
+            }
+        </div>
 
-            <input id="btnAssign" value="Assign" type="submit" class="btn peach-gradient btn-rounded" />
-            <div id="SuccessMessage" class="alert alert-success mt-2" style="display: none;">Assign Successfully!</div>
-        </form>
+        <input id="btnAssign" value="Assign" type="button" class="btn peach-gradient btn-rounded" />
     </div>
 </div>
 
 
 @section Scripts {
     <script>
-        function AddTable(data) {
-            var table = '';
-            $.each(data,
-                function(i, item) {
-                    table += `<table class="data-table table table-sm table-bordered nowrap">
-              <thead><tr><th><strong><i class="fas fa-angle-right"></i> ${item.Category}</strong></th></tr></thead>
-              <tbody>${AddRows(item.Links)}</tbody>
-            </table>`;
-                });
-
-            return table;
-        }
-
-        function AddRows(data) {
-            var row = '';
-            $.each(data,
-                function(i, item) {
-                    row += `<tr><td><input type="checkbox" ${item.IsAssign ? 'checked' : ''} data-role="${item.RoleName}" value="${item.LinkId}" class="form-check-input" id="${item.LinkId}"><label class="form-check-label" for="${item.LinkId}">${item.Title}</label></td></tr>`;
-                });
-            return row;
-        }
-
         //Assign Click event to Button.
-        $('form#formAssign').submit(function(e) {
-            e.preventDefault();
+        const btnAssign = document.getElementById("btnAssign");
+        btnAssign.addEventListener("click", function(evt) {
+            evt.preventDefault();
+            this.disabled = true;
 
-            const regId = parseInt($('#selectSubAdmin').val());
             var links = [];
-            const url = "/SubAdmin/postLinks";
-            if (!regId) return;
-
             $(".data-table input[type=checkbox]:checked").each(function(i, element) {
                 links[i] = { LinkId: parseInt(this.value), RoleName: $(this).data("role") };
             });
 
-            $.post(url, { regId, links }, function(data) {
-                if (data) $("#SuccessMessage").show();
+            $.ajax({
+                url: '/SubAdmin/PostLinks',
+                type: "POST",
+                data: { regId:'@Context.Request.RouteValues["id"]', links},
+                success: response=> {
+                    this.disabled = false;
+
+                    if (response) location.href = `/SubAdmin/List`;
+                },
+                error: function(error) {
+                    console.log(error);
+                }
             });
         });
     </script>

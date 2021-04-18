@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using InventoryManagement.Data;
 
 namespace InventoryManagement.Web.Controllers
 {
@@ -36,19 +37,28 @@ namespace InventoryManagement.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            returnUrl ??= Url.Content("~/Dashboard/Index");
-
             if (!ModelState.IsValid) return View(model);
 
             var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
 
             if (result.Succeeded)
             {
-                _logger.LogInformation("User logged in.");
-                return LocalRedirect(returnUrl);
+                if (User.IsInRole("admin"))
+                {
+                    return LocalRedirect(returnUrl ??= Url.Content("~/Dashboard/Index"));
+                }
+                if (User.IsInRole("SubAdmin"))
+                {
+                    return LocalRedirect(returnUrl ??= Url.Content("~/Dashboard/Index"));
+                }
+                if (User.IsInRole("SalesPerson"))
+                {
+                    return LocalRedirect(returnUrl ??= Url.Content("~/Salesman/Dashboard"));
+                }
             }
 
-            if (result.RequiresTwoFactor) return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, model.RememberMe });
+            if (result.RequiresTwoFactor)
+                return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, model.RememberMe });
 
             if (result.IsLockedOut)
             {

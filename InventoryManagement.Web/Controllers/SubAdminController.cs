@@ -69,9 +69,9 @@ namespace InventoryManagement.Web.Controllers
                 _db.Registrations.Add(reg);
                 await _db.SaveChangesAsync().ConfigureAwait(false);
 
-
                 return RedirectToAction("List", "SubAdmin");
             }
+
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
