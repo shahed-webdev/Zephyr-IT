@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using InventoryManagement.Data;
+using System.Collections.Generic;
 using System.Linq;
-using InventoryManagement.Data;
 
 namespace InventoryManagement.Repository
 {
@@ -18,7 +18,7 @@ namespace InventoryManagement.Repository
 
         public ICollection<AdminInfo> GetSubAdminList()
         {
-            return Context.Registration.Where(r => r.Type == "Sub-Admin").Select(r => new AdminInfo
+            return Context.Registration.Where(r => r.Type == UserType.SubAdmin.ToString()).Select(r => new AdminInfo
             {
                 UserName = r.UserName,
                 Name = r.Name,
@@ -37,7 +37,7 @@ namespace InventoryManagement.Repository
 
         public ICollection<DDL> SubAdmins()
         {
-            return Context.Registration?.Where(r => r.Type == "Sub-Admin").Select(r =>
+            return Context.Registration?.Where(r => r.Type == UserType.SubAdmin.ToString()).Select(r =>
                 new DDL { value = r.RegistrationId, label = r.Name + " (" + r.UserName + ")" }).ToList();
         }
 
