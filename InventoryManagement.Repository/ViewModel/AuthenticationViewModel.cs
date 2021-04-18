@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using InventoryManagement.Data;
+using System.ComponentModel.DataAnnotations;
 
 namespace InventoryManagement.Repository
 {
@@ -34,6 +35,8 @@ namespace InventoryManagement.Repository
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public UserType Type { get; set; }
     }
     public class LoginViewModel
     {

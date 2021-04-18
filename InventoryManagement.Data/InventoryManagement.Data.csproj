@@ -49,6 +49,8 @@
     <Compile Remove="Migrations\20210313101706_SellingDiscountPercentageColumnType.Designer.cs" />
     <Compile Remove="Migrations\20210317044945_SellingTabelChange.cs" />
     <Compile Remove="Migrations\20210317044945_SellingTabelChange.Designer.cs" />
+    <Compile Remove="Migrations\20210418051928_AddRoleSalesPerson.cs" />
+    <Compile Remove="Migrations\20210418051928_AddRoleSalesPerson.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

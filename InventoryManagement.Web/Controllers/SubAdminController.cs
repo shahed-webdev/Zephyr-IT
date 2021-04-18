@@ -53,11 +53,11 @@ namespace InventoryManagement.Web.Controllers
             {
                 _logger.LogInformation("User created a new account with password.");
 
-                await _userManager.AddToRoleAsync(user, "sub-admin").ConfigureAwait(false);
+                await _userManager.AddToRoleAsync(user, model.Type.ToString()).ConfigureAwait(false);
 
                 var reg = new Registration()
                 {
-                    Type = "sub-admin",
+                    Type = model.Type.ToString(),
                     Name = model.Name,
                     UserName = model.UserName,
                     Email = model.Email,
@@ -108,7 +108,7 @@ namespace InventoryManagement.Web.Controllers
                 var user = await _userManager.FindByNameAsync(userName).ConfigureAwait(false);
                 var roleList = links.Select(l => l.RoleName).ToList();
 
-                roleList.Add("sub-admin");
+                roleList.Add(UserType.SubAdmin.ToString());
 
                 var userRoles = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
                 await _userManager.RemoveFromRolesAsync(user, userRoles.ToArray()).ConfigureAwait(false);
