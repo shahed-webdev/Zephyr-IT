@@ -12,5 +12,6 @@ namespace InventoryManagement.Repository
         AdminInfo GetAdminInfo(string userName);
         void UpdateCustom(string userName, AdminInfo reg);
         UserType UserTypeByUserName(string userName);
+        decimal Balance(string userName);
     }
 }

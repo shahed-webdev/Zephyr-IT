@@ -104,5 +104,10 @@ namespace InventoryManagement.Repository
 
             return userType;
         }
+
+        public decimal Balance(string userName)
+        {
+            return Context.Registration.FirstOrDefault(r => r.UserName == userName)?.Balance ?? 0;
+        }
     }
 }

@@ -33,6 +33,7 @@ namespace InventoryManagement.Data
         public byte[] Image { get; set; }
         public DateTime CreateDate { get; set; }
         public string Ps { get; set; }
+        public decimal Balance { get; set; }
 
         public virtual ICollection<Expense> Expense { get; set; }
         public virtual ICollection<PageLinkAssign> PageLinkAssign { get; set; }
