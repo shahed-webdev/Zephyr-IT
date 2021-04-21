@@ -17,6 +17,8 @@ namespace InventoryManagement.Web.Controllers
             _db = db;
         }
 
+        #region Add Product
+
         //Add products info
         [Authorize(Roles = "admin, add-product")]
         public IActionResult AddProduct(int? id)
@@ -82,7 +84,7 @@ namespace InventoryManagement.Web.Controllers
 
             return View(model.Data);
         }
-
+        #endregion
 
         //GET: Barcode
         [Authorize(Roles = "admin, barcode")]

@@ -77,6 +77,7 @@ namespace InventoryManagement.Repository
     }
     public class CustomerSellingViewModel
     {
+        public int CustomerId { get; set; }
         public int SellingId { get; set; }
         public int SellingSn { get; set; }
         public decimal SellingTotalPrice { get; set; }
