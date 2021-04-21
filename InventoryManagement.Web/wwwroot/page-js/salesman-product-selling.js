@@ -52,7 +52,7 @@ const customerError = formPayment.querySelector('#customer-error')
 
 // get set storage object
 const storage = {
-    saveData: function (product) {
+    saveData: function(product) {
         codeExistError.textContent = '';
         if (!product) {
             codeExistError.textContent = `"${inputBarCode.value}" Not found!`;
@@ -60,21 +60,23 @@ const storage = {
         }
 
         //unique by name, purchase price
-        const found = cartProducts.some(el => el.ProductCatalogId === product.ProductCatalogId && el.ProductName === product.ProductName && el.PurchasePrice === product.PurchasePrice);
+        const found = cartProducts.some(el => el.ProductCatalogId === product.ProductCatalogId &&
+            el.ProductName === product.ProductName &&
+            el.PurchasePrice === product.PurchasePrice);
         if (!found) {
             //save to global object
             product.codes = [product.ProductCode];
             product.sellingFixedValue = product.SellingPrice;
             cartProducts.unshift(product);
-        }
-        else {
-            const index = cartProducts.findIndex(item => item.ProductCatalogId === product.ProductCatalogId && item.ProductName === product.ProductName && item.PurchasePrice === product.PurchasePrice);
+        } else {
+            const index = cartProducts.findIndex(item => item.ProductCatalogId === product.ProductCatalogId &&
+                item.ProductName === product.ProductName &&
+                item.PurchasePrice === product.PurchasePrice);
             const codes = cartProducts[index].codes;
 
             if (codes.indexOf(product.ProductCode) === -1) {
                 codes.push(product.ProductCode);
-            }
-            else {
+            } else {
                 codeExistError.textContent = `"${inputBarCode.value}" code already added!`;
             }
         }
@@ -89,20 +91,23 @@ const storage = {
         tbody.innerHTML = '';
         showProducts();
     },
-    setData: function () {
+    setData: function() {
         localStorage.setItem('salesman-selling-cart', JSON.stringify(cartProducts))
     },
-    getData: function () {
+    getData: function() {
         const store = localStorage.getItem('salesman-selling-cart')
         if (!store) return;
 
         cartProducts = JSON.parse(store)
     },
-    countProduct: function () {
+    removeCart: function() {
+        localStorage.removeItem("salesman-selling-cart");
+        cartProducts = [];
+    },
+    countProduct: function() {
         productCount.textContent = cartProducts.length
     }
 }
-
 
 //****FUNCTIONS****//
 //append code
@@ -439,7 +444,7 @@ const onSellSubmitClicked = function (evt) {
         data: body,
         success: function (response) {
             if (response.IsSuccess) {
-                localStoreClear();
+                storage.removeCart();
                 location.href = `/Selling/SellingReceipt/${response.Data}`;
                 return;
             }
@@ -519,9 +524,4 @@ function checkDueLimit() {
     }
 
     return true  
-}
-
-//remove localstorage
-function localStoreClear() {
-    localStorage.removeItem("salesman-selling-cart");
 }

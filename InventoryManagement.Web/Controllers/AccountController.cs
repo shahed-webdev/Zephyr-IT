@@ -11,15 +11,17 @@ namespace InventoryManagement.Web.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private readonly IUnitOfWork _db;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<AccountController> logger)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<AccountController> logger, IUnitOfWork db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _db = db;
         }
 
         //GET: Login
@@ -43,18 +45,15 @@ namespace InventoryManagement.Web.Controllers
 
             if (result.Succeeded)
             {
-                if (User.IsInRole("admin"))
+                var type = _db.Registrations.UserTypeByUserName(model.UserName);
+
+                return type switch
                 {
-                    return LocalRedirect(returnUrl ??= Url.Content("~/Dashboard/Index"));
-                }
-                if (User.IsInRole("SubAdmin"))
-                {
-                    return LocalRedirect(returnUrl ??= Url.Content("~/Dashboard/Index"));
-                }
-                if (User.IsInRole("SalesPerson"))
-                {
-                    return LocalRedirect(returnUrl ??= Url.Content("~/Salesman/Dashboard"));
-                }
+                    UserType.Admin => LocalRedirect(returnUrl ??= Url.Content("~/Dashboard/Index")),
+                    UserType.SubAdmin => LocalRedirect(returnUrl ??= Url.Content("~/Dashboard/Index")),
+                    UserType.SalesPerson => LocalRedirect(returnUrl ??= Url.Content("~/Salesman/Dashboard")),
+                    _ => LocalRedirect(returnUrl ??= Url.Content("~/Account/Login"))
+                };
             }
 
             if (result.RequiresTwoFactor)
