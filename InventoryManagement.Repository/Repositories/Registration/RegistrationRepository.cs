@@ -109,5 +109,12 @@ namespace InventoryManagement.Repository
         {
             return Context.Registration.FirstOrDefault(r => r.UserName == userName)?.Balance ?? 0;
         }
+
+        public void BalanceAdd(int registrationId, decimal amount)
+        {
+            var account = Context.Registration.Find(registrationId);
+            account.Balance += amount;
+            Context.Registration.Update(account);
+        }
     }
 }

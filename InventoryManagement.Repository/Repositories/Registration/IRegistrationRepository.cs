@@ -13,5 +13,6 @@ namespace InventoryManagement.Repository
         void UpdateCustom(string userName, AdminInfo reg);
         UserType UserTypeByUserName(string userName);
         decimal Balance(string userName);
+        void BalanceAdd(int registrationId, decimal amount);
     }
 }
