@@ -5,7 +5,7 @@ namespace InventoryManagement.Repository
 {
     public interface IRegistrationRepository : IRepository<Registration>
     {
-        int GetRegID_ByUserName(string UserName);
+        int GetRegID_ByUserName(string userName);
         ICollection<DDL> SubAdmins();
         ICollection<AdminInfo> GetSubAdminList();
         AdminBasic GetAdminBasic(string userName);

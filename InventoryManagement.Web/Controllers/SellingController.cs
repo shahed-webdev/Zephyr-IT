@@ -20,6 +20,7 @@ namespace InventoryManagement.Web.Controllers
             _account = account;
         }
 
+        #region Selling
         //selling
         [Authorize(Roles = "admin, selling")]
         public IActionResult Selling()
@@ -51,6 +52,7 @@ namespace InventoryManagement.Web.Controllers
 
             return View(model);
         }
+        #endregion
 
         #region Bill expense
         //get
@@ -164,6 +166,7 @@ namespace InventoryManagement.Web.Controllers
             return View();
         }
 
+        [Authorize(Roles = "admin, bill-change")]
         public async Task<IActionResult> BillChange(int? id)
         {
             if (id == null) return RedirectToAction("BillList");
@@ -202,6 +205,7 @@ namespace InventoryManagement.Web.Controllers
 
         #region Sales Report from Dashboard
         //Sales report
+        [Authorize(Roles = "admin")]
         public IActionResult SalesReport()
         {
             return View();
@@ -225,6 +229,7 @@ namespace InventoryManagement.Web.Controllers
 
         #region Product Sold Report
         //Product Sold Report
+        [Authorize(Roles = "admin")]
         public IActionResult ProductSoldReport()
         {
             return View();
@@ -248,6 +253,7 @@ namespace InventoryManagement.Web.Controllers
 
         #region Cash Collection
         //Cash Collection
+        [Authorize(Roles = "admin")]
         public IActionResult CashCollection()
         {
             return View();
