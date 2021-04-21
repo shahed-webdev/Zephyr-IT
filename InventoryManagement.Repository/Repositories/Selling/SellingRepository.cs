@@ -114,6 +114,10 @@ namespace InventoryManagement.Repository
                 if (model.SellingPaidAmount > 0 && model.AccountId != null)
                     db.Account.BalanceAdd(model.AccountId.Value, model.SellingPaidAmount);
 
+                //Sales parson add balance
+                if (model.SellingPaidAmount > 0)
+                    db.Registrations.BalanceAdd(model.RegistrationId, model.SellingPaidAmount);
+
                 await Context.SaveChangesAsync().ConfigureAwait(false);
 
                 db.Customers.UpdatePaidDue(model.CustomerId);
