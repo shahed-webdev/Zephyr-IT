@@ -55,6 +55,7 @@ namespace InventoryManagement.Web.Views
             return Json(data);
         }
 
+        [Authorize(Roles = "admin, purchase")]
         public async Task<IActionResult> PurchaseReceipt(int? id)
         {
             if (id == null) return RedirectToAction("Purchase");

@@ -9,10 +9,18 @@
             <strong>@UserManager.GetUserName(User)</strong>
         </a>
         <div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbarDropdownMenuLink">
+            @if (User.IsInRole("admin") || User.IsInRole("SubAdmin")) { 
             <a class="dropdown-item" href="/Dashboard/Index">
                 <i class="fas fa-tachometer-alt"></i>
                 Dashboard
             </a>
+            }
+            @if (User.IsInRole("SalesPerson")) { 
+                <a class="dropdown-item" href="/Salesman/Dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </a>
+            }
             <a class="dropdown-item" href="/Account/ChangePassword">
                 <i class="fas fa-lock"></i>
                 Change Password

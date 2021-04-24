@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 
 namespace InventoryManagement.Web.Controllers
 {
-    [Authorize]
     public class DashboardController : Controller
     {
         private readonly IUnitOfWork _db;
@@ -17,18 +16,21 @@ namespace InventoryManagement.Web.Controllers
             _db = db;
         }
 
+        [Authorize(Roles = "admin, SubAdmin")]
         public IActionResult Index(int? year)
         {
             var d = new DashboardRepository(_db);
             return View(d.Data(year));
         }
 
+        [Authorize(Roles = "admin, SubAdmin")]
         public IActionResult TopDueCustomer(DataRequest request)
         {
             var data = _db.Customers.TopDueDataTable(request);
             return Json(data);
         }
 
+        [Authorize(Roles = "admin, SubAdmin")]
         public IActionResult TopDueVendor(DataRequest request)
         {
             var data = _db.Vendors.TopDueDataTable(request);
@@ -36,6 +38,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //find by date
+        [Authorize(Roles = "admin, SubAdmin")]
         public IActionResult DailyReport(DateTime date)
         {
             var data = new DashboardRepository(_db);
@@ -45,6 +48,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET: Profile
+        [Authorize(Roles = "admin, SubAdmin")]
         public IActionResult Profile()
         {
             var user = _db.Registrations.GetAdminInfo(User.Identity.Name);
@@ -63,6 +67,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET: Store Info
+        [Authorize(Roles = "admin, SubAdmin")]
         public IActionResult StoreInfo()
         {
             var model = _db.Institutions.FindCustom();
@@ -70,6 +75,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin, SubAdmin")]
         public IActionResult StoreInfo(InstitutionVM model)
         {
             if (!ModelState.IsValid) return RedirectToAction("Index");
@@ -81,6 +87,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //Login Info
+        [Authorize(Roles = "admin, SubAdmin, SalesPerson")]
         public string GetUserLoggedInInfo()
         {
             var admin = _db.Registrations.GetAdminBasic(User.Identity.Name);

@@ -18,7 +18,6 @@ namespace InventoryManagement.Web.Controllers
         }
 
         #region Add Product
-
         //Add products info
         [Authorize(Roles = "admin, add-product")]
         public IActionResult AddProduct(int? id)

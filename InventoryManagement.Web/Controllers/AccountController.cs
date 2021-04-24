@@ -114,5 +114,11 @@ namespace InventoryManagement.Web.Controllers
 
             return RedirectToAction("Login", "Account");
         }
+
+        //access denied user
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

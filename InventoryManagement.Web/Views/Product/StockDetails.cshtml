@@ -2,7 +2,9 @@
 @model ProductViewModel
 @{
     ViewData["Title"] = "Product Stock";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    
+    var isSalesmen = User.IsInRole("SalesPerson");
+    Layout = isSalesmen ? "_SalesmanLayout" : "_AdminLayout";
 }
 
 @section Styles
@@ -15,7 +17,14 @@
     </style>  
 }
 <div class="container">
-    <a href="/Product/AddProduct"><i class="far fa-long-arrow-alt-left"></i> Back to Product</a>
+    @if (isSalesmen)
+    {
+        <a href="/Salesman/ProductStock"><i class="far fa-long-arrow-alt-left"></i> Back to Stock</a>
+    }
+    else
+    {
+        <a href="/Product/AddProduct"><i class="far fa-long-arrow-alt-left"></i> Back to Product</a>
+    }
 
     <div class="card d-block mt-2" id="codes">
         <div class="card-header">
@@ -26,7 +35,7 @@
             @foreach (var item in Model.ProductStocks)
             {
                 <span data-code="@item.ProductCode" class="code badge badge-pill badge-info">
-                     @item.ProductCode
+                    @item.ProductCode
                     <i class="far fa-eye"></i>
                 </span>
             }
@@ -100,8 +109,10 @@
             const purchase = document.getElementById('purchase');
 
             product.SellingId ? bill.innerHTML = `<strong class="green-text">Bill No: </strong><a target="_blank" href="/Selling/SellingReceipt/${product.SellingId}">#${product.SellingSn}</a>` : bill.innerHTML = '';
-            purchase.innerHTML = `<a target="_blank" href="/Purchase/PurchaseReceipt/${product.PurchaseId}">Purchase Details <i class="fal fa-long-arrow-right"></i></a>`;
-
+            @if (!isSalesmen)
+            {
+                @:purchase.innerHTML = `<a target="_blank" href="/Purchase/PurchaseReceipt/${product.PurchaseId}">Purchase Details <i class="fal fa-long-arrow-right"></i></a>`;
+            }
             $("#codeDetailsModal").modal("show");
         }
     </script>

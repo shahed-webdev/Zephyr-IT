@@ -2,7 +2,8 @@
 @model SellingReceiptViewModel
 @{
     ViewData["Title"] = "Due Collection";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var isSalesmen = User.IsInRole("SalesPerson");
+    Layout = isSalesmen ? "_SalesmanLayout" : "_AdminLayout";
 }
 
 @section Styles{
@@ -26,7 +27,10 @@
                     Back to previous
                 </a>
                 <h5 class="mb-0">Due Collection</h5>
-                <a class="btn btn-success btn-rounded" href="/Selling/Selling"><i class="fal fa-cart-plus mr-1"></i>Selling</a>
+                @if (!isSalesmen)
+                {
+                    <a class="btn btn-success btn-rounded" href="/Selling/Selling"><i class="fal fa-cart-plus mr-1"></i>Selling</a>
+                }
             </div>
         </section>
 
@@ -90,7 +94,11 @@
                                 {
                                     <span>@item.Description,</span>
                                 }
-                                @string.Join(",", item.ProductCodes)
+
+                                @foreach (var code in item.ProductCodes)
+                                {
+                                    <span>@code</span>
+                                }
                             </td>
                             <td class="text-center">@item.Warranty</td>
                             <td class="text-center">@item.ProductCodes.Length</td>
