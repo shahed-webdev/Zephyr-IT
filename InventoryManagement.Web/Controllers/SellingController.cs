@@ -29,7 +29,8 @@ namespace InventoryManagement.Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "admin, selling")]
+
+        [Authorize(Roles = "admin, selling, SalesPerson")]
         [HttpPost]
         public async Task<IActionResult> Selling(SellingViewModel model)
         {
