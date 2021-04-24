@@ -115,6 +115,17 @@ namespace InventoryManagement.Repository
 
                 db.Vendors.UpdatePaidDue(model.VendorId);
 
+                //Product Logs 
+                var logs = purchase.PurchaseList.SelectMany(p => p.ProductStock.Select(c => new ProductLogAddModel
+                {
+                    ProductStockId = c.ProductStockId,
+                    ActivityByRegistrationId = model.RegistrationId,
+                    Details = $"Product Buy at Receipt No: {purchase.PurchaseSn}",
+                    LogStatus = ProductLogStatus.Buy
+                })).ToList();
+
+                db.ProductLog.AddList(logs);
+
                 response.IsSuccess = true;
                 response.Message = "Success";
                 response.Data = purchase.PurchaseId;

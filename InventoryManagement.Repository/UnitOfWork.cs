@@ -22,6 +22,7 @@ namespace InventoryManagement.Repository
             Products = new ProductRepository(_context);
             ProductCatalogs = new ProductCatalogRepository(_context);
             ProductCatalogTypes = new ProductCatalogTypeRepository(_context);
+            ProductLog = new ProductLogRepository(_context, _mapper);
             ProductStocks = new ProductStockRepository(_context);
             Purchases = new PurchaseRepository(_context);
             PurchasePayments = new PurchasePaymentRepository(_context);
@@ -49,6 +50,7 @@ namespace InventoryManagement.Repository
         public IProductRepository Products { get; }
         public IProductCatalogRepository ProductCatalogs { get; }
         public IProductCatalogTypeRepository ProductCatalogTypes { get; }
+        public IProductLogRepository ProductLog { get; }
         public IProductStockRepository ProductStocks { get; }
         public IPurchaseRepository Purchases { get; }
         public IPurchasePaymentRepository PurchasePayments { get; }

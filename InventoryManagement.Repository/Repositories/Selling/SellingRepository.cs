@@ -122,7 +122,16 @@ namespace InventoryManagement.Repository
 
                 db.Customers.UpdatePaidDue(model.CustomerId);
 
+                //Product Logs 
+                var logs = selling.SellingList.SelectMany(p => p.ProductStock.Select(c => new ProductLogAddModel
+                {
+                    ProductStockId = c.ProductStockId,
+                    ActivityByRegistrationId = model.RegistrationId,
+                    Details = $"Product Selling at Receipt No: {selling.SellingSn}",
+                    LogStatus = ProductLogStatus.Sale
+                })).ToList();
 
+                db.ProductLog.AddList(logs);
 
                 response.IsSuccess = true;
                 response.Message = "Success";
