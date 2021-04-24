@@ -130,7 +130,9 @@
 
 @section Scripts{
     <script>
-        $(function() {
+        $(function () {
+            dataTable.filter = [];
+            dataTable.filter.push({ Field: "CustomerId", Value: @Model.CustomerId, Operand: 0 });
             dataTable.getData();
         });
 
@@ -166,7 +168,10 @@
                     serverSide: true,
                     ajax: {
                         url: "/Customer/SellingRecordsData",
-                        type: "POST"
+                        type: "POST",
+                        data: function(d) {
+                            d.filters = dataTable.filter;
+                        }
                     },
                     columns:
                     [

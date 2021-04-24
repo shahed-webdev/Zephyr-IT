@@ -23,6 +23,7 @@ namespace InventoryManagement.Web.Controllers
 
         public IActionResult Dashboard()
         {
+            ViewBag.Balance = _db.Registrations.Balance(User.Identity.Name);
             return View();
         }
 
@@ -44,6 +45,16 @@ namespace InventoryManagement.Web.Controllers
 
             return Json(response);
         }
+        #endregion
+
+        #region Product Stock
+
+        public IActionResult ProductStock()
+        {
+            ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
+            return View();
+        }
+
         #endregion
     }
 }

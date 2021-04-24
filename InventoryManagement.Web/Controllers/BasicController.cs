@@ -23,7 +23,7 @@ namespace InventoryManagement.Web.Controllers
 
 
         //GET: Side Menu
-        [Authorize(Roles = "admin, sub-admin")]
+        [Authorize(Roles = "admin, SubAdmin")]
         public IActionResult GetSideMenu()
         {
             var data = _db.PageLinks.GetSideMenuByUser(User.Identity.Name);

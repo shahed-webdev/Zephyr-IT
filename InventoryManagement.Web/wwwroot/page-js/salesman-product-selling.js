@@ -36,10 +36,6 @@ const totalDue = formPayment.querySelector('#totalDue')
 const selectPaymentMethod = formPayment.selectPaymentMethod
 const inputPromisedDate = formPayment.inputPromisedDate
 
-//expense
-const inputExpense = formPayment.inputExpense
-const inputExpenseDescription = formPayment.inputExpenseDescription
-
 //service charge
 const inputServiceCharge = formPayment.inputServiceCharge
 const inputServiceChargeDescription = formPayment.inputServiceChargeDescription
@@ -427,8 +423,6 @@ const onSellSubmitClicked = function (evt) {
         ServiceCharge: inputServiceCharge.value,
         ServiceChargeDescription: inputServiceChargeDescription.value,
         ServiceCost: inputServiceCost.value,
-        Expense:inputExpense.value,
-        ExpenseDescription:inputExpenseDescription.value,
         AccountId: inputPaid.value ? selectPaymentMethod.value : "",
         ProductList: productList
     }
