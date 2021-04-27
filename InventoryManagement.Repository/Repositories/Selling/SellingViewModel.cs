@@ -94,6 +94,7 @@ namespace InventoryManagement.Repository
         public int SellingSn { get; set; }
         public string CustomerName { get; set; }
         public decimal SellingAmount { get; set; }
+        public decimal ServiceCharge { get; set; }
         public decimal SellingPaidAmount { get; set; }
         public decimal SellingDiscountAmount { get; set; }
         public decimal SellingDueAmount { get; set; }
