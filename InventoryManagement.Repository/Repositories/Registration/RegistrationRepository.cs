@@ -32,7 +32,8 @@ namespace InventoryManagement.Repository
                 Email = r.Email,
                 Image = r.Image,
                 NationalId = r.NationalId,
-                Phone = r.Phone
+                Phone = r.Phone,
+                Validation = r.Validation.Value
             }).ToList();
         }
 
@@ -51,7 +52,8 @@ namespace InventoryManagement.Repository
                 Email = r.Email,
                 Image = r.Image,
                 NationalId = r.NationalId,
-                Phone = r.Phone
+                Phone = r.Phone,
+                Validation = r.Validation.Value
             }).ToList();
         }
 

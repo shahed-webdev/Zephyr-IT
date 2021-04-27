@@ -25,6 +25,13 @@ namespace InventoryManagement.Web.Controllers
             _db = db;
         }
 
+        //active deactivate user login
+        [HttpPost]
+        public IActionResult DeactivateUserLogin()
+        {
+            return Json("");
+        }
+
         #region Sub Admin
         [Authorize(Roles = "admin, sub-admin-list")]
         public IActionResult List()

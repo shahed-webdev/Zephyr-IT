@@ -17,6 +17,7 @@
                         <th>Username</th>
                         <th>Mobile</th>
                         <th>Email</th>
+                        <th style="width:30px">Locked?</th>
                         <th>Wallet</th>
                     </tr>
                 </thead>
@@ -28,6 +29,12 @@
                             <td>@item.UserName</td>
                             <td>@item.Phone</td>
                             <td>@item.Email</td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input lockClick" id="@item.RegistrationId" @(item.Validation ? "" : "checked")>
+                                    <label class="custom-control-label" for="@item.RegistrationId"></label>
+                                </div>
+                            </td>
                             <td>
                                 <a class="blue-text" href="/SubAdmin/PageAccess/@item.RegistrationId">Details</a>
                             </td>

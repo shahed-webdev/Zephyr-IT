@@ -13,10 +13,11 @@
             <table id="data-table" class="table table-sm table-bordered nowrap">
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th class="text-left">Name</th>
                         <th>Username</th>
                         <th>Mobile</th>
                         <th>Email</th>
+                        <th style="width:30px">Locked?</th>
                         <th>Page Access</th>
                     </tr>
                 </thead>
@@ -24,10 +25,16 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.Name</td>
+                            <td class="text-left">@item.Name</td>
                             <td>@item.UserName</td>
                             <td>@item.Phone</td>
                             <td>@item.Email</td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input lock-checked" id="@item.RegistrationId" @(item.Validation ? "" : "checked")>
+                                    <label class="custom-control-label" for="@item.RegistrationId"></label>
+                                </div>
+                            </td>
                             <td>
                                 <a class="blue-text" href="/SubAdmin/PageAccess/@item.RegistrationId">Page Access</a>
                             </td>
@@ -38,3 +45,28 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        //on lock click
+        const onTable = document.getElementById("data-table");
+        onTable.addEventListener("click", function (evt) {
+            const element = evt.target;
+            const onChecked = element.classList.contains("lock-checked");
+
+            if (onChecked) {
+                $.ajax({
+                    url: "/SubAdmin/DeactivateUserLogin",
+                    type: "POST",
+                    data: { id: element.id },
+                    success: response => {
+                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }
+        });
+    </script> 
+}
