@@ -43,18 +43,20 @@ namespace InventoryManagement.Web.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            //check user is locked
-            var isValid = (await _db.Registrations.SingleOrDefaultAsync(r => r.UserName.ToLower() == model.UserName.ToLower())).Validation;
-            if (isValid != null && !isValid.Value)
-            {
-                ModelState.AddModelError(Empty, "Your Account Is Locked");
-                return View(model);
-            }
-
+           
             //access to login
             var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
             if (result.Succeeded)
             {
+                //check user is locked
+                var isValid = _db.Registrations.GetValidation(model.UserName);
+                if (!isValid)
+                {
+                    ModelState.AddModelError(Empty, "Your Account Is Locked");
+                    await _signInManager.SignOutAsync();
+                    return View(model);
+                }
+
                 var type = _db.Registrations.UserTypeByUserName(model.UserName);
 
                 return type switch
@@ -71,8 +73,9 @@ namespace InventoryManagement.Web.Controllers
 
             if (result.IsLockedOut)
             {
-                _logger.LogWarning("User account locked out.");
-                return RedirectToPage("./Lockout");
+                ModelState.AddModelError(Empty, "User account locked out.");
+                await _signInManager.SignOutAsync();
+                return View(model);
             }
 
             ModelState.AddModelError(Empty, "Invalid login attempt.");

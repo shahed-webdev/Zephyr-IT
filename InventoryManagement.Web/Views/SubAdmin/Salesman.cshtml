@@ -24,21 +24,21 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td class="text-left">@item.Name</td>
-                            <td>@item.UserName</td>
-                            <td>@item.Phone</td>
-                            <td>@item.Email</td>
-                            <td>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input lockClick" id="@item.RegistrationId" @(item.Validation ? "" : "checked")>
-                                    <label class="custom-control-label" for="@item.RegistrationId"></label>
-                                </div>
-                            </td>
-                            <td>
-                                <a class="blue-text" href="/SubAdmin/PageAccess/@item.RegistrationId">Details</a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td class="text-left">@item.Name</td>
+                        <td>@item.UserName</td>
+                        <td>@item.Phone</td>
+                        <td>@item.Email</td>
+                        <td>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input lock-checked" id="@item.RegistrationId" @(item.Validation ? "" : "checked")>
+                                <label class="custom-control-label" for="@item.RegistrationId"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <a class="blue-text" href="#">Details</a>
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
@@ -46,3 +46,27 @@
     </div>
 </div>
 
+@section Scripts{
+    <script>
+        //on lock click
+        const onTable = document.getElementById("data-table");
+        onTable.addEventListener("click", function (evt) {
+            const element = evt.target;
+            const onChecked = element.classList.contains("lock-checked");
+
+            if (onChecked) {
+                $.ajax({
+                    url: "/SubAdmin/DeactivateUserLogin",
+                    type: "POST",
+                    data: { id: element.id },
+                    success: response => {
+                        $.notify(response.Message, "success");
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }
+        });
+    </script>
+}

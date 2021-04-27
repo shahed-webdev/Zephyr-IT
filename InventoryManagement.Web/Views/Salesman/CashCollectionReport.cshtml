@@ -1,9 +1,8 @@
 ﻿
 @{
     ViewData["Title"] = "Cash Collection Report";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Views/Shared/_SalesmanLayout.cshtml";
 }
-
 
 <div class="m-md-3">
     <h4 class="page-header mb-3">Cash Collection Report</h4>
@@ -28,14 +27,13 @@
 
         <table id="data-table" class="table table-sm table-bordered">
             <thead>
-            <tr>
-                <th>#Bill No</th>
-                <th>Customer Name</th>
-                <th>Paid</th>
-                <th>P.Method</th>
-                <th>Paid Date</th>
-                <th>Collected By</th>
-            </tr>
+                <tr>
+                    <th>#Bill No</th>
+                    <th>Customer Name</th>
+                    <th>Paid</th>
+                    <th>P.Method</th>
+                    <th>Paid Date</th>
+                </tr>
             </thead>
         </table>
     </div>
@@ -49,30 +47,13 @@
                 format: 'd-mmmm-yyyy'
             });
 
-            const date = "@Context.Request.RouteValues["id"]";
-
-            if (date) {
-                const from = document.querySelector("#inputFromDate");
-                const to = document.querySelector("#inputToDate");
-
-                from.value = date;
-                from.previousElementSibling.classList.add("active");
-
-                to.value = date;
-                to.previousElementSibling.classList.add("active");
-
-                dataTable.filter = [];
-                dataTable.filter.push({ Field: "PaidDate", Value: date, Operand: dataTable.operand.GreaterThanOrEqual });
-                dataTable.filter.push({ Field: "PaidDate", Value: date, Operand: dataTable.operand.LessThanOrEqual });
-
-                getAmountSummery({ fromDate: date, toDate: date });
-            } else {
-                //get amount
-                getAmountSummery();
-            }
-
             //get data-table
+            dataTable.filter = [];
+            dataTable.filter.push({ Field: "RegistrationId", Value: @ViewBag.RegistrationId, Operand: dataTable.operand.Equal });
             dataTable.getData();
+
+            //get amount
+            getAmountSummery();
         });
 
         //get data
@@ -85,7 +66,7 @@
                     serverSide: true,
                     dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>><"row"<"col-sm-12"<tr>>><"row"<"col-sm-5"i><"col-sm-7"p>>',
                     buttons: dataTable.button,
-                    language: { infoFiltered: ""},
+                    language: { infoFiltered: "" },
                     ajax: {
                         url: "/Selling/CashCollectionData",
                         type: "POST",
@@ -96,15 +77,15 @@
                     columns:
                     [
                         {
-                            data: "SellingSn", "render": function(data, type, row, meta) {
+                            data: "SellingSn",
+                            "render": function(data, type, row, meta) {
                                 return `<a class="blue-text" href="/Selling/SellingReceipt/${row.SellingId}">${data}</a>`;
                             }
                         },
                         { data: "CustomerName" },
                         { data: "PaidAmount", "render": dataTable.addSign },
                         { data: "PaymentMethod" },
-                        { data: "PaidDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
-                        { data: "CollectBy" }
+                        { data: "PaidDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } }
                     ],
                     columnDefs: [
                         { 'className': "text-right", "targets": [2] },
@@ -128,18 +109,21 @@
             },
             addSign: function(data) { return `${data}/-` },
             button: {
-                buttons: [{
-                    extend: 'print',
-                    text: '<i class="fa fa-print"></i> Print',
-                    title: '',
-                    exportOptions: {
-                        //columns: [0,1] //Column value those print
-                                                                                                                                                                                                         },
-                    customize: function(win) {
-                        $(win.document.body).prepend(`<nav class="mb-3 navbar peach-gradient"><a class="navbar-brand ml-1"><span>Zephyr</span> IT</a></nav><h3 class="h3-responsive">${$('h4').text()}</h3>`);
-                    },
-                    autoPrint: true
-                }],
+                buttons: [
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        title: '',
+                        exportOptions: {
+                            //columns: [0,1] //Column value those print
+
+                        },
+                        customize: function(win) {
+                            $(win.document.body).prepend(`<nav class="mb-3 navbar peach-gradient"><a class="navbar-brand ml-1"><span>Zephyr</span> IT</a></nav><h3 class="h3-responsive">${$('h4').text()}</h3>`);
+                        },
+                        autoPrint: true
+                    }
+                ],
                 dom: {
                     button: {
                         className: 'btn btn-dark btn-rounded btn-sm my-0'
@@ -150,32 +134,32 @@
 
         //selectors
         const formPost = document.getElementById("formPost");
+        formPost.addEventListener('submit',
+            function(evt) {
+                evt.preventDefault();
 
-        formPost.addEventListener('submit', function(evt) {
-            evt.preventDefault();
+                const inputFromDate = formPost.inputFromDate.value;
+                const inputToDate = formPost.inputToDate.value;
 
-            const inputFromDate = formPost.inputFromDate.value;
-            const inputToDate = formPost.inputToDate.value;
+                dataTable.filter = [];
+                dataTable.filter.push({ Field: "RegistrationId", Value: @ViewBag.RegistrationId, Operand: dataTable.operand.Equal });
 
-            dataTable.filter = [];
+                if (inputFromDate)
+                    dataTable.filter.push({ Field: "PaidDate", Value: inputFromDate, Operand: dataTable.operand.GreaterThanOrEqual });
 
-            if (inputFromDate)
-                dataTable.filter.push({ Field: "PaidDate", Value: inputFromDate, Operand: dataTable.operand.GreaterThanOrEqual });
+                if (inputToDate)
+                    dataTable.filter.push({ Field: "PaidDate", Value: inputToDate, Operand: dataTable.operand.LessThanOrEqual });
 
-            if (inputToDate)
-                dataTable.filter.push({ Field: "PaidDate", Value: inputToDate, Operand: dataTable.operand.LessThanOrEqual });
+                dataTable.getData();
 
+                const data = {
+                    fromDate: inputFromDate,
+                    toDate: inputToDate,
+                    id: "@ViewBag.RegistrationId"
+                };
 
-            dataTable.getData();
-
-
-            const data = {
-                fromDate: inputFromDate,
-                toDate: inputToDate
-            };
-
-            getAmountSummery(data);
-        });
+                getAmountSummery(data);
+            });
 
         function getAmountSummery(dates) {
             //for get and set total amount
@@ -185,7 +169,7 @@
             $.ajax({
                 type: "POST",
                 url,
-                data: dates,
+                data: dates ? dates : {fromDate: "", toDate: "", id: "@ViewBag.RegistrationId" },
                 success: function(response) {
                     totalAmount.textContent = `Total: ৳${response}`;
                 }

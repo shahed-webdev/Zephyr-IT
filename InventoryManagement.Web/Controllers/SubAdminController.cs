@@ -27,9 +27,10 @@ namespace InventoryManagement.Web.Controllers
 
         //active deactivate user login
         [HttpPost]
-        public IActionResult DeactivateUserLogin()
+        public IActionResult DeactivateUserLogin(int id)
         {
-            return Json("");
+            var response = _db.Registrations.ValidationChange(id);
+            return Json(response);
         }
 
         #region Sub Admin

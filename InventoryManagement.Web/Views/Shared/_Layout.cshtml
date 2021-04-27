@@ -13,8 +13,8 @@
     <!-- Material Design Bootstrap -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.2/css/mdb.min.css" rel="stylesheet" />
     <!-- custom -->
-    <link href="~/css/custom-public.css" rel="stylesheet" />
-    @RenderSection("Styles", false)
+    <link href="~/css/custom-public.css?v=1.0.0" rel="stylesheet" />
+    @await RenderSectionAsync("Styles", false)
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark peach-gradient">
@@ -55,29 +55,29 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <!-- MDB core JavaScript -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.2/js/mdb.min.js"></script>
-    @RenderSection("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 
-    <script type="text/javascript">
-        $(function () {
-            //Back to top
-            $('body').append('<div id="toTop" class="btn orange darken-4 text-white">TOP</div>');
-            $(window).scroll(function () {
-                if ($(this).scrollTop() != 0) {
-                    $('#toTop').fadeIn();
-                } else {
-                    $('#toTop').fadeOut();
-                }
-            });
-
-            $('#toTop').click(function () {
-                $("html, body").animate({ scrollTop: 0 }, 600);
-                return false;
-            });
+<script type="text/javascript">
+    $(function () {
+        //Back to top
+        $('body').append('<div id="toTop" class="btn orange darken-4 text-white">TOP</div>');
+        $(window).scroll(function () {
+            if ($(this).scrollTop() != 0) {
+                $('#toTop').fadeIn();
+            } else {
+                $('#toTop').fadeOut();
+            }
         });
 
+        $('#toTop').click(function () {
+            $("html, body").animate({ scrollTop: 0 }, 600);
+            return false;
+        });
+    });
 
-        // Animations initialization
-        new WOW().init();
-    </script>
+
+    // Animations initialization
+    new WOW().init();
+</script>
 </body>
 </html>

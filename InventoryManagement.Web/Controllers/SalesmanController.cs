@@ -50,7 +50,6 @@ namespace InventoryManagement.Web.Controllers
         #endregion
 
         #region Product Stock
-
         public IActionResult ProductStock()
         {
             ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
@@ -58,5 +57,11 @@ namespace InventoryManagement.Web.Controllers
         }
 
         #endregion
+
+        public IActionResult CashCollectionReport()
+        {
+            ViewBag.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+            return View();
+        }
     }
 }

@@ -34,7 +34,12 @@
                         </div>
 
                         <button class="btn btn-block btn-rounded z-depth-1a waves-effect waves-light peach-gradient mb-3" type="submit">Sign in</button>
-                        <div asp-validation-summary="ModelOnly"></div>
+                        
+                        <div asp-validation-summary="All" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

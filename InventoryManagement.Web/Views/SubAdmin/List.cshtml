@@ -60,7 +60,7 @@
                     type: "POST",
                     data: { id: element.id },
                     success: response => {
-                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                        $.notify(response.Message, "success");
                     },
                     error: function (err) {
                         console.log(err);
