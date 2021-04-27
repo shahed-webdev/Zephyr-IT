@@ -80,6 +80,10 @@ namespace InventoryManagement.Repository
                 if (model.PaidAmount > 0 && model.AccountId != null)
                     db.Account.BalanceAdd(model.AccountId.Value, model.PaidAmount);
 
+                //Sales parson add balance
+                if (model.PaidAmount > 0)
+                    db.Registrations.BalanceAdd(model.RegistrationId, model.PaidAmount);
+
                 await db.SaveChangesAsync().ConfigureAwait(false);
 
                 db.Customers.UpdatePaidDue(model.CustomerId);
@@ -144,6 +148,10 @@ namespace InventoryManagement.Repository
                 //Account add balance
                 if (model.PaidAmount > 0 && model.AccountId != null)
                     db.Account.BalanceAdd(model.AccountId.Value, model.PaidAmount);
+
+                //Sales parson add balance
+                if (model.PaidAmount > 0)
+                    db.Registrations.BalanceAdd(model.RegistrationId, model.PaidAmount);
 
                 await db.SaveChangesAsync().ConfigureAwait(false);
 
