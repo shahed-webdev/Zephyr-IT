@@ -25,6 +25,7 @@ namespace InventoryManagement.Web.Controllers
             _db = db;
         }
 
+        #region Sub Admin
         [Authorize(Roles = "admin, sub-admin-list")]
         public IActionResult List()
         {
@@ -69,7 +70,7 @@ namespace InventoryManagement.Web.Controllers
                 _db.Registrations.Add(reg);
                 await _db.SaveChangesAsync().ConfigureAwait(false);
 
-                return RedirectToAction("List", "SubAdmin");
+                return RedirectToAction(model.Type == UserType.SubAdmin ? "List" : "Salesman", "SubAdmin");
             }
 
             foreach (var error in result.Errors)
@@ -115,15 +116,16 @@ namespace InventoryManagement.Web.Controllers
                 return false;
             }
         }
-       
-        
-        protected override void Dispose(bool disposing)
+        #endregion
+
+        #region Salesman
+        [Authorize(Roles = "admin, salesman-list")]
+        public IActionResult Salesman()
         {
-            if (disposing)
-            {
-                _db.Dispose();
-            }
-            base.Dispose(disposing);
+            var model = _db.Registrations.GetSalesPersonList();
+            return View(model);
         }
+
+        #endregion
     }
 }

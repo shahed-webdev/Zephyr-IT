@@ -24,6 +24,8 @@ namespace InventoryManagement.Web.Controllers
         public IActionResult Dashboard()
         {
             ViewBag.Balance = _db.Registrations.Balance(User.Identity.Name);
+            ViewBag.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+           
             return View();
         }
 

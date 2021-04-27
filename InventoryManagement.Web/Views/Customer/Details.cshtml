@@ -167,6 +167,7 @@
                 dataTable.table = $("#receipt-data").DataTable({
                     processing: true,
                     serverSide: true,
+                    language: { infoFiltered: ""},
                     ajax: {
                         url: "/Customer/SellingRecordsData",
                         type: "POST",
@@ -189,7 +190,7 @@
                         {
                             data: "SellingDueAmount",
                             "render": function(data, type, row, meta) {
-                                return data ? `<a class="blue-text" href="/Selling/DueCollection/${row.SellingId}">${data}</a><small class="d-block">${row.PromisedPaymentDate ? moment(row.PromisedPaymentDate).format('DD MMM YYYY') : ""}</small>` : data;
+                                return data ? `<a class="blue-text" href="/Selling/DueCollection/${row.SellingId}">${data}/-</a><small class="d-block">${row.PromisedPaymentDate ? moment(row.PromisedPaymentDate).format('DD MMM YYYY') : ""}</small>` : data;
                             }
                         },
                         { data: "SellingDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } }

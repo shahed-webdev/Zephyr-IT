@@ -1,0 +1,41 @@
+﻿@using InventoryManagement.Repository
+@model IEnumerable<AdminInfo>
+@{
+    ViewData["Title"] = "Salesman";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="m-md-3">
+    <h4 class="page-header mb-3">Salesman</h4>
+
+    <div class="card card-body">
+        <div class="table-responsive">
+            <table id="data-table" class="table table-sm table-bordered nowrap">
+                <thead>
+                    <tr>
+                        <th class="text-left">Name</th>
+                        <th>Username</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>Wallet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-left">@item.Name</td>
+                            <td>@item.UserName</td>
+                            <td>@item.Phone</td>
+                            <td>@item.Email</td>
+                            <td>
+                                <a class="blue-text" href="/SubAdmin/PageAccess/@item.RegistrationId">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

@@ -80,19 +80,29 @@ namespace InventoryManagement.Web.Controllers
         }
         #endregion
 
-        //call from ajax
+        //find product (ajax)
         public async Task<IActionResult> FindProductByCode(string code)
         {
             var data = await _db.ProductStocks.FindforSellAsync(code).ConfigureAwait(false);
             return Json(data);
         }
 
+        //find customer (ajax)
         public async Task<IActionResult> FindCustomers(string prefix)
         {
             var data = await _db.Customers.SearchAsync(prefix).ConfigureAwait(false);
             return Json(data);
         }
 
+        //find Due Bill (ajax)
+        public async Task<IActionResult> FindDueBill(string billNo)
+        {
+            var data = await _db.Customers.SearchAsync(billNo).ConfigureAwait(false);
+            return Json(data);
+        }
+
+
+        #region Selling Invoice
         //selling invoice
         [Authorize(Roles = "admin, selling-record")]
         public IActionResult SellingRecords()
@@ -107,6 +117,7 @@ namespace InventoryManagement.Web.Controllers
             var data = _db.Selling.Records(request);
             return Json(data);
         }
+        #endregion
 
         #region Due Invoice
         //due invoice
@@ -158,7 +169,6 @@ namespace InventoryManagement.Web.Controllers
         }
         #endregion Due Invoice
 
-
         #region Update Bill
         //Post: Change Bill
         [Authorize(Roles = "admin, bill-change")]
@@ -203,7 +213,6 @@ namespace InventoryManagement.Web.Controllers
         }
         #endregion Update bill
 
-
         #region Sales Report from Dashboard
         //Sales report
         [Authorize(Roles = "admin")]
@@ -226,7 +235,6 @@ namespace InventoryManagement.Web.Controllers
             return Json(model);
         }
         #endregion Sales report
-
 
         #region Product Sold Report
         //Product Sold Report
@@ -251,7 +259,6 @@ namespace InventoryManagement.Web.Controllers
         }
         #endregion Product Sold Report
 
-
         #region Cash Collection
         //Cash Collection
         [Authorize(Roles = "admin")]
@@ -274,7 +281,6 @@ namespace InventoryManagement.Web.Controllers
             return Json(model);
         }
         #endregion Cash Collection
-
 
         #region Bill Wise Profite 
         //Bill Profit

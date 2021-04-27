@@ -6,8 +6,8 @@
 
 @section Styles{
     <style>
-        .past-row-color { background-color: #ff8a65 }
-        .today-row-color { background-color: #a5d6a7 }
+        .past-row-color td { color: #ff1818; }
+        .today-row-color td { color: #00b107; }
     </style>
 }
 
@@ -24,7 +24,8 @@
             <tr>
                 <th>#Bill No</th>
                 <th>Customer Name</th>
-                <th>Amount</th>
+                <th>Product Price</th>
+                <th>Service</th>
                 <th>Paid</th>
                 <th>Discount</th>
                 <th>Due</th>
@@ -63,6 +64,7 @@
                             },
                             { data: "CustomerName" },
                             { data: "SellingAmount", "render": dataTable.addSign },
+                            { data: "ServiceCharge", "render": dataTable.addSign },
                             { data: "SellingPaidAmount", "render": dataTable.addSign },
                             { data: "SellingDiscountAmount", "render": dataTable.addSign },
                             {
@@ -80,11 +82,11 @@
                             }
                         ],
                     columnDefs: [
-                        { 'searchable': false, 'targets': [2, 3, 4, 6, 7] },
-                        { 'className': "text-right", "targets": [2, 3, 4, 5] },
+                        { 'searchable': false, 'targets': [2,3,4,5,6,7,8] },
+                        { 'className': "text-right", "targets": [2,3,4,5,6] },
                         { 'className': "text-left", "targets": [1] }
                     ],
-                    order: [[7, "desc"]],
+                    order: [[8, "desc"]],
                     rowCallback: function (row, data, index) {
                         const date = moment(data["PromisedPaymentDate"]);
                         const now = moment();
