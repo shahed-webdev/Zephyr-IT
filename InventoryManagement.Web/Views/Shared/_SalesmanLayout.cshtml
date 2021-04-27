@@ -25,7 +25,8 @@
     <style>
         .manu-top-wraper { background-color: #2d2d2d; }
         #sidedrawer { background-color: #f3f3f3; }
-    </style>  
+        #sidedrawer strong { color: #cecece; }
+    </style> 
     
 
     @await RenderSectionAsync("Styles", false)
@@ -54,8 +55,20 @@
             </li>
             <li>
                 <strong>
+                    <span class="fas fa-chart-line">
+                    </span><a class="links" href="/Salesman/ProductStock">Product Stock</a>
+                </strong>
+            </li>
+            <li>
+                <strong>
                     <span class="fas fa-shopping-cart">
                     </span><a class="links" href="/Salesman/SellingProduct">Selling</a>
+                </strong>
+            </li>
+            <li>
+                <strong>
+                    <span class="fas fa-users">
+                    </span><a class="links" href="/Customer/List">Customers</a>
                 </strong>
             </li>
         </ul>
@@ -116,7 +129,7 @@
             $('[data-toggle="tooltip"]').tooltip();
 
             //User login Info
-            @*const url = "@Url.Action($"GetUserLoggedInInfo", $"Dashboard")";
+            const url = "@Url.Action($"GetUserLoggedInInfo", $"Dashboard")";
             $.get(url, response => {
                 const data = JSON.parse(response);
                 if (!data) return;
@@ -125,7 +138,7 @@
                     $("#loginUserPhoto").attr("src", `data:image/png;base64,${data.Image}`);
 
                 $("#loginUserName").html(`<strong class="p-0"><i class="fas fa-user"></i> ${data.Name}</strong>`);
-            });*@
+            });
 
 
             //Back to top

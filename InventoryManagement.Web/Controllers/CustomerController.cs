@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace InventoryManagement.Web.Controllers
 {
-    [Authorize(Roles = "admin, customer-list")]
+    [Authorize(Roles = "admin, SalesPerson, customer-list")]
     public class CustomerController : Controller
     {
         private readonly IUnitOfWork _db;
@@ -23,7 +23,6 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET:// List of customer
-
         public IActionResult List()
         {
             return View();

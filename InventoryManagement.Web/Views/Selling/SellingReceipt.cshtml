@@ -2,7 +2,8 @@
 @model SellingReceiptViewModel
 @{
     ViewData["Title"] = "Selling Receipt";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var isSalesmen = User.IsInRole("SalesPerson");
+    Layout = isSalesmen ? "_SalesmanLayout" : "_AdminLayout";
 }
 
 @section Styles{
@@ -14,118 +15,125 @@
 }
 
 <div id="receipt">
-    <section class="my-4 d-print-none">
-        <div class="d-flex justify-content-between">
-            <div>
-                <a class="btn btn-success btn-rounded" href="/Selling/Selling"><i class="fal fa-cart-plus mr-1"></i>Selling</a>
-                <a class="btn btn-deep-purple btn-rounded" href="/Selling/BillChange/@Model.SellingId"><i class="fal fa-cart-plus mr-1"></i>Update Bill</a>
-                <a id="showExpenseModal" class="btn btn-danger btn-rounded"><i class="fas fa-wallet mr-1"></i>Expense</a>
+    @if (!isSalesmen)
+    {
+        <section class="my-4 d-print-none">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <a class="btn btn-success btn-rounded" href="/Selling/Selling"><i class="fal fa-cart-plus mr-1"></i>Selling</a>
+                    <a class="btn btn-deep-purple btn-rounded" href="/Selling/BillChange/@Model.SellingId"><i class="fal fa-cart-plus mr-1"></i>Update Bill</a>
+                    <a id="showExpenseModal" class="btn btn-danger btn-rounded"><i class="fas fa-wallet mr-1"></i>Expense</a>
+                </div>
+                <div>
+                    <a class="btn btn-blue-grey btn-rounded" href="/Selling/SellingRecords"><i class="fas fa-file-invoice mr-1"></i>Selling Invoice</a>
+                    <button class="btn btn-elegant btn-rounded" onclick="print()"><i class="fal fa-print mr-1"></i>Print</button>
+                </div>
             </div>
-            <div>
-                <a class="btn btn-blue-grey btn-rounded" href="/Selling/SellingRecords"><i class="fas fa-file-invoice mr-1"></i>Selling Invoice</a>
-                <button class="btn btn-elegant btn-rounded" onclick="print()"><i class="fal fa-print mr-1"></i>Print</button>
-            </div>
-        </div>
-    </section>
+        </section>
+    }
 
     <table class="table table-sm table-bordered">
         <tbody>
-            <tr>
-                <td class="text-right" style="width: 50px"><strong>Name</strong></td>
-                <td>@Model.CustomerInfo.Name</td>
-                <td class="text-right" style="width: 50px"><strong>Bill&nbsp;No</strong></td>
-                <td style="width: 90px">@Model.SellingSn</td>
-            </tr>
-            <tr>
-                <td class="text-right"><strong>Address</strong></td>
-                <td>@Model.CustomerInfo.CustomerAddress</td>
-                <td class="text-right"><strong>Date</strong></td>
-                <td>@Model.SellingDate.ToString("d MMM yyyy")</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td class="text-right"><strong>Cell</strong></td>
-                <td>@Model.CustomerInfo.CustomerPhone</td>
-            </tr>
+        <tr>
+            <td class="text-right" style="width: 50px"><strong>Name</strong></td>
+            <td>@Model.CustomerInfo.Name</td>
+            <td class="text-right" style="width: 50px"><strong>Bill&nbsp;No</strong></td>
+            <td style="width: 90px">@Model.SellingSn</td>
+        </tr>
+        <tr>
+            <td class="text-right"><strong>Address</strong></td>
+            <td>@Model.CustomerInfo.CustomerAddress</td>
+            <td class="text-right"><strong>Date</strong></td>
+            <td>@Model.SellingDate.ToString("d MMM yyyy")</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td class="text-right"><strong>Cell</strong></td>
+            <td>@Model.CustomerInfo.CustomerPhone</td>
+        </tr>
         </tbody>
     </table>
 
 
     <table class="product-tb table table-sm table-bordered mt-5">
         <thead>
-            <tr>
-                <th><strong>SL.</strong></th>
-                <th><strong>Product</strong></th>
-                <th><strong>Description</strong></th>
-                <th><strong>Warranty</strong></th>
-                <th><strong>Qty.</strong></th>
-                <th><strong>U.Price</strong></th>
-                <th class="text-right"><strong>Price</strong></th>
-            </tr>
+        <tr>
+            <th><strong>SL.</strong></th>
+            <th><strong>Product</strong></th>
+            <th><strong>Description</strong></th>
+            <th><strong>Warranty</strong></th>
+            <th><strong>Qty.</strong></th>
+            <th><strong>U.Price</strong></th>
+            <th class="text-right"><strong>Price</strong></th>
+        </tr>
         </thead>
         <tbody>
-            @{
-                var index = 1;
-                @if (Model.ServiceCharge > 0)
-                {
-                    <tr>
-                        <td class="text-center">@index</td>
-                        <td>Service</td>
-                        <td colspan="4">@Model.ServiceChargeDescription</td>
-                        <td class="text-right">৳@Model.ServiceCharge</td>
-                    </tr>
-                    index++;
+        @{
+            var index = 1;
+            @if (Model.ServiceCharge > 0)
+            {
+                <tr>
+                    <td class="text-center">@index</td>
+                    <td>Service</td>
+                    <td colspan="4">@Model.ServiceChargeDescription</td>
+                    <td class="text-right">৳@Model.ServiceCharge</td>
+                </tr>
+                index++;
+            }
+
+            foreach (var item in Model.Products)
+            {
+                <tr>
+                    <td class="text-center">@index</td>
+                    <td>@item.ProductCatalogName</td>
+                    <td>
+                        @item.ProductName,
+                        @if (item.Description != null)
+                        {
+                            <span>@item.Description,</span>
+                        }
+
+                        @foreach (var code in item.ProductCodes)
+                        {
+                            <span class="codeSpan">
+
+                                @code
+
+                            </span>
+                        }
+                    </td>
+                    <td class="text-center">@item.Warranty</td>
+                    <td class="text-center">@item.ProductCodes.Length</td>
+                    <td class="text-center">৳@item.SellingPrice</td>
+                    <td class="text-right">৳@(item.SellingPrice * item.ProductCodes.Length)</td>
+                </tr>
+                index++;
+            }
+        }
+
+        <tr>
+            <td colspan="6" class="text-center">
+                <span id="amount-word"></span>
+            </td>
+            <td class="text-right">
+                @{
+                    var totalAmount = Model.SellingTotalPrice + Model.ServiceCharge;
                 }
-
-                foreach (var item in Model.Products)
+                <h5>Total&nbspAmount:<strong>৳@totalAmount</strong></h5>
+                @if (Model.SellingDiscountAmount > 0)
                 {
-                    <tr>
-                        <td class="text-center">@index</td>
-                        <td>@item.ProductCatalogName</td>
-                        <td>
-                            @item.ProductName,
-                            @if (item.Description != null)
-                            {
-                                <span>@item.Description,</span>
-                            }
-
-                            @foreach (var code in item.ProductCodes)
-                            {
-                                <span class="codeSpan">@code</span>
-                            }
-                        </td>
-                        <td class="text-center">@item.Warranty</td>
-                        <td class="text-center">@item.ProductCodes.Length</td>
-                        <td class="text-center">৳@item.SellingPrice</td>
-                        <td class="text-right">৳@(item.SellingPrice * item.ProductCodes.Length)</td>
-                    </tr>
-                        index++;
-                    }
+                    <h5 class="border-bottom border-dark pb-1">Discount:<strong>৳@Model.SellingDiscountAmount</strong></h5>
+                    <h5 class="mt-1">Net Payable Amount:<strong>৳@(totalAmount - Model.SellingDiscountAmount)</strong></h5>
                 }
-
-            <tr>
-                <td colspan="6" class="text-center">
-                    <span id="amount-word"></span>
-                </td>
-                <td class="text-right">
-                    @{
-                        var totalAmount = Model.SellingTotalPrice + Model.ServiceCharge;
-                    }
-                    <h5>Total&nbspAmount:<strong>৳@totalAmount</strong></h5>
-                    @if (Model.SellingDiscountAmount > 0)
-                    {
-                        <h5 class="border-bottom border-dark pb-1">Discount:<strong>৳@Model.SellingDiscountAmount</strong></h5>
-                        <h5 class="mt-1">Net Payable Amount:<strong>৳@(totalAmount - Model.SellingDiscountAmount)</strong></h5>
-                    }
-                    <h5>Cash&nbspPaid:<strong>৳@Model.SellingPaidAmount</strong></h5>
-                    @if (Model.SellingReturnAmount > 0)
-                    {
-                        <h5>Return&nbspAmount:<strong>৳@Model.SellingReturnAmount</strong></h5>
-                    }
-                    <h5>Due Amount:<strong>৳@Model.SellingDueAmount</strong></h5>
-                </td>
-            </tr>
+                <h5>Cash&nbspPaid:<strong>৳@Model.SellingPaidAmount</strong></h5>
+                @if (Model.SellingReturnAmount > 0)
+                {
+                    <h5>Return&nbspAmount:<strong>৳@Model.SellingReturnAmount</strong></h5>
+                }
+                <h5>Due Amount:<strong>৳@Model.SellingDueAmount</strong></h5>
+            </td>
+        </tr>
         </tbody>
     </table>
 
