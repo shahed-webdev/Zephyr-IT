@@ -1,10 +1,12 @@
-﻿using InventoryManagement.Repository;
+﻿using System;
+using InventoryManagement.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using InventoryManagement.Data;
+using static System.String;
 
 namespace InventoryManagement.Web.Controllers
 {
@@ -41,18 +43,26 @@ namespace InventoryManagement.Web.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
+            //check user is locked
+            var isValid = (await _db.Registrations.SingleOrDefaultAsync(r => r.UserName.ToLower() == model.UserName.ToLower())).Validation;
+            if (isValid != null && !isValid.Value)
+            {
+                ModelState.AddModelError(Empty, "Your Account Is Locked");
+                return View(model);
+            }
 
+            //access to login
+            var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
             if (result.Succeeded)
             {
                 var type = _db.Registrations.UserTypeByUserName(model.UserName);
 
                 return type switch
                 {
-                    UserType.Admin => LocalRedirect(returnUrl ??= Url.Content("~/Dashboard/Index")),
-                    UserType.SubAdmin => LocalRedirect(returnUrl ??= Url.Content("~/Dashboard/Index")),
-                    UserType.SalesPerson => LocalRedirect(returnUrl ??= Url.Content("~/Salesman/Dashboard")),
-                    _ => LocalRedirect(returnUrl ??= Url.Content("~/Account/Login"))
+                    UserType.Admin => LocalRedirect(returnUrl ??= Url.Content($"/Dashboard/Index")),
+                    UserType.SubAdmin => LocalRedirect(returnUrl ??= Url.Content($"/Dashboard/Index")),
+                    UserType.SalesPerson => LocalRedirect(returnUrl ??= Url.Content($"/Salesman/Dashboard")),
+                    _ => LocalRedirect(returnUrl ??= Url.Content($"/Account/Login"))
                 };
             }
 
@@ -65,7 +75,7 @@ namespace InventoryManagement.Web.Controllers
                 return RedirectToPage("./Lockout");
             }
 
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            ModelState.AddModelError(Empty, "Invalid login attempt.");
             return View(model);
         }
 
@@ -91,7 +101,7 @@ namespace InventoryManagement.Web.Controllers
             {
                 foreach (var error in changePasswordResult.Errors)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    ModelState.AddModelError(Empty, error.Description);
                 }
 
                 return View(model);
