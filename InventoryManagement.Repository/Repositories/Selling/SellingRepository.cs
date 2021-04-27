@@ -718,6 +718,13 @@ namespace InventoryManagement.Repository
             return response;
         }
 
+        public async Task<DbResponse<int>> FindBill(int billNo)
+        {
+            var selling = await Context.Selling.FirstOrDefaultAsync(s => s.SellingSn == billNo);
+
+            return selling == null ? new DbResponse<int>(false, "Bill Not Found") : new DbResponse<int>(true, "Success", selling.SellingId);
+        }
+
         public async Task<DbResponse> ExpenseAdd(SellingExpenseAddModel model)
         {
 

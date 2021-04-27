@@ -15,5 +15,7 @@ namespace InventoryManagement.Repository
         UserType UserTypeByUserName(string userName);
         decimal Balance(string userName);
         void BalanceAdd(int registrationId, decimal amount);
+        DbResponse ValidationChange(int registrationId);
+        bool GetValidation(int registrationId);
     }
 }

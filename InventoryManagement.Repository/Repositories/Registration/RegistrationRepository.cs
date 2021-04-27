@@ -135,5 +135,21 @@ namespace InventoryManagement.Repository
             account.Balance += amount;
             Context.Registration.Update(account);
         }
+
+        public DbResponse ValidationChange(int registrationId)
+        {
+
+            var registration = Context.Registration.Find(registrationId);
+            if (registration == null) return new DbResponse(false, "User Not Found");
+            registration.Validation = !registration.Validation;
+            Context.Registration.Update(registration);
+            Context.SaveChanges();
+            return new DbResponse(true, registration.Validation.Value ? "User Access Unlock Successfully" : "User Access Lock Successfully");
+        }
+
+        public bool GetValidation(int registrationId)
+        {
+            return Context.Registration.Find(registrationId)?.Validation ?? false;
+        }
     }
 }
