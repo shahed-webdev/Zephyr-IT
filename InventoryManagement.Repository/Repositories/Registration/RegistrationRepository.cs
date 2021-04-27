@@ -149,9 +149,9 @@ namespace InventoryManagement.Repository
             return new DbResponse(true, registration.Validation.Value ? "User Access Unlock Successfully" : "User Access Lock Successfully");
         }
 
-        public bool GetValidation(int registrationId)
+        public bool GetValidation(string userName)
         {
-            return Context.Registration.Find(registrationId)?.Validation ?? false;
+            return Context.Registration.FirstOrDefault(r => r.UserName.ToLower() == userName.ToLower())?.Validation ?? false;
         }
     }
 }

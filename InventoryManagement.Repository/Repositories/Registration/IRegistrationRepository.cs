@@ -16,6 +16,6 @@ namespace InventoryManagement.Repository
         decimal Balance(string userName);
         void BalanceAdd(int registrationId, decimal amount);
         DbResponse ValidationChange(int registrationId);
-        bool GetValidation(int registrationId);
+        bool GetValidation(string userName);
     }
 }
