@@ -174,17 +174,21 @@ namespace InventoryManagement.Repository
         {
             return Context.SellingPayment
                 .Include(s => s.SellingPaymentList)
+                .Include(s => s.Account)
                 .Include(s => s.Customer)
+                .Include(s => s.Registration)
                 .Select(s => new SellingPaymentRecordModel
                 {
                     SellingPaymentId = s.SellingPaymentId,
                     CustomerId = s.CustomerId,
+                    RegistrationId = s.RegistrationId,
+                    CollectBy = $" {s.Registration.Name} ({s.Registration.UserName})",
                     CustomerName = s.Customer.CustomerName,
                     ReceiptSn = s.ReceiptSn,
                     SellingSn = s.SellingPaymentList.Select(p => p.Selling.SellingSn).FirstOrDefault(),
                     SellingId = s.SellingPaymentList.Select(p => p.Selling.SellingId).FirstOrDefault(),
                     PaidAmount = s.PaidAmount,
-                    PaymentMethod = s.PaymentMethod,
+                    PaymentMethod = s.Account.AccountName,
                     PaidDate = s.PaidDate
                 })
                 .ToDataResult(request);
@@ -197,6 +201,16 @@ namespace InventoryManagement.Repository
             return Context
                 .SellingPayment
                 .Where(r => r.PaidDate <= eD && r.PaidDate >= sD).Sum(s => s.PaidAmount);
+        }
+
+        public decimal CollectionAmountDateWise(DateTime? sDateTime, DateTime? eDateTime, int registrationId)
+        {
+            var sD = sDateTime ?? new DateTime(DateTime.Now.BdTime().Year, 1, 1);
+            var eD = eDateTime ?? new DateTime(DateTime.Now.BdTime().Year, 12, 31);
+            return Context
+                .SellingPayment
+                .Where(r => r.PaidDate <= eD && r.PaidDate >= sD && r.RegistrationId == registrationId)
+                .Sum(s => s.PaidAmount);
         }
     }
 }

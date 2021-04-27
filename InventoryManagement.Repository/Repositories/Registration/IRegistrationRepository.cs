@@ -8,6 +8,7 @@ namespace InventoryManagement.Repository
         int GetRegID_ByUserName(string userName);
         ICollection<DDL> SubAdmins();
         ICollection<AdminInfo> GetSubAdminList();
+        ICollection<AdminInfo> GetSalesPersonList();
         AdminBasic GetAdminBasic(string userName);
         AdminInfo GetAdminInfo(string userName);
         void UpdateCustom(string userName, AdminInfo reg);

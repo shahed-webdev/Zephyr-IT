@@ -214,20 +214,25 @@ namespace InventoryManagement.Repository
 
         public DataResult<SellingRecordViewModel> Records(DataRequest request)
         {
-            var r = Context.Selling.Include(s => s.Customer).Select(s => new SellingRecordViewModel
-            {
-                SellingId = s.SellingId,
-                CustomerId = s.CustomerId,
-                CustomerName = s.Customer.CustomerName,
-                SellingSn = s.SellingSn,
-                SellingAmount = s.SellingTotalPrice,
-                SellingPaidAmount = s.SellingPaidAmount,
-                SellingDiscountAmount = s.SellingDiscountAmount,
-                SellingDueAmount = s.SellingDueAmount,
-                SellingDate = s.SellingDate,
-                LastUpdateDate = s.LastUpdateDate.Value,
-                PromisedPaymentDate = s.PromisedPaymentDate
-            });
+            var r = Context.Selling
+                .Include(s => s.Customer)
+                .Include(s => s.Registration)
+                .Select(s => new SellingRecordViewModel
+                {
+                    SellingId = s.SellingId,
+                    RegistrationId = s.RegistrationId,
+                    BillCreateBy = $" {s.Registration.Name} ({s.Registration.UserName})",
+                    CustomerId = s.CustomerId,
+                    CustomerName = s.Customer.CustomerName,
+                    SellingSn = s.SellingSn,
+                    SellingAmount = s.SellingTotalPrice,
+                    SellingPaidAmount = s.SellingPaidAmount,
+                    SellingDiscountAmount = s.SellingDiscountAmount,
+                    SellingDueAmount = s.SellingDueAmount,
+                    SellingDate = s.SellingDate,
+                    LastUpdateDate = s.LastUpdateDate.Value,
+                    PromisedPaymentDate = s.PromisedPaymentDate
+                });
             return r.ToDataResult(request);
         }
 
@@ -235,12 +240,15 @@ namespace InventoryManagement.Repository
         {
             var r = Context.Selling
                 .Include(s => s.Customer)
+                .Include(s => s.Registration)
                 .Where(s => s.SellingDueAmount > 0)
                 .OrderBy(s => s.PromisedPaymentDate)
                 .Select(s => new SellingRecordViewModel
                 {
                     SellingId = s.SellingId,
                     CustomerId = s.CustomerId,
+                    RegistrationId = s.RegistrationId,
+                    BillCreateBy = $" {s.Registration.Name} ({s.Registration.UserName})",
                     CustomerName = s.Customer.CustomerName,
                     SellingSn = s.SellingSn,
                     SellingAmount = s.SellingTotalPrice,

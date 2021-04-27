@@ -89,6 +89,8 @@ namespace InventoryManagement.Repository
     {
         public int SellingId { get; set; }
         public int CustomerId { get; set; }
+        public int RegistrationId { get; set; }
+        public string BillCreateBy { get; set; }
         public int SellingSn { get; set; }
         public string CustomerName { get; set; }
         public decimal SellingAmount { get; set; }

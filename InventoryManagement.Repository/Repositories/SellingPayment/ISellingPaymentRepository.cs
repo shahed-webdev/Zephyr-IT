@@ -13,6 +13,7 @@ namespace InventoryManagement.Repository
         decimal DailyCashCollectionAmount(DateTime? date);
         DataResult<SellingPaymentRecordModel> Records(DataRequest request);
         decimal CollectionAmountDateWise(DateTime? sDateTime, DateTime? eDateTime);
+        decimal CollectionAmountDateWise(DateTime? sDateTime, DateTime? eDateTime, int registrationId);
 
     }
 }

@@ -49,6 +49,8 @@ namespace InventoryManagement.Repository
     {
         public int SellingPaymentId { get; set; }
         public int CustomerId { get; set; }
+        public int RegistrationId { get; set; }
+        public string CollectBy { get; set; }
         public string CustomerName { get; set; }
         public int ReceiptSn { get; set; }
         public int SellingId { get; set; }

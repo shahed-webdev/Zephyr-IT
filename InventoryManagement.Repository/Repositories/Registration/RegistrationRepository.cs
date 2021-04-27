@@ -36,6 +36,25 @@ namespace InventoryManagement.Repository
             }).ToList();
         }
 
+        public ICollection<AdminInfo> GetSalesPersonList()
+        {
+            return Context.Registration.Where(r => r.Type == UserType.SalesPerson.ToString()).Select(r => new AdminInfo
+            {
+                UserName = r.UserName,
+                Name = r.Name,
+                RegistrationId = r.RegistrationId,
+                Type = r.Type,
+                FatherName = r.FatherName,
+                Address = r.Address,
+                DateofBirth = r.DateofBirth,
+                Designation = r.Designation,
+                Email = r.Email,
+                Image = r.Image,
+                NationalId = r.NationalId,
+                Phone = r.Phone
+            }).ToList();
+        }
+
         public ICollection<DDL> SubAdmins()
         {
             return Context.Registration?.Where(r => r.Type == UserType.SubAdmin.ToString()).Select(r =>
