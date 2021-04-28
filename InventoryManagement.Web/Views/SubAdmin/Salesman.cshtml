@@ -36,7 +36,14 @@
                             </div>
                         </td>
                         <td>
-                            <a class="blue-text" href="/SubAdmin/CashReceive/@item.RegistrationId">200.00</a>
+                            @if (item.Balance < 1)
+                            {
+                                @item.Balance
+                            }
+                            else
+                            {
+                                <a class="blue-text" href="/SubAdmin/CashReceive/@item.RegistrationId">৳@item.Balance</a>
+                            }
                         </td>
                     </tr>
                     }

@@ -58,10 +58,20 @@ namespace InventoryManagement.Web.Controllers
 
         #endregion
 
+        #region Reports
+        //selling report
+        public IActionResult SellingRecords()
+        {
+            ViewBag.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+            return View();
+        }
+
+        //Cash Collection records
         public IActionResult CashCollectionReport()
         {
             ViewBag.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
             return View();
         }
+        #endregion
     }
 }

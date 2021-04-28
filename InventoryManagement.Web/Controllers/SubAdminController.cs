@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using InventoryManagement.BusinessLogin;
 using JqueryDataTables.LoopsIT;
 
 namespace InventoryManagement.Web.Controllers
@@ -17,12 +18,14 @@ namespace InventoryManagement.Web.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<SubAdminController> _logger;
         private readonly IUnitOfWork _db;
+        private readonly IAdminMoneyCollectionCore _adminMoneyCollection;
 
-        public SubAdminController(UserManager<IdentityUser> userManager, ILogger<SubAdminController> logger, IUnitOfWork db)
+        public SubAdminController(UserManager<IdentityUser> userManager, ILogger<SubAdminController> logger, IUnitOfWork db, IAdminMoneyCollectionCore adminMoneyCollection)
         {
             _userManager = userManager;
             _logger = logger;
             _db = db;
+            _adminMoneyCollection = adminMoneyCollection;
         }
 
         //active deactivate user login
@@ -147,21 +150,22 @@ namespace InventoryManagement.Web.Controllers
         {
             if (!id.HasValue) return RedirectToAction("Salesman");
 
-            return View();
+            return View(_db.Registrations.GetSalesPersonInfo(id.GetValueOrDefault()));
         }
 
         //post
         [Authorize(Roles = "admin")]
-        public IActionResult PostCashReceive()
+        public IActionResult PostCashReceive(AdminMoneyCollectionAddModel model)
         {
-            return Json("");
+            var response = _adminMoneyCollection.Add(model);
+            return Json(response);
         }
 
         //request from data-table(ajax)
         [Authorize(Roles = "admin, SalesPerson")]
         public IActionResult CashReceiveRecords(DataRequest request)
         {
-            var data = _db.SellingPayments.Records(request);
+            var data = _adminMoneyCollection.List(request);
             return Json(data);
         }
         #endregion

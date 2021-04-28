@@ -1,4 +1,4 @@
-﻿
+﻿@model InventoryManagement.Repository.AdminInfo
 @{
     ViewData["Title"] = "Cash Receive";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -7,7 +7,7 @@
 
 <div class="container">
     <h4 class="page-header">Cash Receive</h4>
-    <p class="mb-3">Md Ripon, Wallet: 200.00</p>
+    <p class="mb-3">@Model.Name, Wallet: ৳ @Model.Balance</p>
 
     <div class="card card-body">
         <form id="formReceive">
@@ -15,7 +15,7 @@
                 <div class="col-lg-3">
                     <div class="md-form">
                         <label for="inputAmount">Receive Amount</label>
-                        <input id="inputAmount" type="number" class="form-control" required>
+                        <input id="inputAmount" min="0" max="@Model.Balance" type="number" class="form-control" required>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -32,7 +32,7 @@
             </div>
         </form>
 
-        <table id="data-table" class="table table-sm">
+        <table id="data-table" class="table table-sm table-bordered">
             <thead>
                 <tr>
                     <th><strong>Amount</strong></th>
@@ -74,9 +74,9 @@
                     },
                     columns:
                     [
-                        { data: "PaidAmount", "render": dataTable.addSign },
-                        { data: "PaymentMethod" },
-                        { data: "PaidDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } }
+                        { data: "CollectionAmount", "render": dataTable.addSign },
+                        { data: "Description" },
+                            { data: "InsertDate", "render": function (data) { return moment.utc(data).local().format('DD MMM YYYY') } }
                     ],
                     columnDefs: [
                         { 'className': "text-right", "targets": [0] },
@@ -107,7 +107,7 @@
                         title: '',
                         exportOptions: {
                             //columns: [0,1] //Column value those print
-
+                        
                         },
                         customize: function(win) {
                             $(win.document.body).prepend(`<nav class="mb-3 navbar peach-gradient"><a class="navbar-brand ml-1"><span>Zephyr</span> IT</a></nav><h3 class="h3-responsive">${$('h4').text()}</h3>`);
@@ -129,23 +129,23 @@
             function(evt) {
                 evt.preventDefault();
 
-                const body = { RegistrationId: @id, Amount: this.inputAmount.value, Description: this.inputDescription.value}
+                const body = { RegistrationId: @id, CollectionAmount: this.inputAmount.value, Description: this.inputDescription.value }
                 this.btnReceive.disabled = true;
 
                 $.ajax({
                     url: '/SubAdmin/PostCashReceive',
                     type: "POST",
                     data: body,
-                    success: response=> {
+                    success: response => {
                         if (response.IsSuccess) {
                             location.href = "/SubAdmin/Salesman";
                             return;
                         }
 
-                        $.notify(response.Message,"error");
+                        $.notify(response.Message, "error");
                         this.btnReceive.disabled = false;
                     },
-                    error: error=> {
+                    error: error => {
                         console.log(error);
                         this.btnReceive.disabled = false;
                     }
