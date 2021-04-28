@@ -12,6 +12,7 @@ namespace InventoryManagement.Repository
         {
             _context = context;
             _mapper = mapper;
+            AdminMoneyCollection = new AdminMoneyCollectionRepository(_context, _mapper);
             Account = new AccountRepository(_context, _mapper);
             AccountDeposit = new AccountDepositRepository(_context, _mapper);
             AccountWithdraw = new AccountWithdrawRepository(_context, _mapper);
@@ -40,6 +41,7 @@ namespace InventoryManagement.Repository
         }
 
 
+        public IAdminMoneyCollectionRepository AdminMoneyCollection { get; }
         public IAccountRepository Account { get; }
         public IAccountDepositRepository AccountDeposit { get; }
         public IAccountWithdrawRepository AccountWithdraw { get; }
