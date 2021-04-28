@@ -8,5 +8,7 @@ namespace InventoryManagement.Repository
         DbResponse Delete(int id);
         bool IsNull(int id);
         DataResult<AdminMoneyCollectionViewModel> List(DataRequest request);
+
+        AdminMoneyCollectionViewModel Get(int id);
     }
 }

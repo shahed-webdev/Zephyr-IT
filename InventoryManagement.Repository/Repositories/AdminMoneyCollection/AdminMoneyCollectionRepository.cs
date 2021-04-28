@@ -44,5 +44,12 @@ namespace InventoryManagement.Repository
                 .OrderByDescending(a => a.InsertDate)
                 .ToDataResult(request);
         }
+
+        public AdminMoneyCollectionViewModel Get(int id)
+        {
+            return Context.AdminMoneyCollection
+                .ProjectTo<AdminMoneyCollectionViewModel>(_mapper.ConfigurationProvider)
+                .FirstOrDefault(a => a.AdminMoneyCollectionId == id);
+        }
     }
 }

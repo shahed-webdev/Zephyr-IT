@@ -11,10 +11,12 @@ namespace InventoryManagement.Repository
         ICollection<AdminInfo> GetSalesPersonList();
         AdminBasic GetAdminBasic(string userName);
         AdminInfo GetAdminInfo(string userName);
+        AdminInfo GetSalesPersonInfo(int registrationId);
         void UpdateCustom(string userName, AdminInfo reg);
         UserType UserTypeByUserName(string userName);
         decimal Balance(string userName);
         void BalanceAdd(int registrationId, decimal amount);
+        void BalanceSubtract(int registrationId, decimal amount);
         DbResponse ValidationChange(int registrationId);
         bool GetValidation(string userName);
     }

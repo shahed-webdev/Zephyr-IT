@@ -10,7 +10,7 @@ namespace InventoryManagement.Repository
             CreateMap<AdminMoneyCollectionAddModel, AdminMoneyCollection>();
             CreateMap<AdminMoneyCollection, AdminMoneyCollectionViewModel>()
                 .ForMember(d => d.CollectionFrom, opt => opt.MapFrom(c => $"{c.Registration.Name} ({c.Registration.UserName})"))
-                .ForMember(d => d.InsertDate, opt => opt.MapFrom(c => c.InsertDateUtc.BdTime()))
+                .ForMember(d => d.InsertDate, opt => opt.MapFrom(c => c.InsertDateUtc))
 
                 ;
         }

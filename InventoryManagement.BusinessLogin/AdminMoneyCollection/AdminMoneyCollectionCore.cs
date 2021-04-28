@@ -18,6 +18,9 @@ namespace InventoryManagement.BusinessLogin
                 if (model.CollectionAmount <= 0)
                     return new DbResponse<AdminMoneyCollectionViewModel>(false, "Invalid Data");
 
+
+                _db.Registrations.BalanceSubtract(model.RegistrationId, model.CollectionAmount);
+
                 return _db.AdminMoneyCollection.Add(model);
 
             }
@@ -31,7 +34,11 @@ namespace InventoryManagement.BusinessLogin
         {
             try
             {
-                return _db.AdminMoneyCollection.IsNull(id) ? new DbResponse(false, "No data Found") : _db.AdminMoneyCollection.Delete(id);
+                if (_db.AdminMoneyCollection.IsNull(id))
+                    return new DbResponse(false, "No data Found");
+                var adminMoneyCollection = _db.AdminMoneyCollection.Get(id);
+                _db.Registrations.BalanceAdd(adminMoneyCollection.RegistrationId, adminMoneyCollection.CollectionAmount);
+                return _db.AdminMoneyCollection.Delete(id);
             }
             catch (Exception e)
             {
