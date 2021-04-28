@@ -33,7 +33,8 @@ namespace InventoryManagement.Repository
                 Image = r.Image,
                 NationalId = r.NationalId,
                 Phone = r.Phone,
-                Validation = r.Validation.Value
+                Validation = r.Validation.Value,
+                Balance = r.Balance
             }).ToList();
         }
 
@@ -53,7 +54,8 @@ namespace InventoryManagement.Repository
                 Image = r.Image,
                 NationalId = r.NationalId,
                 Phone = r.Phone,
-                Validation = r.Validation.Value
+                Validation = r.Validation.Value,
+                Balance = r.Balance
             }).ToList();
         }
 
@@ -93,7 +95,30 @@ namespace InventoryManagement.Repository
                 NationalId = r.NationalId,
                 Address = r.Address,
                 Phone = r.Phone,
-                Email = r.Email
+                Email = r.Email,
+                Balance = r.Balance,
+                Validation = r.Validation.Value
+            }).FirstOrDefault();
+        }
+
+        public AdminInfo GetSalesPersonInfo(int registrationId)
+        {
+            return Context.Registration.Where(r => r.RegistrationId == registrationId).Select(r => new AdminInfo
+            {
+                RegistrationId = r.RegistrationId,
+                Name = r.Name,
+                UserName = r.UserName,
+                Type = r.Type,
+                Image = r.Image,
+                FatherName = r.FatherName,
+                Designation = r.Designation,
+                DateofBirth = r.DateofBirth,
+                NationalId = r.NationalId,
+                Address = r.Address,
+                Phone = r.Phone,
+                Email = r.Email,
+                Balance = r.Balance,
+                Validation = r.Validation.Value
             }).FirstOrDefault();
         }
 
@@ -135,6 +160,13 @@ namespace InventoryManagement.Repository
         {
             var account = Context.Registration.Find(registrationId);
             account.Balance += amount;
+            Context.Registration.Update(account);
+        }
+
+        public void BalanceSubtract(int registrationId, decimal amount)
+        {
+            var account = Context.Registration.Find(registrationId);
+            account.Balance -= amount;
             Context.Registration.Update(account);
         }
 
