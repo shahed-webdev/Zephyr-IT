@@ -249,7 +249,7 @@
                 url: '/Selling/DueCollection',
                 type: "POST",
                 data: body,
-                success: function (response) {
+                success: response=> {
                     $.notify(response.Message, response.IsSuccess?"success":"error");
 
                     if (response.IsSuccess) {

@@ -8,10 +8,10 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JqueryDataTables.LoopsIT;
 
 namespace InventoryManagement.Web.Controllers
 {
-    [Authorize]
     public class SubAdminController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -26,6 +26,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //active deactivate user login
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public IActionResult DeactivateUserLogin(int id)
         {
@@ -34,6 +35,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         #region Sub Admin
+
         [Authorize(Roles = "admin, sub-admin-list")]
         public IActionResult List()
         {
@@ -55,7 +57,7 @@ namespace InventoryManagement.Web.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var user = new IdentityUser { UserName = model.UserName, Email = model.Email };
+            var user = new IdentityUser {UserName = model.UserName, Email = model.Email};
             var result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(false);
 
             if (result.Succeeded)
@@ -124,9 +126,11 @@ namespace InventoryManagement.Web.Controllers
                 return false;
             }
         }
+
         #endregion
 
         #region Salesman
+
         [Authorize(Roles = "admin, salesman-list")]
         public IActionResult Salesman()
         {
@@ -134,6 +138,32 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
+        #endregion
+
+        #region Cash Receive
+        //get
+        [Authorize(Roles = "admin")]
+        public IActionResult CashReceive(int? id)
+        {
+            if (!id.HasValue) return RedirectToAction("Salesman");
+
+            return View();
+        }
+
+        //post
+        [Authorize(Roles = "admin")]
+        public IActionResult PostCashReceive()
+        {
+            return Json("");
+        }
+
+        //request from data-table(ajax)
+        [Authorize(Roles = "admin, SalesPerson")]
+        public IActionResult CashReceiveRecords(DataRequest request)
+        {
+            var data = _db.SellingPayments.Records(request);
+            return Json(data);
+        }
         #endregion
     }
 }

@@ -1,0 +1,155 @@
+﻿
+@{
+    ViewData["Title"] = "Cash Receive";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var id = Context.Request.RouteValues["id"];
+}
+
+<div class="container">
+    <h4 class="page-header">Cash Receive</h4>
+    <p class="mb-3">Md Ripon, Wallet: 200.00</p>
+
+    <div class="card card-body">
+        <form id="formReceive">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="md-form">
+                        <label for="inputAmount">Receive Amount</label>
+                        <input id="inputAmount" type="number" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="md-form">
+                        <label for="inputDescription">Description</label>
+                        <input id="inputDescription" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="md-form">
+                        <input id="btnReceive" type="submit" class="btn btn-danger" value="Receive">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <table id="data-table" class="table table-sm">
+            <thead>
+                <tr>
+                    <th><strong>Amount</strong></th>
+                    <th><strong>Description</strong></th>
+                    <th><strong>Receive Date</strong></th>
+                </tr>
+            </thead>
+        </table> 
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        $(function() {
+            //get data-table
+            dataTable.filter = [];
+            dataTable.filter.push({ Field: "RegistrationId", Value: @id, Operand: dataTable.operand.Equal });
+            dataTable.getData();
+        });
+
+        //get data
+        var dataTable = {
+            table: null,
+            filter: null,
+            init: function() {
+                dataTable.table = $("#data-table").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>><"row"<"col-sm-12"<tr>>><"row"<"col-sm-5"i><"col-sm-7"p>>',
+                    buttons: dataTable.button,
+                    language: { infoFiltered: "" },
+                    ajax: {
+                        url: "/SubAdmin/CashReceiveRecords",
+                        type: "POST",
+                        data: function(d) {
+                            d.filters = dataTable.filter;
+                        }
+                    },
+                    columns:
+                    [
+                        { data: "PaidAmount", "render": dataTable.addSign },
+                        { data: "PaymentMethod" },
+                        { data: "PaidDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } }
+                    ],
+                    columnDefs: [
+                        { 'className': "text-right", "targets": [0] },
+                        { 'className': "text-left", "targets": [1] }
+                    ]
+                });
+            },
+            operand: {
+                Equal: 0,
+                NotEqual: 1,
+                GreaterThan: 2,
+                LessThan: 3,
+                GreaterThanOrEqual: 4,
+                LessThanOrEqual: 5,
+                Contains: 6,
+                StartsWith: 7,
+                EndsWith: 8
+            },
+            getData: function() {
+                dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
+            },
+            addSign: function(data) { return `${data}/-` },
+            button: {
+                buttons: [
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        title: '',
+                        exportOptions: {
+                            //columns: [0,1] //Column value those print
+
+                        },
+                        customize: function(win) {
+                            $(win.document.body).prepend(`<nav class="mb-3 navbar peach-gradient"><a class="navbar-brand ml-1"><span>Zephyr</span> IT</a></nav><h3 class="h3-responsive">${$('h4').text()}</h3>`);
+                        },
+                        autoPrint: true
+                    }
+                ],
+                dom: {
+                    button: {
+                        className: 'btn btn-dark btn-rounded btn-sm my-0'
+                    }
+                }
+            }
+        }
+
+        //post receive
+        const formPost = document.getElementById("formReceive");
+        formPost.addEventListener('submit',
+            function(evt) {
+                evt.preventDefault();
+
+                const body = { RegistrationId: @id, Amount: this.inputAmount.value, Description: this.inputDescription.value}
+                this.btnReceive.disabled = true;
+
+                $.ajax({
+                    url: '/SubAdmin/PostCashReceive',
+                    type: "POST",
+                    data: body,
+                    success: response=> {
+                        if (response.IsSuccess) {
+                            location.href = "/SubAdmin/Salesman";
+                            return;
+                        }
+
+                        $.notify(response.Message,"error");
+                        this.btnReceive.disabled = false;
+                    },
+                    error: error=> {
+                        console.log(error);
+                        this.btnReceive.disabled = false;
+                    }
+                });
+            });
+    </script>
+}
