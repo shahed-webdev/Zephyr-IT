@@ -17,6 +17,7 @@ namespace InventoryManagement.Data
             Service = new HashSet<Service>();
             ExpenseTransportation = new HashSet<ExpenseTransportation>();
             ProductLog = new HashSet<ProductLog>();
+            AdminMoneyCollection = new HashSet<AdminMoneyCollection>();
         }
 
         public int RegistrationId { get; set; }
@@ -46,5 +47,6 @@ namespace InventoryManagement.Data
         public virtual ICollection<Service> Service { get; set; }
         public virtual ICollection<ExpenseTransportation> ExpenseTransportation { get; set; }
         public virtual ICollection<ProductLog> ProductLog { get; set; }
+        public virtual ICollection<AdminMoneyCollection> AdminMoneyCollection { get; set; }
     }
 }

@@ -5,6 +5,7 @@ namespace InventoryManagement.Repository
 {
     public interface IUnitOfWork : IDisposable
     {
+        IAdminMoneyCollectionRepository AdminMoneyCollection { get; }
         IAccountRepository Account { get; }
         IAccountDepositRepository AccountDeposit { get; }
         IAccountWithdrawRepository AccountWithdraw { get; }
