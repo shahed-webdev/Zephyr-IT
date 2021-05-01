@@ -29,6 +29,8 @@ namespace InventoryManagement.Repository
         IVendorRepository Vendors { get; }
         ISellingRepository Selling { get; }
         ISellingPaymentRepository SellingPayments { get; }
+        IWarrantyRepository Warranty { get; }
+
         int SaveChanges();
         Task<int> SaveChangesAsync();
     }

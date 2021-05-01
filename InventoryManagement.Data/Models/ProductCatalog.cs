@@ -10,6 +10,7 @@ namespace InventoryManagement.Data
             InverseParent = new HashSet<ProductCatalog>();
             Product = new HashSet<Product>();
             ServiceDevice = new HashSet<ServiceDevice>();
+            Warranty = new HashSet<Warranty>();
         }
 
         public int ProductCatalogId { get; set; }
@@ -25,5 +26,6 @@ namespace InventoryManagement.Data
         public virtual ICollection<ProductCatalog> InverseParent { get; set; }
         public virtual ICollection<Product> Product { get; set; }
         public virtual ICollection<ServiceDevice> ServiceDevice { get; set; }
+        public virtual ICollection<Warranty> Warranty { get; set; }
     }
 }

@@ -52,6 +52,7 @@ namespace InventoryManagement.Web
             services.AddTransient<IExpenseCore, ExpenseCore>();
             services.AddTransient<IAccountCore, AccountCore>();
             services.AddTransient<IAdminMoneyCollectionCore, AdminMoneyCollectionCore>();
+            services.AddTransient<IWarrantyCore, WarrantyCore>();
 
 
             services.AddMvc().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);

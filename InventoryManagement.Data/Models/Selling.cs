@@ -11,6 +11,7 @@ namespace InventoryManagement.Data
             SellingList = new HashSet<SellingList>();
             SellingPaymentList = new HashSet<SellingPaymentList>();
             SellingExpense = new HashSet<SellingExpense>();
+            Warranty = new HashSet<Warranty>();
         }
 
         public int SellingId { get; set; }
@@ -50,6 +51,7 @@ namespace InventoryManagement.Data
         public virtual ICollection<SellingList> SellingList { get; set; }
         public virtual ICollection<SellingPaymentList> SellingPaymentList { get; set; }
         public virtual ICollection<SellingExpense> SellingExpense { get; set; }
+        public virtual ICollection<Warranty> Warranty { get; set; }
 
     }
 }

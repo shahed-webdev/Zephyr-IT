@@ -8,6 +8,7 @@ namespace InventoryManagement.Data
         {
             SellingAdjustment = new HashSet<SellingAdjustment>();
             ProductLog = new HashSet<ProductLog>();
+            Warranty = new HashSet<Warranty>();
         }
 
         public int ProductStockId { get; set; }
@@ -21,5 +22,6 @@ namespace InventoryManagement.Data
         public virtual PurchaseList PurchaseList { get; set; }
         public virtual ICollection<SellingAdjustment> SellingAdjustment { get; set; }
         public virtual ICollection<ProductLog> ProductLog { get; set; }
+        public virtual ICollection<Warranty> Warranty { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace InventoryManagement.Data
         public string AcceptanceDescription { get; set; }
         public DateTime AcceptanceDate { get; set; }
         public string DeliveryDescription { get; set; }
-        public DateTime DeliveryDate { get; set; }
+        public DateTime? DeliveryDate { get; set; }
         public string ChangedProductName { get; set; }
         public string ChangedProductCode { get; set; }
         public bool IsDelivered { get; set; }

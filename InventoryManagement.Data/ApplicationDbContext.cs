@@ -45,6 +45,7 @@ namespace InventoryManagement.Data
         public virtual DbSet<ServiceList> ServiceList { get; set; }
         public virtual DbSet<ServicePaymentList> ServicePaymentList { get; set; }
         public virtual DbSet<Vendor> Vendor { get; set; }
+        public virtual DbSet<Warranty> Warranty { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new AdminMoneyCollectionConfiguration());
@@ -83,6 +84,7 @@ namespace InventoryManagement.Data
             builder.ApplyConfiguration(new ServiceListConfiguration());
             builder.ApplyConfiguration(new ServicePaymentListConfiguration());
             builder.ApplyConfiguration(new VendorConfiguration());
+            builder.ApplyConfiguration(new WarrantyConfiguration());
 
 
             base.OnModelCreating(builder);

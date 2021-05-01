@@ -36,7 +36,7 @@ namespace InventoryManagement.Repository
             Selling = new SellingRepository(_context, _mapper);
             SellingPayments = new SellingPaymentRepository(_context);
             Vendors = new VendorRepository(_context);
-
+            Warranty = new WarrantyRepository(_context, _mapper);
 
         }
 
@@ -65,6 +65,7 @@ namespace InventoryManagement.Repository
         public IVendorRepository Vendors { get; }
         public ISellingRepository Selling { get; }
         public ISellingPaymentRepository SellingPayments { get; }
+        public IWarrantyRepository Warranty { get; }
 
 
         public int SaveChanges()
