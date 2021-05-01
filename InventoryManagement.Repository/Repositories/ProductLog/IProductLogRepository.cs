@@ -6,5 +6,7 @@ namespace InventoryManagement.Repository
     {
         void Add(ProductLogAddModel model);
         void AddList(List<ProductLogAddModel> models);
+
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using InventoryManagement.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Linq;
@@ -52,6 +53,8 @@ namespace InventoryManagement.Repository
         public DbResponse<WarrantyAcceptanceReceiptModel> AcceptanceReceipt(int warrantyId)
         {
             var warranty = Context.Warranty
+                .Include(w => w.Selling)
+                .ThenInclude(s => s.Customer)
                 .Where(w => w.WarrantyId == warrantyId)
                 .ProjectTo<WarrantyAcceptanceReceiptModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefault();

@@ -6,7 +6,7 @@
         DbResponse<int> Acceptance(WarrantyAcceptanceModel model);
         bool IsInWarranty(int productStockId);
         bool IsNull(int warrantyId);
-
         DbResponse<WarrantyAcceptanceReceiptModel> AcceptanceReceipt(int warrantyId);
+
     }
 }
