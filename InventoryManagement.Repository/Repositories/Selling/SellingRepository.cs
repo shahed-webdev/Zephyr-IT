@@ -583,6 +583,7 @@ namespace InventoryManagement.Repository
             try
             {
                 var stocks = new List<ProductStock>();
+                var productLogs = new List<ProductLogAddModel>();
 
                 var accountCostPercentage = db.Account.GetCostPercentage(model.AccountId.GetValueOrDefault());
                 if (model.AddedProductCodes != null)
@@ -596,6 +597,16 @@ namespace InventoryManagement.Repository
                             return s;
                         }).ToList();
                         stocks.AddRange(addedStocks);
+
+                        var logs = addedStocks.Select(c => new ProductLogAddModel
+                        {
+                            ProductStockId = c.ProductStockId,
+                            ActivityByRegistrationId = model.UpdateRegistrationId,
+                            Details = $"Product Selling by bill changed",
+                            LogStatus = ProductLogStatus.Sale
+                        }).ToList();
+
+                        productLogs.AddRange(logs);
                     }
                 }
 
@@ -664,6 +675,17 @@ namespace InventoryManagement.Repository
                         if (removedStocks.Any())
                         {
                             Context.ProductStock.UpdateRange(removedStocks);
+
+                            var logs = removedStocks.Select(c => new ProductLogAddModel
+                            {
+                                ProductStockId = c.ProductStockId,
+                                ActivityByRegistrationId = model.UpdateRegistrationId,
+                                Details = $"Product return by bill changed",
+                                LogStatus = ProductLogStatus.Return
+                            }).ToList();
+
+                            productLogs.AddRange(logs);
+
                         }
                     }
                 }
@@ -702,7 +724,8 @@ namespace InventoryManagement.Repository
                 await Context.SaveChangesAsync();
 
                 db.Customers.UpdatePaidDue(selling.CustomerId);
-
+                //Product log
+                db.ProductLog.AddList(productLogs);
             }
             catch (Exception e)
             {

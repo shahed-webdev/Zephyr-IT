@@ -86,16 +86,33 @@ namespace InventoryManagement.Repository
             return product;
         }
 
-        public async Task<DbResponse<int>> FindSellingIdAsync(string code)
+        public async Task<DbResponse<ProductBillStockModel>> FindSellingIdAsync(string code)
         {
-            var sellingList = await Context.ProductStock
+            var productStock = await Context.ProductStock
                 .Include(p => p.SellingList)
                 .Where(s => s.ProductCode == code)
-                .Select(s => s.SellingList).FirstOrDefaultAsync();
+                .Select(s => s).FirstOrDefaultAsync();
 
-            if (sellingList == null) return new DbResponse<int>(false, "Selling receipt not found");
+            if (productStock.SellingListId == null)
+            {
+                var warranty = await Context.Warranty.Where(w => w.ChangedProductCode == code).FirstOrDefaultAsync();
 
-            return new DbResponse<int>(true, "Success", sellingList.SellingId);
+                if (warranty == null)
+                    return new DbResponse<ProductBillStockModel>(false, "Selling receipt not found");
+
+                var data = new ProductBillStockModel
+                {
+                    SellingId = warranty.SellingId,
+                    ProductStockId = warranty.ProductStockId
+                };
+                return new DbResponse<ProductBillStockModel>(true, "Success", data);
+            }
+            var d = new ProductBillStockModel
+            {
+                SellingId = productStock.SellingList.SellingId,
+                ProductStockId = productStock.ProductStockId
+            };
+            return new DbResponse<ProductBillStockModel>(true, "Success", d);
         }
 
         public Task<List<ProductStock>> SellingStockFromCodesAsync(string[] codes)

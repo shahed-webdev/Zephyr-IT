@@ -45,4 +45,11 @@ namespace InventoryManagement.Repository
         public string[] ProductCodes { get; set; }
     }
 
+    public class ProductBillStockModel
+    {
+        public int SellingId { get; set; }
+        public int ProductStockId { get; set; }
+    }
+
+
 }
