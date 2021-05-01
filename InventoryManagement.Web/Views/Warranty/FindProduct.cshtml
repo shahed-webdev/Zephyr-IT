@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewData["Title"] = "Find Product";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container">
+    <h4 class="page-header mb-3">Find Product</h4>
+
+    <div class="card card-body mb-3 p-5">
+        <form id="formCode">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="md-form mt-0 mb-0 flex-1">
+                    <input id="inputProductCode" autocomplete="off" type="text" class="form-control" required />
+                    <label for="inputProductCode">Product code</label>
+                    <span id="codeError" class="field-validation-error"></span>
+                </div>
+
+                <button id="btnFind" type="submit" class="btn btn-sm btn-deep-orange">
+                    <i class="far fa-search text-white"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        // product code form
+        const formCode = document.getElementById('formCode');
+
+        // on Product code submit
+        formCode.addEventListener('submit', evt => {
+            evt.preventDefault()
+
+            $.ajax({
+                url: '/Warranty/FindProductByCode',
+                type: "POST",
+                data: { code: this.inputProductCode.value.trim() },
+                success: function (response) {
+                    console.log(response)
+                    if (response.IsSuccess) {
+                        location.href = `/Warranty/AcceptanceSlip/${response.Data}`;
+                        return;
+                    }
+
+                    $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>  
+}
