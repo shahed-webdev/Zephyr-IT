@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using InventoryManagement.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace InventoryManagement.Repository
 {
@@ -25,6 +28,14 @@ namespace InventoryManagement.Repository
             var logs = models.Select(l => _mapper.Map<ProductLog>(l)).ToList();
             Context.ProductLog.AddRange(logs);
             Context.SaveChanges();
+        }
+
+        public async Task<DbResponse<List<ProductLogViewModel>>> FindLogAsync(int productStockId)
+        {
+            var logs = await Context.ProductLog.Where(l => l.ProductStockId == productStockId)
+                 .ProjectTo<ProductLogViewModel>(_mapper.ConfigurationProvider)
+                 .ToListAsync();
+            return new DbResponse<List<ProductLogViewModel>>(true, "Success", logs);
         }
     }
 }
