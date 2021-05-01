@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace InventoryManagement.Repository
 {
@@ -7,6 +8,6 @@ namespace InventoryManagement.Repository
         void Add(ProductLogAddModel model);
         void AddList(List<ProductLogAddModel> models);
 
-
+        Task<DbResponse<List<ProductLogViewModel>>> FindLogAsync(int productStockId);
     }
 }
