@@ -11,6 +11,8 @@ namespace InventoryManagement.Repository
         Task<string[]> IsStockOutAsync(string[] codes);
         Task<ProductSellViewModel> FindforSellAsync(string code);
         Task<ProductStockDetailsViewModel> FindforDetailsAsync(string code);
+
+        Task<DbResponse<int>> FindSellingIdAsync(string code);
         Task<List<ProductStock>> SellingStockFromCodesAsync(string[] codes);
         Task<List<ProductStockReportModel>> StockReport();
         decimal StockProductPurchaseValue();

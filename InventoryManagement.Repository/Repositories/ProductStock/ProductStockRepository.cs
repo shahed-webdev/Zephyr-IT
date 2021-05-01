@@ -86,6 +86,18 @@ namespace InventoryManagement.Repository
             return product;
         }
 
+        public async Task<DbResponse<int>> FindSellingIdAsync(string code)
+        {
+            var sellingList = await Context.ProductStock
+                .Include(p => p.SellingList)
+                .Where(s => s.ProductCode == code)
+                .Select(s => s.SellingList).FirstOrDefaultAsync();
+
+            if (sellingList == null) return new DbResponse<int>(false, "Selling receipt not found");
+
+            return new DbResponse<int>(true, "Success", sellingList.SellingId);
+        }
+
         public Task<List<ProductStock>> SellingStockFromCodesAsync(string[] codes)
         {
             return Context.ProductStock.Include(s => s.Product).Where(s => codes.Contains(s.ProductCode)).ToListAsync();
