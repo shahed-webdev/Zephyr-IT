@@ -7,6 +7,9 @@
 
 @section Styles{
     <link href="~/css/selling-receipt.css?v=.002" rel="stylesheet" />
+    <style>
+        .found-code{ color: red; font-weight: bold}
+    </style>
 }
 
 <div class="container">
@@ -94,11 +97,7 @@
 
                                     @foreach (var code in item.ProductCodes)
                                     {
-                                        <span class="codeSpan">
-
-                                            @code
-
-                                        </span>
+                                        <span class="codeSpan">@code</span>
                                     }
                                 </td>
                                 <td class="text-center">@item.Warranty</td>
@@ -160,7 +159,7 @@
                             <label for="inputDecription">Description</label>
                         </div>
 
-                        <input type="submit" value="Submit" class="btn btn-danger">
+                        <input id="btnSubmit" type="submit" value="Submit" class="btn btn-danger">
                     </form>
                 </div>
             </div>
@@ -172,57 +171,81 @@
 
 @section scripts{
     <script>
-        (function () {
+        (function() {
             // product code form
             const formCode = document.getElementById('formCode');
-            formCode.addEventListener('submit', function (evt) {
-                evt.preventDefault();
+            formCode.addEventListener('submit',
+                function(evt) {
+                    evt.preventDefault();
 
-                $.ajax({
-                    url: '/Warranty/FindProductByCode',
-                    type: "POST",
-                    data: { code: this.inputProductCode.value.trim() },
-                    success: function (response) {
-                        if (response.IsSuccess) {
-                            sessionStorage.setItem("productInfo", JSON.stringify(response.Data));
+                    $.ajax({
+                        url: '/Warranty/FindProductByCode',
+                        type: "POST",
+                        data: { code: this.inputProductCode.value.trim() },
+                        success: response => {
+                            if (response.IsSuccess) {
+                                const obj = response.Data;
+                                obj.Code = this.inputProductCode.value.trim();
 
-                            location.href = `/Warranty/FindProduct/${response.Data.SellingId}`;
-                            return;
+                                sessionStorage.setItem("productInfo", JSON.stringify(obj));
+
+                                location.href = `/Warranty/FindProduct/${response.Data.SellingId}`;
+                                return;
+                            }
+
+                            $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                        },
+                        error: function(error) {
+                            console.log(error);
                         }
-
-                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
-                    },
-                    error: function (error) {
-                        console.log(error);
-                    }
+                    });
                 });
-            });
 
             //post data
             const formAdd = document.getElementById("formAdd");
-            formAdd.addEventListener("submit", function (evt) {
-                evt.preventDefault();
+            if (formAdd) {
+                formAdd.addEventListener("submit", function(evt) {
+                        evt.preventDefault();
 
-                const productInfo = JSON.parse(sessionStorage.getItem("productInfo"));
-                const body = { SellingId: productInfo.SellingId, ProductStockId: productInfo.ProductStockId, AcceptanceDescription: this.AcceptanceDescription.value }
+                        const productInfo = JSON.parse(sessionStorage.getItem("productInfo"));
+                        const body = { SellingId: productInfo.SellingId, ProductStockId: productInfo.ProductStockId, AcceptanceDescription: this.AcceptanceDescription.value }
 
-                $.ajax({
-                    url: '/Warranty/PostAcceptance',
-                    type: "POST",
-                    data: body,
-                    success: response => {
-                        if (response.IsSuccess) {
-                            location.href = `/Warranty/AcceptanceSlip/${response.Data}`;
-                            return;
-                        }
+                        this.btnSubmit.disabled = true;
 
-                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
-                    },
-                    error: function (error) {
-                        console.log(error);
+                        $.ajax({
+                            url: '/Warranty/PostAcceptance',
+                            type: "POST",
+                            data: body,
+                            success: response => {
+                                if (response.IsSuccess) {
+                                    location.href = `/Warranty/AcceptanceSlip/${response.Data}`;
+                                    return;
+                                }
+                                this.btnSubmit.disabled = false;
+                                $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                            },
+                            error: error => {
+                                this.btnSubmit.disabled = false;
+                                console.log(error);
+                            }
+                        });
+                    });
+            }
+
+            //match the code in list
+            function highlightCode() {
+                const element = document.querySelectorAll(".codeSpan");
+                const code = JSON.parse(sessionStorage.getItem("productInfo"));
+                console.log(code)
+                for (let i = 0; i < element.length; i++) {
+                    if (element[i].textContent === code.Code) {
+                        element[i].classList.add("found-code");
+                        break;
                     }
-                });
-            });
+                }
+            }
+
+            highlightCode();
         })();
-    </script>  
+    </script>
 }
