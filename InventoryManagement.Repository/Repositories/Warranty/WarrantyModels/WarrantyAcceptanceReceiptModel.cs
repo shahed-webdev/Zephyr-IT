@@ -7,6 +7,7 @@ namespace InventoryManagement.Repository
         public int WarrantyId { get; set; }
         public int SellingId { get; set; }
         public int ProductStockId { get; set; }
+        public int SellingSn { get; set; }
         public int WarrantySn { get; set; }
         public string AcceptanceDescription { get; set; }
         public DateTime AcceptanceDate { get; set; }

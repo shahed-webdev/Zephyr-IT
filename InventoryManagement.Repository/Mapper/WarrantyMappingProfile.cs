@@ -15,6 +15,7 @@ namespace InventoryManagement.Repository
                 .ForMember(d => d.ProductCatalogName, opt => opt.MapFrom(c => c.ProductStock.Product.ProductCatalog.CatalogName))
                 .ForMember(d => d.ProductDescription, opt => opt.MapFrom(c => c.ProductStock.Product.Description))
                 .ForMember(d => d.ProductName, opt => opt.MapFrom(c => c.ProductStock.Product.ProductName))
+                .ForMember(d => d.SellingSn, opt => opt.MapFrom(c => c.Selling.SellingSn))
                 ;
         }
     }
