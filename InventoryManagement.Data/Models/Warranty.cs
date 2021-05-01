@@ -7,7 +7,7 @@ namespace InventoryManagement.Data
         public int WarrantyId { get; set; }
         public int SellingId { get; set; }
         public int ProductStockId { get; set; }
-        public int ChangedProductCatalogId { get; set; }
+        public int? ChangedProductCatalogId { get; set; }
         public int WarrantySn { get; set; }
         public string AcceptanceDescription { get; set; }
         public DateTime AcceptanceDate { get; set; }

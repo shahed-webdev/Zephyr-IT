@@ -160,6 +160,7 @@ namespace InventoryManagement.Repository
               .ThenInclude(sp => sp.SellingPayment)
               .ThenInclude(a => a.Account)
               .Include(s => s.SellingExpense)
+              .Include(s => s.Warranty)
               .Select(s => new SellingReceiptViewModel
               {
                   SellingSn = s.SellingSn,
@@ -205,7 +206,22 @@ namespace InventoryManagement.Repository
                       Expense = e.Expense,
                       ExpenseDescription = e.ExpenseDescription,
                       InsertDateUtc = e.InsertDateUtc
-                  }).ToList()
+                  }).ToList(),
+                  WarrantyList = s.Warranty
+                      .OrderBy(w => w.ProductStock)
+                      .ThenBy(w => w.AcceptanceDate)
+                      .Select(w => new WarrantyViewByBillModel
+                      {
+                          WarrantyId = w.WarrantyId,
+                          WarrantySn = w.WarrantySn,
+                          DeliveryDescription = w.DeliveryDescription,
+                          ProductCode = w.ProductStock.ProductCode,
+                          ProductCatalogName = w.ProductStock.Product.ProductCatalog.CatalogName,
+                          ChangedProductCode = w.ChangedProductCode,
+                          AcceptanceDate = w.AcceptanceDate,
+                          DeliveryDate = w.DeliveryDate,
+                          IsDelivered = w.IsDelivered
+                      }).ToList()
 
               }).FirstOrDefaultAsync(s => s.SellingId == id);
 

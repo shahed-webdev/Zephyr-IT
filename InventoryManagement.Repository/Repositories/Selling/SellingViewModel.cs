@@ -76,6 +76,7 @@ namespace InventoryManagement.Repository
         public ICollection<SellingReceiptProductViewModel> Products { get; set; }
         public ICollection<SellingPaymentViewModel> Payments { get; set; }
         public ICollection<SellingExpenseListModel> SellingExpenses { get; set; }
+        public ICollection<WarrantyViewByBillModel> WarrantyList { get; set; }
         public CustomerReceiptViewModel CustomerInfo { get; set; }
         public string SoldBy { get; set; }
         public decimal ServiceCharge { get; set; }
