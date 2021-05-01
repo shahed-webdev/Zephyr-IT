@@ -1,11 +1,12 @@
-﻿
+﻿@using InventoryManagement.Repository
+@model WarrantyAcceptanceReceiptModel
 @{
     ViewData["Title"] = "Acceptance Slip";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 @section Styles{
-    <link href="~/css/selling-receipt.css?v=.002" rel="stylesheet" />
+    <link href="~/css/selling-receipt.css?v=1.0.0" rel="stylesheet" />
 }
 
 <div class="container">
@@ -16,21 +17,21 @@
             <tbody>
                 <tr>
                     <td class="text-right" style="width: 50px"><strong>Name</strong></td>
-                    <td>@Model.CustomerInfo.Name</td>
-                    <td class="text-right" style="width: 50px"><strong>Bill&nbsp;No</strong></td>
-                    <td style="width: 90px">@Model.SellingSn</td>
+                    <td>@Model.CustomerName</td>
+                    <td class="text-right" style="width: 50px"><strong>Warranty&nbsp;No</strong></td>
+                    <td style="width: 90px">@Model.WarrantySn</td>
                 </tr>
                 <tr>
                     <td class="text-right"><strong>Address</strong></td>
-                    <td>@Model.CustomerInfo.CustomerAddress</td>
-                    <td class="text-right"><strong>Date</strong></td>
-                    <td>@Model.SellingDate.ToString("d MMM yyyy")</td>
+                    <td></td>
+                    <td class="text-right"><strong>Acceptance Date</strong></td>
+                    <td>@Model.AcceptanceDate.ToString("d MMM yyyy")</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td class="text-right"><strong>Cell</strong></td>
-                    <td>@Model.CustomerInfo.CustomerPhone</td>
+                    <td>@Model.CustomerPhone</td>
                 </tr>
             </tbody>
         </table>
@@ -38,175 +39,20 @@
         <table class="product-tb table table-sm table-bordered mt-5">
             <thead>
                 <tr>
-                    <th><strong>SL.</strong></th>
-                    <th><strong>Product</strong></th>
+                    <th><strong>Product Type</strong></th>
                     <th><strong>Description</strong></th>
-                    <th><strong>Warranty</strong></th>
-                    <th><strong>Qty.</strong></th>
-                    <th><strong>U.Price</strong></th>
-                    <th class="text-right"><strong>Price</strong></th>
+                    <th><strong>Serial No</strong></th>
                 </tr>
             </thead>
             <tbody>
-                @{
-                    var index = 1;
-                    @if (Model.ServiceCharge > 0)
-                    {
-                        <tr>
-                            <td class="text-center">@index</td>
-                            <td>Service</td>
-                            <td colspan="4">@Model.ServiceChargeDescription</td>
-                            <td class="text-right">৳@Model.ServiceCharge</td>
-                        </tr>
-                        index++;
-                    }
-
-                    foreach (var item in Model.Products)
-                    {
-                        <tr>
-                            <td class="text-center">@index</td>
-                            <td>@item.ProductCatalogName</td>
-                            <td>
-                                @item.ProductName,
-                                @if (item.Description != null)
-                                {
-                                    <span>@item.Description,</span>
-                                }
-
-                                @foreach (var code in item.ProductCodes)
-                                {
-                                    <span class="codeSpan">
-
-                                        @code
-
-                                    </span>
-                                }
-                            </td>
-                            <td class="text-center">@item.Warranty</td>
-                            <td class="text-center">@item.ProductCodes.Length</td>
-                            <td class="text-center">৳@item.SellingPrice</td>
-                            <td class="text-right">৳@(item.SellingPrice * item.ProductCodes.Length)</td>
-                        </tr>
-                        index++;
-                    }
-                }
-
                 <tr>
-                    <td colspan="6" class="text-center">
-                        <span id="amount-word"></span>
-                    </td>
-                    <td class="text-right">
-                        @{
-                            var totalAmount = Model.SellingTotalPrice + Model.ServiceCharge;
-                        }
-                        <h5>Total&nbspAmount:<strong>৳@totalAmount</strong></h5>
-                        @if (Model.SellingDiscountAmount > 0)
-                        {
-                            <h5 class="border-bottom border-dark pb-1">Discount:<strong>৳@Model.SellingDiscountAmount</strong></h5>
-                            <h5 class="mt-1">Net Payable Amount:<strong>৳@(totalAmount - Model.SellingDiscountAmount)</strong></h5>
-                        }
-                        <h5>Cash&nbspPaid:<strong>৳@Model.SellingPaidAmount</strong></h5>
-                        @if (Model.SellingReturnAmount > 0)
-                        {
-                            <h5>Return&nbspAmount:<strong>৳@Model.SellingReturnAmount</strong></h5>
-                        }
-                        <h5>Due Amount:<strong>৳@Model.SellingDueAmount</strong></h5>
-                    </td>
+                    <td>@Model.ProductCatalogName</td>
+                    <td>@Model.ProductDescription</td>
+                    <td class="text-center">@Model.ProductCode</td>
                 </tr>
             </tbody>
         </table>
-
-        <div class="paid-record row">
-            @if (Model.Payments.Count > 0)
-            {
-                <div class="col">
-                    <fieldset>
-                        <legend>Payment Record</legend>
-
-                        @foreach (var item in Model.Payments)
-                        {
-                            <ul class="list-group list-group-flush black-text">
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span>৳@item.PaidAmount/- <small>@item.PaymentMethod</small></span>
-                                    <small>@item.PaidDate.ToString("d MMM yyyy")</small>
-                                </li>
-                            </ul>
-                        }
-                    </fieldset>
-                </div>
-            }
-            <div class="col">
-                <form id="formAdd">
-                    <div class="md-form">
-                        <textarea required id="inputDecription" name="WarrantyDescription" class="md-textarea form-control" rows="3"></textarea>
-                        <label for="inputDecription">Description</label>
-                    </div>
-                    
-                    <input type="submit" value="Submit" class="btn btn-danger">
-                </form>
-            </div>
-        </div>
-
-        <p class="mb-0 mt-1">Served By: @Model.SoldBy</p>
     </div>
 </div>
 
-@section scripts{
-    <script src="~/js/amount-in-word.js"></script>
-    <script>
-        $(function() {
-            $("#amount-word").text(`Taka (in words): ${number2text(@totalAmount)}`);
-        });
 
-        (function() {
-            const serializeForm = function(form) {
-                const obj = {};
-                const formData = new FormData(form);
-                for (let key of formData.keys()) {
-                    obj[key] = formData.get(key);
-                }
-                return obj;
-            };
-
-            const formAdd = document.getElementById("formAdd");
-
-            //post data
-            formAdd.addEventListener("submit",
-                function(evt) {
-                    evt.preventDefault();
-
-                    const body = serializeForm(this);
-                    body.SellingId = '@Model.SellingId';
-
-                    const btn = this.btnSubmit;
-                    btnDisabled(btn, true);
-
-                    $.ajax({
-                        url: '/Selling/AddBillExpense',
-                        type: "POST",
-                        data: body,
-                        success: response => {
-                            $.notify(response.Message, response.IsSuccess ? "success" : "error");
-
-                            btnDisabled(btn, false);
-
-                            if (response.IsSuccess) {
-                                // expenseList.appendChild(appendData(response.Data));
-                                this.reset();
-                            }
-                        },
-                        error: function(error) {
-                            btnDisabled(btn, false);
-                            console.log(error);
-                        }
-                    });
-                });
-
-
-            //disable btn
-            function btnDisabled(btn, isLoading) {
-                btn.disabled = isLoading;
-            }
-        })();
-    </script>
-}

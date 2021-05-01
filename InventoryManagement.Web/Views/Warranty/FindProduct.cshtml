@@ -1,13 +1,18 @@
-﻿
+﻿@using InventoryManagement.Repository
+@model SellingReceiptViewModel
 @{
     ViewData["Title"] = "Find Product";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+@section Styles{
+    <link href="~/css/selling-receipt.css?v=.002" rel="stylesheet" />
+}
+
 <div class="container">
     <h4 class="page-header mb-3">Find Product</h4>
 
-    <div class="card card-body mb-3 p-5">
+    <div class="mb-4">
         <form id="formCode">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="md-form mt-0 mb-0 flex-1">
@@ -22,35 +27,202 @@
             </div>
         </form>
     </div>
-</div>
 
+    @if (Model != null)
+    {
+        <div id="receipt">
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="text-right" style="width: 50px"><strong>Name</strong></td>
+                        <td>@Model.CustomerInfo.Name</td>
+                        <td class="text-right" style="width: 50px"><strong>Bill&nbsp;No</strong></td>
+                        <td style="width: 90px">@Model.SellingSn</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><strong>Address</strong></td>
+                        <td>@Model.CustomerInfo.CustomerAddress</td>
+                        <td class="text-right"><strong>Date</strong></td>
+                        <td>@Model.SellingDate.ToString("d MMM yyyy")</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right"><strong>Cell</strong></td>
+                        <td>@Model.CustomerInfo.CustomerPhone</td>
+                    </tr>
+                </tbody>
+            </table>
 
-@section Scripts{
-    <script>
-        // product code form
-        const formCode = document.getElementById('formCode');
+            <table class="product-tb table table-sm table-bordered mt-5">
+                <thead>
+                    <tr>
+                        <th><strong>SL.</strong></th>
+                        <th><strong>Product</strong></th>
+                        <th><strong>Description</strong></th>
+                        <th><strong>Warranty</strong></th>
+                        <th><strong>Qty.</strong></th>
+                        <th><strong>U.Price</strong></th>
+                        <th class="text-right"><strong>Price</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var index = 1;
+                        @if (Model.ServiceCharge > 0)
+                        {
+                            <tr>
+                                <td class="text-center">@index</td>
+                                <td>Service</td>
+                                <td colspan="4">@Model.ServiceChargeDescription</td>
+                                <td class="text-right">৳@Model.ServiceCharge</td>
+                            </tr>
+                            index++;
+                        }
 
-        // on Product code submit
-        formCode.addEventListener('submit', evt => {
-            evt.preventDefault()
+                        foreach (var item in Model.Products)
+                        {
+                            <tr>
+                                <td class="text-center">@index</td>
+                                <td>@item.ProductCatalogName</td>
+                                <td>
+                                    @item.ProductName,
+                                    @if (item.Description != null)
+                                    {
+                                        <span>@item.Description,</span>
+                                    }
 
-            $.ajax({
-                url: '/Warranty/FindProductByCode',
-                type: "POST",
-                data: { code: this.inputProductCode.value.trim() },
-                success: function (response) {
-                    console.log(response)
-                    if (response.IsSuccess) {
-                        location.href = `/Warranty/AcceptanceSlip/${response.Data}`;
-                        return;
+                                    @foreach (var code in item.ProductCodes)
+                                    {
+                                        <span class="codeSpan">
+
+                                            @code
+
+                                        </span>
+                                    }
+                                </td>
+                                <td class="text-center">@item.Warranty</td>
+                                <td class="text-center">@item.ProductCodes.Length</td>
+                                <td class="text-center">৳@item.SellingPrice</td>
+                                <td class="text-right">৳@(item.SellingPrice * item.ProductCodes.Length)</td>
+                            </tr>
+                            index++;
+                        }
                     }
 
-                    $.notify(response.Message, response.IsSuccess ? "success" : "error");
-                },
-                error: function (error) {
-                    console.log(error);
+                    <tr>
+                        <td colspan="6" class="text-center">
+                        </td>
+                        <td class="text-right">
+                            @{
+                                var totalAmount = Model.SellingTotalPrice + Model.ServiceCharge;
+                            }
+                            <h5>Total&nbspAmount:<strong>৳@totalAmount</strong></h5>
+                            @if (Model.SellingDiscountAmount > 0)
+                            {
+                                <h5 class="border-bottom border-dark pb-1">Discount:<strong>৳@Model.SellingDiscountAmount</strong></h5>
+                                <h5 class="mt-1">Net Payable Amount:<strong>৳@(totalAmount - Model.SellingDiscountAmount)</strong></h5>
+                            }
+                            <h5>Cash&nbspPaid:<strong>৳@Model.SellingPaidAmount</strong></h5>
+                            @if (Model.SellingReturnAmount > 0)
+                            {
+                                <h5>Return&nbspAmount:<strong>৳@Model.SellingReturnAmount</strong></h5>
+                            }
+                            <h5>Due Amount:<strong>৳@Model.SellingDueAmount</strong></h5>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="paid-record row">
+                @if (Model.Payments.Count > 0)
+                {
+                    <div class="col">
+                        <fieldset>
+                            <legend>Payment Record</legend>
+
+                            @foreach (var item in Model.Payments)
+                            {
+                                <ul class="list-group list-group-flush black-text">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span>৳@item.PaidAmount/- <small>@item.PaymentMethod</small></span>
+                                        <small>@item.PaidDate.ToString("d MMM yyyy")</small>
+                                    </li>
+                                </ul>
+                            }
+                        </fieldset>
+                    </div>
                 }
+                <div class="col">
+                    <form id="formAdd">
+                        <div class="md-form">
+                            <textarea required id="inputDecription" name="AcceptanceDescription" class="md-textarea form-control" rows="1"></textarea>
+                            <label for="inputDecription">Description</label>
+                        </div>
+
+                        <input type="submit" value="Submit" class="btn btn-danger">
+                    </form>
+                </div>
+            </div>
+
+            <p class="mb-0 mt-1">Served By: @Model.SoldBy</p>
+        </div>
+    }
+</div>
+
+@section scripts{
+    <script>
+        (function () {
+            // product code form
+            const formCode = document.getElementById('formCode');
+            formCode.addEventListener('submit', function (evt) {
+                evt.preventDefault();
+
+                $.ajax({
+                    url: '/Warranty/FindProductByCode',
+                    type: "POST",
+                    data: { code: this.inputProductCode.value.trim() },
+                    success: function (response) {
+                        if (response.IsSuccess) {
+                            sessionStorage.setItem("productInfo", JSON.stringify(response.Data));
+
+                            location.href = `/Warranty/FindProduct/${response.Data.SellingId}`;
+                            return;
+                        }
+
+                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
             });
-        });
+
+            //post data
+            const formAdd = document.getElementById("formAdd");
+            formAdd.addEventListener("submit", function (evt) {
+                evt.preventDefault();
+
+                const productInfo = JSON.parse(sessionStorage.getItem("productInfo"));
+                const body = { SellingId: productInfo.SellingId, ProductStockId: productInfo.ProductStockId, AcceptanceDescription: this.AcceptanceDescription.value }
+
+                $.ajax({
+                    url: '/Warranty/PostAcceptance',
+                    type: "POST",
+                    data: body,
+                    success: response => {
+                        if (response.IsSuccess) {
+                            location.href = `/Warranty/AcceptanceSlip/${response.Data}`;
+                            return;
+                        }
+
+                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        })();
     </script>  
 }
