@@ -16,20 +16,20 @@
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
-                    <td class="text-right" style="width: 50px"><strong>Name</strong></td>
+                    <td class="text-right" style="width:100px"><strong>Name</strong></td>
                     <td>@Model.CustomerName</td>
-                    <td class="text-right" style="width: 50px"><strong>Warranty&nbsp;No</strong></td>
+                    <td class="text-right"><strong>Warranty&nbsp;No</strong></td>
                     <td style="width: 90px">@Model.WarrantySn</td>
                 </tr>
                 <tr>
-                    <td class="text-right"><strong>Address</strong></td>
-                    <td></td>
-                    <td class="text-right"><strong>Acceptance Date</strong></td>
+                    <td class="text-right"><strong>Bill No.</strong></td>
+                    <td>@Model.SellingSn</td>
+                    <td class="text-right"><strong>Acceptance&nbsp;Date</strong></td>
                     <td>@Model.AcceptanceDate.ToString("d MMM yyyy")</td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td></td>
+                    <td class="text-right"><strong>Purchase Date</strong></td>
+                    <td>@Model.SellingDate.ToString("d MMM yyyy")</td>
                     <td class="text-right"><strong>Cell</strong></td>
                     <td>@Model.CustomerPhone</td>
                 </tr>

@@ -11,6 +11,7 @@
     <style>
         #expenseList .delete { color: red; cursor: pointer }
         #expenseList strong { font-weight: bold;}
+        .product-changed{ text-decoration: line-through; color: #777}
     </style>
 }
 
@@ -140,7 +141,7 @@
     <div class="paid-record row">
         @if (Model.Payments.Count > 0)
         {
-            <div class="col">
+            <div class="col-4">
                 <fieldset>
                     <legend>Payment Record</legend>
 
@@ -164,6 +165,39 @@
                     also be void if warranty sticker is removed. Sold products are non-refundable.
                 </p>
             </fieldset>
+            
+            @if (Model.WarrantyList.Any())
+            {
+                <table class="table table-bordered table-sm mt-3">
+                    <thead>
+                    <tr>
+                        <th><strong>Warranty No.</strong></th>
+                        <th><strong>Product Type</strong></th>
+                        <th><strong>Serial No.</strong></th>
+                        <th><strong>Delivery Description</strong></th>
+                        <th><strong>Delivery Date</strong></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var warranty in Model.WarrantyList)
+                    {
+                        <tr>
+                            <td>@warranty.WarrantySn</td>
+                            <td>@warranty.ProductCatalogName</td>
+                            <td>
+                                <span class="@(warranty.ChangedProductCode == null ? "" : "product-changed")">@warranty.ProductCode</span>
+                                @if (warranty.ChangedProductCode != null)
+                                {
+                                    <span>@warranty.ChangedProductCode</span>
+                                }
+                            </td>
+                            <td>@warranty.DeliveryDescription</td>
+                            <td>@warranty.DeliveryDate</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
         </div>
     </div>
 
