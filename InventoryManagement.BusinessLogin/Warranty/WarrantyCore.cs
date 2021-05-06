@@ -74,7 +74,7 @@ namespace InventoryManagement.BusinessLogin
                 {
                     ProductStockId = model.ProductStockId,
                     ActivityByRegistrationId = registrationId,
-                    Details = $"Product Delivered from warranty {model.ChangedProductCode}",
+                    Details = $"Warranty Product Delivered {model.ChangedProductCode}",
                     LogStatus = ProductLogStatus.WarrantyAcceptance
                 };
 

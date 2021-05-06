@@ -46,9 +46,12 @@
                     },
                     columns:
                     [
-                        { data: "WarrantySn","render": function(data, type, row, meta) {
-                            return `<a class="blue-text" href="/Warranty/WarrantyDelivery/${row.WarrantyId}">${data}</a>`;
-                        } },
+                        {
+                            data: "WarrantySn",
+                            "render": function(data, type, row, meta) {
+                                return `<a class="blue-text" href="/Warranty/AcceptanceSlip/${row.WarrantyId}">${data}</a>`;
+                            }
+                        },
                         {
                             data: "SellingSn",
                             "render": function(data, type, row, meta) {
@@ -76,18 +79,18 @@
                         },
                         {
                             data: "IsDelivered",
-                            "render": function (data, type, row, meta) {
-                                const description = row.DeliveryDescription? row.DeliveryDescription:"";
-                                return data ? `
+                            "render": function(data, type, row, meta) {
+                                const description = row.DeliveryDescription ? row.DeliveryDescription : "";
+                                return data?`
                                ${moment(row.DeliveryDate).format('DD MMM YYYY')} 
-                                <small class="d-block"> ${description}</small>` : `Pending`
+                                <small class="d-block"> ${description}</small>` : `<a class="blue-text" href="/Warranty/WarrantyDelivery/${row.WarrantyId}">Pending</a>`
                             }
                         }
                     ],
                     columnDefs: [
                         { 'searchable': false, 'targets': [6] },
                         //{ 'className': "text-right", "targets": [2, 3, 4,5,6] },
-                        { 'className': "text-left", "targets": [2, 4, 5,6] }
+                        { 'className': "text-left", "targets": [2, 4, 5, 6] }
                     ],
                     //order: [[5, 'desc']]
                 });

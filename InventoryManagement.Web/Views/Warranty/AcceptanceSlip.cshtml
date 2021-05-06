@@ -10,7 +10,7 @@
 }
 
 <div class="container">
-    <h4 class="page-header mb-3">Acceptance Slip</h4>
+    <h4 class="page-header mb-3">Warranty Slip</h4>
 
     <div id="receipt">
         <table class="table table-sm table-bordered">
@@ -18,7 +18,7 @@
                 <tr>
                     <td class="text-right" style="width:100px"><strong>Name</strong></td>
                     <td>@Model.CustomerName</td>
-                    <td class="text-right"><strong>Warranty&nbsp;No</strong></td>
+                    <td class="text-right"><strong>Warranty&nbsp;No.</strong></td>
                     <td style="width: 90px">@Model.WarrantySn</td>
                 </tr>
                 <tr>
@@ -35,8 +35,9 @@
                 </tr>
             </tbody>
         </table>
-
-        <table class="product-tb table table-sm table-bordered mt-5">
+        
+        <h5 class="mt-5">Received Product Info</h5>
+        <table class="product-tb table table-sm table-bordered">
             <thead>
                 <tr>
                     <th><strong>Product Type</strong></th>

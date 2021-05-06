@@ -7,6 +7,7 @@ using InventoryManagement.BusinessLogin;
 using InventoryManagement.Repository;
 using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InventoryManagement.Web.Controllers
 {
@@ -74,18 +75,21 @@ namespace InventoryManagement.Web.Controllers
 
         #region Delivery
         //Warranty Delivery
-        public IActionResult WarrantyDelivery()
-        {
-            return View();
-        }
-
-        //Delivery Slip
-        public IActionResult DeliverySlip(int? id)
+        public IActionResult WarrantyDelivery(int? id)
         {
             if (!id.HasValue) return RedirectToAction("WarrantyList");
 
+            ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label", id.GetValueOrDefault());
             var model = _warranty.AcceptanceReceipt(id.GetValueOrDefault());
             return View(model.Data);
+        }
+
+        //Post Delivery
+        [HttpPost]
+        public IActionResult PostDelivery(WarrantyDeliveryModel model)
+        {
+            var response = _warranty.Delivery(model,User.Identity.Name);
+            return Json(response);
         }
         #endregion
     }
