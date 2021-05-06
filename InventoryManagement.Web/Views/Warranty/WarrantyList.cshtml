@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewData["Title"] = "WarrantyList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="m-md-3">
+    <h4 class="page-header mb-3">Warranty List</h4>
+
+    <div class="card card-body">
+        <table id="data-table" class="table table-sm table-bordered">
+            <thead>
+            <tr>
+                <th><strong>Warranty No.</strong></th>
+                <th><strong>Bill No.</strong></th>
+                <th><strong>Customer</strong></th>
+                <th><strong>Type</strong></th>
+                <th><strong>Serial</strong></th>
+                <th><strong>Acceptance</strong></th>
+                <th><strong>Delivery</strong></th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        $(function() {
+            dataTable.getData();
+        });
+
+        //get data
+        var dataTable = {
+            table: null,
+            init: function() {
+                dataTable.table = $("#data-table").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    buttons: dataTable.button,
+                    dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>><"row"<"col-sm-12"<tr>>><"row"<"col-sm-5"i><"col-sm-7"p>>',
+                    ajax: {
+                        url: "/Warranty/WarrantyListData",
+                        type: "POST"
+                    },
+                    columns:
+                    [
+                        { data: "WarrantySn","render": function(data, type, row, meta) {
+                            return `<a class="blue-text" href="/Warranty/WarrantyDelivery/${row.WarrantyId}">${data}</a>`;
+                        } },
+                        {
+                            data: "SellingSn",
+                            "render": function(data, type, row, meta) {
+                                return `<a class="blue-text" href="/Selling/SellingReceipt/${row.SellingId}">${data}</a>`;
+                            }
+                        },
+                        {
+                            data: "CustomerName",
+                            "render": function(data, type, row, meta) {
+                                return `${data} <small class="d-block"> ${row.CustomerPhone}</small>`
+                            }
+                        },
+                        { data: "ProductCatalogName" },
+                        {
+                            data: "ProductCode",
+                            "render": function(data, type, row, meta) {
+                                return `${row.ProductName}, ${data}`
+                            }
+                        },
+                        {
+                            data: "AcceptanceDate",
+                            "render": function(data, type, row, meta) {
+                                return `${moment(data).format('DD MMM YYYY')} <small class="d-block"> ${row.AcceptanceDescription}</small>`
+                            }
+                        },
+                        {
+                            data: "IsDelivered",
+                            "render": function (data, type, row, meta) {
+                                const description = row.DeliveryDescription? row.DeliveryDescription:"";
+                                return data ? `
+                               ${moment(row.DeliveryDate).format('DD MMM YYYY')} 
+                                <small class="d-block"> ${description}</small>` : `Pending`
+                            }
+                        }
+                    ],
+                    columnDefs: [
+                        { 'searchable': false, 'targets': [6] },
+                        //{ 'className': "text-right", "targets": [2, 3, 4,5,6] },
+                        { 'className': "text-left", "targets": [2, 4, 5,6] }
+                    ],
+                    //order: [[5, 'desc']]
+                });
+            },
+            getData: function() {
+                dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
+            },
+            addSign: function(data) { return `${data}/-` },
+            button: {
+                buttons: [
+                    {
+                        title: '',
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        exportOptions: { /*columns: [0,1] //Column value those print*/  },
+                        autoPrint: true,
+                        customize: function(win) {
+                            $(win.document.body).prepend(`<nav class="mb-3 navbar peach-gradient"><a class="navbar-brand ml-1"><span>Zephyr</span> IT</a></nav><h3 class="h3-responsive">${$('h4').text()}</h3>`);
+                        }
+                    }
+                ],
+                dom: {
+                    button: { className: 'btn btn-dark btn-rounded btn-sm my-0' }
+                }
+            }
+        }
+    </script>
+}
