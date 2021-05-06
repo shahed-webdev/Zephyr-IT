@@ -5,11 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using InventoryManagement.BusinessLogin;
 using InventoryManagement.Repository;
+using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 
 namespace InventoryManagement.Web.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public class WarrantyController : Controller
     {
         private readonly IUnitOfWork _db;
@@ -20,9 +21,9 @@ namespace InventoryManagement.Web.Controllers
             _warranty = warranty;
         }
 
-
         #region Acceptance
         //find product
+        [Authorize(Roles = "admin, warranty-acceptance")]
         public async Task<IActionResult> FindProduct(int? id)
         {
             var model = await _db.Selling.SellingReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
@@ -39,7 +40,7 @@ namespace InventoryManagement.Web.Controllers
         //Post Acceptance(ajax)
         public IActionResult PostAcceptance(WarrantyAcceptanceModel model)
         {
-            var response =  _warranty.Acceptance(model, User.Identity.Name);
+            var response = _warranty.Acceptance(model, User.Identity.Name);
             return Json(response);
         }
 
@@ -48,7 +49,42 @@ namespace InventoryManagement.Web.Controllers
         {
             if (!id.HasValue) return RedirectToAction("FindProduct");
 
-            var model =  _warranty.AcceptanceReceipt(id.GetValueOrDefault());
+            var model = _warranty.AcceptanceReceipt(id.GetValueOrDefault());
+            return View(model.Data);
+        }
+        #endregion
+
+
+        #region Warranty List
+        //Get Warranty List
+        [Authorize(Roles = "admin, warranty-list")]
+        public IActionResult WarrantyList()
+        {
+            return View();
+        }
+
+        //data-table
+        public IActionResult WarrantyListData(DataRequest request)
+        {
+            var response = _warranty.List(request);
+            return Json(response);
+        }
+        #endregion
+
+
+        #region Delivery
+        //Warranty Delivery
+        public IActionResult WarrantyDelivery()
+        {
+            return View();
+        }
+
+        //Delivery Slip
+        public IActionResult DeliverySlip(int? id)
+        {
+            if (!id.HasValue) return RedirectToAction("WarrantyList");
+
+            var model = _warranty.AcceptanceReceipt(id.GetValueOrDefault());
             return View(model.Data);
         }
         #endregion
