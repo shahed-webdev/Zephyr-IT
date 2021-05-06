@@ -69,6 +69,7 @@ namespace InventoryManagement.Repository
                 .Where(s => s.ProductCode == code)
                 .Select(s => new ProductStockDetailsViewModel
                 {
+                    ProductStockId = s.ProductStockId,
                     ProductId = s.ProductId,
                     ProductCode = s.ProductCode,
                     ProductName = s.Product.ProductName,

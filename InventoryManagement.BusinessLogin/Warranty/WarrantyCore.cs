@@ -58,6 +58,35 @@ namespace InventoryManagement.BusinessLogin
             }
         }
 
+        public DbResponse<int> Delivery(WarrantyDeliveryModel model, string userName)
+        {
+            try
+            {
+                if (_db.Warranty.IsNull(model.WarrantyId))
+                    return new DbResponse<int>(false, "Not Found");
+
+                var registrationId = _db.Registrations.GetRegID_ByUserName(userName);
+                if (registrationId == 0)
+                    return new DbResponse<int>(false, $"Invalid User");
+
+                //Product Logs 
+                var logs = new ProductLogAddModel
+                {
+                    ProductStockId = model.ProductStockId,
+                    ActivityByRegistrationId = registrationId,
+                    Details = $"Product Delivered from warranty {model.ChangedProductCode}",
+                    LogStatus = ProductLogStatus.WarrantyAcceptance
+                };
+
+                _db.ProductLog.Add(logs);
+                return _db.Warranty.Delivery(model);
+            }
+            catch (Exception e)
+            {
+                return new DbResponse<int>(false, $"{e.Message}. {e.InnerException?.Message ?? ""}");
+            }
+        }
+
         public DataResult<WarrantyListViewModel> List(DataRequest request)
         {
             return _db.Warranty.List(request);

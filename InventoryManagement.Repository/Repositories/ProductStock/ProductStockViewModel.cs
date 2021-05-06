@@ -9,6 +9,7 @@ namespace InventoryManagement.Repository
 
     public class ProductStockDetailsViewModel
     {
+        public int ProductStockId { get; set; }
         public int ProductId { get; set; }
         public string ProductCode { get; set; }
         public string ProductCatalogName { get; set; }

@@ -41,6 +41,23 @@ namespace InventoryManagement.Repository
             return new DbResponse<int>(true, "Warranty Accepted Successfully", warranty.WarrantyId);
         }
 
+        public DbResponse<int> Delivery(WarrantyDeliveryModel model)
+        {
+            var warranty = Context.Warranty.Find(model.WarrantyId);
+
+            warranty.ChangedProductCatalogId = model.ChangedProductCatalogId;
+            warranty.DeliveryDescription = model.DeliveryDescription;
+            warranty.ChangedProductName = model.ChangedProductName;
+            warranty.ChangedProductCode = model.ChangedProductCode;
+
+            warranty.DeliveryDate = DateTime.Today.BdTime().Date;
+            warranty.IsDelivered = true;
+
+            Context.Warranty.Update(warranty);
+            Context.SaveChanges();
+            return new DbResponse<int>(true, "Warranty Delivered Successfully", warranty.WarrantyId);
+        }
+
         public bool IsInWarranty(int productStockId)
         {
             return Context.Warranty.Any(w => !w.IsDelivered && w.ProductStockId == productStockId);
