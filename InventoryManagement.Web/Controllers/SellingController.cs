@@ -277,7 +277,8 @@ namespace InventoryManagement.Web.Controllers
         //GET:// Get Collection Amount ByDate(ajax)
         public IActionResult GetCollectionByDate(DateTime? fromDate, DateTime? toDate, int? id)
         {
-            var model = _db.SellingPayments.CollectionAmountDateWise(fromDate, toDate, id.GetValueOrDefault());
+            var regId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+            var model = _db.SellingPayments.CollectionAmountDateWise(fromDate, toDate, id ?? regId);
             return Json(model);
         }
         #endregion Cash Collection
