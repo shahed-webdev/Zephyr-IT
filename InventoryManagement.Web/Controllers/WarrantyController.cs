@@ -49,7 +49,7 @@ namespace InventoryManagement.Web.Controllers
         {
             if (!id.HasValue) return RedirectToAction("FindProduct");
 
-            var model = _warranty.AcceptanceReceipt(id.GetValueOrDefault());
+            var model = _warranty.Receipt(id.GetValueOrDefault());
             return View(model.Data);
         }
         #endregion
@@ -84,7 +84,7 @@ namespace InventoryManagement.Web.Controllers
         {
             if (!id.HasValue) return RedirectToAction("WarrantyList");
 
-            var model = _warranty.AcceptanceReceipt(id.GetValueOrDefault());
+            var model = _warranty.Receipt(id.GetValueOrDefault());
             return View(model.Data);
         }
         #endregion

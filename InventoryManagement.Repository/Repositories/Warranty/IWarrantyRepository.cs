@@ -9,7 +9,7 @@ namespace InventoryManagement.Repository
         DbResponse<int> Delivery(WarrantyDeliveryModel model);
         bool IsInWarranty(int productStockId);
         bool IsNull(int warrantyId);
-        DbResponse<WarrantyAcceptanceReceiptModel> AcceptanceReceipt(int warrantyId);
+        DbResponse<WarrantyReceiptModel> Receipt(int warrantyId);
         DataResult<WarrantyListViewModel> List(DataRequest request);
 
     }

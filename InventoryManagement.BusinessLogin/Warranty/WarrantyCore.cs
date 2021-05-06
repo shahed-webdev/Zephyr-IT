@@ -43,18 +43,18 @@ namespace InventoryManagement.BusinessLogin
             }
         }
 
-        public DbResponse<WarrantyAcceptanceReceiptModel> AcceptanceReceipt(int warrantyId)
+        public DbResponse<WarrantyReceiptModel> Receipt(int warrantyId)
         {
             try
             {
                 if (_db.Warranty.IsNull(warrantyId))
-                    return new DbResponse<WarrantyAcceptanceReceiptModel>(false, "Not Found");
+                    return new DbResponse<WarrantyReceiptModel>(false, "Not Found");
 
-                return _db.Warranty.AcceptanceReceipt(warrantyId);
+                return _db.Warranty.Receipt(warrantyId);
             }
             catch (Exception e)
             {
-                return new DbResponse<WarrantyAcceptanceReceiptModel>(false, $"{e.Message}. {e.InnerException?.Message ?? ""}");
+                return new DbResponse<WarrantyReceiptModel>(false, $"{e.Message}. {e.InnerException?.Message ?? ""}");
             }
         }
 

@@ -68,15 +68,15 @@ namespace InventoryManagement.Repository
             return !Context.Warranty.Any(w => w.WarrantyId == warrantyId);
         }
 
-        public DbResponse<WarrantyAcceptanceReceiptModel> AcceptanceReceipt(int warrantyId)
+        public DbResponse<WarrantyReceiptModel> Receipt(int warrantyId)
         {
             var warranty = Context.Warranty
                 .Include(w => w.Selling)
                 .ThenInclude(s => s.Customer)
                 .Where(w => w.WarrantyId == warrantyId)
-                .ProjectTo<WarrantyAcceptanceReceiptModel>(_mapper.ConfigurationProvider)
+                .ProjectTo<WarrantyReceiptModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefault();
-            return new DbResponse<WarrantyAcceptanceReceiptModel>(true, "Success", warranty);
+            return new DbResponse<WarrantyReceiptModel>(true, "Success", warranty);
         }
 
         public DataResult<WarrantyListViewModel> List(DataRequest request)

@@ -2,7 +2,7 @@
 
 namespace InventoryManagement.Repository
 {
-    public class WarrantyAcceptanceReceiptModel
+    public class WarrantyReceiptModel
     {
         public int WarrantyId { get; set; }
         public int SellingId { get; set; }
@@ -18,5 +18,11 @@ namespace InventoryManagement.Repository
         public string ProductName { get; set; }
         public string ProductCode { get; set; }
         public string ProductCatalogName { get; set; }
+        public string DeliveryDescription { get; set; }
+        public DateTime? DeliveryDate { get; set; }
+        public bool IsDelivered { get; set; }
+        public string ChangedProductCatalogName { get; set; }
+        public string ChangedProductName { get; set; }
+        public string ChangedProductCode { get; set; }
     }
 }
