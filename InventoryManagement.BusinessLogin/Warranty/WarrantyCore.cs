@@ -70,11 +70,12 @@ namespace InventoryManagement.BusinessLogin
                     return new DbResponse<int>(false, $"Invalid User");
 
                 //Product Logs 
+                var details= model.ChangedProductCode != "" ? "Changed ProductCode: " + model.ChangedProductCode: "";
                 var logs = new ProductLogAddModel
                 {
                     ProductStockId = model.ProductStockId,
                     ActivityByRegistrationId = registrationId,
-                    Details = $"Warranty Product Delivered {model.ChangedProductCode}",
+                    Details = $"Warranty Product Delivered {details}",
                     LogStatus = ProductLogStatus.WarrantyAcceptance
                 };
 

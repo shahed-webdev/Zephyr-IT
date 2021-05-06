@@ -80,7 +80,7 @@ namespace InventoryManagement.Web.Controllers
             if (!id.HasValue) return RedirectToAction("WarrantyList");
 
             ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label", id.GetValueOrDefault());
-            var model = _warranty.AcceptanceReceipt(id.GetValueOrDefault());
+            var model = _warranty.Receipt(id.GetValueOrDefault());
             return View(model.Data);
         }
 
