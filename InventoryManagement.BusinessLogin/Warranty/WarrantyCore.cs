@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InventoryManagement.Data;
 using InventoryManagement.Repository;
+using JqueryDataTables.LoopsIT;
 using System;
 
 namespace InventoryManagement.BusinessLogin
@@ -57,5 +58,9 @@ namespace InventoryManagement.BusinessLogin
             }
         }
 
+        public DataResult<WarrantyListViewModel> List(DataRequest request)
+        {
+            return _db.Warranty.List(request);
+        }
     }
 }

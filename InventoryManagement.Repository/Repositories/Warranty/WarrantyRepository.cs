@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using InventoryManagement.Data;
+using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System;
@@ -59,6 +60,16 @@ namespace InventoryManagement.Repository
                 .ProjectTo<WarrantyAcceptanceReceiptModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefault();
             return new DbResponse<WarrantyAcceptanceReceiptModel>(true, "Success", warranty);
+        }
+
+        public DataResult<WarrantyListViewModel> List(DataRequest request)
+        {
+            var warranty = Context.Warranty
+                .Include(w => w.Selling)
+                .ThenInclude(s => s.Customer)
+                .ProjectTo<WarrantyListViewModel>(_mapper.ConfigurationProvider)
+                .ToDataResult(request);
+            return warranty;
         }
     }
 }
