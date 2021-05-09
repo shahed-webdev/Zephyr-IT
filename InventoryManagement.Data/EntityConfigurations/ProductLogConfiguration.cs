@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace InventoryManagement.Data
 {
@@ -31,6 +31,19 @@ namespace InventoryManagement.Data
                 .HasForeignKey(e => e.ActivityByRegistrationId)
                 .OnDelete(DeleteBehavior.NoAction)
                 .HasConstraintName("FK_ProductLog_Registration");
+
+
+            builder.HasOne(e => e.Selling)
+                .WithMany(e => e.ProductLog)
+                .HasForeignKey(e => e.SellingId)
+                .OnDelete(DeleteBehavior.NoAction)
+                .HasConstraintName("FK_ProductLog_Selling");
+
+            builder.HasOne(e => e.Purchase)
+                .WithMany(e => e.ProductLog)
+                .HasForeignKey(e => e.PurchaseId)
+                .OnDelete(DeleteBehavior.NoAction)
+                .HasConstraintName("FK_ProductLog_Purchase");
         }
     }
 }

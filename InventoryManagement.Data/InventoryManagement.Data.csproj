@@ -51,6 +51,8 @@
     <Compile Remove="Migrations\20210317044945_SellingTabelChange.Designer.cs" />
     <Compile Remove="Migrations\20210418051928_AddRoleSalesPerson.cs" />
     <Compile Remove="Migrations\20210418051928_AddRoleSalesPerson.Designer.cs" />
+    <Compile Remove="Migrations\20210509084453_AddSellingPurchaseInProductLog.cs" />
+    <Compile Remove="Migrations\20210509084453_AddSellingPurchaseInProductLog.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

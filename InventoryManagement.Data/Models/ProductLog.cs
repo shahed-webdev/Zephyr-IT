@@ -12,5 +12,10 @@ namespace InventoryManagement.Data
         public DateTime CreatedOnUtc { get; set; }
         public int ActivityByRegistrationId { get; set; }
         public Registration Registration { get; set; }
+        public int? SellingId { get; set; }
+        public int? PurchaseId { get; set; }
+        public virtual Selling Selling { get; set; }
+        public virtual Purchase Purchase { get; set; }
+
     }
 }

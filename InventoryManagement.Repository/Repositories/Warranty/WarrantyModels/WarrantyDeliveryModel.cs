@@ -2,6 +2,7 @@
 {
     public class WarrantyDeliveryModel
     {
+        public int SellingId { get; set; }
         public int WarrantyId { get; set; }
         public int ProductStockId { get; set; }
         public int? ChangedProductCatalogId { get; set; }

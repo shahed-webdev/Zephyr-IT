@@ -118,6 +118,7 @@ namespace InventoryManagement.Repository
                 //Product Logs 
                 var logs = purchase.PurchaseList.SelectMany(p => p.ProductStock.Select(c => new ProductLogAddModel
                 {
+                    PurchaseId = p.PurchaseId,
                     ProductStockId = c.ProductStockId,
                     ActivityByRegistrationId = model.RegistrationId,
                     Details = $"Product Buy at Receipt No: {purchase.PurchaseSn}",

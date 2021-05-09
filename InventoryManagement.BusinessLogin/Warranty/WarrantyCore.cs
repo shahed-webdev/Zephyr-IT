@@ -26,6 +26,7 @@ namespace InventoryManagement.BusinessLogin
                 //Product Logs 
                 var logs = new ProductLogAddModel
                 {
+                    SellingId = model.SellingId,
                     ProductStockId = model.ProductStockId,
                     ActivityByRegistrationId = registrationId,
                     Details = $"Product Accepted for warranty",
@@ -72,6 +73,7 @@ namespace InventoryManagement.BusinessLogin
                 //Product Logs 
                 var logs = new ProductLogAddModel
                 {
+                    SellingId = model.SellingId,
                     ProductStockId = model.ProductStockId,
                     ActivityByRegistrationId = registrationId,
                     Details = $"Product Delivered from warranty {model.ChangedProductCode}",

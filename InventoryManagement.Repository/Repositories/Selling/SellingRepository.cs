@@ -125,6 +125,7 @@ namespace InventoryManagement.Repository
                 //Product Logs 
                 var logs = selling.SellingList.SelectMany(p => p.ProductStock.Select(c => new ProductLogAddModel
                 {
+                    SellingId = selling.SellingId,
                     ProductStockId = c.ProductStockId,
                     ActivityByRegistrationId = model.RegistrationId,
                     Details = $"Product Selling at Receipt No: {selling.SellingSn}",
@@ -616,6 +617,7 @@ namespace InventoryManagement.Repository
 
                         var logs = addedStocks.Select(c => new ProductLogAddModel
                         {
+                            SellingId = model.SellingId,
                             ProductStockId = c.ProductStockId,
                             ActivityByRegistrationId = model.UpdateRegistrationId,
                             Details = $"Product Selling by bill changed",
@@ -663,7 +665,7 @@ namespace InventoryManagement.Repository
                         SellingId = model.SellingId,
                         ProductId = p.ProductId,
                         SellingPrice = p.SellingPrice,
-                        PurchasePrice = p.PurchasePrice,
+                        PurchasePrice = p.RemainCodes.Length > 0 ? p.PurchasePrice : 0,
                         Description = p.Description,
                         Warranty = p.Warranty,
                         ProductStock = stocks.Where(s => p.RemainCodes.Contains(s.ProductCode)).ToList()
@@ -694,6 +696,7 @@ namespace InventoryManagement.Repository
 
                             var logs = removedStocks.Select(c => new ProductLogAddModel
                             {
+                                SellingId = model.SellingId,
                                 ProductStockId = c.ProductStockId,
                                 ActivityByRegistrationId = model.UpdateRegistrationId,
                                 Details = $"Product return by bill changed",
