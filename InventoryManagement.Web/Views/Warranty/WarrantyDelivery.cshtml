@@ -113,6 +113,7 @@
 
                 const body = serializeForm(this);
                 body.ProductStockId = @Model.ProductStockId;
+                body.SellingId = @Model.SellingId;
                 body.WarrantyId = @Context.Request.RouteValues["id"];
 
                 $.ajax({

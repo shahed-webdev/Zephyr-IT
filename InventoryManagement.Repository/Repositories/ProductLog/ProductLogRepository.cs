@@ -32,7 +32,7 @@ namespace InventoryManagement.Repository
 
         public async Task<DbResponse<List<ProductLogViewModel>>> FindLogAsync(int productStockId)
         {
-            var logs = await Context.ProductLog.Where(l => l.ProductStockId == productStockId)
+            var logs = await Context.ProductLog.Include(p=> p.Selling).Where(l => l.ProductStockId == productStockId)
                  .ProjectTo<ProductLogViewModel>(_mapper.ConfigurationProvider)
                  .ToListAsync();
             return new DbResponse<List<ProductLogViewModel>>(true, "Success", logs);

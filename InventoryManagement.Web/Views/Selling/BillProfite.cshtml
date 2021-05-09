@@ -10,7 +10,7 @@
     td.loss-row-color { color: #CC0000 }
 
     #summery p{ margin-bottom: 5px;}
-    #summery .net-amount{ font-weight: bold; border-top: 1px solid #333}
+    #summery .net-amount{ font-weight: bold; border-top: 1px solid #333 }
 </style>
 }
 
@@ -239,7 +239,6 @@
             location.href = "/Selling/BillProfite";
         });
 
-
         //get total profit sum
         function getAmountSummery(dates) {
             //for get and set total amount
@@ -253,12 +252,22 @@
                 url: "/Selling/BillProfitByDate",
                 data: dates,
                 success: function (response) {
-                    const {ServiceProfit, GrandProfit,GenuineExpense,NetProfit,} = response.Data;
+                    const {ServiceProfit, GrandProfit,GenuineExpense,NetProfit} = response.Data;
 
                     serviceProfit.textContent = ServiceProfit;
                     billProfit.textContent = GrandProfit;
                     totalExpense.textContent = GenuineExpense;
                     grandProfit.textContent = NetProfit;
+
+
+                    if (GrandProfit > 0) {
+                        billProfit.parentElement.classList.add("text-success");
+                        billProfit.parentElement.classList.remove("text-danger");
+                    } else {
+                        billProfit.parentElement.classList.remove("text-success");
+                        billProfit.parentElement.classList.add("text-danger");
+                    }
+
 
                     if (NetProfit > 0) {
                         grandProfit.parentElement.classList.add("text-success");
