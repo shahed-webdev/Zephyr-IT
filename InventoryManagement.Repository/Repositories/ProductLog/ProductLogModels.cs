@@ -18,7 +18,7 @@ namespace InventoryManagement.Repository
         public int ActivityByRegistrationId { get; set; }
         public string ActivityBy { get; set; }
         public string Details { get; set; }
-        public ProductLogStatus LogStatus { get; set; }
+        public string LogStatus { get; set; }
         public DateTime CreatedOnUtc { get; set; }
         public int? SellingId { get; set; }
         public int SellingSn { get; set; }
