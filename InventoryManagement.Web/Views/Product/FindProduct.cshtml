@@ -35,21 +35,29 @@
             </form>
         </div>
 
-        <div class="card card-body p-5 info-container">
-            <div class="text-center">
-                <h4 class="mb-1 font-weight-bold"><strong id="category"></strong></h4>
+        <div class="info-container">
+            <div class="card card-body p-5">
+                <div class="text-center">
+                    <h4 class="mb-1 font-weight-bold"><strong id="category"></strong></h4>
+                </div>
+                <ul class="striped list-unstyled mb-0">
+                    <li id="receipt"></li>
+                    <li id="purchase"></li>
+                    <li><strong>Code:</strong><span id="productCode"></span></li>
+                    <li><strong>Brand and Model:</strong><span id="productName"></span></li>
+                    <li><strong>Purchase Price:</strong><span id="purchasePrice"></span></li>
+                    <li><strong>Selling Price:</strong><span id="sellingPrice"></span></li>
+                    <li><strong>Warranty:</strong><span id="warranty"></span></li>
+                    <li><strong>Description:</strong><span id="description"></span></li>
+                    <li><strong>Note:</strong><span id="note"></span></li>
+                </ul>
             </div>
-            <ul class="striped list-unstyled mb-0">
-                <li id="receipt"></li>
-                <li id="purchase"></li>
-                <li><strong>Code:</strong><span id="productCode"></span></li>
-                <li><strong>Brand and Model:</strong><span id="productName"></span></li>
-                <li><strong>Purchase Price:</strong><span id="purchasePrice"></span></li>
-                <li><strong>Selling Price:</strong><span id="sellingPrice"></span></li>
-                <li><strong>Warranty:</strong><span id="warranty"></span></li>
-                <li><strong>Description:</strong><span id="description"></span></li>
-                <li><strong>Note:</strong><span id="note"></span></li>
-            </ul>
+
+            <div class="mt-3 card card-body">
+                <h5 class="font-weight-bold">Product Activity Logs</h5>
+
+                <ul id="show-log" class="list-group list-group-flush"></ul>
+            </div>
         </div>
     </div>
 </div>
@@ -65,15 +73,16 @@
         const infoContainer = document.querySelector('.info-container')
 
         // on Product code submit
-        formCode.addEventListener('submit', evt => {
-            evt.preventDefault()
-            const url = '/Product/FindProductDetailsByCode'
-            const param = { params: { code: inputProductCode.value.trim() } };
+        formCode.addEventListener('submit',
+            evt => {
+                evt.preventDefault()
+                const url = '/Product/FindProductDetailsByCode'
+                const param = { params: { code: inputProductCode.value.trim() } };
 
-            axios.get(url, param).then(res => {
-                appendData(res.data)
-            }).catch(err => console.log(err))
-        })
+                axios.get(url, param).then(res => {
+                    appendData(res.data)
+                }).catch(err => console.log(err))
+            })
 
         //append data
         function appendData(product) {
@@ -84,12 +93,15 @@
                 return;
             }
 
+            //get product log
+            getProductLog(product.ProductStockId);
+
             infoContainer.classList.add('show');
             document.getElementById('category').textContent = product.ProductCatalogName;
             document.getElementById('productCode').textContent = product.ProductCode;
             document.getElementById('productName').textContent = product.ProductName;
-            document.getElementById('purchasePrice').textContent = product.PurchasePrice;
-            document.getElementById('sellingPrice').textContent = product.SellingPrice;
+            document.getElementById('purchasePrice').textContent = product.PurchasePrice.toFixed(2);
+            document.getElementById('sellingPrice').textContent = product.SellingPrice.toFixed(2);
             document.getElementById('warranty').textContent = product.Warranty;
             document.getElementById('description').textContent = product.Description;
             document.getElementById('note').textContent = product.Note;
@@ -99,6 +111,28 @@
 
             product.SellingId ? bill.innerHTML = `<strong class="green-text">Bill No: </strong><a target="_blank" href="/Selling/SellingReceipt/${product.SellingId}">#${product.SellingSn}</a>` : bill.innerHTML = '';
             purchase.innerHTML = `<a target="_blank" href="/Purchase/PurchaseReceipt/${product.PurchaseId}">Purchase Details <i class="fal fa-long-arrow-right"></i></a>`;
+        }
+
+
+        //product logs
+        const showLog = document.getElementById("show-log");
+
+        function getProductLog(stockId) {
+            $.ajax({
+                url: '/Product/GetProductLog',
+                data: { stockId },
+                success: function(response) {
+                    response.Data.forEach(item => {
+                        const li = document.createElement("li");
+                        li.className = "list-group-item";
+                        li.innerHTML = ` <p class="mb-0">${item.Details}</p><small class="text-muted">${item.ActivityBy}</small>`;
+                        showLog.appendChild(li);
+                    });
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
         }
     </script>
 }

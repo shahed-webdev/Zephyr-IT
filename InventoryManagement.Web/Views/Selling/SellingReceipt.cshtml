@@ -168,13 +168,13 @@
             
             @if (Model.WarrantyList.Any())
             {
-                <table class="table table-bordered table-sm mt-3">
+              <h6 class="mt-3">Warranty Record</h6>
+                <table class="table table-bordered table-sm">
                     <thead>
                     <tr>
                         <th><strong>Warranty No.</strong></th>
-                        <th><strong>Product Type</strong></th>
-                        <th><strong>Serial No.</strong></th>
-                        <th><strong>Delivery Description</strong></th>
+                        <th><strong>Product</strong></th>
+                        <th><strong>Description</strong></th>
                         <th><strong>Delivery Date</strong></th>
                     </tr>
                     </thead>
@@ -183,16 +183,18 @@
                     {
                         <tr>
                             <td>@warranty.WarrantySn</td>
-                            <td>@warranty.ProductCatalogName</td>
                             <td>
-                                <span class="@(warranty.ChangedProductCode == null ? "" : "product-changed")">@warranty.ProductCode</span>
+                                <strong>@warranty.ProductCatalogName</strong>
+                                <span class="@(warranty.ChangedProductCode == null ? "" : "product-changed")">
+                                    @warranty.ProductCode
+                                </span>
                                 @if (warranty.ChangedProductCode != null)
                                 {
                                     <span>@warranty.ChangedProductCode</span>
                                 }
                             </td>
                             <td>@warranty.DeliveryDescription</td>
-                            <td>@warranty.DeliveryDate</td>
+                            <td>@warranty.DeliveryDate.Value.ToString("dd MMM yyyy")</td>
                         </tr>
                     }
                     </tbody>

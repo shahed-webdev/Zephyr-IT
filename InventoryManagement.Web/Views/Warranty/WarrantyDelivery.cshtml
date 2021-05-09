@@ -1,8 +1,134 @@
-﻿
+﻿@using InventoryManagement.Repository
+@model WarrantyReceiptModel
 @{
     ViewData["Title"] = "Warranty Delivery";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>WarrantyDelivery</h1>
 
+@section Styles{
+    <link href="~/css/selling-receipt.css?v=1.0.0" rel="stylesheet" />
+}
+
+<div class="container">
+    <h4 class="page-header mb-3">Warranty Delivery</h4>
+
+    <div id="receipt">
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="text-right" style="width:100px"><strong>Name</strong></td>
+                    <td>@Model.CustomerName</td>
+                    <td class="text-right"><strong>Warranty&nbsp;No.</strong></td>
+                    <td style="width: 90px">@Model.WarrantySn</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Bill No.</strong></td>
+                    <td>@Model.SellingSn</td>
+                    <td class="text-right"><strong>Acceptance&nbsp;Date</strong></td>
+                    <td>@Model.AcceptanceDate.ToString("d MMM yyyy")</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Purchase Date</strong></td>
+                    <td>@Model.SellingDate.ToString("d MMM yyyy")</td>
+                    <td class="text-right"><strong>Cell</strong></td>
+                    <td>@Model.CustomerPhone</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="product-tb table table-sm table-bordered mt-5">
+            <thead>
+                <tr>
+                    <th><strong>Product Type</strong></th>
+                    <th><strong>Description</strong></th>
+                    <th><strong>Serial No</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.ProductCatalogName</td>
+                    <td>@Model.ProductDescription</td>
+                    <td class="text-center">@Model.ProductCode</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <form id="formDelivery">
+            <div class="form-row">
+                <div class="col-lg-4">
+                    <div class="md-form">
+                        <select name="ChangedProductCatalogId" searchable="Search here.." asp-items="ViewBag.ParentId" class="mdb-select">
+                            <option disabled value="" selected>Changed Category</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="md-form">
+                        <input id="inputProductName" type="text" name="ChangedProductName" class="form-control" />
+                        <label for="inputProductName">Changed Product Name</label>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="md-form">
+                        <input id="inputChangedProductCode" name="ChangedProductCode" class="form-control" type="text" />
+                        <label for="inputChangedProductCode">Changed Product Code</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md-form">
+                <input id="inputDescription" name="DeliveryDescription" class="form-control" type="text" required />
+                <label for="inputDescription">Description</label>
+            </div>
+
+            <div class="text-right">
+                <input type="submit" value="Delivery" class="btn btn-deep-orange btn-rounded" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(function() {
+            // Material Select Initialization
+            $('.mdb-select').materialSelect();
+        });
+
+        const serializeForm = function(form) {
+            const obj = {};
+            const formData = new FormData(form);
+            for (let key of formData.keys()) {
+                obj[key] = formData.get(key);
+            }
+            return obj;
+        };
+
+        const formDelivery = document.getElementById("formDelivery");
+        formDelivery.addEventListener("submit",
+            function(evt) {
+                evt.preventDefault();
+
+                const body = serializeForm(this);
+                body.ProductStockId = @Model.ProductStockId;
+                body.WarrantyId = @Context.Request.RouteValues["id"];
+
+                $.ajax({
+                    url: '/Warranty/PostDelivery',
+                    type: "POST",
+                    data: body,
+                    success: function(response) {
+                        console.log(response)
+                        if (response.IsSuccess) {
+                            location.href = `/Warranty/AcceptanceSlip/${response.Data}`;
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+    </script>
+}

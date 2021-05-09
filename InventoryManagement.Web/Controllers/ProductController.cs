@@ -195,6 +195,7 @@ namespace InventoryManagement.Web.Controllers
             }
         }
 
+        #region Find Product
         //GET: Find Product
         [Authorize(Roles = "admin, find-product")]
         public IActionResult FindProduct()
@@ -209,13 +210,12 @@ namespace InventoryManagement.Web.Controllers
             return Json(data);
         }
 
-        protected override void Dispose(bool disposing)
+        //product log
+        public async Task<IActionResult> GetProductLog(int stockId)
         {
-            if (disposing)
-            {
-                _db.Dispose();
-            }
-            base.Dispose(disposing);
+            var data = await _db.ProductLog.FindLogAsync(stockId);
+            return Json(data);
         }
+        #endregion
     }
 }
