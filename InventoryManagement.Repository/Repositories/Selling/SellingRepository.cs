@@ -673,6 +673,11 @@ namespace InventoryManagement.Repository
 
                     selling.BuyingTotalPrice = model.Products.Sum(p => p.PurchasePrice * p.RemainCodes.Length);
                 }
+                else
+                {
+                    selling.SellingList = null;
+                    selling.BuyingTotalPrice = 0;
+                }
 
 
 

@@ -21,6 +21,6 @@ namespace InventoryManagement.Repository
         public ProductLogStatus LogStatus { get; set; }
         public DateTime CreatedOnUtc { get; set; }
         public int? SellingId { get; set; }
-        public int? SellingSn { get; set; }
+        public int SellingSn { get; set; }
     }
 }
