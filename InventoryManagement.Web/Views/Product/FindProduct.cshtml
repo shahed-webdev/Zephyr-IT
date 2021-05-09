@@ -118,14 +118,20 @@
         const showLog = document.getElementById("show-log");
 
         function getProductLog(stockId) {
+            showLog.innerHTML = "";
+
             $.ajax({
                 url: '/Product/GetProductLog',
                 data: { stockId },
                 success: function(response) {
                     response.Data.forEach(item => {
                         const li = document.createElement("li");
+
                         li.className = "list-group-item";
-                        li.innerHTML = ` <p class="mb-0">${item.Details}</p><small class="text-muted">${item.ActivityBy}</small>`;
+                        li.innerHTML = `<small class="text-muted">Product: ${item.LogStatus}. Bill No: <a target="_blank" href="/Selling/SellingReceipt/${item.SellingId}">#${item.SellingSn}</a></small>
+                         <p class="mb-0">${item.Details}</p>
+                         <small class="text-muted mr-2"><i class="far fa-clock"></i> ${moment.utc(item.CreatedOnUtc).local().format('LLLL')}</small>
+                         <small class="text-muted"><i class="fas fa-user"></i> ${item.ActivityBy}</small>`;
                         showLog.appendChild(li);
                     });
                 },
