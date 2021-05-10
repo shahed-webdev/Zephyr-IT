@@ -2,7 +2,9 @@
 @model ExpenseAddModel
 @{
     ViewData["Title"] = "General Expense";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var isSalesmen = User.IsInRole("SalesPerson");
+    Layout = isSalesmen ? "_SalesmanLayout" : "_AdminLayout";
 
     var message = Context.Request.Query["Message"];
 }
@@ -19,6 +21,7 @@
             </button>
         </div>
     }
+
     <form asp-action="GeneralExpense">
         <div class="card card-body">
             <div class="form-row">

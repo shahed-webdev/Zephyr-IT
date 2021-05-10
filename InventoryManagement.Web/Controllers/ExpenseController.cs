@@ -36,7 +36,7 @@ namespace InventoryManagement.Web.Controllers
 
         #region General Expense
         //***General Expense***
-        [Authorize(Roles = "admin, generalExpense")]
+        [Authorize(Roles = "admin,SalesPerson, generalExpense")]
         public IActionResult GeneralExpense()
         {
             ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label");
@@ -44,7 +44,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         // add
-        [Authorize(Roles = "admin, generalExpense")]
+        [Authorize(Roles = "admin,SalesPerson, generalExpense")]
         [HttpPost]
         public IActionResult GeneralExpense(ExpenseAddModel model)
         {
@@ -55,7 +55,7 @@ namespace InventoryManagement.Web.Controllers
             var response = _expense.AddCost(model, User.Identity.Name, User.IsInRole("admin"));
 
             if (response.IsSuccess)
-                return RedirectToAction("GeneralExpense", new { Message = response.Message });
+                return RedirectToAction("GeneralExpense", new { response.Message });
 
             return View(model);
         }
@@ -104,7 +104,7 @@ namespace InventoryManagement.Web.Controllers
 
         #region Transportation Cost
         //***Transportation Cost***
-        [Authorize(Roles = "admin, transportationCost")]
+        [Authorize(Roles = "admin,SalesPerson, transportationCost")]
         public IActionResult TransportationCost()
         {
             return View();
@@ -112,7 +112,7 @@ namespace InventoryManagement.Web.Controllers
 
 
         //add
-        [Authorize(Roles = "admin, transportationCost")]
+        [Authorize(Roles = "admin,SalesPerson, transportationCost")]
         [HttpPost]
         public IActionResult PostTransportationCost(ExpenseTransportationAddModel model)
         {

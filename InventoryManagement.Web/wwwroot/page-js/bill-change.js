@@ -203,6 +203,9 @@ const appendTotalPrice = function () {
     const productPrice = sellingTotalPrice();
     const totalAmount = productPrice + +inputServiceCharge.value;
 
+    //set max discount limit
+    inputDiscount.setAttribute("max", totalAmount);
+
     productTotalPrice.innerText = productPrice ? `Total: ${productPrice.toFixed(2)}` : "";
     totalPrice.innerText = totalAmount.toFixed(2);
 
