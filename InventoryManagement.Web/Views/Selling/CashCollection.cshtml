@@ -49,8 +49,8 @@
                 format: 'd-mmmm-yyyy'
             });
 
-            const date = "@Context.Request.RouteValues["id"]";
-
+            const date = '@Context.Request.RouteValues["id"]';
+          
             if (date) {
                 const from = document.querySelector("#inputFromDate");
                 const to = document.querySelector("#inputToDate");
@@ -76,7 +76,7 @@
         });
 
         //get data
-        var dataTable = {
+        const dataTable = {
             table: null,
             filter: null,
             init: function() {
@@ -180,14 +180,20 @@
         function getAmountSummery(dates) {
             //for get and set total amount
             const totalAmount = document.getElementById('totalAmount');
-            const url = "/Selling/GetCollectionByDate";
-
+         
             $.ajax({
                 type: "POST",
-                url,
+                url: "/Selling/GetCollectionByDate",
                 data: dates,
-                success: function(response) {
-                    totalAmount.textContent = `Total: ৳${response}`;
+                success: function (cash) {
+                    $.ajax({
+                        type: "POST",
+                        url:"/Selling/GetCapitalByDate",
+                        data: dates,
+                        success: function(capital) {
+                            totalAmount.textContent = `Capital: ৳${capital} of Collection: ৳${cash}`;
+                        }
+                    });
                 }
             });
         }
