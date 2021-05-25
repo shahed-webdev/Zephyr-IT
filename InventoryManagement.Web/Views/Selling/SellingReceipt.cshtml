@@ -172,7 +172,7 @@
                 <table class="table table-bordered table-sm">
                     <thead>
                     <tr>
-                        <th><strong>Warranty No.</strong></th>
+                        <th class="text-center"><strong>Warranty No.</strong></th>
                         <th><strong>Product</strong></th>
                         <th><strong>Description</strong></th>
                         <th><strong>Delivery Date</strong></th>
@@ -182,7 +182,9 @@
                     @foreach (var warranty in Model.WarrantyList)
                     {
                         <tr>
-                            <td>@warranty.WarrantySn</td>
+                            <td class="text-center">
+                                <a href="/Warranty/AcceptanceSlip/@warranty.WarrantyId">@warranty.WarrantySn</a>
+                            </td>
                             <td>
                                 <strong>@warranty.ProductCatalogName</strong>
                                 <span class="@(warranty.ChangedProductCode == null ? "" : "product-changed")">

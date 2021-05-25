@@ -278,8 +278,7 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public IActionResult GetCollectionByDate(DateTime? fromDate, DateTime? toDate, int? id)
         {
-            var regId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
-            var model = _db.SellingPayments.CollectionAmountDateWise(fromDate, toDate, id ?? regId);
+            var model = id == null ? _db.SellingPayments.CollectionAmountDateWise(fromDate, toDate): _db.SellingPayments.CollectionAmountDateWise(fromDate, toDate, id.Value);
             return Json(model);
         }
 
