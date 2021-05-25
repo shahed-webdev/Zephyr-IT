@@ -202,6 +202,19 @@ namespace InventoryManagement.Repository
                 .ToDataResult(request);
         }
 
+        public decimal Capital(DateTime? sDateTime, DateTime? eDateTime)
+        {
+            var sD = sDateTime ?? new DateTime(DateTime.Now.BdTime().Year, 1, 1);
+            var eD = eDateTime ?? new DateTime(DateTime.Now.BdTime().Year, 12, 31);
+
+            return Context
+                .SellingPaymentList
+                .Include(p => p.SellingPayment)
+                .Include(p => p.Selling)
+                .Where(r => r.SellingPayment.PaidDate <= eD && r.SellingPayment.PaidDate >= sD)
+                .Sum(s => s.Selling.SellingProfit - s.Selling.SellingPaidAmount);
+        }
+
         public decimal CollectionAmountDateWise(DateTime? sDateTime, DateTime? eDateTime)
         {
             var sD = sDateTime ?? new DateTime(DateTime.Now.BdTime().Year, 1, 1);

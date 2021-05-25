@@ -12,6 +12,7 @@ namespace InventoryManagement.Repository
         Task<DbResponse<int>> DuePayMultipleAsync(SellingDuePayMultipleModel model, IUnitOfWork db);
         decimal DailyCashCollectionAmount(DateTime? date);
         DataResult<SellingPaymentRecordModel> Records(DataRequest request);
+        decimal Capital(DateTime? sDateTime, DateTime? eDateTime);
         decimal CollectionAmountDateWise(DateTime? sDateTime, DateTime? eDateTime);
         decimal CollectionAmountDateWise(DateTime? sDateTime, DateTime? eDateTime, int registrationId);
 
