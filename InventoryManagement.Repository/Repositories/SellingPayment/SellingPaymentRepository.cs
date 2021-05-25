@@ -212,7 +212,7 @@ namespace InventoryManagement.Repository
                 .Include(p => p.SellingPayment)
                 .Include(p => p.Selling)
                 .Where(r => r.SellingPayment.PaidDate <= eD && r.SellingPayment.PaidDate >= sD)
-                .Sum(s => s.Selling.SellingProfit - s.Selling.SellingPaidAmount);
+                .Sum(s => s.Selling.SellingPaidAmount > s.Selling.BuyingTotalPrice ? s.Selling.BuyingTotalPrice - (s.Selling.SellingPaidAmount - s.SellingPaidAmount) : s.SellingPaidAmount);
         }
 
         public decimal CollectionAmountDateWise(DateTime? sDateTime, DateTime? eDateTime)
