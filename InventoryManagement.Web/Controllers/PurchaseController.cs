@@ -55,6 +55,13 @@ namespace InventoryManagement.Web.Views
             return Json(data);
         }
 
+        //GET: check customer PhoneExist
+        public IActionResult IsCustomerPhoneExist(string phone)
+        {
+            var data = _db.Vendors.IsPhoneExist(phone);
+            return Json(data);
+        }
+
         [Authorize(Roles = "admin, purchase")]
         public async Task<IActionResult> PurchaseReceipt(int? id)
         {

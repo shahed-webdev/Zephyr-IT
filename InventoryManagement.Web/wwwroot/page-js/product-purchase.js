@@ -686,6 +686,19 @@ function autoFillInput(customer) {
     document.querySelector("#VendorName").value = customer.CustomerName;
     document.querySelector("#VendorAddress").value = customer.CustomerAddress;
     document.querySelector("#Description").value = customer.Description;
+
+    const errorMessage = document.querySelector("#errorMessage");
+    $.ajax({
+        url: '/Purchase/IsCustomerPhoneExist',
+        type: "POST",
+        data: { phone: customer.PhonePrimary },
+        success: function (response) {
+            errorMessage.style.display = response ? "block" : "none";
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
 }
 
 //****PAYMENT SECTION****/

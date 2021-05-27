@@ -35,6 +35,9 @@
                     <label asp-for="VendorPhone">Phone</label>
                     <input asp-for="VendorPhone" class="form-control" step="0.01" type="number" required />
                     <span asp-validation-for="VendorPhone"></span>
+                    <div id="errorMessage">
+                        <small class="red-text">Vendor Already Inserted</small>
+                    </div>
                 </div>
 
                 <div class="form-group">
