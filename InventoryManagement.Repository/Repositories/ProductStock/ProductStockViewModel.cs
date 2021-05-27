@@ -5,6 +5,7 @@ namespace InventoryManagement.Repository
     public class ProductStockViewModel
     {
         public string ProductCode { get; set; }
+        public bool IsSold { get; set; }
     }
 
     public class ProductStockDetailsViewModel

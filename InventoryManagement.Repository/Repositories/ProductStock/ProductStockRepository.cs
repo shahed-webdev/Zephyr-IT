@@ -22,7 +22,8 @@ namespace InventoryManagement.Repository
             // var codes = stocks.Select(c => c.ProductCode).ToList();
             return Context.ProductStock.Where(s => stocks.Select(c => c.ProductCode).Contains(s.ProductCode)).Select(s => new ProductStockViewModel
             {
-                ProductCode = s.ProductCode
+                ProductCode = s.ProductCode,
+                IsSold = s.IsSold
             }).ToListAsync();
         }
 
