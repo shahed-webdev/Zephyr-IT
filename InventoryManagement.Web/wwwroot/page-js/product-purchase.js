@@ -338,11 +338,21 @@ const onTableRowElementClicked = function (evt) {
 
 //create product code span on modal
 const createCodeSpan = function (newCode) {
-    const iCode = document.createElement('span');
-    iCode.classList.add('badge-pill', 'badge-success', 'code-span');
-    iCode.appendChild(document.createTextNode(newCode));
+    const content = document.createElement('div');
+    content.classList.add('badge-pill', 'badge-success','d-flex',"m-2");
 
-    return iCode;
+    const iCode = document.createElement('span');
+    iCode.classList.add("code-span");
+    iCode.textContent = newCode;
+
+    const deleteIcon = document.createElement('i');
+    deleteIcon.classList.add('code-delete', "fas", "fa-trash-alt");
+    deleteIcon.id = newCode;
+
+    content.appendChild(iCode);
+    content.appendChild(deleteIcon);
+
+    return content;
 }
 
 //show product code on popup
@@ -466,17 +476,17 @@ const onSubmitProductCode = function (form) {
 
 //remove product code
 const onProductCodeClicked = function (evt) {
-    const codeClicked = evt.target.classList.contains('code-span');
+    const codeClicked = evt.target.classList.contains('code-delete');
     if (!codeClicked) return;
 
-    const code = evt.target.innerText;
+    const code = evt.target.id;
 
     tempStorage.ProductStocks = tempStorage.ProductStocks.filter(stock => stock.ProductCode !== code);
 
     productCode.updateStorage(code);
     
     //remove code on modal
-    evt.target.remove();
+    evt.target.parentElement.remove();
 
     //save to local storage
     localStorage.setItem('temp-storage', JSON.stringify(tempStorage));
@@ -490,12 +500,14 @@ const matchExistingProductCode = function (stocks) {
     addedCode.forEach(added => {
         stocks.forEach(stock => {
             if (added.textContent === stock.ProductCode) {
-                added.classList.remove('badge-success');
+                added.parentElement.classList.remove('badge-success');
 
                 if (stock.IsSold) {
-                    added.classList.add('badge-warning');
+                    added.classList.add("code");
+                    added.parentElement.classList.add('badge-warning');
                 } else {
-                    added.classList.add('badge-danger');
+                    added.classList.add("code");
+                    added.parentElement.classList.add('badge-danger');
                     isUnsoldExist = true;
                 }
             }
@@ -532,13 +544,14 @@ const onAddProductToList = function () {
         const serverCode = productCode.isExistServer(tempStorage.ProductStocks);
         serverCode.then(res => {
             if (res.length) {
-                //play buzzer
-                buzzAudio.play();
-
                 //show matched code
                 const isUnsoldExist = matchExistingProductCode(res);
 
-                if (isUnsoldExist) return;
+                if (isUnsoldExist) {
+                    //play buzzer
+                    buzzAudio.play();
+                    return;
+                }
             }
 
             //add value to cart storage
