@@ -485,14 +485,24 @@ const onProductCodeClicked = function (evt) {
 //match Existing Product code
 const matchExistingProductCode = function (stocks) {
     const addedCode = showAddedCode.querySelectorAll('.code-span');
+    let isUnsoldExist = false;
+
     addedCode.forEach(added => {
         stocks.forEach(stock => {
             if (added.textContent === stock.ProductCode) {
                 added.classList.remove('badge-success');
-                added.classList.add('badge-danger');
+
+                if (stock.IsSold) {
+                    added.classList.add('badge-warning');
+                } else {
+                    added.classList.add('badge-danger');
+                    isUnsoldExist = true;
+                }
             }
         })
     });
+
+    return isUnsoldExist;
 }
 
 //add product to list
@@ -526,8 +536,9 @@ const onAddProductToList = function () {
                 buzzAudio.play();
 
                 //show matched code
-                matchExistingProductCode(res);
-                return;
+                const isUnsoldExist = matchExistingProductCode(res);
+
+                if (isUnsoldExist) return;
             }
 
             //add value to cart storage
