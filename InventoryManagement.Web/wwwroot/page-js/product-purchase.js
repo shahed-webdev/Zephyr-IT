@@ -652,9 +652,41 @@ $('#inputFindVendor').typeahead({
     }
 });
 
-//event listener
+//add event listener
 vendorAddClick.addEventListener('click', onVendorAddClicked);
 
+//customer phone auto complete as vendor
+$(document).on("input", "#VendorPhone", function () {
+    $(this).typeahead({
+        minLength: 1,
+        displayText: function (item) {
+            return `${item.CustomerName} ${item.PhonePrimary ? item.PhonePrimary : ''} ${item.OrganizationName ? item.OrganizationName : ''}`;
+        },
+        afterSelect: function (item) {
+            this.$element[0].value = item.PhonePrimary
+        },
+        source: function (request, result) {
+            $.ajax({
+                url: "/Selling/FindCustomers",
+                data: { prefix: request },
+                success: function (response) { result(response); },
+                error: function (err) { console.log(err) }
+            });
+        },
+        updater: function (item) {
+            autoFillInput(item);
+            return item;
+        }
+    })
+})
+
+//fill customer info to input
+function autoFillInput(customer) {
+    document.querySelector("#VendorCompanyName").value = customer.CustomerName;
+    document.querySelector("#VendorName").value = customer.CustomerName;
+    document.querySelector("#VendorAddress").value = customer.CustomerAddress;
+    document.querySelector("#Description").value = customer.Description;
+}
 
 //****PAYMENT SECTION****/
 
