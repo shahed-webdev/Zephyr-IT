@@ -135,6 +135,11 @@ namespace InventoryManagement.Repository
             return true;
         }
 
+        public bool IsPhoneExist(string number)
+        {
+            return Context.Vendor.Any(v => v.VendorPhone == number);
+        }
+
         public decimal TotalDue()
         {
             return Context.Vendor?.Sum(v => v.Due) ?? 0;
