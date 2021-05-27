@@ -16,46 +16,41 @@
         <div class="modal-body">
             <form data-ajax-update="#InsertModal" data-ajax="true" data-ajax-url="/Vendor/Create" data-ajax-method="post" data-ajax-success="onCreateSuccess">
                 <div class="form-row">
-                    <div class="col-7">
-                        <div class="md-form">
-                            <input asp-for="VendorCompanyName" class="form-control" required/>
+                    <div class="col-6">
+                        <div class="form-group">
                             <label asp-for="VendorCompanyName">Company Name</label>
+                            <input asp-for="VendorCompanyName" class="form-control" required />
                             <span asp-validation-for="VendorCompanyName"></span>
                         </div>
                     </div>
-                    <div class="col-5">
-                        <div class="md-form">
-                            <input asp-for="VendorName" class="form-control" />
+                    <div class="col-6">
+                        <div class="form-group">
                             <label asp-for="VendorName">Name</label>
+                            <input asp-for="VendorName" class="form-control" />
                         </div>
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="col-4">
-                        <div class="md-form">
-                            <input asp-for="VendorPhone" class="form-control" step="0.01" type="number" required />
-                            <label asp-for="VendorPhone">Phone</label>
-                            <span asp-validation-for="VendorPhone"></span>
-                        </div>
-                    </div>
-                    <div class="col-8">
-                        <div class="md-form">
-                            <input asp-for="VendorAddress" class="form-control" />
-                            <label asp-for="VendorAddress">Address</label>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label asp-for="VendorPhone">Phone</label>
+                    <input asp-for="VendorPhone" class="form-control" step="0.01" type="number" required />
+                    <span asp-validation-for="VendorPhone"></span>
                 </div>
 
-                <div class="md-form">
-                    <input asp-for="Description" class="form-control" />
+                <div class="form-group">
+                    <label asp-for="VendorAddress">Address</label>
+                    <input asp-for="VendorAddress" class="form-control"/>
+                </div>
+
+                <div class="form-group">
                     <label asp-for="Description">Description</label>
+                    <input asp-for="Description" class="form-control" />
                 </div>
 
                 <div class="text-center mt-1-half">
                     <button type="submit" class="btn peach-gradient mb-1 waves-effect waves-light">Create <i class="fas fa-check ml-1"></i></button>
                 </div>
-            </form>         
+            </form>
         </div>
-    </div>   
+    </div>
 </div>
