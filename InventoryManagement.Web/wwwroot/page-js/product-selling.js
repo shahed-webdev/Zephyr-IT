@@ -445,6 +445,8 @@ const onSellSubmitClicked = function (evt) {
             }
 
             $.notify(response.Message, response.IsSuccess ? "success" : "error");
+            btnSubmit.innerText = "Sell Product";
+            btnSubmit.disabled = false;
         },
         error: function (error) {
             console.log(error);
