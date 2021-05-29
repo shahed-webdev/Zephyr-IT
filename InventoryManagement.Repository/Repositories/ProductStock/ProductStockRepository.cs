@@ -68,6 +68,7 @@ namespace InventoryManagement.Repository
                 .Include(p => p.SellingList)
                 .ThenInclude(sl => sl.Selling)
                 .Where(s => s.ProductCode == code)
+                .OrderByDescending(s=> s.ProductStockId)
                 .Select(s => new ProductStockDetailsViewModel
                 {
                     ProductStockId = s.ProductStockId,

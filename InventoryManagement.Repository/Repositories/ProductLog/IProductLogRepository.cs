@@ -9,5 +9,6 @@ namespace InventoryManagement.Repository
         void AddList(List<ProductLogAddModel> models);
 
         Task<DbResponse<List<ProductLogViewModel>>> FindLogAsync(int productStockId);
+        Task<DbResponse<List<ProductLogViewModel>>> FindLogByCodeAsync(string code);
     }
 }

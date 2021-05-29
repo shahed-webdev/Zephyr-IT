@@ -34,10 +34,22 @@ namespace InventoryManagement.Repository
         {
             var logs = await Context.
                 ProductLog
-                .Include(p=> p.Selling)
+                .Include(p => p.Selling)
                 .Where(l => l.ProductStockId == productStockId)
                  .ProjectTo<ProductLogViewModel>(_mapper.ConfigurationProvider)
                  .ToListAsync();
+            return new DbResponse<List<ProductLogViewModel>>(true, "Success", logs);
+        }
+
+        public async Task<DbResponse<List<ProductLogViewModel>>> FindLogByCodeAsync(string code)
+        {
+            var logs = await Context.
+                ProductLog
+                .Include(p => p.Selling)
+                .Include(p => p.ProductStock)
+                .Where(l => l.ProductStock.ProductCode == code)
+                .ProjectTo<ProductLogViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
             return new DbResponse<List<ProductLogViewModel>>(true, "Success", logs);
         }
     }
