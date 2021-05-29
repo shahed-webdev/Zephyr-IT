@@ -33,8 +33,8 @@ namespace InventoryManagement.Repository
         {
             var response = new DbResponse<int>();
             var codes = model.ProductList.SelectMany(p => p.ProductCodes).ToArray();
-            var StockOuts = await db.ProductStocks.IsStockOutAsync(codes).ConfigureAwait(false);
-            if (StockOuts.Length > 0)
+            var isStockOut = db.ProductStocks.IsStockOut(codes);
+            if (isStockOut)
             {
                 response.Message = "Product Stock Out";
                 response.IsSuccess = false;
@@ -62,7 +62,7 @@ namespace InventoryManagement.Repository
                     PurchasePrice = l.PurchasePrice,
                     Description = l.Description,
                     Warranty = l.Warranty,
-                    ProductStock = sellingStock.Where(s => l.ProductCodes.Contains(s.ProductCode)).Select(s =>
+                    ProductStock = sellingStock.Where(s => l.ProductCodes.Contains(s.ProductCode) && !s.IsSold).Select(s =>
                     {
                         s.IsSold = true;
                         return s;
