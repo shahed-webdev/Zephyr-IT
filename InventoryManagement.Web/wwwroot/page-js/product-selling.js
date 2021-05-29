@@ -45,6 +45,10 @@ const inputServiceCharge = formPayment.inputServiceCharge
 const inputServiceChargeDescription = formPayment.inputServiceChargeDescription
 const inputServiceCost = formPayment.inputServiceCost
 
+//purchase from customer
+const inputPurchaseBillNo = formPayment.inputPurchaseBillNo
+const inputPurchaseAmount = formPayment.inputPurchaseAmount
+const inputPurchaseDescription = formPayment.inputPurchaseDescription
 
 //customer
 const hiddenCustomerId = formPayment.hiddenCustomerId
@@ -445,6 +449,8 @@ const onSellSubmitClicked = function (evt) {
             }
 
             $.notify(response.Message, response.IsSuccess ? "success" : "error");
+            btnSubmit.innerText = "Sell Product";
+            btnSubmit.disabled = false;
         },
         error: function (error) {
             console.log(error);

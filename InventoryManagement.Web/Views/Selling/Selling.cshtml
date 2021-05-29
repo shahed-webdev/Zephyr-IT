@@ -101,6 +101,23 @@
                         </li>
                     </ul>
                 </div>
+                
+                <div class="card card-body mb-3">
+                    <ul class="mb-0">
+                        <li class="md-form">
+                            <input id="inputPurchaseBillNo" type="text" class="form-control">
+                            <label for="inputPurchaseBillNo">Purchase Bill No</label>
+                        </li>
+                        <li class="md-form">
+                            <input id="inputPurchaseAmount" type="number" step="0.01" min="0" class="form-control">
+                            <label for="inputPurchaseAmount">Purchase Amount</label>
+                        </li>
+                        <li class="md-form">
+                            <textarea id="inputPurchaseDescription" rows="1" class="md-textarea form-control"></textarea>
+                            <label for="inputPurchaseDescription">Purchase Description</label>
+                        </li>
+                    </ul>
+                </div>  
 
                 <div class="card card-body mb-3">
                     <ul class="mb-0">
@@ -151,5 +168,5 @@
 </div>
 
 @section Scripts{
-    <script src="~/page-js/product-selling.js?v=2.0.2"></script>
+    <script src="~/page-js/product-selling.js?v=2.1.2"></script>
 }
