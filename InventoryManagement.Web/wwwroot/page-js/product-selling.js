@@ -45,6 +45,10 @@ const inputServiceCharge = formPayment.inputServiceCharge
 const inputServiceChargeDescription = formPayment.inputServiceChargeDescription
 const inputServiceCost = formPayment.inputServiceCost
 
+//purchase from customer
+const inputPurchaseBillNo = formPayment.inputPurchaseBillNo
+const inputPurchaseAmount = formPayment.inputPurchaseAmount
+const inputPurchaseDescription = formPayment.inputPurchaseDescription
 
 //customer
 const hiddenCustomerId = formPayment.hiddenCustomerId
