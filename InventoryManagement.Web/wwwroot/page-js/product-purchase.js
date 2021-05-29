@@ -50,15 +50,15 @@ const buzzAudio = document.getElementById('audio');
 
 //****Global product Code Storage****//
 const productCode = {
-    isExistServer: function (codeArray) {
-        const url = '/Purchase/PurchaseCodeIsExist';
+    isExistServer:  async function (codeArray) {
+        const url = '/Purchase/IsPurchaseCodeExist';
         const options = {
             method: 'post',
             url: url,
             data: codeArray
         }
 
-        return axios(options).then(response => response.data).catch(error => console.log(error.response));
+        return await axios(options).then(response => response.data).catch(error => console.log(error.response));
     },
     isExist: function (newCode) {
         if (!codeStorage.length) return false;
@@ -496,7 +496,7 @@ const onProductCodeClicked = function (evt) {
 const matchExistingProductCode = function (stocks) {
     const addedCode = showAddedCode.querySelectorAll('.code-span');
     let isUnsoldExist = false;
-
+    console.log(stocks)
     addedCode.forEach(added => {
         stocks.forEach(stock => {
             if (added.textContent === stock.ProductCode) {

@@ -41,8 +41,8 @@ namespace InventoryManagement.Web.Views
             return Json(response);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> PurchaseCodeIsExist([FromBody] List<ProductStockViewModel> stocks)
+      
+        public async Task<IActionResult> IsPurchaseCodeExist([FromBody] List<ProductStockViewModel> stocks)
         {
             var existList = await _db.ProductStocks.IsExistListAsync(stocks).ConfigureAwait(false);
             return Json(existList);
