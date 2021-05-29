@@ -94,7 +94,7 @@
             }
 
             //get product log
-            getProductLog(product.ProductStockId);
+            getProductLog(product.ProductCode);
 
             infoContainer.classList.add('show');
             document.getElementById('category').textContent = product.ProductCatalogName;
@@ -117,12 +117,12 @@
         //product logs
         const showLog = document.getElementById("show-log");
 
-        function getProductLog(stockId) {
+        function getProductLog(code) {
             showLog.innerHTML = "";
 
             $.ajax({
                 url: '/Product/GetProductLog',
-                data: { stockId },
+                data: { code },
                 success: function(response) {
                     response.Data.forEach(item => {
                         const li = document.createElement("li");

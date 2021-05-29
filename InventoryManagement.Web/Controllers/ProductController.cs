@@ -211,9 +211,9 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //product log
-        public async Task<IActionResult> GetProductLog(int stockId)
+        public async Task<IActionResult> GetProductLog(string code)
         {
-            var data = await _db.ProductLog.FindLogAsync(stockId);
+            var data = await _db.ProductLog.FindLogByCodeAsync(code);
             return Json(data);
         }
         #endregion
