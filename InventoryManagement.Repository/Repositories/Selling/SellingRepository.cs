@@ -103,7 +103,10 @@ namespace InventoryManagement.Repository
                 ServiceCost = model.ServiceCost,
                 ServiceCharge = model.ServiceCharge,
                 ServiceChargeDescription = model.ServiceChargeDescription,
-                SellingAccountCost = model.SellingPaidAmount * accountCostPercentage / 100
+                SellingAccountCost = model.SellingPaidAmount * accountCostPercentage / 100,
+                PurchaseAdjustedAmount = model.PurchaseAdjustedAmount,
+                PurchaseDescription = model.PurchaseDescription,
+                PurchaseId = model.PurchaseId
             };
 
 
@@ -162,6 +165,7 @@ namespace InventoryManagement.Repository
               .ThenInclude(a => a.Account)
               .Include(s => s.SellingExpense)
               .Include(s => s.Warranty)
+              .Include(s => s.Purchase)
               .Select(s => new SellingReceiptViewModel
               {
                   SellingSn = s.SellingSn,
@@ -201,6 +205,10 @@ namespace InventoryManagement.Repository
                   PromisedPaymentDate = s.PromisedPaymentDate,
                   ServiceCharge = s.ServiceCharge,
                   ServiceChargeDescription = s.ServiceChargeDescription,
+                  PurchaseId = s.PurchaseId,
+                  PurchaseAdjustedAmount = s.PurchaseAdjustedAmount,
+                  PurchaseDescription = s.PurchaseDescription,
+                  PurchaseSn = s.Purchase.PurchaseSn,
                   SellingExpenses = s.SellingExpense.Select(e => new SellingExpenseListModel
                   {
                       SellingExpenseId = e.SellingExpenseId,

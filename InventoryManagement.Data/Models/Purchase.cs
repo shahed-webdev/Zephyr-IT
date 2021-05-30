@@ -30,6 +30,7 @@ namespace InventoryManagement.Data
 
         public virtual Registration Registration { get; set; }
         public virtual Vendor Vendor { get; set; }
+        public virtual Selling Selling { get; set; }
         public virtual ICollection<PurchaseList> PurchaseList { get; set; }
         public virtual ICollection<PurchasePaymentList> PurchasePaymentList { get; set; }
         public virtual ICollection<ProductLog> ProductLog { get; set; }

@@ -4,14 +4,16 @@ using InventoryManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210530042325_AddPurchaseAmountInSellingTable")]
+    partial class AddPurchaseAmountInSellingTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1068,7 +1070,7 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<DateTime?>("PromisedPaymentDate")
                         .HasColumnType("date");
 
-                    b.Property<decimal>("PurchaseAdjustedAmount")
+                    b.Property<decimal>("PurchaseAmount")
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("PurchaseDescription")
@@ -1100,7 +1102,7 @@ namespace InventoryManagement.Data.Migrations
                     b.Property<decimal>("SellingDueAmount")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18, 2)")
-                        .HasComputedColumnSql("(([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount]+[PurchaseAdjustedAmount])) PERSISTED");
+                        .HasComputedColumnSql("(([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount])) PERSISTED");
 
                     b.Property<decimal>("SellingNetProfit")
                         .ValueGeneratedOnAddOrUpdate()
@@ -1114,7 +1116,7 @@ namespace InventoryManagement.Data.Migrations
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("varchar(4)")
-                        .HasComputedColumnSql("(case when (([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount]+[PurchaseAdjustedAmount]))<=(0.00) then 'Paid' else 'Due' end) PERSISTED")
+                        .HasComputedColumnSql("(case when (([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount]))<=(0.00) then 'Paid' else 'Due' end) PERSISTED")
                         .HasMaxLength(4)
                         .IsUnicode(false);
 

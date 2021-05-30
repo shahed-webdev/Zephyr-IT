@@ -55,5 +55,11 @@ namespace InventoryManagement.Data
         public virtual ICollection<Warranty> Warranty { get; set; }
         public virtual ICollection<ProductLog> ProductLog { get; set; }
 
+
+        //Purchase Paid amount 
+        public decimal PurchaseAdjustedAmount { get; set; }
+        public string PurchaseDescription { get; set; }
+        public int? PurchaseId { get; set; }
+        public virtual Purchase Purchase { get; set; }
     }
 }
