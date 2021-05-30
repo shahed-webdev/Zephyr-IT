@@ -438,7 +438,7 @@ const onOpenProductCodeModal = function (form) {
 
     if (isAdded) {
         productError.textContent = 'This product already added!'
-        return
+        return;
     }
 
     //show product code on modal
@@ -446,6 +446,9 @@ const onOpenProductCodeModal = function (form) {
 
     //open modal popup
     modalInsetCode.modal('show');
+
+    //change cart button text
+    changeCartButton(true);
 }
 
 //add product code to temp storage
@@ -468,6 +471,9 @@ const onSubmitProductCode = function (form) {
 
         //save to local storage
         localStorage.setItem('temp-storage', JSON.stringify(tempStorage));
+
+        //change cart button text
+        changeCartButton(true);
     }
 
     //clear the code input field
@@ -496,7 +502,7 @@ const onProductCodeClicked = function (evt) {
 const matchExistingProductCode = function (stocks) {
     const addedCode = showAddedCode.querySelectorAll('.code-span');
     let isUnsoldExist = false;
-    console.log(stocks)
+    
     addedCode.forEach(added => {
         stocks.forEach(stock => {
             if (added.textContent === stock.ProductCode) {
@@ -518,9 +524,9 @@ const matchExistingProductCode = function (stocks) {
 }
 
 //add product to list
-const onAddProductToList = function () {
+const onAddProductToList = function (evt) {
     productError.textContent = ''
-
+ 
     const ParentId = selectCategory.value;
     const ProductId = +selectProductId.value;
     const PurchasePrice = +inputPurchasePrice.value;
@@ -536,9 +542,7 @@ const onAddProductToList = function () {
 
     if (tempStorage.ProductStocks.length) {
         //start loading spinner
-        this.children[0].style.display = "none";
-        this.children[1].style.display = "inline-block";
-        this.disabled = true;
+        btnAddTolist.disabled = true;
 
         //check product code on server
         const serverCode = productCode.isExistServer(tempStorage.ProductStocks);
@@ -554,40 +558,57 @@ const onAddProductToList = function () {
                 }
             }
 
-            //add value to cart storage
-            storage.push(tempStorage);
+            //check if dbl click
+            if (evt.detail === 2) {
+                //add value to cart storage
+                storage.push(tempStorage);
 
-            //show cart on table
-            tbody.appendChild(createTableRow(tempStorage));
+                //show cart on table
+                tbody.appendChild(createTableRow(tempStorage));
 
-            //calculate and show price
-            appendTotalPrice();
+                //calculate and show price
+                appendTotalPrice();
 
-            //save to local storage
-            localStorage.setItem('cart-storage', JSON.stringify(storage));
+                //save to local storage
+                localStorage.setItem('cart-storage', JSON.stringify(storage));
 
-            //remove the stock temp storage
-            tempStorage = null;
-            localStorage.removeItem('temp-storage');
+                //remove the stock temp storage
+                tempStorage = null;
+                localStorage.removeItem('temp-storage');
 
-            //clear the text input
-            clearInput()
+                //clear the text input
+                clearInput()
 
-            //hide modal
-            modalInsetCode.modal('hide');
-
+                //hide modal
+                modalInsetCode.modal('hide');
+            }
         }).finally(() => {
-            this.children[0].style.display = "inline-block";
-            this.children[1].style.display = "none";
-            this.disabled = false;
+            btnAddTolist.disabled = false;
+            changeCartButton();
         });
     }
 }
 
+//check cart button text
+function changeCartButton(isChecking) {
+    if (isChecking) {
+        btnAddTolist.innerText =  "check product";
+        btnAddTolist.classList.add("btn-warning");
+        btnAddTolist.classList.remove("btn-success");
+    } else {
+        btnAddTolist.innerText = "double click to add";
+        btnAddTolist.classList.remove("btn-warning");
+        btnAddTolist.classList.add("btn-success");
+    }
+}
 
-//event listeners
+//open code modal event listeners
 formCart.addEventListener('submit', onOpenProductCodeModal);
+
+//add to cart
+btnAddTolist.addEventListener('dblclick', onAddProductToList);
 btnAddTolist.addEventListener('click', onAddProductToList);
+
 
 //add product code form
 formAddCode.addEventListener('submit', onSubmitProductCode);
