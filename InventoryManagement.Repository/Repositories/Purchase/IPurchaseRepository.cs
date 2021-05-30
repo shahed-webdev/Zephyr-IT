@@ -17,5 +17,6 @@ namespace InventoryManagement.Repository
         decimal DailyPurchaseAmount(DateTime? date);
         ICollection<MonthlyAmount> MonthlyAmounts(int year);
         Task<DbResponse> UpdateMemoNumberAsync(int purchaseId, string newMemoNumber);
+        Task<DbResponse<PurchaseGetByReceiptModel>> GetDetailsByReceiptNo(int receipt);
     }
 }

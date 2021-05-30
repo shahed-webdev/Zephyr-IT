@@ -291,5 +291,29 @@ namespace InventoryManagement.Repository
 
             return response;
         }
+
+        public async Task<DbResponse<PurchaseGetByReceiptModel>> GetDetailsByReceiptNo(int receipt)
+        {
+            try
+            {
+                var purchase = await Context.Purchase.FirstOrDefaultAsync(p => p.PurchaseSn == receipt).ConfigureAwait(false);
+
+                if (purchase == null) return new DbResponse<PurchaseGetByReceiptModel>(false, "Receipt Not Found");
+
+                var data = new PurchaseGetByReceiptModel
+                {
+                    PurchaseAdjustedAmount = purchase.PurchasePaidAmount,
+                    PurchaseDescription = string.Join(", ", purchase.PurchaseList.Select(p => $"{p.Product.ProductName}")),
+                    PurchaseId = purchase.PurchaseId
+                };
+
+                return new DbResponse<PurchaseGetByReceiptModel>(true, "Success", data);
+            }
+            catch (DbUpdateException e)
+            {
+                return new DbResponse<PurchaseGetByReceiptModel>(false, e.Message);
+            }
+
+        }
     }
 }

@@ -58,4 +58,11 @@ namespace InventoryManagement.Repository
         public string MemoNumber { get; set; }
         public DateTime PurchaseDate { get; set; }
     }
+
+    public class PurchaseGetByReceiptModel
+    {
+        public decimal PurchaseAdjustedAmount { get; set; }
+        public string PurchaseDescription { get; set; }
+        public int? PurchaseId { get; set; }
+    }
 }
