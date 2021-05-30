@@ -46,6 +46,8 @@ const inputServiceChargeDescription = formPayment.inputServiceChargeDescription
 const inputServiceCost = formPayment.inputServiceCost
 
 //purchase from customer
+const findPurchaseBill = formPayment.findPurchaseBill
+const hiddenPurchaseId = formPayment.hiddenPurchaseId
 const inputPurchaseBillNo = formPayment.inputPurchaseBillNo
 const inputPurchaseAmount = formPayment.inputPurchaseAmount
 const inputPurchaseDescription = formPayment.inputPurchaseDescription
@@ -314,7 +316,59 @@ showProducts()
 
 //****PAYMENT SECTION****/
 
-//functions
+//purchase bill no input
+findPurchaseBill.addEventListener("click", function () {
+    hiddenPurchaseId.value = "";
+    inputPurchaseAmount.value = "";
+    inputPurchaseDescription.value = "";
+
+    $.ajax({
+        url: "/Selling/GetPurchasePaidAmount",
+        data: { billNo: inputPurchaseBillNo.value },
+        type: "POST",
+        success: function (response) {
+      
+            if (response.IsSuccess) {
+                calculatePayableAmount(response.Data.PurchaseAdjustedAmount);
+
+                hiddenPurchaseId.value = response.Data.PurchaseId;
+                inputPurchaseAmount.value = response.Data.PurchaseAdjustedAmount;
+                inputPurchaseAmount.previousElementSibling.classList.add('active');
+
+                inputPurchaseDescription.value = response.Data.PurchaseDescription;
+                inputPurchaseDescription.previousElementSibling.classList.add('active');
+                return;
+            }
+
+            $.notify(response.Message, response.IsSuccess ? "success" : "error");
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+})
+
+//purchase paid amount change input
+inputPurchaseAmount.addEventListener("input", function () {
+    calculatePayableAmount();
+})
+
+//re calculate payable amount after input purchase paid amount
+function calculatePayableAmount(paidAmount) {
+    const total = +totalPrice.textContent;
+    const purchasePaid = paidAmount ? paidAmount: +inputPurchaseAmount.value;
+
+    const grandTotal = (total - purchasePaid);
+
+    totalPayable.innerText = grandTotal.toFixed();
+    totalDue.innerText = grandTotal.toFixed();
+
+    //inputPurchaseAmount.setAttribute("max", grandTotal);
+
+    inputDiscount.value = '';
+    inputPaid.value = '';
+}
+
 //compare Validation
 const validInput = function (total, inputted) {
     return (total < inputted) ? false : true;
@@ -323,9 +377,10 @@ const validInput = function (total, inputted) {
 //input discount amount
 const onInputDiscount = function () {
     const total = +totalPrice.textContent;
+    const purchaseAmount = +inputPurchaseAmount.value;
     const discount = +this.value;
     const isValid = validInput(total, discount);
-    const grandTotal = (total - discount);
+    const grandTotal = (total - purchaseAmount - discount);
 
     this.setAttribute('max', total);
 
@@ -389,6 +444,12 @@ const validation = function () {
         return false;
     }
 
+    const due = +totalDue.innerText;
+    if (due < 0) {
+        customerError.innerText = 'Due Amount No More Than 0!';
+        return false;
+    }
+
     if (!checkDueLimit()) {
         return false
     }
@@ -429,7 +490,11 @@ const onSellSubmitClicked = function (evt) {
         Expense:inputExpense.value,
         ExpenseDescription:inputExpenseDescription.value,
         AccountId: inputPaid.value ? selectPaymentMethod.value : "",
-        ProductList: productList
+        ProductList: productList,
+
+        PurchaseAdjustedAmount: inputPurchaseAmount.value,
+        PurchaseDescription: inputPurchaseDescription.value,
+        PurchaseId: hiddenPurchaseId.value
     }
 
     //disable button on submit

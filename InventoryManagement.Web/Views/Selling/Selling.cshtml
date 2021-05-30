@@ -103,18 +103,22 @@
                 </div>
                 
                 <div class="card card-body mb-3">
+                    <input id="hiddenPurchaseId" type="hidden"/>
                     <ul class="mb-0">
-                        <li class="md-form">
+                        <li class="md-form input-group">
                             <input id="inputPurchaseBillNo" type="text" class="form-control">
+                            <div class="input-group-append">
+                                <button id="findPurchaseBill" class="btn btn-md btn-secondary m-0 px-3" type="button">find</button>
+                            </div>
                             <label for="inputPurchaseBillNo">Purchase Bill No</label>
-                        </li>
+                        </li> 
                         <li class="md-form">
+                            <label for="inputPurchaseAmount">Purchase Paid Amount</label>
                             <input id="inputPurchaseAmount" type="number" step="0.01" min="0" class="form-control">
-                            <label for="inputPurchaseAmount">Purchase Amount</label>
                         </li>
                         <li class="md-form">
-                            <textarea id="inputPurchaseDescription" rows="1" class="md-textarea form-control"></textarea>
                             <label for="inputPurchaseDescription">Purchase Description</label>
+                            <textarea id="inputPurchaseDescription" rows="1" class="md-textarea form-control"></textarea>
                         </li>
                     </ul>
                 </div>  

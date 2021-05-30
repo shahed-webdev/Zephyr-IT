@@ -101,6 +101,14 @@ namespace InventoryManagement.Web.Controllers
             return Json(data);
         }
 
+        //Get Purchase Paid Amount (ajax)
+        [HttpPost]
+        public async Task<IActionResult> GetPurchasePaidAmount(int billNo)
+        {
+            var data = await _db.Purchases.GetDetailsByReceiptNo(billNo);
+            return Json(data);
+        }
+
 
         #region Selling Invoice
         //selling invoice

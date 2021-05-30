@@ -296,7 +296,10 @@ namespace InventoryManagement.Repository
         {
             try
             {
-                var purchase = await Context.Purchase.FirstOrDefaultAsync(p => p.PurchaseSn == receipt).ConfigureAwait(false);
+                var purchase = await Context.Purchase
+                    .Include(p=> p.PurchaseList)
+                    .ThenInclude(l=> l.Product)
+                    .FirstOrDefaultAsync(p => p.PurchaseSn == receipt).ConfigureAwait(false);
 
                 if (purchase == null) return new DbResponse<PurchaseGetByReceiptModel>(false, "Receipt Not Found");
 
