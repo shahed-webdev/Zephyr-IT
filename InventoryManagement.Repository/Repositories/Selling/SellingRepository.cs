@@ -33,8 +33,8 @@ namespace InventoryManagement.Repository
         {
             var response = new DbResponse<int>();
             var codes = model.ProductList.SelectMany(p => p.ProductCodes).ToArray();
-            var StockOuts = await db.ProductStocks.IsStockOutAsync(codes).ConfigureAwait(false);
-            if (StockOuts.Length > 0)
+            var isStockOut = db.ProductStocks.IsStockOut(codes);
+            if (isStockOut)
             {
                 response.Message = "Product Stock Out";
                 response.IsSuccess = false;
@@ -62,7 +62,7 @@ namespace InventoryManagement.Repository
                     PurchasePrice = l.PurchasePrice,
                     Description = l.Description,
                     Warranty = l.Warranty,
-                    ProductStock = sellingStock.Where(s => l.ProductCodes.Contains(s.ProductCode)).Select(s =>
+                    ProductStock = sellingStock.Where(s => l.ProductCodes.Contains(s.ProductCode) && !s.IsSold).Select(s =>
                     {
                         s.IsSold = true;
                         return s;
@@ -103,7 +103,10 @@ namespace InventoryManagement.Repository
                 ServiceCost = model.ServiceCost,
                 ServiceCharge = model.ServiceCharge,
                 ServiceChargeDescription = model.ServiceChargeDescription,
-                SellingAccountCost = model.SellingPaidAmount * accountCostPercentage / 100
+                SellingAccountCost = model.SellingPaidAmount * accountCostPercentage / 100,
+                PurchaseAdjustedAmount = model.PurchaseAdjustedAmount,
+                PurchaseDescription = model.PurchaseDescription,
+                PurchaseId = model.PurchaseId
             };
 
 
@@ -162,6 +165,7 @@ namespace InventoryManagement.Repository
               .ThenInclude(a => a.Account)
               .Include(s => s.SellingExpense)
               .Include(s => s.Warranty)
+              .Include(s => s.Purchase)
               .Select(s => new SellingReceiptViewModel
               {
                   SellingSn = s.SellingSn,
@@ -201,6 +205,10 @@ namespace InventoryManagement.Repository
                   PromisedPaymentDate = s.PromisedPaymentDate,
                   ServiceCharge = s.ServiceCharge,
                   ServiceChargeDescription = s.ServiceChargeDescription,
+                  PurchaseId = s.PurchaseId,
+                  PurchaseAdjustedAmount = s.PurchaseAdjustedAmount,
+                  PurchaseDescription = s.PurchaseDescription,
+                  PurchaseSn = s.Purchase.PurchaseSn,
                   SellingExpenses = s.SellingExpense.Select(e => new SellingExpenseListModel
                   {
                       SellingExpenseId = e.SellingExpenseId,

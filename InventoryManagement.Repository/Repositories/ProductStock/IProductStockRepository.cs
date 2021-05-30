@@ -8,7 +8,7 @@ namespace InventoryManagement.Repository
     {
         Task<bool> IsExistAsync(string productStock);
         Task<List<ProductStockViewModel>> IsExistListAsync(List<ProductStockViewModel> stocks);
-        Task<string[]> IsStockOutAsync(string[] codes);
+        bool IsStockOut(string[] codes);
         Task<ProductSellViewModel> FindforSellAsync(string code);
         Task<ProductStockDetailsViewModel> FindforDetailsAsync(string code);
 
