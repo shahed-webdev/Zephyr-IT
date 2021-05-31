@@ -45,6 +45,13 @@ const inputServiceCost = formPayment.inputServiceCost
  const hiddenSellingId = formPayment.hiddenSellingId;
  const customerError = formPayment.querySelector('#customer-error');
 
+//purchase from customer
+ const findPurchaseBill = formPayment.findPurchaseBill
+ const hiddenPurchaseId = formPayment.hiddenPurchaseId
+ const inputPurchaseBillNo = formPayment.inputPurchaseBillNo
+ const inputPurchaseAmount = formPayment.inputPurchaseAmount
+ const inputPurchaseDescription = formPayment.inputPurchaseDescription
+
 //formReceiptDelete
 formReceiptDelete = document.getElementById('formReceiptDelete');
 
@@ -158,33 +165,6 @@ const showProducts = function () {
     appendTotalPrice();
 }
 
-// click remove or stock
-const onRemoveClicked = function(evt) {
-    const element = evt.target;
-    const row = element.parentElement.parentElement.parentElement;
-    const id = +row.getAttribute('data-id');
-    const name = row.getAttribute('data-name');
-    const purchasePrice = +row.getAttribute('data-pprice');
-
-    //remove code
-    const codeClicked = element.classList.contains('code');
-
-    if (!codeClicked) return;
-
-    const pCode = element.textContent;
-    const index = cartProducts.findIndex(item => item.ProductCatalogId === id && item.ProductName === name && item.PurchasePrice === purchasePrice);
-    const codes = cartProducts[index].codes;
-
-    codes.forEach((obj, i) => {
-        if (obj.code === pCode) {
-            codes[i].isRemove = !codes[i].isRemove;
-            return;
-        }
-    });
-
-    cartProducts[index].sellingQuantity = codes.filter(itm => !itm.isRemove).length;
-    showProducts();
-}
 
 //show loading
 const loading = function (element, isLoading) {
@@ -209,11 +189,12 @@ const appendTotalPrice = function () {
     productTotalPrice.innerText = productPrice ? `Total: ${productPrice.toFixed(2)}` : "";
     totalPrice.innerText = totalAmount.toFixed(2);
 
+    const purchaseAmount = +inputPurchaseAmount.value;
     const discount = +inputDiscount.value;
     const prevPaid = +totalPrevPaid.textContent;
     const returnAmount = +inputReturnAmount.value;
 
-    const sum = totalAmount - (discount + prevPaid + returnAmount);
+    const sum = totalAmount - (discount + prevPaid + returnAmount + purchaseAmount);
 
     totalDue.textContent = sum.toFixed(2);
 
@@ -262,7 +243,7 @@ const onInputUnitPrice = function (evt) {
 formTable.addEventListener('input', onInputUnitPrice);
 
 
-// onProduct code submit
+// on Product code submit
 formCode.addEventListener('submit', evt => {
     evt.preventDefault()
     const url = '/Selling/FindProductByCode'
@@ -276,13 +257,93 @@ formCode.addEventListener('submit', evt => {
         .finally(() => loading(btnFind, false))
 })
 
-// remove product click
-tbody.addEventListener('click', onRemoveClicked);
+
+// remove product code click
+tbody.addEventListener('click', function (evt) {
+    const element = evt.target;
+    const row = element.parentElement.parentElement.parentElement;
+    const id = +row.getAttribute('data-id');
+    const name = row.getAttribute('data-name');
+    const purchasePrice = +row.getAttribute('data-pprice');
+
+    //remove code
+    const codeClicked = element.classList.contains('code');
+
+    if (!codeClicked) return;
+    const pCode = element.textContent;
+
+    $.ajax({
+        url: '/Selling/ProductIsInStock',
+        type: "POST",
+        data: { code: pCode },
+        success: function (response) {
+            if (response) {
+                $.notify("Product Already In Stock", "error");
+                return;
+            }
+
+            const index = cartProducts.findIndex(item => item.ProductCatalogId === id && item.ProductName === name && item.PurchasePrice === purchasePrice);
+            const codes = cartProducts[index].codes;
+
+            codes.forEach((obj, i) => {
+                if (obj.code === pCode) {
+                    codes[i].isRemove = !codes[i].isRemove;
+                    return;
+                }
+            });
+
+            cartProducts[index].sellingQuantity = codes.filter(itm => !itm.isRemove).length;
+            showProducts();
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+});
 
 
-//****PAYMENT SECTION****/
+//**** PAYMENT SECTION ****/
 
-//functions
+//*** Purchase from customer ****
+//purchase bill no input
+findPurchaseBill.addEventListener("click", function () {
+    hiddenPurchaseId.value = "";
+    inputPurchaseAmount.value = "";
+    inputPurchaseDescription.value = "";
+
+    $.ajax({
+        url: "/Selling/GetPurchasePaidAmount",
+        data: { billNo: inputPurchaseBillNo.value },
+        type: "POST",
+        success: function (response) {
+            if (response.IsSuccess) {
+                calculatePayableAmount(response.Data.PurchaseAdjustedAmount);
+
+                hiddenPurchaseId.value = response.Data.PurchaseId;
+                inputPurchaseAmount.value = response.Data.PurchaseAdjustedAmount;
+                inputPurchaseAmount.previousElementSibling.classList.add('active');
+
+                inputPurchaseDescription.value = response.Data.PurchaseDescription;
+                inputPurchaseDescription.previousElementSibling.classList.add('active');
+                return;
+            }
+
+            $.notify(response.Message, response.IsSuccess ? "success" : "error");
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+})
+
+//purchase paid amount change input
+inputPurchaseAmount.addEventListener("input", function () {
+    //calculatePayableAmount();
+    appendTotalPrice();
+})
+//*** End Purchase from customer ****
+
+
 //compare Validation
 const validInput = function (total, inputted) {
     return (total < inputted) ? false : true;
@@ -322,6 +383,7 @@ const onInputPaid = function () {
     const paid = +this.value;
     paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
 }
+
 
 function disablePaid(dueAmount) {
     if (dueAmount > 0) {
@@ -429,7 +491,11 @@ const onSellSubmitClicked = function(evt) {
         PromisedPaymentDate: inputPromisedDate.value,
         ServiceCharge: inputServiceCharge.value,
         ServiceChargeDescription: inputServiceChargeDescription.value,
-        ServiceCost: inputServiceCost.value
+        ServiceCost: inputServiceCost.value,
+
+        PurchaseAdjustedAmount: inputPurchaseAmount.value,
+        PurchaseDescription: inputPurchaseDescription.value,
+        PurchaseId: hiddenPurchaseId.value
     }
 
     //disable button on submit
