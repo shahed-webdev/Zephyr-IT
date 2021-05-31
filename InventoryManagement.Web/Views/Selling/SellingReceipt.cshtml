@@ -59,84 +59,91 @@
 
     <table class="product-tb table table-sm table-bordered mt-5">
         <thead>
-        <tr>
-            <th><strong>SL.</strong></th>
-            <th><strong>Product</strong></th>
-            <th><strong>Description</strong></th>
-            <th><strong>Warranty</strong></th>
-            <th><strong>Qty.</strong></th>
-            <th><strong>U.Price</strong></th>
-            <th class="text-right"><strong>Price</strong></th>
-        </tr>
+            <tr>
+                <th><strong>SL.</strong></th>
+                <th><strong>Product</strong></th>
+                <th><strong>Description</strong></th>
+                <th><strong>Warranty</strong></th>
+                <th><strong>Qty.</strong></th>
+                <th><strong>U.Price</strong></th>
+                <th class="text-right"><strong>Price</strong></th>
+            </tr>
         </thead>
         <tbody>
-        @{
-            var index = 1;
-            @if (Model.ServiceCharge > 0)
-            {
-                <tr>
-                    <td class="text-center">@index</td>
-                    <td>Service</td>
-                    <td colspan="4">@Model.ServiceChargeDescription</td>
-                    <td class="text-right">৳@Model.ServiceCharge</td>
-                </tr>
-                index++;
+            @{
+                var index = 1;
+                @if (Model.ServiceCharge > 0)
+                {
+                    <tr>
+                        <td class="text-center">@index</td>
+                        <td>Service</td>
+                        <td colspan="4">@Model.ServiceChargeDescription</td>
+                        <td class="text-right">৳@Model.ServiceCharge</td>
+                    </tr>
+                    index++;
+                }
+
+                foreach (var item in Model.Products)
+                {
+                    <tr>
+                        <td class="text-center">@index</td>
+                        <td>@item.ProductCatalogName</td>
+                        <td>
+                            @item.ProductName,
+                            @if (item.Description != null)
+                            {
+                                <span>@item.Description,</span>
+                            }
+
+                            @foreach (var code in item.ProductCodes)
+                            {
+                                <span class="codeSpan">
+
+                                    @code
+
+                                </span>
+                            }
+                        </td>
+                        <td class="text-center">@item.Warranty</td>
+                        <td class="text-center">@item.ProductCodes.Length</td>
+                        <td class="text-center">৳@item.SellingPrice</td>
+                        <td class="text-right">৳@(item.SellingPrice * item.ProductCodes.Length)</td>
+                    </tr>
+                    index++;
+                }
             }
 
-            foreach (var item in Model.Products)
-            {
-                <tr>
-                    <td class="text-center">@index</td>
-                    <td>@item.ProductCatalogName</td>
-                    <td>
-                        @item.ProductName,
-                        @if (item.Description != null)
-                        {
-                            <span>@item.Description,</span>
-                        }
+            <tr>
+                <td colspan="4" class="text-center">
+                    <span id="amount-word"></span>
+                </td>
+                <td colspan="4" class="text-right">
+                    @{
+                        var totalAmount = Model.SellingTotalPrice + Model.ServiceCharge;
+                    }
+                    <h5>Total&nbspAmount:<strong>৳@totalAmount</strong></h5>
+                    @if (Model.SellingDiscountAmount > 0)
+                    {
+                        <h5 class="border-bottom border-dark pb-1">Discount:<strong>৳@Model.SellingDiscountAmount</strong></h5>
+                        <h5 class="mt-1">Net Payable Amount:<strong>৳@(totalAmount - Model.SellingDiscountAmount)</strong></h5>
+                    }
+                    @if (Model.PurchaseAdjustedAmount > 0)
+                    {
+                        <h5>Cash&nbspPaid:<strong>৳@Model.SellingPaidAmount</strong></h5>
+                    }
 
-                        @foreach (var code in item.ProductCodes)
-                        {
-                            <span class="codeSpan">
-
-                                @code
-
-                            </span>
-                        }
-                    </td>
-                    <td class="text-center">@item.Warranty</td>
-                    <td class="text-center">@item.ProductCodes.Length</td>
-                    <td class="text-center">৳@item.SellingPrice</td>
-                    <td class="text-right">৳@(item.SellingPrice * item.ProductCodes.Length)</td>
-                </tr>
-                index++;
-            }
-        }
-
-        <tr>
-            <td colspan="6" class="text-center">
-                <span id="amount-word"></span>
-            </td>
-            <td class="text-right">
-                @{
-                    var totalAmount = Model.SellingTotalPrice + Model.ServiceCharge;
-                }
-                <h5>Total&nbspAmount:<strong>৳@totalAmount</strong></h5>
-                @if (Model.SellingDiscountAmount > 0)
-                {
-                    <h5 class="border-bottom border-dark pb-1">Discount:<strong>৳@Model.SellingDiscountAmount</strong></h5>
-                    <h5 class="mt-1">Net Payable Amount:<strong>৳@(totalAmount - Model.SellingDiscountAmount)</strong></h5>
-                }
-                <h5>Cash&nbspPaid:<strong>৳@Model.SellingPaidAmount</strong></h5>
-                @if (Model.SellingReturnAmount > 0)
-                {
-                    <h5>Return&nbspAmount:<strong>৳@Model.SellingReturnAmount</strong></h5>
-                }
-                <h5>Due Amount:<strong>৳@Model.SellingDueAmount</strong></h5>
-            </td>
-        </tr>
+                    <h5>
+                        <a href="/Purchase/PurchaseReceipt/@Model.PurchaseId">Purchase</a> Adjustment Amount:<strong>৳@Model.PurchaseAdjustedAmount</strong>
+                    </h5>
+                    @if (Model.SellingReturnAmount > 0)
+                    {
+                        <h5>Return&nbspAmount:<strong>৳@Model.SellingReturnAmount</strong></h5>
+                    }
+                    <h5>Due Amount:<strong>৳@Model.SellingDueAmount</strong></h5>
+                </td>
+            </tr>
         </tbody>
-    </table>
+    </table> 
 
     <div class="paid-record row">
         @if (Model.Payments.Count > 0)
