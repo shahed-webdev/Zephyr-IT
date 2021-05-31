@@ -658,6 +658,9 @@ namespace InventoryManagement.Repository
                 selling.ServiceCharge = model.ServiceCharge;
                 selling.ServiceCost = model.ServiceCost;
                 selling.ServiceChargeDescription = model.ServiceChargeDescription;
+                selling.PurchaseId = model.PurchaseId;
+                selling.PurchaseAdjustedAmount = model.PurchaseAdjustedAmount;
+                selling.PurchaseDescription = model.PurchaseDescription;
 
                 if (model.PromisedPaymentDate != null)
                     selling.PromisedPaymentDate = model.PromisedPaymentDate.Value.BdTime().Date;

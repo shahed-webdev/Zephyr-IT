@@ -164,6 +164,10 @@ namespace InventoryManagement.Repository
         public decimal ServiceCost { get; set; }
         public string ServiceChargeDescription { get; set; }
         public int? AccountId { get; set; }
+
+        public decimal PurchaseAdjustedAmount { get; set; }
+        public string PurchaseDescription { get; set; }
+        public int? PurchaseId { get; set; }
     }
 
     public class SellingUpdateProductPostModel
