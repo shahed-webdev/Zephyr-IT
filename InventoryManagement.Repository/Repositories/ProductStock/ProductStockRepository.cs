@@ -35,6 +35,11 @@ namespace InventoryManagement.Repository
             return codeCount != availableStockCount;
         }
 
+        public bool IsInStock(string code)
+        {
+            return Context.ProductStock.Any(s => s.ProductCode == code && !s.IsSold);
+        }
+
         public Task<ProductSellViewModel> FindforSellAsync(string code)
         {
             var product = Context.ProductStock
