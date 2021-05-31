@@ -15,7 +15,7 @@
         #formPayment { color: #4f4f4f; }
         #formPayment ul { list-style-type: none; padding: 0; }
         #formPayment ul li strong { font-weight: 500; }
-        .md-form textarea.md-textarea { padding: .1rem 0; }
+        .md-form textarea.md-textarea { padding: .5rem 0; }
 
         table tbody tr .codeSpan span { margin-right: 5px; }
         table tbody tr .codeSpan span:not(:last-child):after { content: ',' }
@@ -139,6 +139,27 @@
                         <li class="d-flex justify-content-between align-items-center">
                             <strong>Total Expense <a href="/Selling/SellingReceipt/@Model.SellingId"><i class="fas fa-plus-circle"></i></a></strong>
                             <strong>@Model.ExpenseTotal/-</strong>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card card-body mb-3">
+                    <input id="hiddenPurchaseId" type="hidden" value="@Model.PurchaseId">
+                    <ul class="mb-0">
+                        <li class="md-form input-group">
+                            <input id="inputPurchaseBillNo" value="@Model.PurchaseSn" type="text" class="form-control">
+                            @*<div class="input-group-append">
+                    <button id="findPurchaseBill" class="btn btn-md btn-secondary m-0 px-3" type="button">find</button>
+                </div>*@
+                            <label for="inputPurchaseBillNo">Purchase Bill No</label>
+                        </li>
+                        <li class="md-form">
+                            <label for="inputPurchaseAmount">Purchase Paid Amount</label>
+                            <input id="inputPurchaseAmount" value="@Model.PurchaseAdjustedAmount" type="number" step="0.01" min="0" class="form-control">
+                        </li>
+                        <li class="md-form">
+                            <label for="inputPurchaseDescription">Purchase Description</label>
+                            <textarea id="inputPurchaseDescription" rows="1" class="md-textarea form-control">@Model.PurchaseDescription</textarea>
                         </li>
                     </ul>
                 </div>
