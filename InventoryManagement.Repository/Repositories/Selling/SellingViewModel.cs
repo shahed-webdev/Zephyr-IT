@@ -140,6 +140,11 @@ namespace InventoryManagement.Repository
         public DateTime? PromisedPaymentDate { get; set; }
         public decimal ServiceCost { get; set; }
         public decimal ExpenseTotal { get; set; }
+
+        public decimal PurchaseAdjustedAmount { get; set; }
+        public string PurchaseDescription { get; set; }
+        public int? PurchaseId { get; set; }
+        public int? PurchaseSn { get; set; }
     }
 
     public class SellingUpdatePostModel

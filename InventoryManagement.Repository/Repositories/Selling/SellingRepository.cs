@@ -546,6 +546,7 @@ namespace InventoryManagement.Repository
               .ThenInclude(sp => sp.SellingPayment)
               .ThenInclude(a => a.Account)
               .Include(s => s.SellingExpense)
+              .Include(s => s.Purchase)
               .Select(s => new SellingUpdateGetModel
               {
                   SellingSn = s.SellingSn,
@@ -596,7 +597,11 @@ namespace InventoryManagement.Repository
                       InsertDateUtc = e.InsertDateUtc
                   }).ToList(),
                   ExpenseTotal = s.ExpenseTotal,
-                  ServiceCost = s.ServiceCost
+                  ServiceCost = s.ServiceCost,
+                  PurchaseId = s.PurchaseId,
+                  PurchaseSn = s.Purchase.PurchaseSn,
+                  PurchaseDescription = s.PurchaseDescription,
+                  PurchaseAdjustedAmount = s.PurchaseAdjustedAmount
               }).FirstOrDefaultAsync(s => s.SellingId == id);
 
             return sellingReceipt;
