@@ -44,7 +44,8 @@ const codeExistError = formAddCode.querySelector("#code-exist-error");
 const tbody = document.getElementById("tbody");
 const modalInsetCode = $('#modalInsetCode');
 const showAddedCode = document.getElementById('showAddedCode');
-const btnAddTolist = document.getElementById('btnAddToList');
+const btnCheckProduct = document.getElementById('btnCheckProduct');
+const btnAddToList = document.getElementById('btnAddToList');
 const buzzAudio = document.getElementById('audio');
 
 
@@ -414,90 +415,6 @@ const setProductTempObject = function (element) {
     localStorage.setItem('temp-storage', JSON.stringify(tempStorage));
 }
 
-//open product code modal submit
-const onOpenProductCodeModal = function (form) {
-    form.preventDefault();
-    productError.textContent =''
-
-    //get temp obj
-    getTempStorage()
-
-    //save the last value of input
-    setProductTempObject(form.target);
-
-    const ProductId = +formCart.selectProductId.value;
-
-    //check product already added
-    let isAdded = false
-    storage.forEach(product => {
-        if (product.ProductId === ProductId) {
-            isAdded = true
-            return
-        }
-    })
-
-    if (isAdded) {
-        productError.textContent = 'This product already added!'
-        return;
-    }
-
-    //show product code on modal
-    showAddedProductCode();
-
-    //open modal popup
-    modalInsetCode.modal('show');
-
-    //change cart button text
-    changeCartButton(true);
-}
-
-//add product code to temp storage
-const onSubmitProductCode = function (form) {
-    form.preventDefault();
-
-    const element = form.target.inputProductCode;
-    const stock = { ProductCode: element.value };
-    const codeExist = productCode.isExist(stock.ProductCode);
-
-    if (!codeExist) {
-        //add code to temp storage
-        tempStorage.ProductStocks.push(stock);
-
-        //save code to global code hub
-        productCode.setStorage(stock.ProductCode);
-
-        //append code on modal
-        showAddedCode.appendChild(createCodeSpan(stock.ProductCode));
-
-        //save to local storage
-        localStorage.setItem('temp-storage', JSON.stringify(tempStorage));
-
-        //change cart button text
-        changeCartButton(true);
-    }
-
-    //clear the code input field
-    element.value = '';
-}
-
-//remove product code
-const onProductCodeClicked = function (evt) {
-    const codeClicked = evt.target.classList.contains('code-delete');
-    if (!codeClicked) return;
-
-    const code = evt.target.id;
-
-    tempStorage.ProductStocks = tempStorage.ProductStocks.filter(stock => stock.ProductCode !== code);
-
-    productCode.updateStorage(code);
-    
-    //remove code on modal
-    evt.target.parentElement.remove();
-
-    //save to local storage
-    localStorage.setItem('temp-storage', JSON.stringify(tempStorage));
-}
-
 //match Existing Product code
 const matchExistingProductCode = function (stocks) {
     const addedCode = showAddedCode.querySelectorAll('.code-span');
@@ -523,18 +440,61 @@ const matchExistingProductCode = function (stocks) {
     return isUnsoldExist;
 }
 
-//add product to list
-const onAddProductToList = function (evt) {
+//open code modal event listeners
+formCart.addEventListener('submit', function (form) {
+    form.preventDefault();
     productError.textContent = ''
- 
+
+    //get temp obj
+    getTempStorage()
+
+    //save the last value of input
+    setProductTempObject(form.target);
+
+    const ProductId = +formCart.selectProductId.value;
+
+    //check product already added
+    let isAdded = false
+    storage.forEach(product => {
+        if (product.ProductId === ProductId) {
+            isAdded = true
+            return
+        }
+    })
+
+    if (isAdded) {
+        productError.textContent = 'This product already added!';
+        return;
+    }
+
+    //show product code on modal
+    showAddedProductCode();
+
+    //open modal popup
+    modalInsetCode.modal('show');
+
+    //show check btn
+    btnCheckCodeAndCartDisabled(true);
+});
+
+//show hide check cart btn
+function btnCheckCodeAndCartDisabled(isChecking) {
+    btnCheckProduct.style.display = isChecking ? "block" : "none";
+    btnAddToList.style.display = isChecking ? "none" : "block";
+}
+
+//btn check product
+btnCheckProduct.addEventListener('click', function (evt) {
+    productError.textContent = '';
+
     const ParentId = selectCategory.value;
     const ProductId = +selectProductId.value;
     const PurchasePrice = +inputPurchasePrice.value;
     const SellingPrice = +inputSellingPrice.value;
 
     if (!ParentId || !ProductId || !PurchasePrice || !SellingPrice) {
-        productError.textContent='Provide product info!'
-        return
+        productError.textContent = 'Provide product info!'
+        return;
     }
 
     //set the last value of input
@@ -542,7 +502,48 @@ const onAddProductToList = function (evt) {
 
     if (tempStorage.ProductStocks.length) {
         //start loading spinner
-        btnAddTolist.disabled = true;
+        this.disabled = true;
+
+        //check product code on server
+        const serverCode = productCode.isExistServer(tempStorage.ProductStocks);
+        serverCode.then(res => {
+            if (res.length) {
+                //show matched code
+                const isUnsoldExist = matchExistingProductCode(res);
+
+                if (isUnsoldExist) {
+                    //play buzzer
+                    buzzAudio.play();
+                    return;
+                }
+            }
+        }).finally(() => {
+            this.disabled = false;
+            btnCheckCodeAndCartDisabled(false);
+        });
+    }
+});
+
+//add product to cart
+btnAddToList.addEventListener('click', function (evt) {
+    productError.textContent = '';
+
+    const ParentId = selectCategory.value;
+    const ProductId = +selectProductId.value;
+    const PurchasePrice = +inputPurchasePrice.value;
+    const SellingPrice = +inputSellingPrice.value;
+
+    if (!ParentId || !ProductId || !PurchasePrice || !SellingPrice) {
+        productError.textContent = 'Provide product info!'
+        return;
+    }
+
+    //set the last value of input
+    setProductTempObject(formCart);
+
+    if (tempStorage.ProductStocks.length) {
+        //start loading spinner
+        this.disabled = true;
 
         //check product code on server
         const serverCode = productCode.isExistServer(tempStorage.ProductStocks);
@@ -558,62 +559,83 @@ const onAddProductToList = function (evt) {
                 }
             }
 
-            //check if dbl click
-            if (evt.detail === 2) {
-                //add value to cart storage
-                storage.push(tempStorage);
+            //add value to cart storage
+            storage.push(tempStorage);
 
-                //show cart on table
-                tbody.appendChild(createTableRow(tempStorage));
+            //show cart on table
+            tbody.appendChild(createTableRow(tempStorage));
 
-                //calculate and show price
-                appendTotalPrice();
+            //calculate and show price
+            appendTotalPrice();
 
-                //save to local storage
-                localStorage.setItem('cart-storage', JSON.stringify(storage));
+            //save to local storage
+            localStorage.setItem('cart-storage', JSON.stringify(storage));
 
-                //remove the stock temp storage
-                tempStorage = null;
-                localStorage.removeItem('temp-storage');
+            //remove the stock temp storage
+            tempStorage = null;
+            localStorage.removeItem('temp-storage');
 
-                //clear the text input
-                clearInput()
+            //clear the text input
+            clearInput()
 
-                //hide modal
-                modalInsetCode.modal('hide');
-            }
+            //hide modal
+            modalInsetCode.modal('hide');
+
         }).finally(() => {
-            btnAddTolist.disabled = false;
-            changeCartButton();
+            this.disabled = false;
         });
     }
-}
+});
 
-//check cart button text
-function changeCartButton(isChecking) {
-    if (isChecking) {
-        btnAddTolist.innerText =  "check product";
-        btnAddTolist.classList.add("btn-warning");
-        btnAddTolist.classList.remove("btn-success");
-    } else {
-        btnAddTolist.innerText = "double click to add";
-        btnAddTolist.classList.remove("btn-warning");
-        btnAddTolist.classList.add("btn-success");
+
+//input product code submit
+formAddCode.addEventListener('submit', function (form) {
+    form.preventDefault();
+
+    const element = form.target.inputProductCode;
+    const stock = { ProductCode: element.value };
+    const codeExist = productCode.isExist(stock.ProductCode);
+
+    if (!codeExist) {
+        //add code to temp storage
+        tempStorage.ProductStocks.push(stock);
+
+        //save code to global code hub
+        productCode.setStorage(stock.ProductCode);
+
+        //append code on modal
+        showAddedCode.appendChild(createCodeSpan(stock.ProductCode));
+
+        //save to local storage
+        localStorage.setItem('temp-storage', JSON.stringify(tempStorage));
+
+        //show check btn
+        btnCheckCodeAndCartDisabled(true);
     }
-}
 
-//open code modal event listeners
-formCart.addEventListener('submit', onOpenProductCodeModal);
+    //clear the code input field
+    element.value = '';
+});
 
-//add to cart
-btnAddTolist.addEventListener('dblclick', onAddProductToList);
-btnAddTolist.addEventListener('click', onAddProductToList);
+//remove product code
+showAddedCode.addEventListener('click', function (evt) {
+    const codeClicked = evt.target.classList.contains('code-delete');
+    if (!codeClicked) return;
 
+    const code = evt.target.id;
 
-//add product code form
-formAddCode.addEventListener('submit', onSubmitProductCode);
-showAddedCode.addEventListener('click', onProductCodeClicked);
+    tempStorage.ProductStocks = tempStorage.ProductStocks.filter(stock => stock.ProductCode !== code);
 
+    productCode.updateStorage(code);
+
+    //remove code on modal
+    evt.target.parentElement.remove();
+
+    //save to local storage
+    localStorage.setItem('temp-storage', JSON.stringify(tempStorage));
+});
+
+//on change select
 selectCategory.addEventListener('change', onCategoryChanged);
 selectProductId.addEventListener('change', onProductChanged);
 tbody.addEventListener('click', onTableRowElementClicked);

@@ -129,12 +129,11 @@
                     }
                     @if (Model.PurchaseAdjustedAmount > 0)
                     {
-                        <h5>Cash&nbspPaid:<strong>৳@Model.SellingPaidAmount</strong></h5>
+                        <h5>
+                            <a href="/Purchase/PurchaseReceipt/@Model.PurchaseId">Purchase</a> Adjustment Amount:<strong>৳@Model.PurchaseAdjustedAmount</strong>
+                        </h5>
                     }
-
-                    <h5>
-                        <a href="/Purchase/PurchaseReceipt/@Model.PurchaseId">Purchase</a> Adjustment Amount:<strong>৳@Model.PurchaseAdjustedAmount</strong>
-                    </h5>
+                    <h5>Cash&nbspPaid:<strong>৳@Model.SellingPaidAmount</strong></h5>
                     @if (Model.SellingReturnAmount > 0)
                     {
                         <h5>Return&nbspAmount:<strong>৳@Model.SellingReturnAmount</strong></h5>
