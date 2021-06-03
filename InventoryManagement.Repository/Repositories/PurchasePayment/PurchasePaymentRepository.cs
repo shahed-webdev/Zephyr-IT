@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Repository
@@ -88,6 +89,34 @@ namespace InventoryManagement.Repository
                 response.IsSuccess = false;
                 return response;
             }
+        }
+
+        public VendorMultipleDueCollectionViewModel GetPurchaseDuePayMultipleBill(int vendorId)
+        {
+            var customer = Context.Vendor
+                .Include(c => c.Purchase)
+                .Where(v => v.VendorId == vendorId)
+                .Select(c => new VendorMultipleDueCollectionViewModel
+                {
+                    VendorId = c.VendorId,
+                    VendorName = c.VendorName,
+                    VendorAddress = c.VendorAddress,
+                    TotalDue = c.Due,
+                    PurchaseDueRecords = c.Purchase.Where(s => s.PurchaseDueAmount > 0).Select(s => new VendorPurchaseDueViewModel
+                    {
+                        PurchaseId = s.PurchaseId,
+                        PurchaseSn = s.PurchaseSn,
+                        PurchaseTotalPrice = s.PurchaseTotalPrice,
+                        PurchaseDiscountAmount = s.PurchaseDiscountAmount,
+                        PurchasePaidAmount = s.PurchasePaidAmount,
+                        PurchaseReturnAmount = s.PurchaseReturnAmount,
+                        PurchaseDueAmount = s.PurchaseDueAmount,
+                        MemoNumber = s.MemoNumber,
+                        PurchaseDate = s.PurchaseDate
+                    }).ToList(),
+
+                });
+            return customer.FirstOrDefault();
         }
     }
 }

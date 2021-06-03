@@ -1,11 +1,11 @@
-﻿using InventoryManagement.Repository;
+﻿using InventoryManagement.BusinessLogin;
+using InventoryManagement.Repository;
 using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using InventoryManagement.BusinessLogin;
 
 namespace InventoryManagement.Web.Views
 {
@@ -37,11 +37,11 @@ namespace InventoryManagement.Web.Views
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
             var response = await _db.Purchases.AddCustomAsync(model, _db).ConfigureAwait(false);
-            
+
             return Json(response);
         }
 
-      
+
         public async Task<IActionResult> IsPurchaseCodeExist([FromBody] List<ProductStockViewModel> stocks)
         {
             var existList = await _db.ProductStocks.IsExistListAsync(stocks).ConfigureAwait(false);
@@ -132,12 +132,12 @@ namespace InventoryManagement.Web.Views
 
 
         //GET: Due Collection multiple
-        public async Task<IActionResult> PayDueMultiple(int? id)
+        public IActionResult PayDueMultiple(int? id)
         {
             if (id == null) return RedirectToAction("DueReceipt");
 
             ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
-            var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
+            var model = _db.PurchasePayments.GetPurchaseDuePayMultipleBill(id.GetValueOrDefault());
 
             if (model == null) return RedirectToAction("DueReceipt");
             return View(model);

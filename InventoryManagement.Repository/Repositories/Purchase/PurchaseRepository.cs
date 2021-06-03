@@ -155,7 +155,6 @@ namespace InventoryManagement.Repository
                 .ThenInclude(pd => pd.ProductStock)
                 .Include(p => p.PurchasePaymentList)
                 .ThenInclude(p => p.PurchasePayment)
-                .Where(p => p.VendorId == id)
                 .Select(p => new PurchaseReceiptViewModel
                 {
                     PurchaseSn = p.PurchaseSn,
@@ -199,7 +198,7 @@ namespace InventoryManagement.Repository
                     },
                     InstitutionInfo = db.Institutions.FindCustom(),
                     SoildBy = p.Registration.Name
-                }).FirstOrDefaultAsync();
+                }).FirstOrDefaultAsync(p => p.PurchaseId == id);
 
             return purchaseReceipt;
         }
