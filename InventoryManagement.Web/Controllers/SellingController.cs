@@ -166,6 +166,13 @@ namespace InventoryManagement.Web.Controllers
             return Json(dbResponse);
         }
 
+        //multiple bill paid
+        //public async Task<IActionResult> MultipleDueCollection(SellingDuePayMultipleModel model)
+        //{
+        //    var dbResponse = await _db.SellingPayments.CollectionAmountDateWise()
+
+        //    return Json(dbResponse);
+        //}
 
         [HttpPost]
         public async Task<IActionResult> DueCollectionMultiple(SellingDuePayMultipleModel model)

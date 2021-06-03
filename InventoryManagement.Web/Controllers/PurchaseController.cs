@@ -148,11 +148,9 @@ namespace InventoryManagement.Web.Views
         public async Task<IActionResult> PayVendorDueMultiple(PurchaseDuePaySingleModel model)
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
-            var dbResponse = await _db.PurchasePayments.DuePaySingleAsync(model, _db).ConfigureAwait(false);
+            var response = await _db.PurchasePayments.DuePaySingleAsync(model, _db).ConfigureAwait(false);
 
-            if (dbResponse.IsSuccess) return Ok(dbResponse);
-
-            return BadRequest(dbResponse.Message);
+            return Json(response);
         }
         #endregion
 

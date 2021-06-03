@@ -39,9 +39,10 @@
                             </div>
                             <div class="col-md-9 col-9 text-right pr-5">
                                 <p class="text-dark mb-2">
-                                    Business Status<small data-toggle="tooltip"
-                                                          title="(Customer Due + Stock Product Price) - Market Due"
-                                                          class="far fa-question-circle text-muted ml-2"></small>
+                                    Business Status
+                                    <small data-toggle="tooltip"
+                                           title="(Customer Due + Stock Product Price) - Market Due"
+                                           class="far fa-question-circle text-muted ml-2"></small>
                                 </p>
                                 <h4 class="ml-4 font-weight-bold h4-responsive @(businessStatus > 0 ? "text-success" : "text-danger")">৳@businessStatus</h4>
                             </div>
@@ -103,7 +104,7 @@
 
         <section id="daily-report" class="mb-5 mt-1">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Daily Report<small  data-toggle="modal" data-target="#helpModal" class="far fa-question-circle text-muted ml-1"></small></h5>
+                <h5 class="mb-0">Daily Report<small data-toggle="modal" data-target="#helpModal" class="far fa-question-circle text-muted ml-1"></small></h5>
                 <form id="findForm">
                     <div class="input-group">
                         <input id="inputFindDate" class="form-control my-0 py-1 datepicker" type="text" placeholder="Search By Date">
@@ -194,43 +195,6 @@
                 </div>
             </div>
         </section>
-
-        <section class="row mb-5">
-            <div class="col-xl-5 col-lg-5 mb-3">
-                <div class="card card-cascade narrower">
-                    <div class="view view-cascade gradient-card-header blue-gradient lighten-1 p-3">
-                        <h3 class="h3-responsive mb-0 p-1 font-weight-light">Due Vendors</h3>
-                    </div>
-
-                    <div class="card-body card-body-cascade">
-                        <div class="form-inline d-flex justify-content-center align-items-center md-form form-sm active-cyan-2 mb-0 mt-2">
-                            <input id="vendor-input-find" class="form-control form-control-sm mb-0 w-75" type="text" placeholder="Search">
-                            <i class="fas fa-search" aria-hidden="true"></i>
-                        </div>
-
-                        <table id="table-vendor" class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th><strong>Company</strong></th>
-                                    <th><strong>Amount</strong></th>
-                                    <th><strong>Paid</strong></th>
-                                    <th><strong>Due</strong></th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-7 col-lg-7">
-                <div class="card card-cascade narrower">
-                    <div class="view view-cascade gradient-card-header blue-gradient mb-3">
-                        <canvas id="lineChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-        </section>
     }
 
     <section>
@@ -320,6 +284,45 @@
             }
         </div>
     </section>
+
+    @if (User.IsInRole("admin"))
+    {
+        <section class="row mb-5">
+            <div class="col-xl-5 col-lg-5 mb-3">
+                <div class="card card-cascade narrower">
+                    <div class="view view-cascade gradient-card-header blue-gradient lighten-1 p-3">
+                        <h3 class="h3-responsive mb-0 p-1 font-weight-light">Due Vendors</h3>
+                    </div>
+
+                    <div class="card-body card-body-cascade">
+                        <div class="form-inline d-flex justify-content-center align-items-center md-form form-sm active-cyan-2 mb-0 mt-2">
+                            <input id="vendor-input-find" class="form-control form-control-sm mb-0 w-75" type="text" placeholder="Search">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </div>
+
+                        <table id="table-vendor" class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th><strong>Company</strong></th>
+                                    <th><strong>Amount</strong></th>
+                                    <th><strong>Paid</strong></th>
+                                    <th><strong>Due</strong></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-7 col-lg-7">
+                <div class="card card-cascade narrower">
+                    <div class="view view-cascade gradient-card-header blue-gradient mb-3">
+                        <canvas id="lineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
 </div>
 
 
@@ -334,13 +337,13 @@
                         <strong>Product profit =</strong> Selling price - (Purchase Price - Discount) 
                     </li>
                     <li class="list-group-item">
-                        <strong>Product net profit =</strong> Product profit - (Bill Expense + SellingAccountCost + Discount)
+                        <strong>Product net profit =</strong> Product profit - (Bill Expense + Selling Account Cost)
                     </li>
                     <li class="list-group-item">
                         <strong>Service profit =</strong> Service Charge - Service cost
                     </li>
                     <li class="list-group-item">
-                        <strong>Grand profit =</strong> Product net profit + Service profit
+                        <strong>Grand profit =</strong> (Product net profit + Service profit) - Discount
                     </li>
                     <li class="list-group-item">
                         <strong>Genuine expense =</strong> Inputted Expense
