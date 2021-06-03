@@ -219,6 +219,14 @@ namespace InventoryManagement.Web.Controllers
 
             return UnprocessableEntity(dbResponse.Message);
         }
+
+        //check product already is in stock(ajax)
+        [HttpPost]
+        public IActionResult ProductIsInStock(string code)
+        {
+            var data = _db.ProductStocks.IsInStock(code);
+            return Json(data);
+        }
         #endregion Update bill
 
         #region Sales Report from Dashboard

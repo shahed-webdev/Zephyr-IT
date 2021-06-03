@@ -144,27 +144,6 @@
                 </div>
 
                 <div class="card card-body mb-3">
-                    <input id="hiddenPurchaseId" type="hidden" value="@Model.PurchaseId">
-                    <ul class="mb-0">
-                        <li class="md-form input-group">
-                            <input id="inputPurchaseBillNo" value="@Model.PurchaseSn" type="text" class="form-control">
-                            @*<div class="input-group-append">
-                    <button id="findPurchaseBill" class="btn btn-md btn-secondary m-0 px-3" type="button">find</button>
-                </div>*@
-                            <label for="inputPurchaseBillNo">Purchase Bill No</label>
-                        </li>
-                        <li class="md-form">
-                            <label for="inputPurchaseAmount">Purchase Paid Amount</label>
-                            <input id="inputPurchaseAmount" value="@Model.PurchaseAdjustedAmount" type="number" step="0.01" min="0" class="form-control">
-                        </li>
-                        <li class="md-form">
-                            <label for="inputPurchaseDescription">Purchase Description</label>
-                            <textarea id="inputPurchaseDescription" rows="1" class="md-textarea form-control">@Model.PurchaseDescription</textarea>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="card card-body mb-3">
                     <ul class="mb-0">
                         <li class="md-form mt-4">
                             <label for="inputDiscount">Discount</label>
@@ -199,6 +178,27 @@
                     </ul>
                 </div>
 
+                <div class="card card-body mb-3">
+                    <input id="hiddenPurchaseId" type="hidden" value="@Model.PurchaseId">
+                    <ul class="mb-0">
+                        <li class="md-form input-group">
+                            <input id="inputPurchaseBillNo" value="@Model.PurchaseSn" type="text" class="form-control">
+                            <div class="input-group-append">
+                                <button id="findPurchaseBill" class="btn btn-md btn-secondary m-0 px-3" type="button">find</button>
+                            </div>
+                            <label for="inputPurchaseBillNo">Purchase Bill No</label>
+                        </li>
+                        <li class="md-form">
+                            <label for="inputPurchaseAmount">Purchase Paid Amount</label>
+                            <input id="inputPurchaseAmount" value="@Model.PurchaseAdjustedAmount" type="number" step="0.01" min="0" class="form-control">
+                        </li>
+                        <li class="md-form">
+                            <label for="inputPurchaseDescription">Purchase Description</label>
+                            <textarea id="inputPurchaseDescription" rows="1" class="md-textarea form-control">@Model.PurchaseDescription</textarea>
+                        </li>
+                    </ul>
+                </div>
+
                 <div class="text-center">
                     <i id="customer-error" class="mt-2 text-center red-text"></i>
                     <input type="hidden" id="hiddenSellingId" value="@Model.SellingId" />
@@ -210,7 +210,7 @@
 </div>
 
 @section Scripts{
-    <script src="~/page-js/bill-change.js?v=2.1.2"></script>
+    <script src="~/page-js/bill-change.js?v=2.2.2"></script>
     <script>
         //save previous data
         cartProducts = @Html.Raw(Json.Serialize(Model.Products));

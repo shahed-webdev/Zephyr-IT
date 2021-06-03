@@ -316,6 +316,7 @@ showProducts()
 
 //****PAYMENT SECTION****/
 
+//*** Purchase from customer ****
 //purchase bill no input
 findPurchaseBill.addEventListener("click", function () {
     hiddenPurchaseId.value = "";
@@ -363,11 +364,11 @@ function calculatePayableAmount(paidAmount) {
     totalPayable.innerText = grandTotal.toFixed();
     totalDue.innerText = grandTotal.toFixed();
 
-    //inputPurchaseAmount.setAttribute("max", grandTotal);
-
     inputDiscount.value = '';
     inputPaid.value = '';
 }
+//*** End Purchase from customer ****
+
 
 //compare Validation
 const validInput = function (total, inputted) {
