@@ -155,6 +155,7 @@ namespace InventoryManagement.Repository
                 .ThenInclude(pd => pd.ProductStock)
                 .Include(p => p.PurchasePaymentList)
                 .ThenInclude(p => p.PurchasePayment)
+                .Where(p => p.VendorId == id)
                 .Select(p => new PurchaseReceiptViewModel
                 {
                     PurchaseSn = p.PurchaseSn,
@@ -198,7 +199,7 @@ namespace InventoryManagement.Repository
                     },
                     InstitutionInfo = db.Institutions.FindCustom(),
                     SoildBy = p.Registration.Name
-                }).FirstOrDefaultAsync(p => p.PurchaseId == id);
+                }).FirstOrDefaultAsync();
 
             return purchaseReceipt;
         }
@@ -297,8 +298,8 @@ namespace InventoryManagement.Repository
             try
             {
                 var purchase = await Context.Purchase
-                    .Include(p=> p.PurchaseList)
-                    .ThenInclude(l=> l.Product)
+                    .Include(p => p.PurchaseList)
+                    .ThenInclude(l => l.Product)
                     .FirstOrDefaultAsync(p => p.PurchaseSn == receipt).ConfigureAwait(false);
 
                 if (purchase == null) return new DbResponse<PurchaseGetByReceiptModel>(false, "Receipt Not Found");
