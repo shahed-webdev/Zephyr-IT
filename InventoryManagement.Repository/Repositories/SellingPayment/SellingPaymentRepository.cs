@@ -109,18 +109,22 @@ namespace InventoryManagement.Repository
             {
                 var sells = await Context.Selling.Where(s => model.Bills.Select(i => i.SellingId).Contains(s.SellingId)).ToListAsync().ConfigureAwait(false);
 
+                var accountCostPercentage = db.Account.GetCostPercentage(model.AccountId.GetValueOrDefault());
+
                 foreach (var invoice in model.Bills)
                 {
                     var sell = sells.FirstOrDefault(s => s.SellingId == invoice.SellingId);
                     sell.SellingDiscountAmount = invoice.SellingDiscountAmount;
-                    var due = (sell.SellingTotalPrice + sell.ServiceCharge + sell.SellingReturnAmount) - (invoice.SellingDiscountAmount + sell.SellingPaidAmount);
-                    if (due < invoice.SellingPaidAmount)
+                    var due = (sell.SellingTotalPrice + sell.ServiceCharge + sell.SellingReturnAmount) -
+                              (invoice.SellingDiscountAmount + sell.SellingPaidAmount);
+                    if (invoice.SellingPaidAmount > due)
                     {
                         response.IsSuccess = false;
                         response.Message = $"{invoice.SellingPaidAmount} Paid amount is greater than due";
                         return response;
                     }
                     sell.SellingPaidAmount += invoice.SellingPaidAmount;
+                    sell.SellingAccountCost += model.PaidAmount * accountCostPercentage / 100;
                     sell.LastUpdateDate = DateTime.Now.BdTime().Date;
                 }
 
@@ -133,6 +137,7 @@ namespace InventoryManagement.Repository
                     ReceiptSn = Sn,
                     PaidAmount = model.PaidAmount,
                     AccountId = model.AccountId,
+                    AccountCostPercentage = accountCostPercentage,
                     PaymentMethod = model.PaymentMethod,
                     PaidDate = DateTime.Now.BdTime().Date,
                     SellingPaymentList = model.Bills.Select(i => new SellingPaymentList
@@ -142,7 +147,7 @@ namespace InventoryManagement.Repository
                     }).ToList()
                 };
 
-                Context.SellingPayment.Add(receipt);
+                await Context.SellingPayment.AddAsync(receipt).ConfigureAwait(false);
                 Context.Selling.UpdateRange(sells);
 
                 //Account add balance

@@ -39,11 +39,11 @@ namespace InventoryManagement.Data
         public decimal SellingAccountCost { get; set; }
         //[ServiceCharge]-[ServiceCost]
         public decimal ServiceProfit { get; set; }
-        //[BuyingTotalPrice]-([SellingTotalPrice]+[SellingDiscountAmount])
+        //[BuyingTotalPrice]-[SellingTotalPrice]
         public decimal SellingProfit { get; set; }
         //[SellingProfit] - ([ExpenseTotal]+[SellingAccountCost])
         public decimal SellingNetProfit { get; set; }
-        //[SellingNetProfit]-[ServiceProfit]
+        //([SellingNetProfit]+[ServiceProfit]) - [SellingDiscountAmount]
         public decimal GrandProfit { get; set; }
 
         public virtual Customer Customer { get; set; }

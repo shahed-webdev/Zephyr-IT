@@ -88,7 +88,7 @@ namespace InventoryManagement.Data
 
             entity.Property(e => e.SellingNetProfit)
                 .HasColumnType("decimal(18, 2)")
-                .HasComputedColumnSql("([SellingTotalPrice]-([BuyingTotalPrice]+[SellingDiscountAmount]+[SellingAccountCost]+[ExpenseTotal])) PERSISTED");
+                .HasComputedColumnSql("([SellingTotalPrice]-([BuyingTotalPrice]+[SellingAccountCost]+[ExpenseTotal])) PERSISTED");
 
             entity.Property(e => e.GrandProfit)
                 .HasColumnType("decimal(18, 2)")
