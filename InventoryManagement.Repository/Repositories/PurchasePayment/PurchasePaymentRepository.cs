@@ -91,6 +91,76 @@ namespace InventoryManagement.Repository
             }
         }
 
+        public async Task<DbResponse<int>> DuePayMultipleAsync(PurchaseDuePayMultipleModel model, IUnitOfWork db)
+        {
+            var response = new DbResponse<int>();
+            try
+            {
+                var purchases = await Context.Purchase.Where(s => model.Bills.Select(i => i.PurchaseId).Contains(s.PurchaseId)).ToListAsync().ConfigureAwait(false);
+
+                foreach (var invoice in model.Bills)
+                {
+                    var purchase = purchases.FirstOrDefault(s => s.PurchaseId == invoice.PurchaseId);
+                    var due = (purchase.PurchaseTotalPrice + purchase.PurchaseReturnAmount) -
+                              (purchase.PurchaseDiscountAmount + purchase.PurchasePaidAmount);
+
+                    if (due < invoice.PurchasePaidAmount)
+                    {
+                        response.IsSuccess = false;
+                        response.Message = $"{invoice.PurchasePaidAmount} Paid amount is greater than due";
+                        return response;
+                    }
+
+                    if (invoice.PurchasePaidAmount > due)
+                    {
+                        response.IsSuccess = false;
+                        response.Message = $"{invoice.PurchasePaidAmount} Paid amount is greater than due";
+                    }
+                    purchase.PurchasePaidAmount += invoice.PurchasePaidAmount;
+                }
+
+                var Sn = await db.PurchasePayments.GetNewSnAsync().ConfigureAwait(false);
+
+                var PurchasePayment = new PurchasePayment
+                {
+                    RegistrationId = model.RegistrationId,
+                    VendorId = model.VendorId,
+                    ReceiptSn = Sn,
+                    PaidAmount = model.PaidAmount,
+                    PaymentMethod = model.PaymentMethod,
+                    PaidDate = model.PaidDate.BdTime().Date,
+                    AccountId = model.AccountId,
+                    PurchasePaymentList = model.Bills.Select(i => new PurchasePaymentList
+                    {
+                        PurchaseId = i.PurchaseId,
+                        PurchasePaidAmount = i.PurchasePaidAmount
+                    }).ToList()
+                };
+
+                await Context.PurchasePayment.AddAsync(PurchasePayment).ConfigureAwait(false);
+                Context.Purchase.UpdateRange(purchases);
+
+                //Account substract balance
+                if (model.PaidAmount > 0 && model.AccountId != null)
+                    db.Account.BalanceSubtract(model.AccountId.Value, model.PaidAmount);
+
+                await db.SaveChangesAsync().ConfigureAwait(false);
+
+                db.Vendors.UpdatePaidDue(model.VendorId);
+
+                response.IsSuccess = true;
+                response.Message = "Success";
+                response.Data = PurchasePayment.PurchasePaymentId;
+                return response;
+            }
+            catch (Exception e)
+            {
+                response.Message = e.Message;
+                response.IsSuccess = false;
+                return response;
+            }
+        }
+
         public VendorMultipleDueCollectionViewModel GetPurchaseDuePayMultipleBill(int vendorId)
         {
             var customer = Context.Vendor

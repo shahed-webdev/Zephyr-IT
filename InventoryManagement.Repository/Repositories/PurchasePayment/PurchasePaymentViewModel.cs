@@ -27,18 +27,28 @@ namespace InventoryManagement.Repository
         public int? AccountId { get; set; }
     }
 
-
     public class PurchaseDuePayMultipleModel
     {
-        public int PurchaseId { get; set; }
+        public PurchaseDuePayMultipleModel()
+        {
+            Bills = new HashSet<PurchaseDuePayMultipleBill>();
+        }
         public int VendorId { get; set; }
         public int RegistrationId { get; set; }
         public string PaymentMethod { get; set; }
         public decimal PaidAmount { get; set; }
         public DateTime PaidDate { get; set; }
-
         public int? AccountId { get; set; }
+        public ICollection<PurchaseDuePayMultipleBill> Bills { get; set; }
     }
+
+    public class PurchaseDuePayMultipleBill
+    {
+        public int PurchaseId { get; set; }
+        public decimal PurchasePaidAmount { get; set; }
+    }
+
+
 
 
     public class VendorMultipleDueCollectionViewModel
