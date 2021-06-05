@@ -446,7 +446,10 @@
                 },
                 columns:
                 [
-                    { data: "VendorCompanyName" },
+                    { data: "VendorCompanyName",
+                        render: function(data, type, row, meta) {
+                            return `<a class="blue-text" href="/Purchase/PayDueMultiple/${row.VendorId}">${data}</a>`
+                        } },
                     { data: "TotalAmount" },
                     { data: "VendorPaid" },
                     { data: "VendorDue" }

@@ -120,16 +120,16 @@
             const data = {
                 VendorId: @Model.VendorId,
                 PaidAmount: +inputTotalPaid.value,
-                AccountId: selectPaymentMethod.value,
                 PaidDate: inputDate.value,
+                AccountId: selectPaymentMethod.value,
                 Bills: []
             }
 
             for (var i = 1, row; (row = table.rows[i]); i++) {
-                const paid = +row.cells[6].textContent;
+                const paid = +row.cells[5].textContent;
 
                 if (paid > 0) {
-                    const invoice = { SellingId: +row.cells[5].getAttribute("data-id"), SellingPaidAmount: paid };
+                    const invoice = { PurchaseId: +row.cells[5].getAttribute("data-id"), PurchasePaidAmount: paid };
                     data.Bills.push(invoice);
                 }
             }
@@ -139,12 +139,17 @@
                 type: 'POST',
                 url,
                 data,
-                success: function(response) {
-                    location.href = `/Purchase/DueReceipt/${response}`;
+                success: function (response) {
+                    if (response.IsSuccess) {
+                        location.href = `/Purchase/DueReceipt/`;
+                        return;
+                    }
+
+                    btnPaid.disabled = false;
+                    $.notify(response.Message, response.IsSuccess ? "success" : "error");
                 },
                 error: function(err) {
                     console.log(err)
-                    $("#responseError").text(err.responseText);
                     btnPaid.disabled = false;
                 }
             });

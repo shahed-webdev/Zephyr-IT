@@ -101,31 +101,35 @@ namespace InventoryManagement.Repository
                 foreach (var invoice in model.Bills)
                 {
                     var purchase = purchases.FirstOrDefault(s => s.PurchaseId == invoice.PurchaseId);
-                    var due = (purchase.PurchaseTotalPrice + purchase.PurchaseReturnAmount) -
-                              (purchase.PurchaseDiscountAmount + purchase.PurchasePaidAmount);
-
-                    if (due < invoice.PurchasePaidAmount)
+                    
+                    if (purchase != null)
                     {
-                        response.IsSuccess = false;
-                        response.Message = $"{invoice.PurchasePaidAmount} Paid amount is greater than due";
-                        return response;
+                        var due = (purchase.PurchaseTotalPrice + purchase.PurchaseReturnAmount) - (purchase.PurchaseDiscountAmount + purchase.PurchasePaidAmount);
+
+                        if (due < invoice.PurchasePaidAmount)
+                        {
+                            response.IsSuccess = false;
+                            response.Message = $"{invoice.PurchasePaidAmount} Paid amount is greater than due";
+                            return response;
+                        }
+
+                        if (invoice.PurchasePaidAmount > due)
+                        {
+                            response.IsSuccess = false;
+                            response.Message = $"{invoice.PurchasePaidAmount} Paid amount is greater than due";
+                        }
                     }
 
-                    if (invoice.PurchasePaidAmount > due)
-                    {
-                        response.IsSuccess = false;
-                        response.Message = $"{invoice.PurchasePaidAmount} Paid amount is greater than due";
-                    }
-                    purchase.PurchasePaidAmount += invoice.PurchasePaidAmount;
+                    if (purchase != null) purchase.PurchasePaidAmount += invoice.PurchasePaidAmount;
                 }
 
-                var Sn = await db.PurchasePayments.GetNewSnAsync().ConfigureAwait(false);
+                var sn = await db.PurchasePayments.GetNewSnAsync().ConfigureAwait(false);
 
-                var PurchasePayment = new PurchasePayment
+                var purchasePayment = new PurchasePayment
                 {
                     RegistrationId = model.RegistrationId,
                     VendorId = model.VendorId,
-                    ReceiptSn = Sn,
+                    ReceiptSn = sn,
                     PaidAmount = model.PaidAmount,
                     PaymentMethod = model.PaymentMethod,
                     PaidDate = model.PaidDate.BdTime().Date,
@@ -137,10 +141,10 @@ namespace InventoryManagement.Repository
                     }).ToList()
                 };
 
-                await Context.PurchasePayment.AddAsync(PurchasePayment).ConfigureAwait(false);
+                await Context.PurchasePayment.AddAsync(purchasePayment).ConfigureAwait(false);
                 Context.Purchase.UpdateRange(purchases);
 
-                //Account substract balance
+                //Account subtract balance
                 if (model.PaidAmount > 0 && model.AccountId != null)
                     db.Account.BalanceSubtract(model.AccountId.Value, model.PaidAmount);
 
@@ -150,7 +154,7 @@ namespace InventoryManagement.Repository
 
                 response.IsSuccess = true;
                 response.Message = "Success";
-                response.Data = PurchasePayment.PurchasePaymentId;
+                response.Data = purchasePayment.PurchasePaymentId;
                 return response;
             }
             catch (Exception e)

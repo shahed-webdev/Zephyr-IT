@@ -99,7 +99,7 @@ namespace InventoryManagement.Web.Views
         }
         #endregion
 
-        #region Due Collection
+        #region Due Collection(single)
 
         //GET: Due Collection single
         public async Task<IActionResult> PayDue(int? id)
@@ -122,7 +122,9 @@ namespace InventoryManagement.Web.Views
 
             return Json(dbResponse);
         }
+        #endregion
 
+        #region Due Collection(multiple)
 
         //Due Receipt list
         public IActionResult DueReceipt()
@@ -145,13 +147,15 @@ namespace InventoryManagement.Web.Views
 
         //vendor due collection(ajax)
         [HttpPost]
-        public async Task<IActionResult> PayVendorDueMultiple(PurchaseDuePaySingleModel model)
+        public async Task<IActionResult> PayVendorDueMultiple(PurchaseDuePayMultipleModel model)
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
-            var response = await _db.PurchasePayments.DuePaySingleAsync(model, _db).ConfigureAwait(false);
+            var response = await _db.PurchasePayments.DuePayMultipleAsync(model, _db);
 
             return Json(response);
         }
+
+
         #endregion
 
         #region Stock Report
