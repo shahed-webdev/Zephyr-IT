@@ -83,6 +83,7 @@ namespace InventoryManagement.Repository
         public decimal SellingTotalPrice { get; set; }
         public decimal ServiceCharge { get; set; }
         public decimal SellingPaidAmount { get; set; }
+        public decimal SellingReturnAmount { get; set; }
         public decimal SellingDiscountAmount { get; set; }
         public decimal SellingDueAmount { get; set; }
         public DateTime SellingDate { get; set; }
