@@ -44,6 +44,7 @@ namespace InventoryManagement.Repository
                         SellingTotalPrice = s.SellingTotalPrice,
                         ServiceCharge = s.ServiceCharge,
                         SellingPaidAmount = s.SellingPaidAmount,
+                        SellingReturnAmount = s.SellingReturnAmount,
                         SellingDiscountAmount = s.SellingDiscountAmount,
                         SellingDueAmount = s.SellingDueAmount,
                         SellingDate = s.SellingDate,
