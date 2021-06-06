@@ -31,7 +31,6 @@ namespace InventoryManagement.Repository
         public int CustomerId { get; set; }
         public int RegistrationId { get; set; }
         public decimal PaidAmount { get; set; }
-        public string PaymentMethod { get; set; }
         public int? AccountId { get; set; }
         public DateTime PaidDate { get; set; }
         public ICollection<SellingDuePayMultipleBill> Bills { get; set; }
@@ -41,7 +40,6 @@ namespace InventoryManagement.Repository
     {
         public int SellingId { get; set; }
         public decimal SellingPaidAmount { get; set; }
-        public decimal SellingDiscountAmount { get; set; }
 
     }
 

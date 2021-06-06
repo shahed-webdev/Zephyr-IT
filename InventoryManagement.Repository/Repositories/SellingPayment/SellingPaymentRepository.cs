@@ -25,6 +25,36 @@ namespace InventoryManagement.Repository
             return sn + 1;
         }
 
+        public CustomerMultipleDueCollectionViewModel GetSellingDuePayMultipleBill(int customerId)
+        {
+            var customer = Context.Customer
+                .Include(c => c.Selling)
+                .Where(v => v.CustomerId == customerId)
+                .Select(c => new CustomerMultipleDueCollectionViewModel
+                {
+                    CustomerId = c.CustomerId,
+                    CustomerName = c.CustomerName,
+                    CustomerAddress = c.CustomerAddress,
+                    TotalDue = c.Due,
+                    SellingDueRecords = c.Selling.Where(s => s.SellingDueAmount > 0).Select(s => new CustomerSellingViewModel
+                    {
+                        CustomerId = s.CustomerId,
+                        SellingId = s.SellingId,
+                        SellingSn = s.SellingSn,
+                        SellingTotalPrice = s.SellingTotalPrice,
+                        ServiceCharge = s.ServiceCharge,
+                        SellingPaidAmount = s.SellingPaidAmount,
+                        SellingDiscountAmount = s.SellingDiscountAmount,
+                        SellingDueAmount = s.SellingDueAmount,
+                        SellingDate = s.SellingDate,
+                        LastUpdateDate = s.SellingDate,
+                        PromisedPaymentDate = s.PromisedPaymentDate
+                    }).ToList()
+
+                });
+            return customer.FirstOrDefault();
+        }
+
         public async Task<DbResponse> DuePaySingleAsync(SellingDuePaySingleModel model, IUnitOfWork db)
         {
             var response = new DbResponse();
@@ -114,9 +144,8 @@ namespace InventoryManagement.Repository
                 foreach (var invoice in model.Bills)
                 {
                     var sell = sells.FirstOrDefault(s => s.SellingId == invoice.SellingId);
-                    sell.SellingDiscountAmount = invoice.SellingDiscountAmount;
-                    var due = (sell.SellingTotalPrice + sell.ServiceCharge + sell.SellingReturnAmount) -
-                              (invoice.SellingDiscountAmount + sell.SellingPaidAmount);
+
+                    var due = sell.SellingDueAmount;
                     if (invoice.SellingPaidAmount > due)
                     {
                         response.IsSuccess = false;
@@ -138,7 +167,6 @@ namespace InventoryManagement.Repository
                     PaidAmount = model.PaidAmount,
                     AccountId = model.AccountId,
                     AccountCostPercentage = accountCostPercentage,
-                    PaymentMethod = model.PaymentMethod,
                     PaidDate = DateTime.Now.BdTime().Date,
                     SellingPaymentList = model.Bills.Select(i => new SellingPaymentList
                     {

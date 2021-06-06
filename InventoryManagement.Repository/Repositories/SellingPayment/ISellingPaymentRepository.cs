@@ -8,6 +8,7 @@ namespace InventoryManagement.Repository
     public interface ISellingPaymentRepository : IRepository<SellingPayment>
     {
         Task<int> GetNewSnAsync();
+        CustomerMultipleDueCollectionViewModel GetSellingDuePayMultipleBill(int customerId);
         Task<DbResponse> DuePaySingleAsync(SellingDuePaySingleModel model, IUnitOfWork db);
         Task<DbResponse<int>> DuePayMultipleAsync(SellingDuePayMultipleModel model, IUnitOfWork db);
         decimal DailyCashCollectionAmount(DateTime? date);

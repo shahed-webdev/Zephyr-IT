@@ -96,4 +96,17 @@ namespace InventoryManagement.Repository
         public string Name { get; set; }
         public decimal Due { get; set; }
     }
+
+    public class CustomerMultipleDueCollectionViewModel
+    {
+        public CustomerMultipleDueCollectionViewModel()
+        {
+            SellingDueRecords = new HashSet<CustomerSellingViewModel>();
+        }
+        public int CustomerId { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerAddress { get; set; }
+        public decimal TotalDue { get; set; }
+        public ICollection<CustomerSellingViewModel> SellingDueRecords { get; set; }
+    }
 }
