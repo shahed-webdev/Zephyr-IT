@@ -1,0 +1,165 @@
+﻿@model InventoryManagement.Repository.CustomerMultipleDueCollectionViewModel
+@{
+    ViewData["Title"] = "Multiple Due Collection";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card card-body">
+    <section class="my-4 d-print-none">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="page-header">
+                @Model.CustomerName
+                <small class="font-small d-block mt-1">@Model.CustomerAddress</small>
+            </h4>
+            <h4 class="page-header">Selling Due: ৳@Model.TotalDue</h4>
+        </div>
+    </section>
+
+    <table id="tableReceipt" class="table table-sm table-bordered table-hover">
+        <thead class="text-center">
+            <tr>
+                <th><strong>#Bill No</strong></th>
+                <th><strong>Product Price</strong></th>
+                <th><strong>Service</strong></th>
+                <th><strong>Discount</strong></th>
+                <th><strong>Prev.Paid</strong></th>
+                <th><strong>Return</strong></th>
+                <th><strong>Due</strong></th>
+                <th><strong>Paying</strong></th>
+                <th><strong>Date</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var item in Model.SellingDueRecords)
+                {
+                    <tr>
+                        <td class="text-center">
+                            <a target="_blank" class="blue-text" href="/Selling/SellingReceipt/@item.SellingId">@item.SellingSn</a>
+                        </td>
+                        <td class="text-right">@item.SellingTotalPrice</td>
+                        <td class="text-right">@item.ServiceCharge</td>
+                        <td class="text-right">@item.SellingDiscountAmount</td>
+                        <td class="text-right">@item.SellingPaidAmount</td>
+                        <td class="text-right">@item.SellingPaidAmount</td>
+                        <td class="text-right">@item.SellingDueAmount</td>
+                        <td data-id="@item.SellingId" class="text-right font-weight-bold">0</td>
+                        <td class="text-center">@item.SellingDate.ToString("d MMM yyyy")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <form id="formPaid">
+        <div class="form-inline">
+            <div class="md-form">
+                <input id="inputPaid" step="0.01" min="0" max="@Model.TotalDue" required type="number" class="form-control" placeholder="Total Paid Amount" />
+            </div>
+            <div class="md-form mx-3">
+                <input id="inputDate" placeholder="Paid Date" type="text" class="form-control datepicker" />
+            </div>
+            <div class="md-form">
+                <select id="selectPaymentMethod" asp-items="ViewBag.Account" required class="mdb-select mb-0 mt-1 mr-2">
+                    <option value="">[ Payment Method ]</option>
+                </select>
+            </div>
+            <div class="md-form">
+                <input id="submitPaid" type="submit" class="btn btn-blue" value="Paid" />
+                <span id="responseError" class="field-validation-error"></span>
+            </div>
+        </div>
+    </form>
+
+    <a href="/Selling/DueInvoice">Back To List</a>
+</div> 
+
+
+    @section scripts{
+        <script>
+        $(function() {
+            $(".mdb-select").materialSelect();
+            $(".datepicker").pickadate().val(moment(new Date()).format("DD MMMM, YYYY"));
+        });
+
+        //selectors
+        const table = document.getElementById("tableReceipt");
+        const formPaid = document.getElementById("formPaid");
+        const inputTotalPaid = formPaid.inputPaid;
+        const inputDate = formPaid.inputDate;
+        const selectPaymentMethod = formPaid.selectPaymentMethod;
+
+        //events
+        inputTotalPaid.addEventListener("input", function() {
+            const totalDue = @Model.TotalDue;
+            let totalPaid = +this.value;
+
+            for (let i = 1, row; (row = table.rows[i]); i++) {
+                const due = row.cells[6].textContent;
+                const pay = row.cells[7].textContent;
+
+                if (totalPaid < due && totalPaid > 0) {
+                    pay.textContent = totalPaid.toFixed();
+                } else if (totalPaid >= due) {
+                    pay.textContent = due;
+                } else {
+                    pay.textContent = 0;
+                }
+
+                totalPaid -= due;
+            }
+
+            if (totalDue < this.value) {
+                this.value = totalDue;
+                return;
+            }
+        })
+
+        //post paid
+        formPaid.addEventListener('submit', function(evt) {
+            evt.preventDefault();
+
+            //disable button on submit
+            const btnPaid = formPaid.submitPaid;
+            btnPaid.disabled = true;
+
+            const data = {
+                CustomerId: @Model.CustomerId,
+                PaidAmount: +inputTotalPaid.value,
+                PaidDate: inputDate.value,
+                AccountId: selectPaymentMethod.value,
+                Bills: []
+            }
+
+            for (var i = 1, row; (row = table.rows[i]); i++) {
+                const cell = row.cells[7];
+                const paid = +cell.textContent;
+
+                if (paid > 0) {
+                    const invoice = { SellingId: cell.getAttribute("data-id"), SellingPaidAmount: paid };
+                    data.Bills.push(invoice);
+                }
+            }
+
+            const url = "/Selling/PostDueCollectionMultiple";
+            $.ajax({
+                type: 'POST',
+                url,
+                data,
+                success: function (response) {
+                    if (response.IsSuccess) {
+                        location.href = `/Selling/DueInvoice`;
+                        return;
+                    }
+
+                    btnPaid.disabled = false;
+                    $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                },
+                error: function(err) {
+                    console.log(err)
+                    btnPaid.disabled = false;
+                }
+            });
+        });
+        </script>  
+    }

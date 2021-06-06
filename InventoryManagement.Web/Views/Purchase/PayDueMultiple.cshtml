@@ -33,7 +33,9 @@
                     foreach (var item in Model.PurchaseDueRecords)
                     {
                         <tr>
-                            <td class="text-center">@item.PurchaseSn</td>
+                            <td class="text-center">
+                                <a target="_blank" class="blue-text" href="/Purchase/PurchaseReceipt/@item.PurchaseId">@item.PurchaseSn</a>
+                            </td>
                             <td class="text-center">@item.PurchaseTotalPrice</td>
                             <td class="text-right">@item.PurchaseDiscountAmount</td>
                             <td class="text-right">@item.PurchasePaidAmount</td>
@@ -44,7 +46,7 @@
                     }
                 }
             </tbody>
-        </table>
+        </table>  
 
         <form id="formPaid">
             <div class="form-inline">

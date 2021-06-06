@@ -20,6 +20,7 @@ namespace InventoryManagement.Web.Views
             _account = account;
         }
 
+        #region Purchase
         //GET: Purchase
         [Authorize(Roles = "admin, purchase")]
         public IActionResult Purchase()
@@ -72,6 +73,7 @@ namespace InventoryManagement.Web.Views
             if (model == null) return RedirectToAction("Purchase");
             return View(model);
         }
+        #endregion
 
         #region Purchase Record
 
@@ -127,13 +129,14 @@ namespace InventoryManagement.Web.Views
         #region Due Collection(multiple)
 
         //Due Receipt list
+        [Authorize(Roles = "admin, due-pay-multiple")]
         public IActionResult DueReceipt()
         {
             return View();
         }
 
-
         //GET: Due Collection multiple
+        [Authorize(Roles = "admin, due-pay-multiple")]
         public IActionResult PayDueMultiple(int? id)
         {
             if (id == null) return RedirectToAction("DueReceipt");
@@ -154,8 +157,6 @@ namespace InventoryManagement.Web.Views
 
             return Json(response);
         }
-
-
         #endregion
 
         #region Stock Report

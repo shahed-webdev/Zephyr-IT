@@ -16,6 +16,8 @@ namespace InventoryManagement.Web.Controllers
             _db = db;
         }
 
+        #region Customer Add
+
         //GET:// Mobile Is Available(ajax)
         public async Task<bool> CheckMobileIsAvailable(string mobile, int Id = 0)
         {
@@ -81,6 +83,9 @@ namespace InventoryManagement.Web.Controllers
             await _db.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("List");
         }
+        #endregion
+
+        #region Customer Details
 
         //GET:// Details
         public IActionResult Details(int? id)
@@ -100,5 +105,6 @@ namespace InventoryManagement.Web.Controllers
             var data = _db.Customers.SellingRecord(request);
             return Json(data);
         }
+        #endregion
     }
 }

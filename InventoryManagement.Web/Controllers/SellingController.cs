@@ -167,15 +167,17 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //multiple bill paid
-        //public async Task<IActionResult> MultipleDueCollection(SellingDuePayMultipleModel model)
-        //{
-        //    var dbResponse = await _db.SellingPayments.CollectionAmountDateWise()
+        public IActionResult MultipleDueCollection(int? id)
+        {
+            if (id == null) return RedirectToAction("DueInvoice");
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
 
-        //    return Json(dbResponse);
-        //}
+            var model =  _db.SellingPayments.GetSellingDuePayMultipleBill(id.GetValueOrDefault());
+            return View(model);
+        }
 
         [HttpPost]
-        public async Task<IActionResult> DueCollectionMultiple(SellingDuePayMultipleModel model)
+        public async Task<IActionResult> PostDueCollectionMultiple(SellingDuePayMultipleModel model)
         {
             model.RegistrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
             var dbResponse = await _db.SellingPayments.DuePayMultipleAsync(model, _db).ConfigureAwait(false);
