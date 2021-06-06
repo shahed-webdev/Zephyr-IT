@@ -101,23 +101,18 @@ namespace InventoryManagement.Repository
                 foreach (var invoice in model.Bills)
                 {
                     var purchase = purchases.FirstOrDefault(s => s.PurchaseId == invoice.PurchaseId);
-                    
+
                     if (purchase != null)
                     {
-                        var due = (purchase.PurchaseTotalPrice + purchase.PurchaseReturnAmount) - (purchase.PurchaseDiscountAmount + purchase.PurchasePaidAmount);
+                        var due = purchase.PurchaseDueAmount;
 
-                        if (due < invoice.PurchasePaidAmount)
+                        if (invoice.PurchasePaidAmount > due)
                         {
                             response.IsSuccess = false;
                             response.Message = $"{invoice.PurchasePaidAmount} Paid amount is greater than due";
                             return response;
                         }
 
-                        if (invoice.PurchasePaidAmount > due)
-                        {
-                            response.IsSuccess = false;
-                            response.Message = $"{invoice.PurchasePaidAmount} Paid amount is greater than due";
-                        }
                     }
 
                     if (purchase != null) purchase.PurchasePaidAmount += invoice.PurchasePaidAmount;
