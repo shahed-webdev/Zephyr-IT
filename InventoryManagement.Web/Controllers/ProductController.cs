@@ -92,6 +92,8 @@ namespace InventoryManagement.Web.Controllers
             return View();
         }
 
+        #region Product Category
+
         //GET: Catalog list
         [Authorize(Roles = "admin, category-list")]
         public IActionResult CatalogList()
@@ -194,10 +196,11 @@ namespace InventoryManagement.Web.Controllers
                 return View(model);
             }
         }
+        #endregion
 
         #region Find Product
         //GET: Find Product
-        [Authorize(Roles = "admin, find-product")]
+        [Authorize(Roles = "admin, find-product, SalesPerson")]
         public IActionResult FindProduct()
         {
             return View();

@@ -95,9 +95,9 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //find Due Bill (ajax)
-        public async Task<IActionResult> FindDueBill(string billNo)
+        public async Task<IActionResult> FindDueBill(int billNo)
         {
-            var data = await _db.Customers.SearchAsync(billNo).ConfigureAwait(false);
+            var data = await _db.Selling.FindBill(billNo);
             return Json(data);
         }
 
@@ -144,6 +144,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET: Due Collection
+        [Authorize(Roles = "admin, due-invoice")]
         public async Task<IActionResult> DueCollection(int? id)
         {
             if (id == null) return RedirectToAction("List", "Customer");
@@ -167,6 +168,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //multiple bill paid
+        [Authorize(Roles = "admin, due-invoice")]
         public IActionResult MultipleDueCollection(int? id)
         {
             if (id == null) return RedirectToAction("DueInvoice");

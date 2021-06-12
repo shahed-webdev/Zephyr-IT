@@ -129,13 +129,13 @@
                     type: "POST",
                     data: { billNo: this.BillNo.value},
                     success: response => {
-                        this.btnFind.disabled = false;
-
-                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
-
                         if (response.IsSuccess) {
                             location.href = `/Selling/DueCollection/${response.Data}`;
+                            return;
                         }
+
+                        this.btnFind.disabled = false;
+                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
                     },
                     error: error => {
                         console.log(error);

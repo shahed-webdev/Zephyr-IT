@@ -2,6 +2,8 @@
 @{
     ViewData["Title"] = "Find Product";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var isSalesmen = User.IsInRole("SalesPerson");
+    Layout = isSalesmen ? "_SalesmanLayout" : "_AdminLayout";
 }
 
 @section Styles{
@@ -42,16 +44,22 @@
                 </div>
                 <ul class="striped list-unstyled mb-0">
                     <li id="receipt"></li>
-                    <li id="purchase"></li>
+                    @if (!isSalesmen)
+                    {
+                        <li id="purchase"></li>
+                    }
                     <li><strong>Code:</strong><span id="productCode"></span></li>
                     <li><strong>Brand and Model:</strong><span id="productName"></span></li>
-                    <li><strong>Purchase Price:</strong><span id="purchasePrice"></span></li>
+                    @if (!isSalesmen)
+                    {
+                        <li><strong>Purchase Price:</strong><span id="purchasePrice"></span></li>
+                    }
                     <li><strong>Selling Price:</strong><span id="sellingPrice"></span></li>
                     <li><strong>Warranty:</strong><span id="warranty"></span></li>
                     <li><strong>Description:</strong><span id="description"></span></li>
                     <li><strong>Note:</strong><span id="note"></span></li>
                 </ul>
-            </div>
+            </div>   
 
             <div class="mt-3 card card-body">
                 <h5 class="font-weight-bold">Product Activity Logs</h5>
@@ -100,17 +108,24 @@
             document.getElementById('category').textContent = product.ProductCatalogName;
             document.getElementById('productCode').textContent = product.ProductCode;
             document.getElementById('productName').textContent = product.ProductName;
-            document.getElementById('purchasePrice').textContent = product.PurchasePrice.toFixed(2);
+
+            const purchasePrice = document.getElementById('purchasePrice');
+            if (purchasePrice) {
+                purchasePrice.textContent = product.PurchasePrice.toFixed(2);
+            }
+
             document.getElementById('sellingPrice').textContent = product.SellingPrice.toFixed(2);
             document.getElementById('warranty').textContent = product.Warranty;
             document.getElementById('description').textContent = product.Description;
             document.getElementById('note').textContent = product.Note;
 
             const bill = document.getElementById('receipt');
-            const purchase = document.getElementById('purchase');
-
             product.SellingId ? bill.innerHTML = `<strong class="green-text">Bill No: </strong><a target="_blank" href="/Selling/SellingReceipt/${product.SellingId}">#${product.SellingSn}</a>` : bill.innerHTML = '';
-            purchase.innerHTML = `<a target="_blank" href="/Purchase/PurchaseReceipt/${product.PurchaseId}">Purchase Details <i class="fal fa-long-arrow-right"></i></a>`;
+
+            const purchase = document.getElementById('purchase');
+            if (purchase) {
+                purchase.innerHTML = `<a target="_blank" href="/Purchase/PurchaseReceipt/${product.PurchaseId}">Purchase Details <i class="fal fa-long-arrow-right"></i></a>`;
+            }
         }
 
 

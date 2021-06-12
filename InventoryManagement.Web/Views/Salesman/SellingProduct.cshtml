@@ -76,27 +76,19 @@
             <form id="formPayment">
                 <div class="card card-body mb-3">
                     <ul class="mb-0">
-                        <li class="md-form">
-                            <input id="inputServiceCharge" step="0.01" type="number" min="0" class="form-control">
-                            <label for="inputServiceCharge">Service Charge</label>
-                        </li>
                         <li class="d-flex justify-content-between align-items-center">
-                            <strong>Total Amount</strong>
-                            <strong>৳<span id="totalPrice">0</span></strong>
+                            <div class="md-form mt-2 flex-1">
+                                <input id="inputCustomer" type="text" class="form-control" autocomplete="off" />
+                                <label for="inputCustomer">Find Customer</label>
+                                <div id="customerInfo" class="text-center"></div>
+                            </div>
+                            <input id="hiddenCustomerId" type="hidden" />
+                            <a href="/Customer/Add" target="_blank" class="btn-floating btn-sm blue-gradient"><i class="fas fa-plus" aria-hidden="true"></i></a>
                         </li>
-                        <li class="md-form">
-                            <textarea id="inputServiceChargeDescription" rows="1" class="md-textarea form-control"></textarea>
-                            <label for="inputServiceChargeDescription">Service Charge Description</label>
-                        </li>
-                        <li class="md-form">
-                            <input id="inputServiceCost" step="0.01" type="number" min="0" class="form-control">
-                            <label for="inputServiceCost">Service Cost</label>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="card card-body mb-3">
-                    <ul class="mb-0">
+                        <div class="text-center">
+                            <i id="customer-error" class="mt-2 text-center red-text"></i>
+                            <button type="submit" id="btnSelling" class="btn peach-gradient btn-rounded btn-block mt-0">SELL PRODUCT</button>
+                        </div>
                         <li class="md-form">
                             <input id="inputDiscount" step="0.01" type="number" min="0" class="form-control">
                             <label for="inputDiscount">Discount</label>
@@ -114,7 +106,7 @@
                             <strong>৳<span id="totalDue">0</span></strong>
                         </li>
                         <li class="md-form">
-                            <select id="selectPaymentMethod" asp-items="ViewBag.Account" class="mdb-select" style="position: absolute; top: 1rem; left: 0; height: 0; width: 0; opacity: 0; padding: 0; pointer-events: none; display: inline!important;">
+                            <select id="selectPaymentMethod" asp-items="ViewBag.Account" class="mdb-select" style="position: absolute; top: 1rem; left: 0; height: 0; width: 0; opacity: 0; padding: 0; pointer-events: none; display: inline !important;">
                                 <option value="" selected>[ Payment Method ]</option>
                             </select>
                         </li>
@@ -122,21 +114,28 @@
                             <input id="inputPromisedDate" type="text" class="form-control datepicker">
                             <label for="inputPromisedDate">Promised Payment Date</label>
                         </li>
-                        <li class="d-flex justify-content-between align-items-center">
-                            <div class="md-form mt-2 flex-1">
-                                <input id="inputCustomer" type="text" class="form-control" autocomplete="off" />
-                                <label for="inputCustomer">Find Customer</label>
-                                <div id="customerInfo" class="text-center"></div>
-                            </div>
-                            <input id="hiddenCustomerId" type="hidden" />
-                            <a href="/Customer/Add" target="_blank" class="btn-floating btn-sm blue-gradient"><i class="fas fa-plus" aria-hidden="true"></i></a>
-                        </li>
                     </ul>
                 </div>
 
-                <div class="text-center">
-                    <i id="customer-error" class="mt-2 text-center red-text"></i>
-                    <button type="submit" id="btnSelling" class="btn peach-gradient btn-rounded btn-block mt-0">SELL PRODUCT</button>
+                <div class="card card-body mb-3">
+                    <ul class="mb-0">
+                        <li class="md-form">
+                            <input id="inputServiceCharge" step="0.01" type="number" min="0" class="form-control">
+                            <label for="inputServiceCharge">Service Charge</label>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center">
+                            <strong>Total Amount</strong>
+                            <strong>৳<span id="totalPrice">0</span></strong>
+                        </li>
+                        <li class="md-form">
+                            <textarea id="inputServiceChargeDescription" rows="1" class="md-textarea form-control"></textarea>
+                            <label for="inputServiceChargeDescription">Service Charge Description</label>
+                        </li>
+                        <li class="md-form">
+                            <input id="inputServiceCost" step="0.01" type="number" min="0" class="form-control">
+                            <label for="inputServiceCost">Service Cost</label>
+                        </li>
+                    </ul>
                 </div>
             </form>
         </div>
