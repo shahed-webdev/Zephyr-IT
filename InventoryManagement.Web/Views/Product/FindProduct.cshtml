@@ -1,7 +1,7 @@
 ﻿
 @{
     ViewData["Title"] = "Find Product";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
     var isSalesmen = User.IsInRole("SalesPerson");
     Layout = isSalesmen ? "_SalesmanLayout" : "_AdminLayout";
 }

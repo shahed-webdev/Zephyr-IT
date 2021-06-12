@@ -48,7 +48,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //GET: Profile
-        [Authorize(Roles = "admin, SubAdmin")]
+        [Authorize(Roles = "admin, SubAdmin, SalesPerson")]
         public IActionResult Profile()
         {
             var user = _db.Registrations.GetAdminInfo(User.Identity.Name);
@@ -63,7 +63,7 @@ namespace InventoryManagement.Web.Controllers
             _db.Registrations.UpdateCustom(User.Identity.Name, user);
             _db.SaveChanges();
 
-            return RedirectToAction("Index", new { Message = "Profile information Updated" });
+            return RedirectToAction("Profile", new { Message = "Profile information Updated" });
         }
 
         //GET: Store Info

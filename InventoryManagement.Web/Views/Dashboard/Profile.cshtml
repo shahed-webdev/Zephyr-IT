@@ -2,7 +2,9 @@
 @model AdminInfo
 @{
     ViewData["Title"] = "Profile";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var isSalesmen = User.IsInRole("SalesPerson");
+    Layout = isSalesmen ? "_SalesmanLayout" : "_AdminLayout";
 }
 
 @section Styles{
@@ -12,6 +14,16 @@
  }
 
 <section class="section team-section p-4">
+    @if (!string.IsNullOrEmpty(Context.Request.Query["Message"]))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @Context.Request.Query["Message"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
     <div class="row">
         <div class="col-md-8 mb-4">
             <div class="card card-cascade cascading-admin-card user-card">
@@ -22,24 +34,25 @@
                             Edit Profile - <span class="text-muted"> Complete your profile</span>
                         </h5>
                     </div>
-                </div><form asp-action="Profile">
+                </div>
+                <form asp-action="Profile">
                     <div class="card-body card-body-cascade">
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="md-form form-sm mb-0">
-                                    <input required asp-for="Name" class = "form-control form-control-sm"/>
+                                    <input required asp-for="Name" class="form-control form-control-sm"/>
                                     <label for="Name">Name</label>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="md-form form-sm mb-0">
-                                    <input asp-for="FatherName" class="form-control form-control-sm" />
+                                    <input asp-for="FatherName" class="form-control form-control-sm"/>
                                     <label for="FatherName">Father's Name</label>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-12">
                                 <div class="md-form form-sm mb-0">
-                                    <input asp-for="Designation" class="form-control form-control-sm" />
+                                    <input asp-for="Designation" class="form-control form-control-sm"/>
                                     <label for="Designation">Designation</label>
                                 </div>
                             </div>
@@ -48,19 +61,19 @@
                         <div class="row">
                             <div class="col-lg-3">
                                 <div class="md-form form-sm mb-0">
-                                    <input asp-for="Phone" class="form-control form-control-sm" />
+                                    <input asp-for="Phone" class="form-control form-control-sm"/>
                                     <label for="Phone">Phone</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="md-form form-sm mb-0">
-                                    <input asp-for="Address" class="form-control form-control-sm" />
+                                    <input asp-for="Address" class="form-control form-control-sm"/>
                                     <label for="Address">Address</label>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="md-form form-sm mb-0">
-                                    <input asp-for="DateofBirth" class="form-control form-control-sm" />
+                                    <input asp-for="DateofBirth" class="form-control form-control-sm"/>
                                     <label for="DateofBirth">Date of Birth</label>
                                 </div>
                             </div>
@@ -69,37 +82,37 @@
                         <div class="row">
                             <div class="col-lg-4 col-md-12">
                                 <div class="md-form form-sm mb-0">
-                                    <input asp-for="Email" class="form-control form-control-sm" />
+                                    <input asp-for="Email" class="form-control form-control-sm"/>
                                     <label for="Email" class="">Email</label>
                                 </div>
                             </div>
 
                             <div class="col-lg-8 col-md-12">
                                 <div class="md-form form-sm mb-0">
-                                    <input type="hidden" id="Image" name="Image" />
+                                    <input type="hidden" id="Image" name="Image"/>
                                     <div class="file-field">
                                         <div class="btn btn-outline-warning btn-rounded btn-sm float-left">
                                             <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose photo</span>
                                             <input type="file" id="upload" value="Choose a photo" onchange="clearImage(this)">
                                         </div>
                                         <div class="file-path-wrapper">
-                                            <input class="file-path validate" type="text" placeholder="Upload photo" />
+                                            <input class="file-path validate" type="text" placeholder="Upload photo"/>
                                         </div>
-                                    </div>                                   
+                                    </div>
                                 </div>
 
                                 <div class="w-50 m-auto text-center">
-                                    <div id="upload-demo" style="display:none;"></div>
-                                    <img id="prevImage" alt="" />
-                                    <a id="doneButton" class="btn-floating btn-lg btn-black" style="display:none;"><i class="fas fa-crop-alt"></i></a>
+                                    <div id="upload-demo" style="display: none;"></div>
+                                    <img id="prevImage" alt=""/>
+                                    <a id="doneButton" class="btn-floating btn-lg btn-black" style="display: none;"><i class="fas fa-crop-alt"></i></a>
                                 </div>
                             </div>
                         </div>
-                        <input type="submit" value="Update" class="btn peach-gradient btn-rounded waves-effect" />
+                        <input type="submit" value="Update" class="btn peach-gradient btn-rounded waves-effect"/>
                     </div>
                 </form>
             </div>
-        </div> 
+        </div>
 
         <div class="col-md-4 mb-4">
             <div class="card profile-card">
@@ -109,7 +122,7 @@
                         imgSrc = Model.Image != null ? $"data:image/gif;base64,{Convert.ToBase64String(Model.Image)}" : "/images/defaultImage.jpg";
                     }
 
-                    <img src="@imgSrc" class="rounded-circle" style="height:150px; width:150px" alt="" />
+                    <img src="@imgSrc" class="rounded-circle" style="height: 150px; width: 150px" alt=""/>
                 </div>
                 <div class="card-body pt-0 mt-0">
                     <div class="text-center">

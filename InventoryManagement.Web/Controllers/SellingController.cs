@@ -143,8 +143,7 @@ namespace InventoryManagement.Web.Controllers
             return Json(data);
         }
 
-        //GET: Due Collection
-        [Authorize(Roles = "admin, due-invoice")]
+        //GET: Due Collection(single)
         public async Task<IActionResult> DueCollection(int? id)
         {
             if (id == null) return RedirectToAction("List", "Customer");
@@ -157,7 +156,7 @@ namespace InventoryManagement.Web.Controllers
             return View(model);
         }
 
-        //Customer due collection(ajax)
+        //Customer due collection(single) (ajax)
         [HttpPost]
         public async Task<IActionResult> DueCollection(SellingDuePaySingleModel model)
         {
