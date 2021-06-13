@@ -38,6 +38,7 @@ namespace InventoryManagement.Repository
     public class ProductSellViewModel
     {
         public int ProductId { get; set; }
+        public int ProductStockId { get; set; }
         public string ProductCode { get; set; }
         public int ProductCatalogId { get; set; }
         public string ProductCatalogName { get; set; }

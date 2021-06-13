@@ -40,6 +40,11 @@ namespace InventoryManagement.Repository
             return Context.ProductStock.Any(s => s.ProductCode == code && !s.IsSold);
         }
 
+        public bool IsInStock(int productStockId)
+        {
+            return Context.ProductStock.Any(s => s.ProductStockId == productStockId && !s.IsSold);
+        }
+
         public Task<ProductSellViewModel> FindforSellAsync(string code)
         {
             var product = Context.ProductStock
@@ -50,6 +55,7 @@ namespace InventoryManagement.Repository
                 .Select(s => new ProductSellViewModel
                 {
                     ProductId = s.ProductId,
+                    ProductStockId = s.ProductStockId,
                     ProductCatalogId = s.Product.ProductCatalogId,
                     ProductCatalogName = s.Product.ProductCatalog.CatalogName,
                     ProductCode = s.ProductCode,
@@ -157,6 +163,22 @@ namespace InventoryManagement.Repository
         {
             return Context.ProductStock.Include(s => s.PurchaseList)
                        .Where(s => !s.IsSold)?.Sum(s => s.PurchaseList.PurchasePrice) ?? 0;
+        }
+
+        public void StockOut(int productStockId)
+        {
+            var stock = Context.ProductStock.Find(productStockId);
+            stock.IsSold = true;
+            Context.ProductStock.Update(stock);
+            Context.SaveChanges();
+        }
+
+        public void StockIn(int productStockId)
+        {
+            var stock = Context.ProductStock.Find(productStockId);
+            stock.IsSold = false;
+            Context.ProductStock.Update(stock);
+            Context.SaveChanges();
         }
     }
 }

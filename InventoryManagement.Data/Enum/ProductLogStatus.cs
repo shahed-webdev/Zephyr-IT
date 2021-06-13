@@ -17,6 +17,9 @@ namespace InventoryManagement.Data
         WarrantyAcceptance,
 
         [Description("Warranty Delivery")]
-        WarrantyDelivery
+        WarrantyDelivery,
+
+        [Description("Product Damaged")]
+        Damaged
     }
 }

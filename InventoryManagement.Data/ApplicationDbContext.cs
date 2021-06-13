@@ -27,6 +27,7 @@ namespace InventoryManagement.Data
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductCatalog> ProductCatalog { get; set; }
         public virtual DbSet<ProductCatalogType> ProductCatalogType { get; set; }
+        public virtual DbSet<ProductDamaged> ProductDamaged { get; set; }
         public virtual DbSet<ProductLog> ProductLog { get; set; }
         public virtual DbSet<ProductStock> ProductStock { get; set; }
         public virtual DbSet<Purchase> Purchase { get; set; }
@@ -66,6 +67,7 @@ namespace InventoryManagement.Data
             builder.ApplyConfiguration(new ProductConfiguration());
             builder.ApplyConfiguration(new ProductCatalogConfiguration());
             builder.ApplyConfiguration(new ProductCatalogTypeConfiguration());
+            builder.ApplyConfiguration(new ProductDamagedConfiguration());
             builder.ApplyConfiguration(new ProductLogConfiguration());
             builder.ApplyConfiguration(new ProductStockConfiguration());
             builder.ApplyConfiguration(new PurchaseConfiguration());

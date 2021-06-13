@@ -20,6 +20,7 @@ namespace InventoryManagement.Data
         public virtual Product Product { get; set; }
         public virtual SellingList SellingList { get; set; }
         public virtual PurchaseList PurchaseList { get; set; }
+        public virtual ProductDamaged ProductDamaged { get; set; }
         public virtual ICollection<SellingAdjustment> SellingAdjustment { get; set; }
         public virtual ICollection<ProductLog> ProductLog { get; set; }
         public virtual ICollection<Warranty> Warranty { get; set; }

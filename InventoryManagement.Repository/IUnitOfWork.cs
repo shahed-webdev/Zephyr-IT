@@ -16,6 +16,7 @@ namespace InventoryManagement.Repository
         IProductRepository Products { get; }
         IProductCatalogRepository ProductCatalogs { get; }
         IProductCatalogTypeRepository ProductCatalogTypes { get; }
+        IProductDamagedRepository ProductDamaged { get; }
         IProductLogRepository ProductLog { get; }
         IProductStockRepository ProductStocks { get; }
         IPurchaseRepository Purchases { get; }
