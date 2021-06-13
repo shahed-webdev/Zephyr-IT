@@ -34,6 +34,8 @@ namespace InventoryManagement.Repository
         Task<DbResponse> ExpenseDelete(int sellingExpenseId);
 
         List<SellingExpenseListModel> ExpenseList(int sellingId);
+
+        bool IsPurchaseIdExist(int purchaseId);
     }
 
 
