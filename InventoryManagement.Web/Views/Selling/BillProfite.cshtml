@@ -113,7 +113,7 @@
         });
 
         //get data
-        var dataTable = {
+        const dataTable = {
             table: null,
             filter: null,
             init: function() {
@@ -252,6 +252,9 @@
                 url: "/Selling/BillProfitByDate",
                 data: dates,
                 success: function (response) {
+                   const damageAmount= getDamageAmount(dates);
+                    console.log(damageAmount)
+
                     const {ServiceProfit, GrandProfit,GenuineExpense,NetProfit} = response.Data;
 
                     serviceProfit.textContent = ServiceProfit;
@@ -277,6 +280,18 @@
                         grandProfit.parentElement.classList.add("text-danger");
                     }
                     
+                }
+            });
+        }
+
+        //get damage amount
+        function getDamageAmount(dates) {
+            $.ajax({
+                type: "POST",
+                url: "/Selling/GetDamageAmountByDate",
+                data: dates,
+                success: function (response) {
+                    return response;
                 }
             });
         }
