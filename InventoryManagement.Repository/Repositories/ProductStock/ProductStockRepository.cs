@@ -78,6 +78,7 @@ namespace InventoryManagement.Repository
                 .ThenInclude(pl => pl.Purchase)
                 .Include(p => p.SellingList)
                 .ThenInclude(sl => sl.Selling)
+                .Include(s => s.ProductDamaged)
                 .Where(s => s.ProductCode == code)
                 .OrderByDescending(s => s.ProductStockId)
                 .Select(s => new ProductStockDetailsViewModel
@@ -94,7 +95,8 @@ namespace InventoryManagement.Repository
                     PurchasePrice = s.PurchaseList.PurchasePrice - (s.PurchaseList.PurchasePrice * (s.PurchaseList.Purchase.PurchaseDiscountPercentage / 100)),
                     SellingId = s.SellingList.SellingId,
                     SellingSn = s.SellingList.Selling.SellingSn,
-                    PurchaseId = s.PurchaseList.PurchaseId
+                    PurchaseId = s.PurchaseList.PurchaseId,
+                    IsDamaged = s.ProductDamaged != null
                 }).FirstOrDefaultAsync();
 
             return product;

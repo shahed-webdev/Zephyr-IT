@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using InventoryManagement.Data;
 using JqueryDataTables.LoopsIT;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
@@ -18,6 +19,7 @@ namespace InventoryManagement.Repository
         public DbResponse Add(ProductDamagedAddModel model)
         {
             var productDamaged = _mapper.Map<ProductDamaged>(model);
+            productDamaged.DamagedDate = DateTime.Now.Date.BdTime();
             Context.ProductDamaged.Add(productDamaged);
             Context.SaveChanges();
 
@@ -51,6 +53,8 @@ namespace InventoryManagement.Repository
             var eD = toDate ?? new DateTime(3000, 12, 31);
             return Context
                 .ProductDamaged
+                .Include(s => s.ProductStock)
+                .ThenInclude(p => p.PurchaseList)
                 .Where(r => r.DamagedDate <= eD && r.DamagedDate >= sD)
                 .Sum(s => s.ProductStock.PurchaseList.PurchasePrice);
         }

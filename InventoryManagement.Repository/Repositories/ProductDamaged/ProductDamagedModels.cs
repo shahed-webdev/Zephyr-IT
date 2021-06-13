@@ -7,7 +7,6 @@ namespace InventoryManagement.Repository
         public int ProductStockId { get; set; }
         public string ProductCode { get; set; }
         public string Note { get; set; }
-        public DateTime DamagedDate { get; set; }
 
     }
     public class ProductDamagedViewModel
