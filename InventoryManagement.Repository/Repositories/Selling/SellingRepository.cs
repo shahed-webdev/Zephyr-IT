@@ -32,6 +32,14 @@ namespace InventoryManagement.Repository
         public async Task<DbResponse<int>> AddCustomAsync(SellingViewModel model, IUnitOfWork db)
         {
             var response = new DbResponse<int>();
+
+            if (IsPurchaseIdExist(model.PurchaseId.GetValueOrDefault()))
+            {
+                response.Message = "Purchase receipt already applied";
+                response.IsSuccess = false;
+                return response;
+            }
+
             var codes = model.ProductList.SelectMany(p => p.ProductCodes).ToArray();
             var isStockOut = db.ProductStocks.IsStockOut(codes);
             if (isStockOut)
@@ -834,6 +842,11 @@ namespace InventoryManagement.Repository
                 .ProjectTo<SellingExpenseListModel>(_mapper.ConfigurationProvider)
                 .OrderBy(a => a.InsertDateUtc)
                 .ToList();
+        }
+
+        public bool IsPurchaseIdExist(int purchaseId)
+        {
+            return Context.Selling.Any(s => s.PurchaseId == purchaseId);
         }
     }
 }
