@@ -11,13 +11,11 @@
         <table id="data-table" class="table table-sm table-bordered">
             <thead>
                 <tr>
-                    <th><strong>Warranty No.</strong></th>
-                    <th><strong>Bill No.</strong></th>
-                    <th><strong>Customer</strong></th>
-                    <th><strong>Type</strong></th>
-                    <th><strong>Serial</strong></th>
-                    <th><strong>Acceptance</strong></th>
-                    <th><strong>Delivery</strong></th>
+                    <th><strong>Product</strong></th>
+                    <th><strong>Note</strong></th>
+                    <th><strong>Amount</strong></th>
+                    <th><strong>Damage Date</strong></th>
+                    <th><strong>Re-Stock</strong></th>
                 </tr>
             </thead>
         </table>
@@ -41,30 +39,11 @@
                     buttons: dataTable.button,
                     dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>><"row"<"col-sm-12"<tr>>><"row"<"col-sm-5"i><"col-sm-7"p>>',
                     ajax: {
-                        url: "/Warranty/WarrantyListData",
+                        url: "/Damage/DamageListData",
                         type: "POST"
                     },
                     columns:
                     [
-                        {
-                            data: "WarrantySn",
-                            "render": function(data, type, row, meta) {
-                                return `<a class="blue-text" href="/Warranty/AcceptanceSlip/${row.WarrantyId}">${data}</a>`;
-                            }
-                        },
-                        {
-                            data: "SellingSn",
-                            "render": function(data, type, row, meta) {
-                                return `<a class="blue-text" href="/Selling/SellingReceipt/${row.SellingId}">${data}</a>`;
-                            }
-                        },
-                        {
-                            data: "CustomerName",
-                            "render": function(data, type, row, meta) {
-                                return `${data} <small class="d-block"> ${row.CustomerPhone}</small>`
-                            }
-                        },
-                        { data: "ProductCatalogName" },
                         {
                             data: "ProductCode",
                             "render": function(data, type, row, meta) {
@@ -72,25 +51,29 @@
                             }
                         },
                         {
-                            data: "AcceptanceDate",
+                            data: "Note"
+                        },
+                        {
+                            data: "DamagedAmount",
+                            "render": dataTable.addSign
+                        },
+                        {
+                            data: "DamagedDate",
                             "render": function(data, type, row, meta) {
-                                return `${moment(data).format('DD MMM YYYY')} <small class="d-block"> ${row.AcceptanceDescription}</small>`
+                                return `${moment(data).format('DD MMM YYYY')}`
                             }
                         },
                         {
-                            data: "IsDelivered",
+                            data: "ProductDamagedId",
                             "render": function(data, type, row, meta) {
-                                const description = row.DeliveryDescription ? row.DeliveryDescription : "";
-                                return data?`
-                               ${moment(row.DeliveryDate).format('DD MMM YYYY')}
-                                <small class="d-block"> ${description}</small>` : `<a class="blue-text" href="/Warranty/WarrantyDelivery/${row.WarrantyId}">Pending</a>`
+                                return `<a id="${data}" class="restore-product blue-text">Re-Stock</a>`
                             }
                         }
                     ],
                     columnDefs: [
-                        { 'searchable': false, 'targets': [6] },
-                        //{ 'className': "text-right", "targets": [2, 3, 4,5,6] },
-                        { 'className': "text-left", "targets": [2, 4, 5, 6] }
+                        { 'searchable': false, 'targets': [2, 3] },
+                        { 'className': "text-right", "targets": [2] },
+                        { 'className': "text-left", "targets": [0, 1] }
                     ],
                     //order: [[5, 'desc']]
                 });
@@ -117,5 +100,32 @@
                 }
             }
         }
+
+        //re stock product
+        const onTable = document.getElementById("data-table");
+        onTable.addEventListener("click",
+            function(evt) {
+                const element = evt.target;
+                const onRestock = element.classList.contains("restore-product");
+
+                if (!onRestock) return;
+
+                $.ajax({
+                    url: '/Damage/ReStockProduct',
+                    type: "POST",
+                    data: { id: element.id },
+                    success: response => {
+                        if (response.IsSuccess) {
+                            dataTable.getData();
+                            return;
+                        }
+
+                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                    },
+                    error: error => {
+                        console.log(error);
+                    }
+                });
+            });
     </script>
 }

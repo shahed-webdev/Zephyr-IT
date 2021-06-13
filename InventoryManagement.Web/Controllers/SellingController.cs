@@ -14,10 +14,12 @@ namespace InventoryManagement.Web.Controllers
     {
         private readonly IUnitOfWork _db;
         private readonly IAccountCore _account;
-        public SellingController(IUnitOfWork db, IAccountCore account)
+        private readonly IProductDamagedCore _damaged;
+        public SellingController(IUnitOfWork db, IAccountCore account, IProductDamagedCore damaged)
         {
             _db = db;
             _account = account;
+            _damaged = damaged;
         }
 
         #region Selling
@@ -338,6 +340,14 @@ namespace InventoryManagement.Web.Controllers
         {
             var model = _db.Selling.SellingBillProfitSummaryDateWise(fromDate, toDate);
             return Json(model);
+        }
+
+        //GET:// Get damage Amount ByDate(ajax)
+        [HttpPost]
+        public IActionResult GetDamageAmountByDate(DateTime? fromDate, DateTime? toDate)
+        {
+            var response = _damaged.DamagedAmountDateWise(fromDate, toDate);
+            return Json(response);
         }
         #endregion Sales report
     }

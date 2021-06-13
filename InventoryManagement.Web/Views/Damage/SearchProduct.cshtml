@@ -41,7 +41,6 @@
                     <h4 class="mb-1 font-weight-bold"><strong id="category"></strong></h4>
                 </div>
                 <ul class="striped list-unstyled mb-0">
-                    <li id="purchase"></li>
                     <li><strong>Code:</strong><span id="productCode"></span></li>
                     <li><strong>Brand and Model:</strong><span id="productName"></span></li>
                     <li><strong>Purchase Price:</strong><span id="purchasePrice"></span></li>
@@ -53,8 +52,10 @@
 
                 <div class="md-form">
                     <form id="formDamage">
-                        <label for="inputDescription">Description</label>
-                        <input id="inputDescription" type="text" name="Description" required class="form-control" />
+                        <input id="hiddenProductStockId" type="hidden"/>
+
+                        <label for="inputNote">Description</label>
+                        <input id="inputNote" type="text" name="Description" required class="form-control"/>
                         <input type="submit" value="Damage" class="btn btn-danger"/>
                     </form>
                 </div>
@@ -68,9 +69,12 @@
         //*****SELECTORS*****/
         // product code form
         const formCode = document.getElementById('formCode')
+        const inputProductCode = formCode.inputProductCode;
         const codeError = formCode.querySelector('#codeError')
         const btnFind = formCode.btnFind
         const infoContainer = document.querySelector('.info-container')
+
+        const hiddenProductStockId = document.getElementById("hiddenProductStockId");
 
         // on Product code submit
         formCode.addEventListener('submit',
@@ -80,7 +84,7 @@
                 $.ajax({
                     url: '/Damage/FindUnsoldProduct',
                     type: "POST",
-                    data: { code: this.inputProductCode.value.trim() },
+                    data: { code: inputProductCode.value.trim() },
                     success: response => {
                         appendData(response);
                     },
@@ -99,7 +103,8 @@
                 return;
             }
 
-        
+            hiddenProductStockId.value = product.ProductStockId;
+
             infoContainer.classList.add('show');
             document.getElementById('category').textContent = product.ProductCatalogName;
             document.getElementById('productCode').textContent = product.ProductCode;
@@ -110,9 +115,38 @@
             document.getElementById('warranty').textContent = product.Warranty;
             document.getElementById('description').textContent = product.Description;
             document.getElementById('note').textContent = product.Note;
-
-            const purchase = document.getElementById('purchase');
-            purchase.innerHTML = `<a target="_blank" href="/Purchase/PurchaseReceipt/${product.PurchaseId}">Purchase Details <i class="fal fa-long-arrow-right"></i></a>`;
         }
+
+        //post damage
+        const formDamage = document.getElementById('formDamage');
+        formDamage.addEventListener('submit',
+            function(evt) {
+                evt.preventDefault();
+                const stockId = this.hiddenProductStockId.value;
+                if (!stockId) return;
+
+                const model = {
+                    ProductStockId: stockId,
+                    ProductCode: inputProductCode.value.trim(),
+                    Note: this.inputNote.value
+                }
+
+                $.ajax({
+                    url: '/Damage/PostDamage',
+                    type: "POST",
+                    data: model,
+                    success: response => {
+                        if (response.IsSuccess) {
+                            location.href = `/Damage/DamagedList`;
+                            return;
+                        }
+
+                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                    },
+                    error: error => {
+                        console.log(error);
+                    }
+                });
+            });
     </script>
 }
