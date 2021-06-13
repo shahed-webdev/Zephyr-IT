@@ -6,9 +6,9 @@ using System;
 
 namespace InventoryManagement.BusinessLogin
 {
-    public class ProductDamageCore : CoreDependency, IProductDamagedCore
+    public class ProductDamagedCore : CoreDependency, IProductDamagedCore
     {
-        public ProductDamageCore(IUnitOfWork db, IMapper mapper) : base(db, mapper)
+        public ProductDamagedCore(IUnitOfWork db, IMapper mapper) : base(db, mapper)
         {
         }
 
