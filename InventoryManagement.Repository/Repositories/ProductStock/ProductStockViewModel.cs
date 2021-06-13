@@ -23,6 +23,7 @@ namespace InventoryManagement.Repository
         public int? SellingSn { get; set; }
         public int? SellingId { get; set; }
         public int? PurchaseId { get; set; }
+        public bool IsDamaged { get; set; }
     }
 
     public class ProductStockReportModel
