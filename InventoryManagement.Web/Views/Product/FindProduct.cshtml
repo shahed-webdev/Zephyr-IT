@@ -10,6 +10,7 @@
     <style>
         .info-container { opacity: 0; transition: opacity .3s ease-in-out }
         .info-container.show { opacity: 1; transition: opacity .3s ease-in-out }
+        #damage-badge{display: none}
 
         ul.striped li { padding: .6rem; font-size: 1.1rem; }
         ul.striped li strong { color: #777 }
@@ -40,7 +41,13 @@
         <div class="info-container">
             <div class="card card-body p-5">
                 <div class="text-center">
-                    <h4 class="mb-1 font-weight-bold"><strong id="category"></strong></h4>
+                    <h4 class="mb-1 font-weight-bold">
+                        <strong id="category"></strong>
+                        <small id="damage-badge" class="red-text">
+                            <i class="fas fa-dumpster"></i>
+                            Damaged
+                        </small>
+                    </h4>
                 </div>
                 <ul class="striped list-unstyled mb-0">
                     <li id="receipt"></li>
@@ -105,6 +112,8 @@
             getProductLog(product.ProductCode);
 
             infoContainer.classList.add('show');
+            document.getElementById('damage-badge').style.display = product.IsDamaged? "block":"none";
+
             document.getElementById('category').textContent = product.ProductCatalogName;
             document.getElementById('productCode').textContent = product.ProductCode;
             document.getElementById('productName').textContent = product.ProductName;

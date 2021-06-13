@@ -72,11 +72,12 @@
         <tbody>
             @{
                 var index = 1;
+                //service
                 @if (Model.ServiceCharge > 0)
                 {
                     <tr>
                         <td class="text-center">@index</td>
-                        <td>Service</td>
+                        <td>SERVICE</td>
                         <td colspan="4">@Model.ServiceChargeDescription</td>
                         <td class="text-right">৳@Model.ServiceCharge</td>
                     </tr>
@@ -111,8 +112,20 @@
                     </tr>
                     index++;
                 }
-            }
 
+                //purchase from customer
+                @if (Model.PurchaseAdjustedAmount > 0)
+                {
+                    <tr>
+                        <td class="text-center">@index</td>
+                        <td>PURCHASE</td>
+                        <td colspan="4">@Model.PurchaseDescription</td>
+                        <td class="text-right">৳@Model.PurchaseAdjustedAmount</td>
+                    </tr>
+                    index++;
+                }
+            }
+  
             <tr>
                 <td colspan="4" class="text-center">
                     <span id="amount-word"></span>
