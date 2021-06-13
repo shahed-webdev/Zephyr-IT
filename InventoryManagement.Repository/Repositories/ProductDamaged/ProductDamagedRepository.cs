@@ -18,6 +18,7 @@ namespace InventoryManagement.Repository
         public DbResponse Add(ProductDamagedAddModel model)
         {
             var productDamaged = _mapper.Map<ProductDamaged>(model);
+            productDamaged.DamagedDate = DateTime.Now.Date.BdTime();
             Context.ProductDamaged.Add(productDamaged);
             Context.SaveChanges();
 
