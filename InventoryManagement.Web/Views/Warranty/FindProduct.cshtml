@@ -204,7 +204,8 @@
             //post data
             const formAdd = document.getElementById("formAdd");
             if (formAdd) {
-                formAdd.addEventListener("submit", function(evt) {
+                formAdd.addEventListener("submit",
+                    function(evt) {
                         evt.preventDefault();
 
                         const productInfo = JSON.parse(sessionStorage.getItem("productInfo"));
@@ -236,7 +237,7 @@
             function highlightCode() {
                 const element = document.querySelectorAll(".codeSpan");
                 const code = JSON.parse(sessionStorage.getItem("productInfo"));
-                console.log(code)
+
                 for (let i = 0; i < element.length; i++) {
                     if (element[i].textContent === code.Code) {
                         element[i].classList.add("found-code");
