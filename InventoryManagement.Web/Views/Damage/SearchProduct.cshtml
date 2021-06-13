@@ -1,9 +1,7 @@
 ﻿
 @{
-    ViewData["Title"] = "Find Product";
-
-    var isSalesmen = User.IsInRole("SalesPerson");
-    Layout = isSalesmen ? "_SalesmanLayout" : "_AdminLayout";
+    ViewData["Title"] = "Search Product For Damage";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 @section Styles{
@@ -19,7 +17,7 @@
 
 <div class="row">
     <div class="col-lg-8 mx-auto">
-        <h4 class="mb-3 page-header d-print-none">Find Product</h4>
+        <h4 class="mb-3 page-header d-print-none">Find Product For Damage</h4>
 
         <div class="card card-body mb-3 p-5">
             <form id="formCode">
@@ -43,28 +41,23 @@
                     <h4 class="mb-1 font-weight-bold"><strong id="category"></strong></h4>
                 </div>
                 <ul class="striped list-unstyled mb-0">
-                    <li id="receipt"></li>
-                    @if (!isSalesmen)
-                    {
-                        <li id="purchase"></li>
-                    }
+                    <li id="purchase"></li>
                     <li><strong>Code:</strong><span id="productCode"></span></li>
                     <li><strong>Brand and Model:</strong><span id="productName"></span></li>
-                    @if (!isSalesmen)
-                    {
-                        <li><strong>Purchase Price:</strong><span id="purchasePrice"></span></li>
-                    }
+                    <li><strong>Purchase Price:</strong><span id="purchasePrice"></span></li>
                     <li><strong>Selling Price:</strong><span id="sellingPrice"></span></li>
                     <li><strong>Warranty:</strong><span id="warranty"></span></li>
                     <li><strong>Description:</strong><span id="description"></span></li>
                     <li><strong>Note:</strong><span id="note"></span></li>
                 </ul>
-            </div>   
 
-            <div class="mt-3 card card-body">
-                <h5 class="font-weight-bold">Product Activity Logs</h5>
-
-                <ul id="show-log" class="list-group list-group-flush"></ul>
+                <div class="md-form">
+                    <form id="formDamage">
+                        <label for="inputDescription">Description</label>
+                        <input id="inputDescription" type="text" name="Description" required class="form-control" />
+                        <input type="submit" value="Damage" class="btn btn-danger"/>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -75,22 +68,27 @@
         //*****SELECTORS*****/
         // product code form
         const formCode = document.getElementById('formCode')
-        const inputProductCode = formCode.inputProductCode
         const codeError = formCode.querySelector('#codeError')
         const btnFind = formCode.btnFind
         const infoContainer = document.querySelector('.info-container')
 
         // on Product code submit
         formCode.addEventListener('submit',
-            evt => {
-                evt.preventDefault()
-                const url = '/Product/FindProductDetailsByCode'
-                const param = { params: { code: inputProductCode.value.trim() } };
+            function(evt) {
+                evt.preventDefault();
 
-                axios.get(url, param).then(res => {
-                    appendData(res.data)
-                }).catch(err => console.log(err))
-            })
+                $.ajax({
+                    url: '/Damage/FindUnsoldProduct',
+                    type: "POST",
+                    data: { code: this.inputProductCode.value.trim() },
+                    success: response => {
+                        appendData(response);
+                    },
+                    error: error => {
+                        console.log(error);
+                    }
+                });
+            });
 
         //append data
         function appendData(product) {
@@ -101,62 +99,20 @@
                 return;
             }
 
-            //get product log
-            getProductLog(product.ProductCode);
-
+        
             infoContainer.classList.add('show');
             document.getElementById('category').textContent = product.ProductCatalogName;
             document.getElementById('productCode').textContent = product.ProductCode;
             document.getElementById('productName').textContent = product.ProductName;
 
-            const purchasePrice = document.getElementById('purchasePrice');
-            if (purchasePrice) {
-                purchasePrice.textContent = product.PurchasePrice.toFixed(2);
-            }
-
+            document.getElementById('purchasePrice').textContent = product.PurchasePrice.toFixed(2);
             document.getElementById('sellingPrice').textContent = product.SellingPrice.toFixed(2);
             document.getElementById('warranty').textContent = product.Warranty;
             document.getElementById('description').textContent = product.Description;
             document.getElementById('note').textContent = product.Note;
 
-            const bill = document.getElementById('receipt');
-            product.SellingId ? bill.innerHTML = `<strong class="green-text">Bill No: </strong><a target="_blank" href="/Selling/SellingReceipt/${product.SellingId}">#${product.SellingSn}</a>` : bill.innerHTML = '';
-
             const purchase = document.getElementById('purchase');
-            if (purchase) {
-                purchase.innerHTML = `<a target="_blank" href="/Purchase/PurchaseReceipt/${product.PurchaseId}">Purchase Details <i class="fal fa-long-arrow-right"></i></a>`;
-            }
-        }
-
-
-        //product logs
-        const showLog = document.getElementById("show-log");
-
-        function getProductLog(code) {
-            showLog.innerHTML = "";
-
-            $.ajax({
-                url: '/Product/GetProductLog',
-                data: { code },
-                success: function (response) {
-                    showLog.parentElement.style.display = response.Data.length ? "block" : "none";
-                    if (!response.Data.length) return;
-
-                    response.Data.forEach(item => {
-                        const li = document.createElement("li");
-
-                        li.className = "list-group-item";
-                        li.innerHTML = `<small class="text-muted">Product: ${item.LogStatus}. Bill No: <a target="_blank" href="/Selling/SellingReceipt/${item.SellingId}">#${item.SellingSn}</a></small>
-                         <p class="mb-0">${item.Details}</p>
-                         <small class="text-muted mr-2"><i class="far fa-clock"></i> ${moment.utc(item.CreatedOnUtc).local().format('LLLL')}</small>
-                         <small class="text-muted"><i class="fas fa-user"></i> ${item.ActivityBy}</small>`;
-                        showLog.appendChild(li);
-                    });
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
+            purchase.innerHTML = `<a target="_blank" href="/Purchase/PurchaseReceipt/${product.PurchaseId}">Purchase Details <i class="fal fa-long-arrow-right"></i></a>`;
         }
     </script>
 }

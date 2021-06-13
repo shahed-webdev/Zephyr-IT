@@ -202,7 +202,12 @@
                                 }
                             </td>
                             <td>@warranty.DeliveryDescription</td>
-                            <td>@warranty.DeliveryDate.Value.ToString("dd MMM yyyy")</td>
+                            <td>
+                                @if (warranty.DeliveryDate != null)
+                                {
+                                    @warranty.DeliveryDate.Value.ToString("dd MMM yyyy")
+                                }
+                            </td>
                         </tr>
                     }
                     </tbody>

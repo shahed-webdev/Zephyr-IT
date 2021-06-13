@@ -39,7 +39,7 @@
             <div class="col-lg-3">
                 <div class="form-group">
                     <label>Expanse Date</label>
-                    <input id="expenseDate" type="text" value="@DateTime.Now.ToString("d MMMM, yyyy")" class="form-control datepicker" required />
+                    <input id="expenseDate" type="text" class="form-control datepicker" required />
                 </div>
             </div>
             <div class="col-lg-5">
@@ -107,7 +107,10 @@
 @section Scripts{
     <script>
         $(function () {
-            $('.datepicker').pickadate({ clear: '' })
+            $('.datepicker').pickadate({
+                format: 'd-mmmm-yyyy',
+                clear: ''
+            }).val(moment(new Date()).format('DD-MMMM-YYYY'));
 
             //customer autocomplete
             hiddenCustomerId.value = "";
