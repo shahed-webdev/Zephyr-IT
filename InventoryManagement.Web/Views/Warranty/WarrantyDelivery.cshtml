@@ -100,6 +100,8 @@
             $('.mdb-select').materialSelect();
         });
 
+
+        //POST
         const serializeForm = function(form) {
             const obj = {};
             const formData = new FormData(form);
@@ -108,11 +110,40 @@
             }
             return obj;
         };
-
         const formDelivery = document.getElementById("formDelivery");
         formDelivery.addEventListener("submit",
             function(evt) {
                 evt.preventDefault();
+
+                //post damage
+                $.ajax({
+                    url: '/Damage/FindUnsoldProduct',
+                    type: "POST",
+                    data: { code: this.inputChangedProductCode.value.trim() },
+                    success: response => {
+                        if (!response) return;
+
+                        const model = {
+                            ProductStockId: response.ProductStockId,
+                            ProductCode: this.inputChangedProductCode.value.trim(),
+                            Note: "Replace for warranty(@Model.ProductCode)"
+                        }
+
+                        $.ajax({
+                            url: '/Damage/PostDamage',
+                            type: "POST",
+                            data: model,
+                            success: response => {},
+                            error: error => {
+                                console.log(error);
+                            }
+                        });
+                    },
+                    error: error => {
+                        console.log(error);
+                    }
+                });
+
 
                 const body = serializeForm(this);
                 body.ProductStockId = @Model.ProductStockId;
