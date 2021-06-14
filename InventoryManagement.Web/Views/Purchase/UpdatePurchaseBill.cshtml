@@ -6,28 +6,14 @@
 
 @section Styles{
     <style>
-        table tr td p { margin-bottom: 0; color: #777 }
+        #code-container { display: flex;flex-wrap: wrap }
+        #code-container i { margin-left: 5px;cursor: pointer }
+        #code-container div { padding: 3px 12px; border-radius: 5px; margin: 3px; color: #fff; }
+        #code-container .unsold { background-color: #00C851 }
+        #code-container .sold { background-color: #ff6f00 }
 
-        #showAddedCode { display: flex; flex-wrap: wrap; }
-        .code { cursor: pointer }
-        #showAddedCode .code-delete { color: #fff; margin: 5px; cursor: pointer }
         #btnAddToList { display: none }
-
-        #payment-area li strong { font-size: 17px; }
-        #inputDiscount, #inputPaid, #inputPurchaseDate, #inputMemoNumber { display: inline-block; border-radius: 50px; text-align: right; color: #000; }
-        .list-group-item { padding: .75rem 0; }
-        .has-error { border: 2px solid #ff0000 }
-        .remove { color: #ff0707; cursor: pointer; font-size: 15px; }
-        .stock { padding: .18rem .5rem; }
-
-        #product-code-body span > i { font-size: .8rem }
-        #vendor-info li { font-size: 17px; line-height: 2.5; }
-        #vendor-info li:first-child { border-top: 0 }
-        #vendor-info li:last-child { border-bottom: 0 }
-        #vendor-info i { color: #8a8383 }
-
-        #errorMessage { display: none }
-    </style>
+    </style> 
 }
 
 <div class="m-md-3">
@@ -49,6 +35,8 @@
                         <i id="code-exist-error" class="text-danger"></i>
                     </div>
                 </form>
+                
+                <div id="code-container"></div>
             </div>
 
             <div class="col-lg-8">
@@ -56,7 +44,7 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="md-form">
-                                <select id="ParentId" name="ParentId" searchable="Search here.." asp-items="ViewBag.ParentId" class="mdb-select" required>
+                                <select id="selectCategory" name="ParentId" searchable="Search here.." asp-items="ViewBag.ParentId" class="mdb-select" required>
                                     <option value="" disabled selected>Select Category</option>
                                 </select>
                             </div>
@@ -64,7 +52,7 @@
 
                         <div class="col-lg-6">
                             <div class="md-form">
-                                <select id="selectProductId" name="ProductId" searchable="Search here.." class="mdb-select product-select" required>
+                                <select id="selectProductId" name="ProductId" searchable="Search here.." class="mdb-select" required>
                                     <option value="" disabled selected>Brand and Model</option>
                                 </select>
                             </div>
@@ -105,12 +93,17 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <input type="submit" class="btn btn-deep-orange" value="Add Product To Cart"/>
+
+                    <button id="btnCheckProduct" type="submit" class="btn btn-rounded btn-warning" title="click to check, double click to cart">
+                        check product
+                    </button>
+                    <button id="btnAddToList" type="submit" class="btn btn-rounded btn-success" title="click to check, double click to cart">
+                        Add Product To List
+                    </button>
                 </form>
             </div>
         </div>
-    </section> 
+    </section>
 
     <div class="card card-body">
         <table class="table">
@@ -122,19 +115,18 @@
                     <th><strong>Selling&nbspPrice</strong></th>
                     <th><strong>Warranty</strong></th>
                     <th><strong>Stock</strong></th>
-                    <th style="width: 50px"><strong>Remove</strong></th>
                 </tr>
             </thead>
             <tbody id="tbody">
                 @foreach (var item in Model.PurchaseList)
                 {
-                    <tr data-sn="@DateTime.Now.Millisecond">
+                    <tr id="@item.ProductId">
                         <td>
-                            <p class="m-0">category</p>
+                            <p class="m-0">@item.ProductCatalogName</p>
                             <small class="text-muted">@item.Description</small>
                         </td>
                         <td>
-                            <p class="m-0">Prod</p>
+                            <p class="m-0">@item.ProductName</p>
                             <small class="text-muted">@item.Note</small>
                         </td>
                         <td>@item.PurchasePrice</td>
@@ -147,9 +139,6 @@
                                     @stock.ProductCode
                                 </span>
                             }
-                        </td>
-                        <td class="text-center">
-                            <i class="fal fa-trash-alt remove"></i>
                         </td>
                     </tr>
                 }
@@ -165,6 +154,9 @@
 
 @section Scripts {
     <script>
+        //access from private method
+        const data = @Html.Raw(Json.Serialize(Model.PurchaseList));
+
         $(function () {
             //date picker
             $('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'));
@@ -173,6 +165,5 @@
             $('.mdb-select').materialSelect();
         });
     </script>
-
-    <script src="~/page-js/bill-change-purchase.js"></script>
+    <script src="~/page-js/bill-change-purchase.js?v=1.0.01"></script>
 }
