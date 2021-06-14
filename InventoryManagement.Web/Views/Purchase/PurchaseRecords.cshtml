@@ -29,6 +29,7 @@
                         <th>Paid</th>
                         <th>Due</th>
                         <th>Date</th>
+                        <th>Update</th>
                     </tr>
                 </thead>
             </table>
@@ -57,12 +58,14 @@
                     columns:
                     [
                         {
-                            data: "PurchaseSn", "render": function(data, type, row, meta) {
+                            data: "PurchaseSn",
+                            "render": function(data, type, row, meta) {
                                 return `<a class="blue-text" href="/Purchase/PurchaseReceipt/${row.PurchaseId}">${data}</a>`;
                             }
                         },
                         {
-                            data: "MemoNumber", "render": function(data, type, row, meta) {
+                            data: "MemoNumber",
+                            "render": function(data, type, row, meta) {
                                 return `<div class="memo" data-old="${data}" data-id="${row.PurchaseId}">${data} <i class="fal fa-edit"></i></div>`;
                             }
                         },
@@ -70,16 +73,18 @@
                         { data: "PurchaseAmount", "render": dataTable.addSign },
                         { data: "PurchasePaidAmount", "render": dataTable.addSign },
                         {
-                            data: "PurchaseDueAmount", "render": function(data, type, row, meta) {
+                            data: "PurchaseDueAmount",
+                            "render": function(data, type, row, meta) {
                                 return data > 0 ? `<a class="blue-text" href="/Purchase/PayDue/${row.PurchaseId}">${data}/-</a>` : data;
                             }
                         },
-                        { data: "PurchaseDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } }
+                        { data: "PurchaseDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
+                        { data: "PurchaseId", "render": function(data) { return `<a href="/Purchase/UpdatePurchaseBill/${data}" class="blue-text">Update</a>` } }
                     ],
                     columnDefs: [
                         { searchable: false, 'targets': [3, 4, 5] },
                         { className: "text-right", "targets": [3, 4, 5] },
-                        { className: "text-left", "targets": [2] }
+                        { className: "text-left", "targets": [1, 2] }
                     ],
                     order: [[5, 'desc']]
                 });
@@ -89,16 +94,18 @@
             },
             addSign: function(data) { return `${data}/-` },
             button: {
-                buttons: [{
-                    extend: 'print',
-                    text: '<i class="fa fa-print"></i> Print',
-                    title: '',
-                    exportOptions: { /*columns: [0,1] //Column value those print*/  },
-                    autoPrint: true,
-                    customize: function(win) {
-                        $(win.document.body).prepend(`<nav class="mb-3 navbar peach-gradient"><a class="navbar-brand ml-1"><span>Zephyr</span> IT</a></nav><h3 class="h3-responsive">${$('h4').text()}</h3>`);
+                buttons: [
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        title: '',
+                        exportOptions: { /*columns: [0,1] //Column value those print*/  },
+                        autoPrint: true,
+                        customize: function(win) {
+                            $(win.document.body).prepend(`<nav class="mb-3 navbar peach-gradient"><a class="navbar-brand ml-1"><span>Zephyr</span> IT</a></nav><h3 class="h3-responsive">${$('h4').text()}</h3>`);
+                        }
                     }
-                }],
+                ],
                 dom: {
                     button: { className: 'btn btn-dark btn-rounded btn-sm my-0' }
                 }
@@ -106,19 +113,20 @@
         }
 
         const tBody = document.getElementById('data-table');
-        tBody.addEventListener('click', function(evt) {
-            const element = evt.target;
+        tBody.addEventListener('click',
+            function(evt) {
+                const element = evt.target;
 
-            const onMemo = element.classList.contains('memo');
-            if (!onMemo) return;
-            const old = element.getAttribute('data-old');
+                const onMemo = element.classList.contains('memo');
+                if (!onMemo) return;
+                const old = element.getAttribute('data-old');
 
-            const html = `<form onsubmit="return updateMemo(this)">
+                const html = `<form onsubmit="return updateMemo(this)">
                 <input name="inputMemo" value="${old}" class="inputMemo" type="text" />
             </form>`;
 
-            element.innerHTML = html;
-        });
+                element.innerHTML = html;
+            });
 
         function updateMemo(form) {
             const id = form.parentElement.getAttribute('data-id');

@@ -208,7 +208,7 @@
                             </h3>
                         </div>
                     </div>
-                    <div class="card-body card-body-cascade pt-0">
+                    <div class="card-body card-body-cascade pt-0 pb-2">
                         <div class="form-inline d-flex justify-content-center align-items-center md-form form-sm active-cyan-2 mb-0 mt-2">
                             <input id="input-find" class="form-control form-control-sm mb-0 w-75" type="text" placeholder="Search">
                             <i class="fas fa-search" aria-hidden="true"></i>
@@ -382,7 +382,7 @@
             const customerTable = $('#table-customer').DataTable({
                 processing: true,
                 serverSide: true,
-                pageLength: 12,
+                pageLength: 13,
                 dom: 't',
                 ajax: {
                     url: "/Selling/DueInvoiceData",
