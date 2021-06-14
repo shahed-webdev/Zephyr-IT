@@ -330,9 +330,11 @@ namespace InventoryManagement.Repository
               .ThenInclude(pd => pd.ProductCatalog)
               .Select(p => new PurchaseUpdateGetModel
               {
+
                   VendorPhone = p.Vendor.VendorPhone,
                   VendorId = p.VendorId,
                   VendorName = p.Vendor.VendorName,
+                  VendorCompanyName = p.Vendor.VendorCompanyName,
                   PurchaseId = p.PurchaseId,
                   PurchaseSn = p.PurchaseSn,
                   MemoNumber = p.MemoNumber,
@@ -342,9 +344,12 @@ namespace InventoryManagement.Repository
                   PurchaseReturnAmount = p.PurchaseReturnAmount,
                   PurchasePaidAmount = p.PurchasePaidAmount,
                   PurchaseDate = p.PurchaseDate,
-                  PurchaseList = p.PurchaseList.Select(l => new ProductPurchaseViewModel
+                  PurchaseList = p.PurchaseList.Select(l => new ProductViewModel
                   {
                       ProductId = l.ProductId,
+                      ProductName = l.Product.ProductName,
+                      ProductCatalogId = l.Product.ProductCatalogId,
+                      ProductCatalogName = l.Product.ProductCatalog.CatalogName,
                       Description = l.Description,
                       Warranty = l.Warranty,
                       Note = l.Note,

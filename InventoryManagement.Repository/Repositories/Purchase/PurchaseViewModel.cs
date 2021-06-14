@@ -71,10 +71,11 @@ namespace InventoryManagement.Repository
     {
         public PurchaseUpdateGetModel()
         {
-            PurchaseList = new HashSet<ProductPurchaseViewModel>();
+            PurchaseList = new HashSet<ProductViewModel>();
         }
         public int VendorId { get; set; }
         public string VendorName { get; set; }
+        public string VendorCompanyName { get; set; }
         public string VendorPhone { get; set; }
         public int PurchaseId { get; set; }
         public int PurchaseSn { get; set; }
@@ -85,7 +86,7 @@ namespace InventoryManagement.Repository
         public decimal PurchaseReturnAmount { get; set; }
         public decimal PurchasePaidAmount { get; set; }
         public DateTime PurchaseDate { get; set; }
-        public ICollection<ProductPurchaseViewModel> PurchaseList { get; set; }
+        public ICollection<ProductViewModel> PurchaseList { get; set; }
     }
 
     public class PurchaseUpdatePostModel
