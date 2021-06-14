@@ -318,5 +318,47 @@ namespace InventoryManagement.Repository
             }
 
         }
+
+        public Task<PurchaseUpdateGetModel> FindUpdateBillAsync(int id, IUnitOfWork db)
+        {
+            var purchase = Context.Purchase
+              .Include(s => s.Vendor)
+              .Include(s => s.PurchaseList)
+              .ThenInclude(ps => ps.ProductStock)
+              .ThenInclude(s => s.PurchaseList)
+              .ThenInclude(p => p.Product)
+              .ThenInclude(pd => pd.ProductCatalog)
+              .Select(p => new PurchaseUpdateGetModel
+              {
+                  VendorPhone = p.Vendor.VendorPhone,
+                  VendorId = p.VendorId,
+                  VendorName = p.Vendor.VendorName,
+                  PurchaseId = p.PurchaseId,
+                  PurchaseSn = p.PurchaseSn,
+                  MemoNumber = p.MemoNumber,
+                  PurchaseTotalPrice = p.PurchaseTotalPrice,
+                  PurchaseDiscountAmount = p.PurchaseDiscountAmount,
+                  PurchaseDueAmount = p.PurchaseDueAmount,
+                  PurchaseReturnAmount = p.PurchaseReturnAmount,
+                  PurchasePaidAmount = p.PurchasePaidAmount,
+                  PurchaseDate = p.PurchaseDate,
+                  PurchaseList = p.PurchaseList.Select(l => new ProductPurchaseViewModel
+                  {
+                      ProductId = l.ProductId,
+                      Description = l.Description,
+                      Warranty = l.Warranty,
+                      Note = l.Note,
+                      SellingPrice = l.SellingPrice,
+                      PurchasePrice = l.PurchasePrice,
+                      ProductStocks = l.ProductStock.Select(s => new ProductStockViewModel
+                      {
+                          ProductCode = s.ProductCode,
+                          IsSold = s.IsSold
+                      }).ToList()
+                  }).ToList()
+              }).FirstOrDefaultAsync(s => s.PurchaseId == id);
+
+            return purchase;
+        }
     }
 }

@@ -18,5 +18,8 @@ namespace InventoryManagement.Repository
         ICollection<MonthlyAmount> MonthlyAmounts(int year);
         Task<DbResponse> UpdateMemoNumberAsync(int purchaseId, string newMemoNumber);
         Task<DbResponse<PurchaseGetByReceiptModel>> GetDetailsByReceiptNo(int receipt);
+        Task<PurchaseUpdateGetModel> FindUpdateBillAsync(int id, IUnitOfWork db);
+        // Task<DbResponse<int>> BillUpdated(PurchaseUpdatePostModel model, IUnitOfWork db);
+
     }
 }

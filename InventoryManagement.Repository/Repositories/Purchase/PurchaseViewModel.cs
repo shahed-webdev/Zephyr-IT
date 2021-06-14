@@ -65,4 +65,51 @@ namespace InventoryManagement.Repository
         public string PurchaseDescription { get; set; }
         public int? PurchaseId { get; set; }
     }
+
+
+    public class PurchaseUpdateGetModel
+    {
+        public PurchaseUpdateGetModel()
+        {
+            PurchaseList = new HashSet<ProductPurchaseViewModel>();
+        }
+        public int VendorId { get; set; }
+        public string VendorName { get; set; }
+        public string VendorPhone { get; set; }
+        public int PurchaseId { get; set; }
+        public int PurchaseSn { get; set; }
+        public string MemoNumber { get; set; }
+        public decimal PurchaseTotalPrice { get; set; }
+        public decimal PurchaseDiscountAmount { get; set; }
+        public decimal PurchaseDueAmount { get; set; }
+        public decimal PurchaseReturnAmount { get; set; }
+        public decimal PurchasePaidAmount { get; set; }
+        public DateTime PurchaseDate { get; set; }
+        public ICollection<ProductPurchaseViewModel> PurchaseList { get; set; }
+    }
+
+    public class PurchaseUpdatePostModel
+    {
+        public int PurchaseId { get; set; }
+        public decimal PurchaseTotalPrice { get; set; }
+        public decimal PurchaseDiscountAmount { get; set; }
+        public decimal PurchaseReturnAmount { get; set; }
+        public string[] AddedProductCodes { get; set; }
+        public string[] RemovedProductCodes { get; set; }
+        public decimal PaidAmount { get; set; }
+        public DateTime PaidDate { get; set; }
+        public ICollection<PurchaseUpdateProductPostModel> Products { get; set; }
+        public int? AccountId { get; set; }
+    }
+
+    public class PurchaseUpdateProductPostModel
+    {
+        public int ProductId { get; set; }
+        public string Description { get; set; }
+        public string Warranty { get; set; }
+        public string Note { get; set; }
+        public decimal SellingPrice { get; set; }
+        public decimal PurchasePrice { get; set; }
+        public string[] RemainCodes { get; set; }
+    }
 }
