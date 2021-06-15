@@ -107,6 +107,7 @@ namespace InventoryManagement.Repository
             var productStock = await Context.ProductStock
                 .Include(p => p.SellingList)
                 .Where(s => s.ProductCode == code)
+                .OrderByDescending(s => s.SellingList.SellingId)
                 .Select(s => s).FirstOrDefaultAsync();
 
             if (productStock.SellingListId == null)
@@ -133,7 +134,7 @@ namespace InventoryManagement.Repository
 
         public Task<List<ProductStock>> SellingStockFromCodesAsync(string[] codes)
         {
-            return Context.ProductStock.Include(s => s.Product).Where(s => codes.Contains(s.ProductCode)).ToListAsync();
+            return Context.ProductStock.Include(s => s.Product).Where(s => codes.Contains(s.ProductCode) && !s.IsSold).ToListAsync();
         }
 
         public Task<List<ProductStockReportModel>> StockReport()

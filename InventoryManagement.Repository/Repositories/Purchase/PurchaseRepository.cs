@@ -357,6 +357,7 @@ namespace InventoryManagement.Repository
                       PurchasePrice = l.PurchasePrice,
                       ProductStocks = l.ProductStock.Select(s => new ProductStockViewModel
                       {
+                          ProductStockId = s.ProductStockId,
                           ProductCode = s.ProductCode,
                           IsSold = s.IsSold
                       }).ToList()
@@ -364,6 +365,175 @@ namespace InventoryManagement.Repository
               }).FirstOrDefaultAsync(s => s.PurchaseId == id);
 
             return purchase;
+        }
+
+        public async Task<DbResponse<int>> BillUpdated(PurchaseUpdatePostModel model, IUnitOfWork db, string userName)
+        {
+            var response = new DbResponse<int>();
+            try
+            {
+                var purchase = Context.Purchase
+                    .Include(s => s.PurchaseList)
+                    .FirstOrDefault(s => s.PurchaseId == model.PurchaseId);
+
+                if (purchase == null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Not found";
+                    return response;
+                }
+
+                purchase.PurchaseTotalPrice = model.PurchaseTotalPrice;
+                purchase.PurchaseDiscountAmount = model.PurchaseDiscountAmount;
+                purchase.PurchaseReturnAmount = model.PurchaseReturnAmount;
+                purchase.PurchasePaidAmount += model.PaidAmount;
+
+
+                var due = (purchase.PurchaseTotalPrice + purchase.PurchaseReturnAmount) - (purchase.PurchaseDiscountAmount + purchase.PurchasePaidAmount);
+                if (due < 0)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Due cannot be less than zero";
+                    return response;
+                }
+
+                if (model.RemovedProductStockIds != null)
+                {
+                    if (model.RemovedProductStockIds.Any())
+                    {
+                        var removedStocks = Context.ProductStock
+                            .Include(s => s.ProductLog)
+                            .Include(s => s.Warranty)
+                            .Where(s => model.RemovedProductStockIds.Contains(s.ProductStockId)).ToList();
+
+                        if (removedStocks.Any(s => s.IsSold))
+                        {
+                            response.IsSuccess = false;
+                            response.Message = "Sold product can not be return";
+                            return response;
+                        }
+
+                        if (removedStocks.Any()) Context.ProductStock.RemoveRange(removedStocks);
+                    }
+                }
+
+
+                if (model.PurchaseList == null)
+                {
+                    purchase.PurchaseList = null;
+                }
+
+                Context.Purchase.Update(purchase);
+
+                var existProduct = model.PurchaseList.Where(p => p.PurchaseListId != 0).ToList();
+
+
+                foreach (var pItem in existProduct)
+                {
+                    var purchaseList = Context.PurchaseList.Find(pItem.PurchaseListId);
+
+                    purchaseList.SellingPrice = pItem.SellingPrice;
+                    purchaseList.PurchasePrice = pItem.PurchasePrice;
+                    purchaseList.Description = pItem.Description;
+                    purchaseList.Note = pItem.Note;
+                    purchaseList.Warranty = pItem.Warranty;
+                    purchaseList.ProductStock = pItem.AddedProductCodes.Select(s => new ProductStock
+                    {
+                        ProductCode = s
+                    }).ToList();
+
+                    Context.PurchaseList.Update(purchaseList);
+                }
+
+                var newProduct = model.PurchaseList.Where(p => p.PurchaseListId == 0).ToList();
+
+                var newPurchaseList = newProduct.Select(p => new PurchaseList
+                {
+                    PurchaseListId = p.PurchaseListId,
+                    PurchaseId = model.PurchaseId,
+                    ProductId = p.ProductId,
+                    SellingPrice = p.SellingPrice,
+                    PurchasePrice = p.PurchasePrice,
+                    Description = p.Description,
+                    Note = p.Note,
+                    Warranty = p.Warranty,
+                    ProductStock = p.AddedProductCodes.Select(s => new ProductStock
+                    {
+                        ProductCode = s
+                    }).ToList()
+                }).ToList();
+
+                Context.PurchaseList.AddRange(newPurchaseList);
+
+
+                var registrationId = db.Registrations.GetRegID_ByUserName(userName);
+                if (model.PaidAmount > 0)
+                {
+                    var newSellingPaymentSn = await db.PurchasePayments.GetNewSnAsync().ConfigureAwait(false);
+                    var payment = new PurchasePayment
+                    {
+                        RegistrationId = registrationId,
+                        VendorId = purchase.VendorId,
+                        ReceiptSn = newSellingPaymentSn,
+                        PaidAmount = model.PaidAmount,
+                        AccountId = model.AccountId,
+                        PaidDate = DateTime.Now.BdTime().Date,
+                        PurchasePaymentList = new List<PurchasePaymentList>
+                        {
+                            new PurchasePaymentList
+                            {
+                                PurchasePaidAmount = model.PaidAmount,
+                                PurchaseId =  model.PurchaseId
+                            }
+                        }
+                    };
+
+                    await Context.PurchasePayment.AddAsync(payment);
+                }
+
+                //Account add balance
+                if (model.PaidAmount > 0 && model.AccountId != null)
+                    db.Account.BalanceAdd(model.AccountId.Value, model.PaidAmount);
+
+
+                await Context.SaveChangesAsync();
+
+                db.Customers.UpdatePaidDue(purchase.VendorId);
+
+                //Product Logs 
+                var stockList = Context
+                    .ProductStock
+                    .Where(s => s.PurchaseList.PurchaseId == model.PurchaseId && model.PurchaseList.SelectMany(l => l.AddedProductCodes).Contains(s.ProductCode))
+                    .ToList();
+                //  var logs = purchase.PurchaseList.SelectMany(p => p.ProductStock.Select(c => new ProductLogAddModel
+                var productLogs = stockList.Select(c => new ProductLogAddModel
+                {
+                    PurchaseId = model.PurchaseId,
+                    ProductStockId = c.ProductStockId,
+                    ActivityByRegistrationId = registrationId,
+                    Details = $"Product Buy at Receipt No: {purchase.PurchaseSn}",
+                    LogStatus = ProductLogStatus.Buy
+                }).ToList();
+                //Product log
+                db.ProductLog.AddList(productLogs);
+
+                var removedPurchaseList = Context.PurchaseList.Where(l => !l.ProductStock.Any()).ToList();
+
+                Context.RemoveRange(removedPurchaseList);
+                await Context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                response.IsSuccess = false;
+                response.Message = e.Message;
+                return response;
+            }
+
+            response.IsSuccess = true;
+            response.Message = "Success";
+            response.Data = model.PurchaseId;
+
+            return response;
         }
     }
 }

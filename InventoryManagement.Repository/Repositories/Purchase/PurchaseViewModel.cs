@@ -91,26 +91,30 @@ namespace InventoryManagement.Repository
 
     public class PurchaseUpdatePostModel
     {
+        public PurchaseUpdatePostModel()
+        {
+            PurchaseList = new HashSet<PurchaseUpdateProductPostModel>();
+        }
         public int PurchaseId { get; set; }
         public decimal PurchaseTotalPrice { get; set; }
         public decimal PurchaseDiscountAmount { get; set; }
         public decimal PurchaseReturnAmount { get; set; }
-        public string[] AddedProductCodes { get; set; }
-        public string[] RemovedProductCodes { get; set; }
+        public int[] RemovedProductStockIds { get; set; }
         public decimal PaidAmount { get; set; }
         public DateTime PaidDate { get; set; }
-        public ICollection<PurchaseUpdateProductPostModel> Products { get; set; }
+        public ICollection<PurchaseUpdateProductPostModel> PurchaseList { get; set; }
         public int? AccountId { get; set; }
     }
 
     public class PurchaseUpdateProductPostModel
     {
+        public int PurchaseListId { get; set; }
         public int ProductId { get; set; }
         public string Description { get; set; }
         public string Warranty { get; set; }
         public string Note { get; set; }
         public decimal SellingPrice { get; set; }
         public decimal PurchasePrice { get; set; }
-        public string[] RemainCodes { get; set; }
+        public string[] AddedProductCodes { get; set; }
     }
 }
