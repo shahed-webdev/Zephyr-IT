@@ -42,7 +42,7 @@ namespace InventoryManagement.Web.Views
             return Json(response);
         }
 
-
+        [HttpPost]
         public async Task<IActionResult> IsPurchaseCodeExist([FromBody] List<ProductStockViewModel> stocks)
         {
             var existList = await _db.ProductStocks.IsExistListAsync(stocks).ConfigureAwait(false);
@@ -180,6 +180,13 @@ namespace InventoryManagement.Web.Views
 
             var model = await _db.Purchases.FindUpdateBillAsync(id.GetValueOrDefault(), _db);
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostPurchaseBillChange(PurchaseUpdatePostModel model)
+        {
+            var response = await _db.Purchases.BillUpdated(model, _db, User.Identity.Name);
+            return Json(response);
         }
         #endregion
     }

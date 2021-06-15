@@ -28,7 +28,7 @@
         </h5>
     </div>
 
-    <section class="card card-body mb-3">
+    <section class="card card-body mb-4">
         <div class="row">
             <div class="col-lg-4">
                 <form id="formAddCode">
@@ -45,7 +45,7 @@
             <div class="col-lg-8">
                 <form id="formProductInfo">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <div class="md-form">
                                 <select id="selectCategory" name="ParentId" searchable="Search here.." asp-items="ViewBag.ParentId" class="mdb-select" required>
                                     <option value="" disabled selected>Select Category</option>
@@ -53,7 +53,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <div class="md-form">
                                 <select id="selectProductId" name="ProductId" searchable="Search here.." class="mdb-select" required>
                                     <option value="" disabled selected>Brand and Model</option>
@@ -61,14 +61,14 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <div class="md-form">
                                 <input id="inputPurchasePrice" name="PurchasePrice" class="form-control" step="0.01" type="number" required />
                                 <label for="inputPurchasePrice">Purchase Price</label>
                             </div>
                         </div>
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-3">
                             <div class="md-form">
                                 <input id="inputSellingPrice" name="SellingPrice" class="form-control" step="0.01" type="number" required />
                                 <label for="inputSellingPrice">Selling Price</label>
@@ -82,7 +82,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-9">
+                        <div class="col-lg-6">
                             <div class="md-form">
                                 <input id="inputDescription" name="Description" class="form-control" type="text" />
                                 <label for="inputDescription">Description</label>
@@ -108,15 +108,16 @@
         </div>
     </section>
 
-    <div class="card card-body">
+    <div class="card card-body mb-4">
         <table class="table">
             <thead>
             <tr>
                 <th><strong>Category</strong></th>
-                <th><strong>Brand and Model</strong></th>
+                <th><strong>Brand&nbspand&nbspModel</strong></th>
                 <th><strong>Purchase&nbspPrice</strong></th>
                 <th><strong>Selling&nbspPrice</strong></th>
                 <th><strong>Warranty</strong></th>
+                <th><strong>Qty</strong></th>
                 <th><strong>Stock</strong></th>
             </tr>
             </thead>
@@ -135,6 +136,7 @@
                     <td>@item.PurchasePrice</td>
                     <td>@item.SellingPrice</td>
                     <td>@item.Warranty</td>
+                    <td>@item.ProductStocks.Count</td>
                     <td>
                         @foreach (var stock in item.ProductStocks)
                         {
@@ -147,6 +149,54 @@
             }
             </tbody>
         </table>
+    </div>
+    
+    <div class="card card-body">
+        <form id="formPayment">
+            <input type="hidden" name="PurchaseId" value="@Context.Request.RouteValues["id"]" />
+            <h4 class="page-header mb-3">Total Purchase Amount: ৳<span id="totalPurchaseAmount">@Model.PurchaseTotalPrice</span></h4>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Discount</label>
+                        <input id="inputDiscount" name="PurchaseDiscountAmount" step="0.01" type="number" min="0" class="form-control" value="@Model.PurchaseDiscountAmount"/>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Return Amount</label>
+                        <input id="inputReturn" name="PurchaseReturnAmount" step="0.01" type="number" min="0" class="form-control" value="@Model.PurchaseReturnAmount"/>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Paid Amount <small class="text-muted">(Prev. Paid: ৳<span id="previousPaid">@Model.PurchasePaidAmount</span>)</small></label>
+                        <input id="inputPaid" name="PaidAmount" step="0.01" type="number" min="0" class="form-control"/>
+                        <small class="red-text">Total Due: ৳<span id="totalDue">@Model.PurchaseDueAmount</span></small>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Payment Method</label>
+                        <select id="selectPaymentMethod" name="AccountId" asp-items="ViewBag.Account" class="form-control">
+                            <option value="" selected>[ SELECT ]</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Paid Date</label>
+                        <input id="inputPaidDate" name="PaidDate" type="text" class="form-control datepicker"/>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <button type="submit" id="btnUpdateBill" class="btn peach-gradient btn-rounded mt-4">Update Bill</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -191,6 +241,9 @@
     <script>
         //access from private method
         const data = @Html.Raw(Json.Serialize(Model.PurchaseList));
+        data.forEach(function(obj, i) {
+            obj.Quantity = obj.ProductStocks.length;
+        });
 
         $(function () {
             //date picker

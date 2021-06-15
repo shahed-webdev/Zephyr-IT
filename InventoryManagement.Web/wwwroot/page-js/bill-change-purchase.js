@@ -1,8 +1,10 @@
 ﻿let cartStorage = [];
 const purchaseUpdate = (function() {
     //global store
-    let cartStorage = [...data];
+    const cartStorage = [...data];
     const formProductInfo = document.getElementById("formProductInfo");
+    const formPayment = document.getElementById("formPayment");
+    const codeContainer = document.getElementById("code-container");
 
     //on change category
     const selectCategory = document.getElementById("selectCategory");
@@ -68,7 +70,9 @@ const purchaseUpdate = (function() {
     //form elements binding
     function inputBinding(items,reset) {
         const elements = formProductInfo.elements;
- 
+
+        if (reset) codeContainer.innerHTML = "";
+
         for (let element of elements) {
             if ((element.type === "text" || element.type === "number") && !element.readOnly && !element.classList.contains("search")) {
                 const label = element.nextElementSibling;
@@ -104,10 +108,12 @@ const purchaseUpdate = (function() {
 
         appendNewCode(code);
         this.reset();
+
+        //show check btn
+        btnCheckCodeAndCartDisabled(true);
     });
 
-    ////append code to DOM
-    const codeContainer = document.getElementById("code-container");
+    //append code to DOM
     function appendNewCode(code) {
         const div = document.createElement("div");
         div.className = "unsold";
@@ -184,10 +190,11 @@ const purchaseUpdate = (function() {
     };
 
     //submit product info
+    const tbody = document.getElementById("tbody");
     formProductInfo.addEventListener("submit",
         function(evt) {
             evt.preventDefault();
-       
+
             //get code list
             const { codes } = addedCodeList();
 
@@ -201,32 +208,58 @@ const purchaseUpdate = (function() {
                 return { ProductCode: item }
             });
 
-            const options = {
-                method: 'post',
+            //check product code from db
+            $.ajax({
                 url: '/Purchase/IsPurchaseCodeExist',
-                data: postCodes
-            }
-
-            axios(options)
-                .then(response => {
-                    if (response.data.length) {
-                        const isUnsoldExist = matchExistingProductCode(response.data);
-                        if (isUnsoldExist) return;
-                    }
-
-                    btnCheckCodeAndCartDisabled(false);
-
-                    if (document.activeElement.id !== "btnAddToList") return;
-
-                    const model = serializeForm(this);
-                    model.ProductCatalogName = selectCategory.options[selectCategory.selectedIndex].text;
-                    model.ProductName = selectProductId.options[selectProductId.selectedIndex].text;
-                    model.ProductStocks = codes
-
-                    console.log(model)
-                })
-                .catch(error => console.log(error.response))
+                type: "POST",
+                data: JSON.stringify(postCodes),
+                contentType: "application/json;charset=utf-8",
+                success: onAddToCart,
+                error: error => console.log(error)
+            });
         });
+
+    //add to cart event listen
+    function onAddToCart(response) {
+        btnCheckCodeAndCartDisabled(false);
+
+        if (response) {
+            const isUnsoldExist = matchExistingProductCode(response);
+            if (isUnsoldExist) return;
+        }
+
+        //add to cart
+        if (document.activeElement.id !== "btnAddToList") return;
+
+        //get code list
+        const { codes } = addedCodeList();
+
+        const PurchaseList = serializeForm(formProductInfo);
+        PurchaseList.ProductCatalogName = selectCategory.options[selectCategory.selectedIndex].text;
+        PurchaseList.ProductName = selectProductId.options[selectProductId.selectedIndex].text;
+        PurchaseList.ProductStocks = codes;
+        PurchaseList.Quantity = codes.length;
+        PurchaseList.AddedProductCodes = [];
+
+
+        if (isProductAddedInCart(PurchaseList.ProductId)) {
+            $.notify(`This Product Already added In Cart!`, "error");
+            return;
+        }
+
+        //append new row
+        tbody.appendChild(createRow(PurchaseList));
+
+        //add to store 
+        cartStorage.push(PurchaseList);
+
+        //reset 
+        inputBinding({}, true);
+
+
+        appendTotalPrice();
+        updateCalculation();
+    }
 
     //show hide check cart btn
     function btnCheckCodeAndCartDisabled(isChecking) {
@@ -265,28 +298,28 @@ const purchaseUpdate = (function() {
 
 
     //check product already in listed
-    function isProductAddedInCart(product) {
-        return cartStorage.some(item => item.ProductId === product.ProductId);
+    function isProductAddedInCart(productId) {
+        return cartStorage.some(item => +item.ProductId === +productId);
     }
 
     //create new table row
     function createRow(item) {
         const tr = document.createElement("tr");
-        tr.id = "";
+        tr.id = item.ProductId;
         tr.innerHTML = `<td>
-                           <p class="m-0">Processor</p>
-                           <small class="text-muted">3.10 Ghz, 12MB Cache, 6 Cores &amp; 12 Threads</small>
+                           <p class="m-0">${item.ProductCatalogName}</p>
+                              <small class="text-muted">${item.Description}</small>
                            </td>
                            <td>
-                               <p class="m-0">Intel i5-10500</p>
-                               <small class="text-muted"></small>
+                               <p class="m-0">${item.ProductName}</p>
+                               <small class="text-muted">${item.Note}</small>
                            </td>
-                           <td>18200.00</td>
-                           <td>18200.00</td>
-                           <td>1095days</td>
-                           <td>
-                               ${appendCodes(codes)}
-                           </td>`
+                           <td>${item.PurchasePrice}</td>
+                           <td>${item.SellingPrice}</td>
+                           <td>${item.Warranty}</td>
+                           <td>${item.ProductStocks.length}</td>
+                           <td>${appendCodes(item.ProductStocks)}</td>`;
+        return tr;
     }
 
     //append product code
@@ -298,5 +331,102 @@ const purchaseUpdate = (function() {
 
         return codeSpan;
     }
+
+
+
+    //***** PAYMENT ****
+    const totalPrice = document.getElementById("totalPurchaseAmount");
+    const previousPaid = document.getElementById("previousPaid");
+    const totalDue = document.getElementById("totalDue");
+
+    const inputDiscount = document.getElementById("inputDiscount");
+    const inputReturn = document.getElementById("inputReturn");
+    const inputPaid = document.getElementById("inputPaid");
+    const selectPaymentMethod = document.getElementById("selectPaymentMethod");
+    const inputPaidDate = document.getElementById("inputPaidDate");
+
+    //sum total product price
+    function sumTotal() {
+        return cartStorage.map(item => item.PurchasePrice * item.Quantity).reduce((prev, cur) => prev + cur, 0);
+    }
+
+    //append total price to DOM
+    function appendTotalPrice() {
+        const totalAmount = sumTotal();
+
+        //set max discount limit
+        inputDiscount.setAttribute("max", totalAmount);
+
+        totalPrice.innerText = totalAmount.toFixed(2);
+
+        //for reset paid amount and method
+        if (inputPaid.value) {
+            inputPaid.value = '';
+        }
+
+        if (selectPaymentMethod.selectedIndex > 0) {
+            selectPaymentMethod.removeAttribute('required');
+        }
+    }
+
+    //on discount
+    inputDiscount.addEventListener("input", function() {
+        updateCalculation();
+    });
+
+    //on return
+    inputReturn.addEventListener("input", function () {
+        updateCalculation();
+    });
+
+    //input paid amount
+    inputPaid.addEventListener("input", function () {
+        const paid = +this.value;
+        paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
+    });
+
+
+    //dom calculate paid due
+    function updateCalculation() {
+        const totalAmount = +totalPrice.textContent;
+        const discount = +inputDiscount.value;
+        const prevPaid = +previousPaid.textContent;
+        const returnAmount = +inputReturn.value;
+
+        const dueAmount = (totalAmount + returnAmount) - (discount + prevPaid);
+
+        totalDue.innerText = dueAmount.toFixed(2);
+
+        //input paid set attribute
+        enabledDisablePaid(dueAmount);
+    }
+
+    //enabled Disable Paid input
+    function enabledDisablePaid(dueAmount) {
+        if (dueAmount > 0) {
+            inputPaid.removeAttribute('disabled');
+            selectPaymentMethod.removeAttribute('disabled');
+            inputPaid.setAttribute('max', dueAmount);
+        } else {
+            inputPaid.setAttribute('disabled', 'disabled');
+            selectPaymentMethod.setAttribute('disabled', 'disabled');
+
+            const paid = +inputPaid.value;
+
+            if (paid) inputPaid.value = '';
+
+            paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
+        }
+    }
+
+    //submit update bill
+    formPayment.addEventListener("submit", function(evt) {
+        evt.preventDefault();
+
+        const model = serializeForm(this);
+        model.PurchaseTotalPrice = totalPrice.textContent;
+        model.RemovedProductStockIds = [];
+        model.PurchaseList = cartStorage;
+    });
 })(document);
 
