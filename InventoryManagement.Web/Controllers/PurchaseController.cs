@@ -168,5 +168,19 @@ namespace InventoryManagement.Web.Views
         }
 
         #endregion
+
+        #region Bill Update
+
+        public async Task<IActionResult> UpdatePurchaseBill(int? id)
+        {
+            if (!id.HasValue) return RedirectToAction("PurchaseRecords");
+           
+            ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
+
+            var model = await _db.Purchases.FindUpdateBillAsync(id.GetValueOrDefault(), _db);
+            return View(model);
+        }
+        #endregion
     }
 }

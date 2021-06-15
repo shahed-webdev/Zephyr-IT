@@ -1,0 +1,169 @@
+﻿@model InventoryManagement.Repository.PurchaseUpdateGetModel
+@{
+    ViewData["Title"] = "Update Purchase Bill";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Styles{
+    <style>
+        #code-container { display: flex;flex-wrap: wrap }
+        #code-container i { margin-left: 5px;cursor: pointer }
+        #code-container div { padding: 3px 12px; border-radius: 5px; margin: 3px; color: #fff; }
+        #code-container .unsold { background-color: #00C851 }
+        #code-container .sold { background-color: #ff6f00 }
+
+        #btnAddToList { display: none }
+    </style> 
+}
+
+<div class="m-md-3">
+    <div class="mb-4">
+        <h4 class="mb-2 page-header d-print-none">Update Bill #@Model.PurchaseSn</h4>
+        <h5 class="mb-0">
+            <span class="badge badge-pill purple">@Model.VendorName</span>
+            <span class="badge badge-pill purple">@Model.VendorPhone</span>
+        </h5>
+    </div>
+
+    <section class="card card-body mb-3">
+        <div class="row">
+            <div class="col-lg-4">
+                <form id="formAddCode">
+                    <div class="md-form">
+                        <input id="inputProductCode" autocomplete="off" class="form-control" type="text" required />
+                        <label for="inputProductCode">Product Code</label>
+                        <i id="code-exist-error" class="text-danger"></i>
+                    </div>
+                </form>
+                
+                <div id="code-container"></div>
+            </div>
+
+            <div class="col-lg-8">
+                <form id="formProductInfo">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="md-form">
+                                <select id="selectCategory" name="ParentId" searchable="Search here.." asp-items="ViewBag.ParentId" class="mdb-select" required>
+                                    <option value="" disabled selected>Select Category</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="md-form">
+                                <select id="selectProductId" name="ProductId" searchable="Search here.." class="mdb-select" required>
+                                    <option value="" disabled selected>Brand and Model</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="md-form">
+                                <input id="inputPurchasePrice" name="PurchasePrice" class="form-control" step="0.01" type="number" required />
+                                <label for="inputPurchasePrice">Purchase Price</label>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="md-form">
+                                <input id="inputSellingPrice" name="SellingPrice" class="form-control" step="0.01" type="number" required />
+                                <label for="inputSellingPrice">Selling Price</label>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <div class="md-form">
+                                <input id="inputWarranty" name="Warranty" class="form-control" type="text" />
+                                <label for="inputWarranty">Warranty</label>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-9">
+                            <div class="md-form">
+                                <input id="inputDescription" name="Description" class="form-control" type="text" />
+                                <label for="inputDescription">Description</label>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="md-form">
+                                <input id="inputNote" name="Note" class="form-control" type="text" />
+                                <label for="inputNote">Note</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="btnCheckProduct" type="submit" class="btn btn-rounded btn-warning" title="click to check, double click to cart">
+                        check product
+                    </button>
+                    <button id="btnAddToList" type="submit" class="btn btn-rounded btn-success" title="click to check, double click to cart">
+                        Add Product To List
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div class="card card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><strong>Category</strong></th>
+                    <th><strong>Brand and Model</strong></th>
+                    <th><strong>Purchase&nbspPrice</strong></th>
+                    <th><strong>Selling&nbspPrice</strong></th>
+                    <th><strong>Warranty</strong></th>
+                    <th><strong>Stock</strong></th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                @foreach (var item in Model.PurchaseList)
+                {
+                    <tr id="@item.ProductId">
+                        <td>
+                            <p class="m-0">@item.ProductCatalogName</p>
+                            <small class="text-muted">@item.Description</small>
+                        </td>
+                        <td>
+                            <p class="m-0">@item.ProductName</p>
+                            <small class="text-muted">@item.Note</small>
+                        </td>
+                        <td>@item.PurchasePrice</td>
+                        <td>@item.SellingPrice</td>
+                        <td>@item.Warranty</td>
+                        <td>
+                            @foreach (var stock in item.ProductStocks)
+                            {
+                                <span class="m-1 stock">
+                                    @stock.ProductCode
+                                </span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div>
+    <audio id="audio" src="~/audio/buzz.mp3"></audio>
+</div>
+
+@section Scripts {
+    <script>
+        //access from private method
+        const data = @Html.Raw(Json.Serialize(Model.PurchaseList));
+
+        $(function () {
+            //date picker
+            $('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'));
+
+            // Material Select Initialization
+            $('.mdb-select').materialSelect();
+        });
+    </script>
+    <script src="~/page-js/bill-change-purchase.js?v=1.0.01"></script>
+}
