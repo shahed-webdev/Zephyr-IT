@@ -4,6 +4,7 @@ namespace InventoryManagement.Repository
 {
     public class ProductStockViewModel
     {
+        public int ProductStockId { get; set; }
         public string ProductCode { get; set; }
         public bool IsSold { get; set; }
     }
