@@ -6,14 +6,17 @@
 
 @section Styles{
     <style>
-        #code-container { display: flex;flex-wrap: wrap }
-        #code-container i { margin-left: 5px;cursor: pointer }
+        #code-container { display: flex; flex-wrap: wrap }
+        #code-container i { margin-left: 5px; cursor: pointer }
         #code-container div { padding: 3px 12px; border-radius: 5px; margin: 3px; color: #fff; }
         #code-container .unsold { background-color: #00C851 }
         #code-container .sold { background-color: #ff6f00 }
 
         #btnAddToList { display: none }
-    </style> 
+        .code-details { cursor: pointer }
+
+        .stock-out { pointer-events: none; color: #9f9f9f }
+    </style>
 }
 
 <div class="m-md-3">
@@ -35,7 +38,7 @@
                         <i id="code-exist-error" class="text-danger"></i>
                     </div>
                 </form>
-                
+
                 <div id="code-container"></div>
             </div>
 
@@ -108,42 +111,74 @@
     <div class="card card-body">
         <table class="table">
             <thead>
-                <tr>
-                    <th><strong>Category</strong></th>
-                    <th><strong>Brand and Model</strong></th>
-                    <th><strong>Purchase&nbspPrice</strong></th>
-                    <th><strong>Selling&nbspPrice</strong></th>
-                    <th><strong>Warranty</strong></th>
-                    <th><strong>Stock</strong></th>
-                </tr>
+            <tr>
+                <th><strong>Category</strong></th>
+                <th><strong>Brand and Model</strong></th>
+                <th><strong>Purchase&nbspPrice</strong></th>
+                <th><strong>Selling&nbspPrice</strong></th>
+                <th><strong>Warranty</strong></th>
+                <th><strong>Stock</strong></th>
+            </tr>
             </thead>
             <tbody id="tbody">
-                @foreach (var item in Model.PurchaseList)
-                {
-                    <tr id="@item.ProductId">
-                        <td>
-                            <p class="m-0">@item.ProductCatalogName</p>
-                            <small class="text-muted">@item.Description</small>
-                        </td>
-                        <td>
-                            <p class="m-0">@item.ProductName</p>
-                            <small class="text-muted">@item.Note</small>
-                        </td>
-                        <td>@item.PurchasePrice</td>
-                        <td>@item.SellingPrice</td>
-                        <td>@item.Warranty</td>
-                        <td>
-                            @foreach (var stock in item.ProductStocks)
-                            {
-                                <span class="m-1 stock">
-                                    @stock.ProductCode
-                                </span>
-                            }
-                        </td>
-                    </tr>
-                }
+            @foreach (var item in Model.PurchaseList)
+            {
+                <tr id="@item.ProductId">
+                    <td>
+                        <p class="m-0">@item.ProductCatalogName</p>
+                        <small class="text-muted">@item.Description</small>
+                    </td>
+                    <td>
+                        <p class="m-0">@item.ProductName</p>
+                        <small class="text-muted">@item.Note</small>
+                    </td>
+                    <td>@item.PurchasePrice</td>
+                    <td>@item.SellingPrice</td>
+                    <td>@item.Warranty</td>
+                    <td>
+                        @foreach (var stock in item.ProductStocks)
+                        {
+                            <span class="m-1 stock @(stock.IsSold?"stock-out":"")">
+                                @stock.ProductCode
+                            </span>
+                        }
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
+    </div>
+</div>
+
+<!--code details Modal  -->
+<div class="modal fade" id="codeDetailsModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-notify" role="document">
+        <div class="modal-content">
+            <div class="modal-header deep-orange darken-1">
+                <strong class="heading lead">Product Details</strong>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="text-center">
+                    <h4 class="mb-1 font-weight-bold"><strong id="category"></strong></h4>
+                </div>
+                <ul class="striped list-unstyled mb-0">
+                    <li id="receipt"></li>
+                    <li id="purchase"></li>
+                    <li><strong>Code:</strong><span id="productCode"></span></li>
+                    <li><strong>Brand and Model:</strong><span id="productName"></span></li>
+                    <li><strong>Purchase Price:</strong><span id="purchasePrice"></span></li>
+                    <li><strong>Selling Price:</strong><span id="sellingPrice"></span></li>
+                    <li><strong>Warranty:</strong><span id="warranty"></span></li>
+                    <li><strong>Description:</strong><span id="description"></span></li>
+                    <li><strong>Note:</strong><span id="note"></span></li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -165,5 +200,5 @@
             $('.mdb-select').materialSelect();
         });
     </script>
-    <script src="~/page-js/bill-change-purchase.js?v=1.0.01"></script>
+    <script src="~/page-js/bill-change-purchase.js?v=1.0.1"></script>
 }

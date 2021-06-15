@@ -49,7 +49,6 @@ const purchaseUpdate = (function() {
         return option;
     }
 
-
     //on change product
     selectProductId.addEventListener('change', function () {
         const productId = +this.value
@@ -122,7 +121,7 @@ const purchaseUpdate = (function() {
         const codesObj = { codes: [], elements: [] };
 
         for (let code of codeSpan) {
-            codesObj.codes.push(code.textContent);
+            codesObj.codes.push(code.textContent.trim());
             codesObj.elements.push(code);
         }
 
@@ -137,25 +136,167 @@ const purchaseUpdate = (function() {
         evt.target.parentElement.remove();
     });
 
+    // on Product code details
+    codeContainer.addEventListener('click', evt => {
+        const element = evt.target;
+        const onCode = element.classList.contains("code-details");
+        if (!onCode) return;
+
+        const url = '/Product/FindProductDetailsByCode';
+        const param = { params: { code: element.innerText } };
+
+        axios.get(url, param).then(res => {
+            appendData(res.data)
+        }).catch(err => console.log(err))
+    })
+
+    //append Product code details
+    function appendData(product) {
+        document.getElementById('category').textContent = product.ProductCatalogName;
+        document.getElementById('productCode').textContent = product.ProductCode;
+        document.getElementById('productName').textContent = product.ProductName;
+        document.getElementById('purchasePrice').textContent = product.PurchasePrice.toFixed(2);
+        document.getElementById('sellingPrice').textContent = product.SellingPrice.toFixed(2);
+        document.getElementById('warranty').textContent = product.Warranty;
+        document.getElementById('description').textContent = product.Description;
+        document.getElementById('note').textContent = product.Note;
+
+        const bill = document.getElementById('receipt');
+        const purchase = document.getElementById('purchase');
+
+        product.SellingId ? bill.innerHTML = `<strong class="green-text">Bill No: </strong><a target="_blank" href="/Selling/SellingReceipt/${product.SellingId}">#${product.SellingSn}</a>` : bill.innerHTML = '';
+        purchase.innerHTML = `<a target="_blank" href="/Purchase/PurchaseReceipt/${product.PurchaseId}">Purchase Details <i class="fal fa-long-arrow-right"></i></a>`;
+
+        $("#codeDetailsModal").modal("show");
+    }
 
     //**** CART BUTTON****
+    const btnCheckProduct = document.getElementById("btnCheckProduct");
+    const btnAddToList = document.getElementById("btnAddToList");
+
+    const serializeForm = function (form) {
+        const obj = {};
+        const formData = new FormData(form);
+        for (let key of formData.keys()) {
+            obj[key] = formData.get(key);
+        }
+        return obj;
+    };
+
+    //submit product info
     formProductInfo.addEventListener("submit",
         function(evt) {
             evt.preventDefault();
+       
+            //get code list
+            const { codes } = addedCodeList();
 
-            const { codes } = addedCodeList()
-            console.log(codes)
+            if (!codes.length) {
+                $.notify("Add Product To Purchase", "error");
+                return;
+            }
+
+            //create object from array
+            const postCodes = codes.map(item => {
+                return { ProductCode: item }
+            });
+
             const options = {
                 method: 'post',
                 url: '/Purchase/IsPurchaseCodeExist',
-                data: codes
+                data: postCodes
             }
 
             axios(options)
                 .then(response => {
-                    console.log(response.data)
+                    if (response.data.length) {
+                        const isUnsoldExist = matchExistingProductCode(response.data);
+                        if (isUnsoldExist) return;
+                    }
+
+                    btnCheckCodeAndCartDisabled(false);
+
+                    if (document.activeElement.id !== "btnAddToList") return;
+
+                    const model = serializeForm(this);
+                    model.ProductCatalogName = selectCategory.options[selectCategory.selectedIndex].text;
+                    model.ProductName = selectProductId.options[selectProductId.selectedIndex].text;
+                    model.ProductStocks = codes
+
+                    console.log(model)
                 })
-                .catch(error => console.log(error.response));
+                .catch(error => console.log(error.response))
         });
+
+    //show hide check cart btn
+    function btnCheckCodeAndCartDisabled(isChecking) {
+        btnCheckProduct.style.display = isChecking ? "block" : "none";
+        btnAddToList.style.display = isChecking ? "none" : "block";
+    }
+
+
+    //match Existing Product code
+    function matchExistingProductCode(stocks) {
+        //get code list
+        const { elements } = addedCodeList();
+        let isUnsoldExist = false;
+
+        elements.forEach(added => {
+        stocks.forEach(stock => {
+            const span = added.parentElement.classList;
+
+                if (added.textContent.trim() === stock.ProductCode) {
+                    span.remove('unsold');
+
+                    if (stock.IsSold) {
+                        added.classList.add("code-details");
+                        span.add('sold');
+                    } else {
+                        added.classList.add("code-details");
+                        span.add('badge-danger');
+                        isUnsoldExist = true;
+                    }
+                }
+            })
+        });
+
+        return isUnsoldExist;
+    }
+
+
+    //check product already in listed
+    function isProductAddedInCart(product) {
+        return cartStorage.some(item => item.ProductId === product.ProductId);
+    }
+
+    //create new table row
+    function createRow(item) {
+        const tr = document.createElement("tr");
+        tr.id = "";
+        tr.innerHTML = `<td>
+                           <p class="m-0">Processor</p>
+                           <small class="text-muted">3.10 Ghz, 12MB Cache, 6 Cores &amp; 12 Threads</small>
+                           </td>
+                           <td>
+                               <p class="m-0">Intel i5-10500</p>
+                               <small class="text-muted"></small>
+                           </td>
+                           <td>18200.00</td>
+                           <td>18200.00</td>
+                           <td>1095days</td>
+                           <td>
+                               ${appendCodes(codes)}
+                           </td>`
+    }
+
+    //append product code
+    function appendCodes(codes) {
+        let codeSpan = "";
+        codes.forEach(code => {
+            codeSpan += `<span class="m-1 stock">${code}</span>`;
+        });
+
+        return codeSpan;
+    }
 })(document);
 
