@@ -15,7 +15,9 @@
         #btnAddToList { display: none }
         .code-details { cursor: pointer }
 
+        .stock{ cursor: pointer; display: inline-block}
         .stock-out { pointer-events: none; color: #9f9f9f }
+        .code-removed { text-decoration: line-through; color: #ff0000 }
     </style>
 }
 
@@ -23,8 +25,8 @@
     <div class="mb-4">
         <h4 class="mb-2 page-header d-print-none">Update Bill #@Model.PurchaseSn</h4>
         <h5 class="mb-0">
-            <span class="badge badge-pill purple">@Model.VendorName</span>
-            <span class="badge badge-pill purple">@Model.VendorPhone</span>
+            <span class="badge badge-pill deep-orange">@Model.VendorName</span>
+            <span class="badge badge-pill deep-orange">@Model.VendorPhone</span>
         </h5>
     </div>
 
@@ -124,7 +126,7 @@
             <tbody id="tbody">
             @foreach (var item in Model.PurchaseList)
             {
-                <tr id="@item.ProductId">
+                <tr>
                     <td>
                         <p class="m-0">@item.ProductCatalogName</p>
                         <small class="text-muted">@item.Description</small>
@@ -137,7 +139,7 @@
                     <td>@item.SellingPrice</td>
                     <td>@item.Warranty</td>
                     <td>@item.ProductStocks.Count</td>
-                    <td>
+                    <td id="@item.ProductId">
                         @foreach (var stock in item.ProductStocks)
                         {
                             <span class="m-1 stock @(stock.IsSold?"stock-out":"")">
@@ -171,9 +173,9 @@
                 </div>
                 <div class="col-lg-4">
                     <div class="form-group">
-                        <label>Paid Amount <small class="text-muted">(Prev. Paid: ৳<span id="previousPaid">@Model.PurchasePaidAmount</span>)</small></label>
-                        <input id="inputPaid" name="PaidAmount" step="0.01" type="number" min="0" class="form-control"/>
-                        <small class="red-text">Total Due: ৳<span id="totalDue">@Model.PurchaseDueAmount</span></small>
+                        <label>Paid Amount </label>
+                        <input id="inputPaid" name="PaidAmount" step="0.01" type="number" min="0" class="form-control" />
+                        <small class="text-muted">(Prev. Paid: ৳<span id="previousPaid">@Model.PurchasePaidAmount</span>)</small>
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -190,15 +192,17 @@
                         <input id="inputPaidDate" name="PaidDate" type="text" class="form-control datepicker"/>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col d-flex align-items-center">
                     <div class="form-group">
                         <button type="submit" id="btnUpdateBill" class="btn peach-gradient btn-rounded mt-4">Update Bill</button>
                     </div>
+                    <h5 class="red-text mb-0 font-weight-500">Total Due: ৳<span id="totalDue">@Model.PurchaseDueAmount</span></h5>
                 </div>
             </div>
         </form>
     </div>
 </div>
+
 
 <!--code details Modal  -->
 <div class="modal fade" id="codeDetailsModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -243,9 +247,22 @@
         const data = @Html.Raw(Json.Serialize(Model.PurchaseList));
         data.forEach(function(obj, i) {
             obj.Quantity = obj.ProductStocks.length;
+
+            const newStock = obj.ProductStocks.map(item => {
+                return {
+                    ProductStockId: item.ProductStockId,
+                    ProductCode: item.ProductCode,
+                    IsSold: item.IsSold,
+                    isRemove: false,
+                    isNew: false
+                }
+            });
+
+            obj.ProductStocks = newStock;
+            obj.AddedProductCodes = [];
         });
 
-        $(function () {
+        $(function() {
             //date picker
             $('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'));
 

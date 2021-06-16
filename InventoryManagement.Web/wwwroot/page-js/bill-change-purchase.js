@@ -11,30 +11,31 @@ const purchaseUpdate = (function() {
     const selectProductId = document.getElementById("selectProductId");
 
     //on change category
-    selectCategory.addEventListener('change', function() {
-        const categoryId = +this.value
-        if (!categoryId) return;
+    selectCategory.addEventListener('change',
+        function() {
+            const categoryId = +this.value
+            if (!categoryId) return;
 
-        const url = '/Product/GetProductByCategoryDropDown';
-        const parameter = { params: { categoryId } }
+            const url = '/Product/GetProductByCategoryDropDown';
+            const parameter = { params: { categoryId } }
 
-        axios.get(url, parameter).then(res => {
-            const fragment = document.createDocumentFragment();
-            const items = { value: "", text: "Brand and Model", firstItem: true };
+            axios.get(url, parameter).then(res => {
+                const fragment = document.createDocumentFragment();
+                const items = { value: "", text: "Brand and Model", firstItem: true };
 
-            fragment.appendChild(createOptions(items));
+                fragment.appendChild(createOptions(items));
 
-            if (res.data.length) {
-                res.data.forEach(item => {
-                    const newItem = { value: item.ProductId, text: item.ProductName, firstItem: false };
-                    fragment.appendChild(createOptions(newItem));
-                });
-            }
+                if (res.data.length) {
+                    res.data.forEach(item => {
+                        const newItem = { value: item.ProductId, text: item.ProductName, firstItem: false };
+                        fragment.appendChild(createOptions(newItem));
+                    });
+                }
 
-            selectProductId.innerHTML = '';
-            selectProductId.appendChild(fragment);
-        })
-    });
+                selectProductId.innerHTML = '';
+                selectProductId.appendChild(fragment);
+            })
+        });
 
     //create select options
     function createOptions(items) {
@@ -52,29 +53,32 @@ const purchaseUpdate = (function() {
     }
 
     //on change product
-    selectProductId.addEventListener('change', function () {
-        const productId = +this.value
-        if (!productId) return;
+    selectProductId.addEventListener('change',
+        function() {
+            const productId = +this.value
+            if (!productId) return;
 
-        //remove input value
-        inputBinding({}, false);
+            //remove input value
+            inputBinding({}, false);
 
-        const url = '/Product/GetProductInfo'
-        const parameter = { params: { productId } }
+            const url = '/Product/GetProductInfo'
+            const parameter = { params: { productId } }
 
-        axios.get(url, parameter).then(res => {
-            inputBinding(res.data,false);
-        })
-    });
+            axios.get(url, parameter).then(res => {
+                inputBinding(res.data, false);
+            })
+        });
 
     //form elements binding
-    function inputBinding(items,reset) {
+    function inputBinding(items, reset) {
         const elements = formProductInfo.elements;
 
         if (reset) codeContainer.innerHTML = "";
 
         for (let element of elements) {
-            if ((element.type === "text" || element.type === "number") && !element.readOnly && !element.classList.contains("search")) {
+            if ((element.type === "text" || element.type === "number") &&
+                !element.readOnly &&
+                !element.classList.contains("search")) {
                 const label = element.nextElementSibling;
                 if (!reset) {
                     element.value = items[element.name];
@@ -88,30 +92,29 @@ const purchaseUpdate = (function() {
     }
 
 
-
-
     /**** ADD CODE ****/
     //add product code
     const formAddCode = document.getElementById("formAddCode");
-    formAddCode.addEventListener("submit", function(evt) {
-        evt.preventDefault();
+    formAddCode.addEventListener("submit",
+        function(evt) {
+            evt.preventDefault();
 
-        const code = this.inputProductCode.value;
-        if (!code) return;
+            const code = this.inputProductCode.value.trim();
+            if (!code) return;
 
-        const { codes } = addedCodeList();
-       
-        if (codes.indexOf(code) !== -1) {
-            $.notify(`'${code}' Already added!`, "error");
-            return;
-        }
+            const { codes } = addedCodeList();
 
-        appendNewCode(code);
-        this.reset();
+            if (codes.indexOf(code) !== -1) {
+                $.notify(`'${code}' Already added!`, "error");
+                return;
+            }
 
-        //show check btn
-        btnCheckCodeAndCartDisabled(true);
-    });
+            appendNewCode(code);
+            this.reset();
+
+            //show check btn
+            btnCheckCodeAndCartDisabled(true);
+        })
 
     //append code to DOM
     function appendNewCode(code) {
@@ -135,26 +138,28 @@ const purchaseUpdate = (function() {
     }
 
     //remove code
-    codeContainer.addEventListener("click", function(evt) {
-        const onRemove = evt.target.classList.contains("code-remove");
+    codeContainer.addEventListener("click",
+        function(evt) {
+            const onRemove = evt.target.classList.contains("code-remove");
 
-        if (!onRemove) return;
-        evt.target.parentElement.remove();
-    });
+            if (!onRemove) return;
+            evt.target.parentElement.remove();
+        })
 
     // on Product code details
-    codeContainer.addEventListener('click', evt => {
-        const element = evt.target;
-        const onCode = element.classList.contains("code-details");
-        if (!onCode) return;
+    codeContainer.addEventListener('click',
+        evt => {
+            const element = evt.target;
+            const onCode = element.classList.contains("code-details");
+            if (!onCode) return;
 
-        const url = '/Product/FindProductDetailsByCode';
-        const param = { params: { code: element.innerText } };
+            const url = '/Product/FindProductDetailsByCode';
+            const param = { params: { code: element.innerText } };
 
-        axios.get(url, param).then(res => {
-            appendData(res.data)
-        }).catch(err => console.log(err))
-    })
+            axios.get(url, param).then(res => {
+                appendData(res.data)
+            }).catch(err => console.log(err))
+        })
 
     //append Product code details
     function appendData(product) {
@@ -170,7 +175,7 @@ const purchaseUpdate = (function() {
         const bill = document.getElementById('receipt');
         const purchase = document.getElementById('purchase');
 
-        product.SellingId ? bill.innerHTML = `<strong class="green-text">Bill No: </strong><a target="_blank" href="/Selling/SellingReceipt/${product.SellingId}">#${product.SellingSn}</a>` : bill.innerHTML = '';
+        product.SellingId ? bill.innerHTML =`<strong class="green-text">Bill No: </strong><a target="_blank" href="/Selling/SellingReceipt/${product.SellingId}">#${product.SellingSn}</a>`: bill.innerHTML = '';
         purchase.innerHTML = `<a target="_blank" href="/Purchase/PurchaseReceipt/${product.PurchaseId}">Purchase Details <i class="fal fa-long-arrow-right"></i></a>`;
 
         $("#codeDetailsModal").modal("show");
@@ -180,7 +185,7 @@ const purchaseUpdate = (function() {
     const btnCheckProduct = document.getElementById("btnCheckProduct");
     const btnAddToList = document.getElementById("btnAddToList");
 
-    const serializeForm = function (form) {
+    const serializeForm = function(form) {
         const obj = {};
         const formData = new FormData(form);
         for (let key of formData.keys()) {
@@ -237,30 +242,70 @@ const purchaseUpdate = (function() {
         const PurchaseList = serializeForm(formProductInfo);
         PurchaseList.ProductCatalogName = selectCategory.options[selectCategory.selectedIndex].text;
         PurchaseList.ProductName = selectProductId.options[selectProductId.selectedIndex].text;
-        PurchaseList.ProductStocks = codes;
-        PurchaseList.Quantity = codes.length;
-        PurchaseList.AddedProductCodes = [];
+        PurchaseList.ProductStocks = [];
 
+        //check product is added
+        const isAdded = cartStorage.some(item => +item.ProductId === +PurchaseList.ProductId);
 
-        if (isProductAddedInCart(PurchaseList.ProductId)) {
-            $.notify(`This Product Already added In Cart!`, "error");
+        if (isAdded) {
+            const index = cartStorage.findIndex(item => +item.ProductId === +PurchaseList.ProductId);
+            PurchaseList.ProductStocks = cartStorage[index].ProductStocks;
+            PurchaseList.AddedProductCodes = cartStorage[index].AddedProductCodes;
+
+            codes.forEach(code => {
+                if (PurchaseList.ProductStocks.indexOf(code) === -1) {
+                    //update new code
+                    PurchaseList.ProductStocks.push({
+                        ProductStockId: 0,
+                        ProductCode: code,
+                        IsSold: false,
+                        isRemove: false,
+                        isNew: true
+                    });
+                }
+            });
+
+            PurchaseList.Quantity = PurchaseList.ProductStocks.length;
+            cartStorage[index] = PurchaseList;
+
+            renderTable();
+            appendTotalPrice();
+            updateCalculation();
+
+            //reset
+            inputBinding({}, true);
+
+            btnCheckCodeAndCartDisabled(true);
             return;
         }
+
+        //add to store 
+        codes.forEach(code => {
+            //update new code
+            PurchaseList.ProductStocks.push({
+                ProductStockId: 0,
+                ProductCode: code,
+                IsSold: false,
+                isRemove: false,
+                isNew: true
+            });
+        });
+
+        PurchaseList.Quantity = PurchaseList.ProductStocks.length;
+        cartStorage.push(PurchaseList);
 
         //append new row
         tbody.appendChild(createRow(PurchaseList));
 
-        //add to store 
-        cartStorage.push(PurchaseList);
-
-        //reset 
-        inputBinding({}, true);
-
-
         appendTotalPrice();
         updateCalculation();
-    }
 
+        //reset
+        inputBinding({}, true);
+
+        btnCheckCodeAndCartDisabled(true);
+    }
+   
     //show hide check cart btn
     function btnCheckCodeAndCartDisabled(isChecking) {
         btnCheckProduct.style.display = isChecking ? "block" : "none";
@@ -275,8 +320,8 @@ const purchaseUpdate = (function() {
         let isUnsoldExist = false;
 
         elements.forEach(added => {
-        stocks.forEach(stock => {
-            const span = added.parentElement.classList;
+            stocks.forEach(stock => {
+                const span = added.parentElement.classList;
 
                 if (added.textContent.trim() === stock.ProductCode) {
                     span.remove('unsold');
@@ -296,16 +341,20 @@ const purchaseUpdate = (function() {
         return isUnsoldExist;
     }
 
+    //render table
+    function renderTable() {
+        const fragment = document.createDocumentFragment();
 
-    //check product already in listed
-    function isProductAddedInCart(productId) {
-        return cartStorage.some(item => +item.ProductId === +productId);
+        cartStorage.forEach(item => {
+            fragment.appendChild(createRow(item));
+        });
+        tbody.innerHTML = "";
+        tbody.appendChild(fragment);
     }
 
     //create new table row
     function createRow(item) {
         const tr = document.createElement("tr");
-        tr.id = item.ProductId;
         tr.innerHTML = `<td>
                            <p class="m-0">${item.ProductCatalogName}</p>
                               <small class="text-muted">${item.Description}</small>
@@ -317,8 +366,8 @@ const purchaseUpdate = (function() {
                            <td>${item.PurchasePrice}</td>
                            <td>${item.SellingPrice}</td>
                            <td>${item.Warranty}</td>
-                           <td>${item.ProductStocks.length}</td>
-                           <td>${appendCodes(item.ProductStocks)}</td>`;
+                           <td>${item.Quantity}</td>
+                           <td id="${item.ProductId}">${appendCodes(item.ProductStocks)}</td>`;
         return tr;
     }
 
@@ -326,12 +375,44 @@ const purchaseUpdate = (function() {
     function appendCodes(codes) {
         let codeSpan = "";
         codes.forEach(code => {
-            codeSpan += `<span class="m-1 stock">${code}</span>`;
+            const remove = code.isRemove ? "code-removed" : "";
+            const stockOut = code.IsSold ? "stock-out" : "";
+
+            codeSpan += `<span class="m-1 stock ${remove} ${stockOut}">${code.ProductCode}</span>`;
         });
 
         return codeSpan;
     }
 
+
+    // remove product code from table stock
+    tbody.addEventListener('click',
+        function(evt) {
+            const element = evt.target;
+
+            //remove code
+            const codeClicked = element.classList.contains('stock');
+
+            if (!codeClicked) return;
+            const id = +element.parentElement.id;
+            const code = element.textContent.trim();
+
+            const index = cartStorage.findIndex(item => +item.ProductId === id);
+            const codes = cartStorage[index].ProductStocks;
+
+            codes.forEach((obj, i) => {
+                if (obj.ProductCode === code) {
+                    codes[i].isRemove = !codes[i].isRemove;
+                    return;
+                }
+            });
+
+            cartStorage[index].Quantity = codes.filter(item => !item.isRemove).length;
+
+            renderTable();
+            appendTotalPrice();
+            updateCalculation();
+        });
 
 
     //***** PAYMENT ****
@@ -343,11 +424,10 @@ const purchaseUpdate = (function() {
     const inputReturn = document.getElementById("inputReturn");
     const inputPaid = document.getElementById("inputPaid");
     const selectPaymentMethod = document.getElementById("selectPaymentMethod");
-    const inputPaidDate = document.getElementById("inputPaidDate");
-
+ 
     //sum total product price
     function sumTotal() {
-        return cartStorage.map(item => item.PurchasePrice * item.Quantity).reduce((prev, cur) => prev + cur, 0);
+        return cartStorage.map(item => +item.PurchasePrice * +item.Quantity).reduce((prev, cur) => prev + cur, 0);
     }
 
     //append total price to DOM
@@ -403,7 +483,7 @@ const purchaseUpdate = (function() {
 
     //enabled Disable Paid input
     function enabledDisablePaid(dueAmount) {
-        if (dueAmount > 0) {
+        if (dueAmount >= 0) {
             inputPaid.removeAttribute('disabled');
             selectPaymentMethod.removeAttribute('disabled');
             inputPaid.setAttribute('max', dueAmount);
@@ -424,9 +504,27 @@ const purchaseUpdate = (function() {
         evt.preventDefault();
 
         const model = serializeForm(this);
-        model.PurchaseTotalPrice = totalPrice.textContent;
+        model.PurchaseTotalPrice = sumTotal();
         model.RemovedProductStockIds = [];
+
+        console.log(cartStorage)
+        cartStorage.forEach(product => {
+            product.ProductStocks.forEach(item => {
+                //remove list
+                if (item.isRemove && !item.isNew && !item.IsSold) {
+                    model.RemovedProductStockIds.push(item.ProductStockId);
+                }
+
+                //added list
+                if (!item.isRemove && item.isNew) {
+                    product.AddedProductCodes.push(item.ProductCode);
+                }
+            });
+        });
+
         model.PurchaseList = cartStorage;
+
+        console.log(model)
     });
 })(document);
 
