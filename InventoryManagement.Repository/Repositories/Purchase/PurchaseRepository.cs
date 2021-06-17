@@ -427,7 +427,7 @@ namespace InventoryManagement.Repository
 
                 Context.Purchase.Update(purchase);
 
-                var existProduct = model.PurchaseList.Where(p => p.PurchaseListId != 0).ToList();
+                var existProduct = model.PurchaseList.Where(p => p.PurchaseListId != 0 && p.AddedProductCodes != null).ToList();
 
 
                 foreach (var pItem in existProduct)
@@ -441,6 +441,7 @@ namespace InventoryManagement.Repository
                     purchaseList.Warranty = pItem.Warranty;
                     purchaseList.ProductStock = pItem.AddedProductCodes.Select(s => new ProductStock
                     {
+                        ProductId = pItem.ProductId,
                         ProductCode = s
                     }).ToList();
 
@@ -461,6 +462,7 @@ namespace InventoryManagement.Repository
                     Warranty = p.Warranty,
                     ProductStock = p.AddedProductCodes.Select(s => new ProductStock
                     {
+                        ProductId = p.ProductId,
                         ProductCode = s
                     }).ToList()
                 }).ToList();
@@ -500,12 +502,19 @@ namespace InventoryManagement.Repository
 
                 await Context.SaveChangesAsync();
 
-                db.Customers.UpdatePaidDue(purchase.VendorId);
+                db.Vendors.UpdatePaidDue(purchase.VendorId);
+
+                //remove purchase list
+                var removedPurchaseList = Context.PurchaseList.Where(l => !l.ProductStock.Any()).ToList();
+
+                Context.RemoveRange(removedPurchaseList);
+                await Context.SaveChangesAsync();
 
                 //Product Logs 
+                var codes = model.PurchaseList.SelectMany(l => l.AddedProductCodes).ToArray();
                 var stockList = Context
                     .ProductStock
-                    .Where(s => s.PurchaseList.PurchaseId == model.PurchaseId && model.PurchaseList.SelectMany(l => l.AddedProductCodes).Contains(s.ProductCode))
+                    .Where(s => s.PurchaseList.PurchaseId == model.PurchaseId && codes.Contains(s.ProductCode))
                     .ToList();
                 //  var logs = purchase.PurchaseList.SelectMany(p => p.ProductStock.Select(c => new ProductLogAddModel
                 var productLogs = stockList.Select(c => new ProductLogAddModel
@@ -513,16 +522,11 @@ namespace InventoryManagement.Repository
                     PurchaseId = model.PurchaseId,
                     ProductStockId = c.ProductStockId,
                     ActivityByRegistrationId = registrationId,
-                    Details = $"Product Buy at Receipt No: {purchase.PurchaseSn}",
-                    LogStatus = ProductLogStatus.Buy
+                    Details = $"Bill Updated: Product Buy at Receipt No: {purchase.PurchaseSn}",
+                    LogStatus = ProductLogStatus.PurchaseUpdate
                 }).ToList();
                 //Product log
                 db.ProductLog.AddList(productLogs);
-
-                var removedPurchaseList = Context.PurchaseList.Where(l => !l.ProductStock.Any()).ToList();
-
-                Context.RemoveRange(removedPurchaseList);
-                await Context.SaveChangesAsync();
             }
             catch (Exception e)
             {

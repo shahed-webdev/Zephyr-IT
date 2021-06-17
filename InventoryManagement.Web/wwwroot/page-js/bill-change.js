@@ -424,7 +424,7 @@ const validation = function () {
 
     const due = +totalDue.textContent;
     if (due < 0) {
-        customerError.innerText = "Due Amount must be more than or equal 0."
+        customerError.innerText = "Due Amount must be more than or equal 0"
         return false;
     }
 
@@ -508,11 +508,12 @@ const onSellSubmitClicked = function(evt) {
         type: "POST",
         data: body,
         success: function(response) {
-            $.notify(response.Message, response.IsSuccess ? "success" : "error");
-
             if (response.IsSuccess) {
                 location.href = `/Selling/SellingReceipt/${response.Data}`;
+                return;
             }
+
+            $.notify(response.Message, response.IsSuccess ? "success" : "error");
         },
         error: function(error) {
             console.log(error);

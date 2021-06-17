@@ -111,46 +111,48 @@
     </section>
 
     <div class="card card-body mb-4">
-        <table class="table">
-            <thead>
-            <tr>
-                <th><strong>Category</strong></th>
-                <th><strong>Brand&nbspand&nbspModel</strong></th>
-                <th><strong>Purchase&nbspPrice</strong></th>
-                <th><strong>Selling&nbspPrice</strong></th>
-                <th><strong>Warranty</strong></th>
-                <th><strong>Qty</strong></th>
-                <th><strong>Stock</strong></th>
-            </tr>
-            </thead>
-            <tbody id="tbody">
-            @foreach (var item in Model.PurchaseList)
-            {
-                <tr>
-                    <td>
-                        <p class="m-0">@item.ProductCatalogName</p>
-                        <small class="text-muted">@item.Description</small>
-                    </td>
-                    <td>
-                        <p class="m-0">@item.ProductName</p>
-                        <small class="text-muted">@item.Note</small>
-                    </td>
-                    <td>@item.PurchasePrice</td>
-                    <td>@item.SellingPrice</td>
-                    <td>@item.Warranty</td>
-                    <td>@item.ProductStocks.Count</td>
-                    <td id="@item.ProductId">
-                        @foreach (var stock in item.ProductStocks)
-                        {
-                            <span class="m-1 stock @(stock.IsSold?"stock-out":"")">
-                                @stock.ProductCode
-                            </span>
-                        }
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th><strong>Category</strong></th>
+                        <th><strong>Brand&nbspand&nbspModel</strong></th>
+                        <th><strong>Purchase&nbspPrice</strong></th>
+                        <th><strong>Selling&nbspPrice</strong></th>
+                        <th><strong>Warranty</strong></th>
+                        <th><strong>Qty</strong></th>
+                        <th><strong>Stock</strong></th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                    @foreach (var item in Model.PurchaseList)
+                    {
+                        <tr>
+                            <td>
+                                <p class="m-0">@item.ProductCatalogName</p>
+                                <small class="text-muted">@item.Description</small>
+                            </td>
+                            <td>
+                                <p class="m-0">@item.ProductName</p>
+                                <small class="text-muted">@item.Note</small>
+                            </td>
+                            <td>@item.PurchasePrice</td>
+                            <td>@item.SellingPrice</td>
+                            <td>@item.Warranty</td>
+                            <td>@item.ProductStocks.Count</td>
+                            <td id="@item.ProductId">
+                                @foreach (var stock in item.ProductStocks)
+                                {
+                                    <span class="m-1 stock @(stock.IsSold ? "stock-out" : "")">
+                                        @stock.ProductCode
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
     
     <div class="card card-body">
@@ -194,7 +196,7 @@
                 </div>
                 <div class="col d-flex align-items-center">
                     <div class="form-group">
-                        <button type="submit" id="btnUpdateBill" class="btn peach-gradient btn-rounded mt-4">Update Bill</button>
+                        <button id="btnUpdateBill" type="submit" class="btn peach-gradient btn-rounded mt-4">Update Bill</button>
                     </div>
                     <h5 class="red-text mb-0 font-weight-500">Total Due: ৳<span id="totalDue">@Model.PurchaseDueAmount</span></h5>
                 </div>
@@ -261,7 +263,7 @@
             obj.ProductStocks = newStock;
             obj.AddedProductCodes = [];
         });
-
+        
         $(function() {
             //date picker
             $('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'));

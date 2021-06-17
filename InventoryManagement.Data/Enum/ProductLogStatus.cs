@@ -20,6 +20,9 @@ namespace InventoryManagement.Data
         WarrantyDelivery,
 
         [Description("Product Damaged")]
-        Damaged
+        Damaged,
+
+        [Description("Purchase Bill Update")]
+        PurchaseUpdate
     }
 }

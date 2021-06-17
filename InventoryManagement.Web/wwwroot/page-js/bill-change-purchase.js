@@ -76,9 +76,7 @@ const purchaseUpdate = (function() {
         if (reset) codeContainer.innerHTML = "";
 
         for (let element of elements) {
-            if ((element.type === "text" || element.type === "number") &&
-                !element.readOnly &&
-                !element.classList.contains("search")) {
+            if ((element.type === "text" || element.type === "number") && !element.readOnly && !element.classList.contains("search")) {
                 const label = element.nextElementSibling;
                 if (!reset) {
                     element.value = items[element.name];
@@ -251,6 +249,7 @@ const purchaseUpdate = (function() {
             const index = cartStorage.findIndex(item => +item.ProductId === +PurchaseList.ProductId);
             PurchaseList.ProductStocks = cartStorage[index].ProductStocks;
             PurchaseList.AddedProductCodes = cartStorage[index].AddedProductCodes;
+            PurchaseList.PurchaseListId = cartStorage[index].PurchaseListId;
 
             codes.forEach(code => {
                 if (PurchaseList.ProductStocks.indexOf(code) === -1) {
@@ -292,6 +291,8 @@ const purchaseUpdate = (function() {
         });
 
         PurchaseList.Quantity = PurchaseList.ProductStocks.length;
+        PurchaseList.PurchaseListId = 0;
+
         cartStorage.push(PurchaseList);
 
         //append new row
@@ -357,11 +358,11 @@ const purchaseUpdate = (function() {
         const tr = document.createElement("tr");
         tr.innerHTML = `<td>
                            <p class="m-0">${item.ProductCatalogName}</p>
-                              <small class="text-muted">${item.Description}</small>
+                              <small class="text-muted">${item.Description ? item.Description:""}</small>
                            </td>
                            <td>
                                <p class="m-0">${item.ProductName}</p>
-                               <small class="text-muted">${item.Note}</small>
+                               <small class="text-muted">${item.Note ? item.Note:""}</small>
                            </td>
                            <td>${item.PurchasePrice}</td>
                            <td>${item.SellingPrice}</td>
@@ -483,7 +484,7 @@ const purchaseUpdate = (function() {
 
     //enabled Disable Paid input
     function enabledDisablePaid(dueAmount) {
-        if (dueAmount >= 0) {
+        if (dueAmount > 0) {
             inputPaid.removeAttribute('disabled');
             selectPaymentMethod.removeAttribute('disabled');
             inputPaid.setAttribute('max', dueAmount);
@@ -503,12 +504,21 @@ const purchaseUpdate = (function() {
     formPayment.addEventListener("submit", function(evt) {
         evt.preventDefault();
 
+        const due = +totalDue.textContent;
+
+        if (due < 0) {
+            $.notify("Due Amount must be more than or equal 0", "error");
+            return;
+        }
+
+        this.btnUpdateBill.disabled = true;
+
         const model = serializeForm(this);
         model.PurchaseTotalPrice = sumTotal();
         model.RemovedProductStockIds = [];
 
-        console.log(cartStorage)
         cartStorage.forEach(product => {
+            const added = [];
             product.ProductStocks.forEach(item => {
                 //remove list
                 if (item.isRemove && !item.isNew && !item.IsSold) {
@@ -517,14 +527,33 @@ const purchaseUpdate = (function() {
 
                 //added list
                 if (!item.isRemove && item.isNew) {
-                    product.AddedProductCodes.push(item.ProductCode);
+                    added.push(item.ProductCode);
                 }
             });
+
+            product.AddedProductCodes = added;
         });
 
         model.PurchaseList = cartStorage;
+    
+        $.ajax({
+            url: '/Purchase/PostPurchaseBillChange',
+            type: "POST",
+            data: model,
+            success: response=> {
+                if (response.IsSuccess) {
+                    location.href = `/Purchase/PurchaseRecords`;
+                    return;
+                }
 
-        console.log(model)
+                $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                this.btnUpdateBill.disabled = false;
+            },
+            error: error=> {
+                this.btnUpdateBill.disabled = false;
+                console.log(error);
+            }
+        });
     });
 })(document);
 
