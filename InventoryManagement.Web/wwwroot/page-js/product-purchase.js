@@ -51,7 +51,7 @@ const buzzAudio = document.getElementById('audio');
 
 //****Global product Code Storage****//
 const productCode = {
-    isExistServer:  async function (codeArray) {
+    isExistServer: async function (codeArray) {
         const url = '/Purchase/IsPurchaseCodeExist';
         const options = {
             method: 'post',
@@ -422,7 +422,7 @@ const matchExistingProductCode = function (stocks) {
     
     addedCode.forEach(added => {
         stocks.forEach(stock => {
-            if (added.textContent === stock.ProductCode) {
+            if (added.textContent.trim() === stock.ProductCode) {
                 added.parentElement.classList.remove('badge-success');
 
                 if (stock.IsSold) {

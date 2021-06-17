@@ -6,26 +6,31 @@
 
 @section Styles{
     <style>
-        #code-container { display: flex;flex-wrap: wrap }
-        #code-container i { margin-left: 5px;cursor: pointer }
+        #code-container { display: flex; flex-wrap: wrap }
+        #code-container i { margin-left: 5px; cursor: pointer }
         #code-container div { padding: 3px 12px; border-radius: 5px; margin: 3px; color: #fff; }
         #code-container .unsold { background-color: #00C851 }
         #code-container .sold { background-color: #ff6f00 }
 
         #btnAddToList { display: none }
-    </style> 
+        .code-details { cursor: pointer }
+
+        .stock{ cursor: pointer; display: inline-block}
+        .stock-out { pointer-events: none; color: #9f9f9f }
+        .code-removed { text-decoration: line-through; color: #ff0000 }
+    </style>
 }
 
 <div class="m-md-3">
     <div class="mb-4">
         <h4 class="mb-2 page-header d-print-none">Update Bill #@Model.PurchaseSn</h4>
         <h5 class="mb-0">
-            <span class="badge badge-pill purple">@Model.VendorName</span>
-            <span class="badge badge-pill purple">@Model.VendorPhone</span>
+            <span class="badge badge-pill deep-orange">@Model.VendorName</span>
+            <span class="badge badge-pill deep-orange">@Model.VendorPhone</span>
         </h5>
     </div>
 
-    <section class="card card-body mb-3">
+    <section class="card card-body mb-4">
         <div class="row">
             <div class="col-lg-4">
                 <form id="formAddCode">
@@ -35,14 +40,14 @@
                         <i id="code-exist-error" class="text-danger"></i>
                     </div>
                 </form>
-                
+
                 <div id="code-container"></div>
             </div>
 
             <div class="col-lg-8">
                 <form id="formProductInfo">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <div class="md-form">
                                 <select id="selectCategory" name="ParentId" searchable="Search here.." asp-items="ViewBag.ParentId" class="mdb-select" required>
                                     <option value="" disabled selected>Select Category</option>
@@ -50,7 +55,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <div class="md-form">
                                 <select id="selectProductId" name="ProductId" searchable="Search here.." class="mdb-select" required>
                                     <option value="" disabled selected>Brand and Model</option>
@@ -58,14 +63,14 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <div class="md-form">
                                 <input id="inputPurchasePrice" name="PurchasePrice" class="form-control" step="0.01" type="number" required />
                                 <label for="inputPurchasePrice">Purchase Price</label>
                             </div>
                         </div>
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-3">
                             <div class="md-form">
                                 <input id="inputSellingPrice" name="SellingPrice" class="form-control" step="0.01" type="number" required />
                                 <label for="inputSellingPrice">Selling Price</label>
@@ -79,7 +84,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-9">
+                        <div class="col-lg-6">
                             <div class="md-form">
                                 <input id="inputDescription" name="Description" class="form-control" type="text" />
                                 <label for="inputDescription">Description</label>
@@ -105,45 +110,129 @@
         </div>
     </section>
 
-    <div class="card card-body">
+    <div class="card card-body mb-4">
         <table class="table">
             <thead>
-                <tr>
-                    <th><strong>Category</strong></th>
-                    <th><strong>Brand and Model</strong></th>
-                    <th><strong>Purchase&nbspPrice</strong></th>
-                    <th><strong>Selling&nbspPrice</strong></th>
-                    <th><strong>Warranty</strong></th>
-                    <th><strong>Stock</strong></th>
-                </tr>
+            <tr>
+                <th><strong>Category</strong></th>
+                <th><strong>Brand&nbspand&nbspModel</strong></th>
+                <th><strong>Purchase&nbspPrice</strong></th>
+                <th><strong>Selling&nbspPrice</strong></th>
+                <th><strong>Warranty</strong></th>
+                <th><strong>Qty</strong></th>
+                <th><strong>Stock</strong></th>
+            </tr>
             </thead>
             <tbody id="tbody">
-                @foreach (var item in Model.PurchaseList)
-                {
-                    <tr id="@item.ProductId">
-                        <td>
-                            <p class="m-0">@item.ProductCatalogName</p>
-                            <small class="text-muted">@item.Description</small>
-                        </td>
-                        <td>
-                            <p class="m-0">@item.ProductName</p>
-                            <small class="text-muted">@item.Note</small>
-                        </td>
-                        <td>@item.PurchasePrice</td>
-                        <td>@item.SellingPrice</td>
-                        <td>@item.Warranty</td>
-                        <td>
-                            @foreach (var stock in item.ProductStocks)
-                            {
-                                <span class="m-1 stock">
-                                    @stock.ProductCode
-                                </span>
-                            }
-                        </td>
-                    </tr>
-                }
+            @foreach (var item in Model.PurchaseList)
+            {
+                <tr>
+                    <td>
+                        <p class="m-0">@item.ProductCatalogName</p>
+                        <small class="text-muted">@item.Description</small>
+                    </td>
+                    <td>
+                        <p class="m-0">@item.ProductName</p>
+                        <small class="text-muted">@item.Note</small>
+                    </td>
+                    <td>@item.PurchasePrice</td>
+                    <td>@item.SellingPrice</td>
+                    <td>@item.Warranty</td>
+                    <td>@item.ProductStocks.Count</td>
+                    <td id="@item.ProductId">
+                        @foreach (var stock in item.ProductStocks)
+                        {
+                            <span class="m-1 stock @(stock.IsSold?"stock-out":"")">
+                                @stock.ProductCode
+                            </span>
+                        }
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
+    </div>
+    
+    <div class="card card-body">
+        <form id="formPayment">
+            <input type="hidden" name="PurchaseId" value="@Context.Request.RouteValues["id"]" />
+            <h4 class="page-header mb-3">Total Purchase Amount: ৳<span id="totalPurchaseAmount">@Model.PurchaseTotalPrice</span></h4>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Discount</label>
+                        <input id="inputDiscount" name="PurchaseDiscountAmount" step="0.01" type="number" min="0" class="form-control" value="@Model.PurchaseDiscountAmount"/>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Return Amount</label>
+                        <input id="inputReturn" name="PurchaseReturnAmount" step="0.01" type="number" min="0" class="form-control" value="@Model.PurchaseReturnAmount"/>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Paid Amount </label>
+                        <input id="inputPaid" name="PaidAmount" step="0.01" type="number" min="0" class="form-control" />
+                        <small class="text-muted">(Prev. Paid: ৳<span id="previousPaid">@Model.PurchasePaidAmount</span>)</small>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Payment Method</label>
+                        <select id="selectPaymentMethod" name="AccountId" asp-items="ViewBag.Account" class="form-control">
+                            <option value="" selected>[ SELECT ]</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Paid Date</label>
+                        <input id="inputPaidDate" name="PaidDate" type="text" class="form-control datepicker"/>
+                    </div>
+                </div>
+                <div class="col d-flex align-items-center">
+                    <div class="form-group">
+                        <button type="submit" id="btnUpdateBill" class="btn peach-gradient btn-rounded mt-4">Update Bill</button>
+                    </div>
+                    <h5 class="red-text mb-0 font-weight-500">Total Due: ৳<span id="totalDue">@Model.PurchaseDueAmount</span></h5>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!--code details Modal  -->
+<div class="modal fade" id="codeDetailsModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-notify" role="document">
+        <div class="modal-content">
+            <div class="modal-header deep-orange darken-1">
+                <strong class="heading lead">Product Details</strong>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="text-center">
+                    <h4 class="mb-1 font-weight-bold"><strong id="category"></strong></h4>
+                </div>
+                <ul class="striped list-unstyled mb-0">
+                    <li id="receipt"></li>
+                    <li id="purchase"></li>
+                    <li><strong>Code:</strong><span id="productCode"></span></li>
+                    <li><strong>Brand and Model:</strong><span id="productName"></span></li>
+                    <li><strong>Purchase Price:</strong><span id="purchasePrice"></span></li>
+                    <li><strong>Selling Price:</strong><span id="sellingPrice"></span></li>
+                    <li><strong>Warranty:</strong><span id="warranty"></span></li>
+                    <li><strong>Description:</strong><span id="description"></span></li>
+                    <li><strong>Note:</strong><span id="note"></span></li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -156,8 +245,24 @@
     <script>
         //access from private method
         const data = @Html.Raw(Json.Serialize(Model.PurchaseList));
+        data.forEach(function(obj, i) {
+            obj.Quantity = obj.ProductStocks.length;
 
-        $(function () {
+            const newStock = obj.ProductStocks.map(item => {
+                return {
+                    ProductStockId: item.ProductStockId,
+                    ProductCode: item.ProductCode,
+                    IsSold: item.IsSold,
+                    isRemove: false,
+                    isNew: false
+                }
+            });
+
+            obj.ProductStocks = newStock;
+            obj.AddedProductCodes = [];
+        });
+
+        $(function() {
             //date picker
             $('.datepicker').pickadate().val(moment(new Date()).format('DD MMMM, YYYY'));
 
@@ -165,5 +270,5 @@
             $('.mdb-select').materialSelect();
         });
     </script>
-    <script src="~/page-js/bill-change-purchase.js?v=1.0.01"></script>
+    <script src="~/page-js/bill-change-purchase.js?v=1.0.1"></script>
 }
