@@ -9,6 +9,7 @@ namespace InventoryManagement.Repository
             this.ProductStocks = new HashSet<ProductStockViewModel>();
         }
         public int ProductId { get; set; }
+        public int PurchaseListId { get; set; }
         public int ProductCatalogId { get; set; }
         public string ProductCatalogName { get; set; }
         public string ProductName { get; set; }

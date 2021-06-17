@@ -167,6 +167,7 @@ namespace InventoryManagement.Repository
                     MemoNumber = p.MemoNumber,
                     Products = p.PurchaseList.Select(pd => new ProductViewModel
                     {
+                        PurchaseListId = pd.PurchaseListId,
                         ProductId = pd.ProductId,
                         ProductCatalogId = pd.Product.ProductCatalogId,
                         ProductCatalogName = pd.Product.ProductCatalog.CatalogName,
@@ -346,6 +347,7 @@ namespace InventoryManagement.Repository
                   PurchaseDate = p.PurchaseDate,
                   PurchaseList = p.PurchaseList.Select(l => new ProductViewModel
                   {
+                      PurchaseListId = l.PurchaseListId,
                       ProductId = l.ProductId,
                       ProductName = l.Product.ProductName,
                       ProductCatalogId = l.Product.ProductCatalogId,
