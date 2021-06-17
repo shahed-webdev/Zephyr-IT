@@ -110,7 +110,7 @@ namespace InventoryManagement.Repository
                     Note = p.Note,
                     SellingPrice = p.SellingPrice,
                     PurchasePrice = p.SellingPrice,
-                    ProductStocks = p.ProductStock.Where(s=> !s.IsSold).Select(s => new ProductStockViewModel
+                    ProductStocks = p.ProductStock.Where(s => !s.IsSold).Select(s => new ProductStockViewModel
                     {
                         ProductCode = s.ProductCode
                     }).ToList(),
@@ -137,6 +137,12 @@ namespace InventoryManagement.Repository
                 response.IsSuccess = false;
                 return response;
             }
+        }
+
+        public int GetLastPurchaseId(int productId)
+        {
+            return Context.PurchaseList.OrderByDescending(p => p.Purchase.InsertDate)
+                .FirstOrDefault(p => p.ProductId == productId)?.PurchaseId ?? 0;
         }
     }
 }

@@ -13,5 +13,7 @@ namespace InventoryManagement.Repository
         bool RemoveCustom(int id);
         Task<ProductShowViewModel> FindByIdAsync(int productId);
         DbResponse<ProductViewModel> ProductWithCodes(int productId);
+
+        int GetLastPurchaseId(int productId);
     }
 }
