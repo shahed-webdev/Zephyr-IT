@@ -42,11 +42,10 @@ namespace InventoryManagement.Web.Controllers
             var response = _damaged.Add(model, User.Identity.Name);
             return Json(response);
         }
-
         #endregion
 
-        #region Damage list
 
+        #region Damage list
         [Authorize(Roles = "admin, damaged-list")]
         public IActionResult DamagedList()
         {

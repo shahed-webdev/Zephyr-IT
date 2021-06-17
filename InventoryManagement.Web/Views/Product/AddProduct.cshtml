@@ -100,9 +100,15 @@
                     },
                     columns:
                     [
-                        { data: "ProductName" },
                         {
-                            data: "Stock", "render": function(data, type, row, meta) {
+                            data: "ProductName",
+                            "render": function (data, type, row, meta) {
+                                return `<a id="${row.ProductId}" class="blue-text bill-details">${data}</a>`
+                            }
+                        },
+                        {
+                            data: "Stock",
+                            "render": function(data, type, row, meta) {
                                 return data > 0 ? `<a class="blue-text" href="/Product/StockDetails/${row.ProductId}">${data}</a>` : data;
                             }
                         },
@@ -124,36 +130,61 @@
 
         //delete click
         $('#data-table').on("click", ".remove", function(evt) {
-            evt.preventDefault();
+                evt.preventDefault();
 
-            var row = $(this).closest("tr");
-            var btnDelete = $(this);
-            const url = $(this).attr('href');
+                var row = $(this).closest("tr");
+                var btnDelete = $(this);
+                const url = $(this).attr('href');
 
-            $('#table-row em').remove();
-            $('#table-row tr').removeClass("error-color");
+                $('#table-row em').remove();
+                $('#table-row tr').removeClass("error-color");
 
-            if (!url) return;
+                if (!url) return;
 
-            if (confirm("Are you sure you want to delete?")) {
-                $.post(url, function(response) {
-                    if (response === -1) {
-                        row.addClass("error-color").after('<em class="used-error">This data already used in others place</em>');
-                        btnDelete.removeAttr("href");
+                if (confirm("Are you sure you want to delete?")) {
+                    $.post(url,
+                        function(response) {
+                            if (response === -1) {
+                                row.addClass("error-color").after('<em class="used-error">This data already used in others place</em>');
+                                btnDelete.removeAttr("href");
+                                return;
+                            }
+                            row.hide();
+                        });
+                }
+            });
+
+        //product details click
+        $('#data-table').on("click", ".bill-details", function(evt) {
+  
+            $.ajax({
+                url: '/Product/StockOutProductBill',
+                type: "POST",
+                data: { productId: this.id },
+                success: function(response) {
+                    if (response) {
+                        location.href = `/Purchase/PurchaseReceipt/${response}`;
                         return;
                     }
-                    row.hide();
-                });
-            }
+
+                    $.notify("Bill Not Found!", "error");
+                },
+                error: function(error) {
+                    console.log(error);
+                    btnSubmit.innerText = 'Update Bill';
+                    btnSubmit.disabled = false;
+                }
+            });
         });
 
         // event change category
-        parentId.addEventListener('change', function() {
-            const categoryId = this.value;
-            if (!categoryId) return;
+        parentId.addEventListener('change',
+            function() {
+                const categoryId = this.value;
+                if (!categoryId) return;
 
-            categoryBasedProduct(categoryId);
-        });
+                categoryBasedProduct(categoryId);
+            });
 
         //show category based product
         function categoryBasedProduct(categoryId) {

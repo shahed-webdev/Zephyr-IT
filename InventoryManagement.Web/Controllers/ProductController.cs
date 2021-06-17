@@ -83,6 +83,15 @@ namespace InventoryManagement.Web.Controllers
 
             return View(model.Data);
         }
+
+
+        //stock out product details
+        [HttpPost]
+        public IActionResult StockOutProductBill(int productId)
+        {
+            var response = _db.Products.GetLastPurchaseId(productId);
+            return Json(response);
+        }
         #endregion
 
         //GET: Barcode
