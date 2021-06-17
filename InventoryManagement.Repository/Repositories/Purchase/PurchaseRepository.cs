@@ -447,7 +447,7 @@ namespace InventoryManagement.Repository
                     Context.PurchaseList.Update(purchaseList);
                 }
 
-                var newProduct = model.PurchaseList.Where(p => p.PurchaseListId == 0).ToList();
+                var newProduct = model.PurchaseList.Where(p => p.PurchaseListId == 0 && p.AddedProductCodes != null).ToList();
 
                 var newPurchaseList = newProduct.Select(p => new PurchaseList
                 {
