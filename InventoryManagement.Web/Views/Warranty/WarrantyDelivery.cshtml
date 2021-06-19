@@ -40,17 +40,16 @@
         <table class="product-tb table table-sm table-bordered mt-5">
             <thead>
                 <tr>
-                    <th><strong>Product</strong></th>
+                    <th><strong>Product Type</strong></th>
+                    <th><strong>Product Details</strong></th>
                     <th><strong>Issue</strong></th>
                     <th><strong>Serial No</strong></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>
-                        <p class="mb-0">@Model.ProductCatalogName</p>
-                        <small>@Model.ProductDescription</small>
-                    </td>
+                    <td>@Model.ProductCatalogName</td>
+                    <td>@Model.ChangedProductName</td>
                     <td>@Model.ProductDescription</td>
                     <td class="text-center">@Model.ProductCode</td>
                 </tr>

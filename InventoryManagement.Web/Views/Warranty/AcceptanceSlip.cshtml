@@ -40,17 +40,16 @@
         <table class="product-tb table table-sm table-bordered">
             <thead>
             <tr>
-                <th><strong>Product</strong></th>
+                <th><strong>Product Type</strong></th>
+                <th><strong>Product Details</strong></th>
                 <th><strong>Issue</strong></th>
                 <th><strong>Serial No</strong></th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td>
-                    <p class="mb-0">@Model.ProductCatalogName</p>
-                    <small>@Model.ProductDescription</small>
-                </td>
+                <td>@Model.ProductCatalogName</td>
+                <td>@Model.ProductName</td>
                 <td>@Model.AcceptanceDescription</td>
                 <td class="text-center">@Model.ProductCode</td>
             </tr>
@@ -62,21 +61,20 @@
             <h5 class="mt-5">Delivery Product Info</h5>
             <table class="product-tb table table-sm table-bordered">
                 <thead>
-                <tr>
-                    <th><strong>Product Type</strong></th>
-                    <th><strong>Description</strong></th>
-                    <th><strong>Serial No</strong></th>
-                </tr>
+                    <tr>
+                        <th><strong>Product Type</strong></th>
+                        <th><strong>Product Details</strong></th>
+                        <th><strong>Description</strong></th>
+                        <th><strong>Serial No</strong></th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>
-                        <p class="mb-0">@Model.ChangedProductCatalogName</p>
-                        <small>@Model.ChangedProductName</small>
-                    </td>
-                    <td>@Model.DeliveryDescription</td>
-                    <td class="text-center">@Model.ChangedProductCode</td>
-                </tr>
+                    <tr>
+                        <td>@Model.ChangedProductCatalogName</td>
+                        <td>@Model.ChangedProductName</td>
+                        <td>@Model.DeliveryDescription</td>
+                        <td class="text-center">@Model.ChangedProductCode</td>
+                    </tr>
                 </tbody>
             </table>
         }
