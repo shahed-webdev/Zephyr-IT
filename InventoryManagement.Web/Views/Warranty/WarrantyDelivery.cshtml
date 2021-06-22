@@ -124,7 +124,7 @@
 
                         const model = {
                             ProductStockId: response.ProductStockId,
-                            ProductCode: this.inputChangedProductCode.value.trim(),
+                            ProductCode: this.inputChangedProductCode.value,
                             Note: "replaced with the product (@Model.ProductCode) for warranty"
                         }
 
@@ -132,7 +132,7 @@
                             url: '/Damage/PostDamage',
                             type: "POST",
                             data: model,
-                            success: response => {},
+                            success: damage => { console.log(damage);},
                             error: error => {
                                 console.log(error);
                             }
