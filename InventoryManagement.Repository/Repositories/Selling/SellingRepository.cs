@@ -710,7 +710,7 @@ namespace InventoryManagement.Repository
                     if (model.RemovedProductCodes.Any())
                     {
                         var removedStocks =
-                            await db.ProductStocks.SellingStockFromCodesAsync(model.RemovedProductCodes);
+                            await db.ProductStocks.SoldBillStockFromCodesAsync(model.SellingId, model.RemovedProductCodes);
 
                         removedStocks = removedStocks.Select(s =>
                         {

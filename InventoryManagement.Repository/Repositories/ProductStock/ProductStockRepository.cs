@@ -137,6 +137,11 @@ namespace InventoryManagement.Repository
             return Context.ProductStock.Include(s => s.Product).Where(s => codes.Contains(s.ProductCode) && !s.IsSold).ToListAsync();
         }
 
+        public Task<List<ProductStock>> SoldBillStockFromCodesAsync(int sellingId, string[] codes)
+        {
+            return Context.ProductStock.Include(s => s.Product).Where(s => codes.Contains(s.ProductCode) && s.SellingList.SellingId == sellingId).ToListAsync();
+        }
+
         public Task<List<ProductStockReportModel>> StockReport()
         {
             return Context

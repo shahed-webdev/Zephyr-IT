@@ -16,6 +16,7 @@ namespace InventoryManagement.Repository
 
         Task<DbResponse<ProductBillStockModel>> FindSellingIdAsync(string code);
         Task<List<ProductStock>> SellingStockFromCodesAsync(string[] codes);
+        Task<List<ProductStock>> SoldBillStockFromCodesAsync(int sellingId, string[] codes);
         Task<List<ProductStockReportModel>> StockReport();
         decimal StockProductPurchaseValue();
 
