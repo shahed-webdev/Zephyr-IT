@@ -8,6 +8,12 @@
     <style>
         .past-row-color td { color: #ff1818; }
         .today-row-color td { color: #00b107; }
+
+        .on-edit form { display: flex }
+        .on-edit input { border: 1px solid #B6B4B4; padding: 6px; text-align: center; box-shadow: 1px 0 7px rgba(0, 0, 0, 0.2); width: 100% }
+        .on-edit input:focus { border: 1px solid #00bfff }
+
+        .on-edit form > button { border: none; background-color: #324ca7; color: #fff; padding: 0 10px; }
     </style>
 }
 
@@ -81,8 +87,9 @@
                         { data: "SellingDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
                         {
                             data: "PromisedPaymentDate",
-                            "render": function(data) {
-                                return data ? moment(data).format('DD MMM YYYY') : ""
+                            "render": function (data, type, row, meta) {
+                                const date = data ? moment(data).format('DD MMM YYYY') : "";
+                                return `<a class="on-edit" data-old="${date}" data-id="${row.SellingId}">${date}</a>`
                             }
                         }
                     ],
@@ -110,6 +117,56 @@
                 dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
             },
             addSign: function(data) { return `${data}/-` }
+        }
+
+
+        //edit on click
+        const tBody = document.getElementById('data-table');
+        tBody.addEventListener('click',
+            function(evt) {
+                const element = evt.target;
+
+                const onEdit = element.classList.contains('on-edit');
+                if (!onEdit) return;
+                const old = element.getAttribute('data-old');
+
+                const html = `<form onsubmit="return postUpdate(this)">
+                  <input name="inputDate" class="datepicker2" value="${old}" type="text" />
+                  <button type="submit"><i class="fas fa-check"></i></button>
+                </form>`;
+
+                element.innerHTML = html;
+
+                $('.datepicker2').pickadate({
+                    format: 'd-mmmm-yyyy'
+            });
+            });
+
+        //post on enter
+        function postUpdate(form) {
+            const id = form.parentElement.getAttribute('data-id');
+            const newValue = form.inputDate.value;
+
+            if (!newValue) return false;
+
+            $.ajax({
+                url: '/Dashboard/PromiseDateUpdate',
+                type: "POST",
+                data: { id:id, newDate: newValue },
+                success: function(response) {
+                    if (response.IsSuccess) {
+                        form.parentElement.innerHTML = `${newValue}`;
+                        form.remove();
+                    }
+
+                    $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+
+            return false;
         }
     </script>
 }

@@ -1,5 +1,4 @@
-﻿@using InventoryManagement.Repository
-@model IEnumerable<ExpenseAllViewModel>
+﻿
 @{
     ViewBag.Title = "Expense";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -9,8 +8,7 @@
     <h4 class="page-header mb-3">Expense</h4>
 
     <div class="card card-body">
-        <div class="table-responsive">
-            <table id="data-table" class="table table-sm table-bordered">
+        <table id="data-table" class="table table-sm table-bordered">
                 <thead>
                     <tr>
                         <th>Voucher No</th>
@@ -22,71 +20,61 @@
                         <th>Details</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>@item.VoucherNo</td>
-                            <td class="text-left">@item.ExpenseCategory</td>
-                            <td class="text-right">৳@item.ExpenseAmount.ToString("#.##")</td>
-                            <td class="text-left">@item.ExpenseFor</td>
-                            <td>@item.ExpenseDate.ToString("dd MMM yyyy")</td>
-                            <td>@item.CreateBy</td>
-                            <td>
-                                @if (item.IsTransportation)
-                                {
-                                    <a class="@(item.IsApproved?"text-success":"text-danger")" href="/Expenses/TransportationCostDetails/@item.Id">Details</a>
-                                }
-                                else
-                                {
-                                    <a class="@(item.IsApproved?"text-success":"text-danger")" href="/Expenses/GeneralExpenseDetails/@item.Id">Details</a>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+        </table>
     </div>
 </div>
 
 
 @section Scripts {
     <script>
-        $(function () {
-            //$("#data-table").DataTable();
+        $(function() {
+            dataTable.getData();
         });
 
-            //const dataTable = {
-            //    table: null,
-            //    filter: null,
-            //    init: function() {
-            //        dataTable.table = $("#data-table1").DataTable({
-            //            processing: true,
-            //            serverSide: true,
-            //            ajax: {
-            //                url: "/Expenses/GetExpense",
-            //                type: "POST"
-            //            },
-            //            columns:
-            //            [
-            //                { data: "VoucherNo" },
-            //                { data: "ExpenseCategory" },
-            //                { data: "ExpenseAmount" },
-            //                { data: "ExpenseFor" },
-            //                { data: "ExpenseDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
-            //                { data: "Id", "render": function(data) { return `<a class="fas fa-edit update" href="/Expense/Edit/${data}"></a>`; } }
-            //            ],
-            //            columnDefs: [
-            //                { 'searchable': false, 'targets': [4] },
-            //                { 'sortable': false, 'targets': [4] },
-            //                { 'className': "text-left", "targets": [0, 2] }
-            //            ]
-            //        });
-            //    },
-            //    getData: function() {
-            //        dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
-            //    }
-            //}
+        const dataTable = {
+            table: null,
+            filter: null,
+            init: function() {
+                dataTable.table = $("#data-table").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "/Expenses/GetExpense",
+                        type: "POST"
+                    },
+                    columns:
+                    [
+                        { data: "VoucherNo" },
+                        { data: "ExpenseCategory" },
+                        {
+                            data: "ExpenseAmount",
+                            "render": function(data) {
+                                return `${data}/-`
+                            }
+                        },
+                        { data: "ExpenseFor" },
+                        { data: "ExpenseDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
+                        { data: "CreateBy" },
+                        {
+                            data: "Id",
+                            "render": function(data, type, row, meta) {
+                                const link = row.IsTransportation ? `TransportationCostDetails` : `GeneralExpenseDetails`;
+                                return `<a class="${row.IsApproved ? "text-success" : "text-danger"}" href="/Expenses/${link}/${row.Id}">Details</a>`;
+                            }
+                        }
+                    ],
+                    columnDefs: [
+                        { 'searchable': false, 'targets': [6] },
+                        { 'sortable': false, 'targets': [6] },
+                        { 'className': "text-left", "targets": [1, 3] },
+                        { 'className': "text-right", "targets": [2] }
+                    ],
+                    order: [[4, 'desc']]
+                });
+            },
+            getData: function() {
+                dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
+            }
+        }
     </script>
 }

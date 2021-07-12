@@ -4,6 +4,7 @@
     ViewData["Title"] = "Expense Category Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 
+    var category = Model.FirstOrDefault()?.ExpenseCategory;
     var from = Context.Request.Query["from"];
     var to = Context.Request.Query["to"];
     var separator = !string.IsNullOrEmpty(to) && !string.IsNullOrEmpty(from) ? " - " : "";
@@ -14,7 +15,7 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
                 <h4 class="page-header">
-                    Expense Details: <small>@Model.FirstOrDefault()?.ExpenseCategory</small>
+                    Expense Details: <small>@category</small>
                 </h4>
                 <em>@from @separator @to</em>
             </div>
@@ -26,7 +27,6 @@
             </div>
         </div>
 
-        <div class="table-responsive">
             <table id="data-table" class="table table-sm table-bordered">
                 <thead>
                     <tr>
@@ -37,29 +37,77 @@
                         <th>Posted By</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @if (item.IsTransportation)
-                                {
-                                <a class="blue-text" href="/Expenses/TransportationCostDetails/@item.Id"> @item.VoucherNo</a>
-                                }
-                                else
-                                {
-                                    @item.VoucherNo
-                                }
-                            </td>
-                            <td class="text-right">৳@item.ExpenseAmount.ToString("#.##")</td>
-                            <td class="text-left">@item.ExpenseFor</td>
-                            <td>@item.ExpenseDate.ToString("d MMM yyyy")</td>
-                            <td>@item.CreateBy</td>
-                        </tr>
-                    }
-                </tbody>
             </table>
-        </div>
     </div>
 </div>
 
+
+@section Scripts {
+    <script>
+        $(function () {
+            dataTable.filter = [];
+            dataTable.filter.push({ Field: "ExpenseCategory", Value: "@category", Operand: dataTable.operand.Equal });
+            dataTable.filter.push({ Field: "ExpenseDate", Value: "@from", Operand: dataTable.operand.GreaterThanOrEqual });
+            dataTable.filter.push({ Field: "ExpenseDate", Value: "@to", Operand: dataTable.operand.LessThanOrEqual });
+
+            dataTable.getData();
+        });
+
+        const dataTable = {
+            table: null,
+            filter: null,
+            init: function() {
+                dataTable.table = $("#data-table").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "/Expenses/GetExpense",
+                        type: "POST",
+                        data: function (d) {
+                            d.filters = dataTable.filter;
+                        }
+                    },
+                    columns:
+                    [
+                        {
+                            data: "VoucherNo",
+                            "render": function(data, type, row, meta) {
+                                return row.IsTransportation ? `<a class="blue-text" href="/Expenses/TransportationCostDetails/${row.Id}">${data}</a>` : data;
+                            }
+                        },
+                        {
+                            data: "ExpenseAmount",
+                            "render": function(data) {
+                                return `${data}/-`
+                            }
+                        },
+                        { data: "ExpenseFor" },
+                        { data: "ExpenseDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
+                        { data: "CreateBy" }
+                    ],
+                    columnDefs: [
+//                        { 'searchable': false, 'targets': [6] },
+//                        { 'sortable': false, 'targets': [6] },
+//                        { 'className': "text-left", "targets": [1, 3] },
+//                        { 'className': "text-right", "targets": [2] }
+                    ],
+//                    order: [[4, 'desc']]
+                });
+            },
+            getData: function() {
+                dataTable.table ? dataTable.table.ajax.reload() : dataTable.init();
+            },
+            operand: {
+                Equal: 0,
+                NotEqual: 1,
+                GreaterThan: 2,
+                LessThan: 3,
+                GreaterThanOrEqual: 4,
+                LessThanOrEqual: 5,
+                Contains: 6,
+                StartsWith: 7,
+                EndsWith: 8
+            }
+        }
+    </script>
+}
