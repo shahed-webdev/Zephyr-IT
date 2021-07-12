@@ -75,4 +75,15 @@ namespace InventoryManagement.Repository
         public string MemoNumber { get; set; }
         public DateTime PurchaseDate { get; set; }
     }
+
+    public class PurchasePaymentRecordViewModel
+    {
+        public int VendorId { get; set; }
+        public string VendorCompanyName { get; set; }
+        public int ReceiptSn { get; set; }
+        public decimal PaidAmount { get; set; }
+        public int? AccountId { get; set; }
+        public string AccountName { get; set; }
+        public DateTime PaidDate { get; set; }
+    }
 }

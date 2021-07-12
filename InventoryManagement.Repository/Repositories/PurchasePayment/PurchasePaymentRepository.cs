@@ -1,4 +1,7 @@
-﻿using InventoryManagement.Data;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using InventoryManagement.Data;
+using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,8 +12,10 @@ namespace InventoryManagement.Repository
 {
     public class PurchasePaymentRepository : Repository<PurchasePayment>, IPurchasePaymentRepository
     {
-        public PurchasePaymentRepository(ApplicationDbContext context) : base(context)
+        private readonly IMapper _mapper;
+        public PurchasePaymentRepository(ApplicationDbContext context, IMapper mapper) : base(context)
         {
+            _mapper = mapper;
         }
 
         public async Task<int> GetNewSnAsync()
@@ -186,6 +191,16 @@ namespace InventoryManagement.Repository
 
                 });
             return customer.FirstOrDefault();
+        }
+
+        public DataResult<PurchasePaymentRecordViewModel> Records(DataRequest request)
+        {
+            return Context.PurchasePayment
+                .Include(p => p.Vendor)
+                .Include(p => p.Account)
+                .OrderBy(p => p.PaidDate)
+                .ProjectTo<PurchasePaymentRecordViewModel>(_mapper.ConfigurationProvider)
+                .ToDataResult(request);
         }
     }
 }

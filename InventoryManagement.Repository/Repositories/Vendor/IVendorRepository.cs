@@ -13,6 +13,7 @@ namespace InventoryManagement.Repository
         Vendor AddCustom(VendorViewModel model);
         void UpdateCustom(VendorViewModel model);
         VendorViewModel FindCustom(int? id);
+        VendorProfileViewModel ProfileDetails(int id);
         void UpdatePaidDue(int id);
         bool RemoveCustom(int id);
         bool IsPhoneExist(string number);

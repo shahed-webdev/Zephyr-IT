@@ -48,17 +48,19 @@ namespace InventoryManagement.Repository
         public List<ExpenseAllViewModel> Records()
         {
             var records = new List<ExpenseAllViewModel>();
-            var t = Context.ExpenseTransportation
-                  .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider)
-                  .ToList();
+            //var t = Context.ExpenseTransportation
+            //      .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider)
+            //      .ToList();
 
-            var g = Context.Expense
-                .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider)
-                .ToList();
+            //var g = Context.Expense
+            //    .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider)
+            //    .ToList();
 
 
-            records.AddRange(g);
-            records.AddRange(t);
+            //records.AddRange(g);
+            //records.AddRange(t);
+            records = Context.VW_ExpenseWithTransportation
+                .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider).ToList();
 
             return records.OrderByDescending(r => r.ExpenseDate).ToList();
         }

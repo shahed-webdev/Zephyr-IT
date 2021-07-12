@@ -27,7 +27,7 @@ namespace InventoryManagement.Repository
             ProductLog = new ProductLogRepository(_context, _mapper);
             ProductStocks = new ProductStockRepository(_context);
             Purchases = new PurchaseRepository(_context);
-            PurchasePayments = new PurchasePaymentRepository(_context);
+            PurchasePayments = new PurchasePaymentRepository(_context, _mapper);
             Registrations = new RegistrationRepository(_context);
             ExpenseCategories = new ExpenseCategoryRepository(_context);
             Expenses = new ExpenseRepository(_context, _mapper);
@@ -36,7 +36,7 @@ namespace InventoryManagement.Repository
             Institutions = new InstitutionRepository(_context);
             Selling = new SellingRepository(_context, _mapper);
             SellingPayments = new SellingPaymentRepository(_context);
-            Vendors = new VendorRepository(_context);
+            Vendors = new VendorRepository(_context, _mapper);
             Warranty = new WarrantyRepository(_context, _mapper);
 
         }
