@@ -30,6 +30,8 @@ namespace InventoryManagement.Repository
                 .ForMember(d => d.ExpenseFor, opt => opt.MapFrom(c => c.ExpenseNote))
                 .ForMember(d => d.ExpenseAmount, opt => opt.MapFrom(c => c.TotalExpense))
                 .ForMember(d => d.IsTransportation, opt => opt.MapFrom(c => true));
+
+            CreateMap<VW_ExpenseWithTransportation, ExpenseAllViewModel>();
         }
     }
 }

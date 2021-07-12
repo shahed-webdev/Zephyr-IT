@@ -36,11 +36,11 @@ namespace InventoryManagement.Repository
 
         public DataResult<ExpenseAllViewModel> RecordsDataTable(DataRequest request)
         {
-            return Context.ExpenseTransportation
+            return Context.VW_ExpenseWithTransportation
                 .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider)
-                .Union(Context.Expense
-                    .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider))
-                .OrderByDescending(r => r.ExpenseDate)
+                //.Union(Context.Expense
+                //    .ProjectTo<ExpenseAllViewModel>(_mapper.ConfigurationProvider))
+                //.OrderByDescending(r => r.ExpenseDate)
                 .ToDataResult(request);
 
         }
