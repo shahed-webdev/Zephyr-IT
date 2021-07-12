@@ -107,20 +107,27 @@ namespace InventoryManagement.Web.Controllers
         {
             if (!id.HasValue) return RedirectToAction("List");
 
-            var model = _db.Customers.ProfileDetails(id.GetValueOrDefault());
+            var model = _db.Vendors.ProfileDetails(id.GetValueOrDefault());
             if (model == null) return NotFound();
 
             return View(model);
         }
 
-        //vendor invoice data-table(ajax)
+        //vendor purchase data-table(ajax)
         [HttpPost]
         public IActionResult PurchaseRecordsData(DataRequest request)
         {
-            var data = _db.Customers.SellingRecord(request);
+            var data = _db.Purchases.Records(request);
             return Json(data);
         }
 
+        //payment
+        [HttpPost]
+        public IActionResult PurchasePaymentRecordsData(DataRequest request)
+        {
+            var data = _db.PurchasePayments.Records(request);
+            return Json(data);
+        }
 
         #endregion
     }

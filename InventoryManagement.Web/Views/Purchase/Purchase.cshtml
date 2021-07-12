@@ -280,9 +280,9 @@
 @section Scripts {
     <partial name="_UnobtrusiveAjaxPartial" />
     <script>
-        const formCode = document.getElementById('modalInsetCode')
+        const formCode = document.getElementById('modalInsetCode');
 
-        // on Product code submit
+        // on product code submit
         formCode.addEventListener('click', evt => {
             const element = evt.target;
             const onCode = element.classList.contains("code");
