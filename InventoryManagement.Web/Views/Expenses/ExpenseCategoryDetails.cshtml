@@ -47,8 +47,15 @@
         $(function () {
             dataTable.filter = [];
             dataTable.filter.push({ Field: "ExpenseCategory", Value: "@category", Operand: dataTable.operand.Equal });
-            dataTable.filter.push({ Field: "ExpenseDate", Value: "@from", Operand: dataTable.operand.GreaterThanOrEqual });
-            dataTable.filter.push({ Field: "ExpenseDate", Value: "@to", Operand: dataTable.operand.LessThanOrEqual });
+            @if (from != "")
+            {
+                @:dataTable.filter.push({ Field: "ExpenseDate", Value: "@from", Operand: dataTable.operand.GreaterThanOrEqual });
+            }
+
+            @if (to != "")
+            {
+                @:dataTable.filter.push({ Field: "ExpenseDate", Value: "@to", Operand: dataTable.operand.LessThanOrEqual });
+            }
 
             dataTable.getData();
         });
@@ -88,10 +95,10 @@
                     columnDefs: [
 //                        { 'searchable': false, 'targets': [6] },
 //                        { 'sortable': false, 'targets': [6] },
-//                        { 'className': "text-left", "targets": [1, 3] },
-//                        { 'className': "text-right", "targets": [2] }
+                        { 'className': "text-left", "targets": [2] },
+                        { 'className': "text-right", "targets": [1] }
                     ],
-//                    order: [[4, 'desc']]
+                    order: [[0, 'asc']]
                 });
             },
             getData: function() {
