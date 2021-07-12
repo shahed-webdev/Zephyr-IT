@@ -206,19 +206,21 @@ namespace InventoryManagement.Repository
 
         public DataResult<PurchaseRecordViewModel> Records(DataRequest request)
         {
-            var r = Context.Purchase.Include(p => p.Vendor).Select(p => new PurchaseRecordViewModel
-            {
-                PurchaseId = p.PurchaseId,
-                VendorId = p.VendorId,
-                VendorCompanyName = p.Vendor.VendorCompanyName,
-                PurchaseSn = p.PurchaseSn,
-                PurchaseAmount = p.PurchaseTotalPrice,
-                PurchasePaidAmount = p.PurchasePaidAmount,
-                PurchaseDiscountAmount = p.PurchaseDiscountAmount,
-                PurchaseDueAmount = p.PurchaseDueAmount,
-                PurchaseDate = p.PurchaseDate,
-                MemoNumber = p.MemoNumber
-            });
+            var r = Context.Purchase
+                .Include(p => p.Vendor)
+                .Select(p => new PurchaseRecordViewModel
+                {
+                    PurchaseId = p.PurchaseId,
+                    VendorId = p.VendorId,
+                    VendorCompanyName = p.Vendor.VendorCompanyName,
+                    PurchaseSn = p.PurchaseSn,
+                    PurchaseAmount = p.PurchaseTotalPrice,
+                    PurchasePaidAmount = p.PurchasePaidAmount,
+                    PurchaseDiscountAmount = p.PurchaseDiscountAmount,
+                    PurchaseDueAmount = p.PurchaseDueAmount,
+                    PurchaseDate = p.PurchaseDate,
+                    MemoNumber = p.MemoNumber
+                }).OrderBy(p => p.PurchaseDate);
             return r.ToDataResult(request);
         }
 

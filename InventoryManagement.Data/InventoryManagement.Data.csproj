@@ -55,6 +55,8 @@
     <Compile Remove="Migrations\20210509084453_AddSellingPurchaseInProductLog.Designer.cs" />
     <Compile Remove="Migrations\20210712100200_AddSellingPromiseDateMissTable.cs" />
     <Compile Remove="Migrations\20210712100200_AddSellingPromiseDateMissTable.Designer.cs" />
+    <Compile Remove="Migrations\20210712120501_test.cs" />
+    <Compile Remove="Migrations\20210712120501_test.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

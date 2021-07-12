@@ -1,4 +1,6 @@
-﻿using InventoryManagement.Data;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using InventoryManagement.Data;
 using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -9,8 +11,11 @@ namespace InventoryManagement.Repository
 {
     public class VendorRepository : Repository<Vendor>, IVendorRepository
     {
-        public VendorRepository(ApplicationDbContext context) : base(context)
+        private readonly IMapper _mapper;
+
+        public VendorRepository(ApplicationDbContext context, IMapper mapper) : base(context)
         {
+            _mapper = mapper;
         }
 
         public async Task<ICollection<VendorViewModel>> ToListCustomAsync()
@@ -105,6 +110,15 @@ namespace InventoryManagement.Repository
                 Description = vendor.Description,
                 Due = vendor.Due
             };
+        }
+
+        public VendorProfileViewModel ProfileDetails(int id)
+        {
+            var vendor = Context.Vendor
+                .ProjectTo<VendorProfileViewModel>(_mapper.ConfigurationProvider)
+                .FirstOrDefault(v => v.VendorId == id);
+
+            return vendor;
         }
 
         public void UpdatePaidDue(int id)
