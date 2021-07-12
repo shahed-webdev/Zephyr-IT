@@ -36,6 +36,7 @@ namespace InventoryManagement.Repository
         List<SellingExpenseListModel> ExpenseList(int sellingId);
 
         bool IsPurchaseIdExist(int purchaseId);
+        Task<DbResponse> PromiseDateChange(int sellingId, DateTime newDate, int registrationId);
     }
 
 

@@ -174,6 +174,7 @@ namespace InventoryManagement.Repository
               .Include(s => s.SellingExpense)
               .Include(s => s.Warranty)
               .Include(s => s.Purchase)
+              .Include(s => s.SellingPromiseDateMisses)
               .Select(s => new SellingReceiptViewModel
               {
                   SellingSn = s.SellingSn,
@@ -238,7 +239,8 @@ namespace InventoryManagement.Repository
                           AcceptanceDate = w.AcceptanceDate,
                           DeliveryDate = w.DeliveryDate,
                           IsDelivered = w.IsDelivered
-                      }).ToList()
+                      }).ToList(),
+                  MissDates = s.SellingPromiseDateMisses.Select(m => m.MissDate).OrderBy(d => d).ToArray()
 
               }).FirstOrDefaultAsync(s => s.SellingId == id);
 
@@ -847,6 +849,29 @@ namespace InventoryManagement.Repository
         public bool IsPurchaseIdExist(int purchaseId)
         {
             return Context.Selling.Any(s => s.PurchaseId == purchaseId);
+        }
+
+        public async Task<DbResponse> PromiseDateChange(int sellingId, DateTime newDate, int registrationId)
+        {
+            var selling = await Context.Selling.FindAsync(sellingId);
+            if (selling == null) return new DbResponse(false, "Data Not Found");
+
+            if (selling.PromisedPaymentDate.GetValueOrDefault() >= newDate) return new DbResponse(false, $"{newDate.ToShortDateString()} not valid date");
+
+            selling.PromisedPaymentDate = newDate;
+
+            var sellingPromiseMissDate = new SellingPromiseDateMiss
+            {
+                RegistrationId = registrationId,
+                SellingId = selling.SellingId,
+                MissDate = newDate
+            };
+
+            Context.Selling.Update(selling);
+            Context.SellingPromiseDateMiss.Add(sellingPromiseMissDate);
+            await Context.SaveChangesAsync().ConfigureAwait(false);
+
+            return new DbResponse(true, "Successfully Changed");
         }
     }
 }

@@ -90,6 +90,7 @@ namespace InventoryManagement.Repository
         public string PurchaseDescription { get; set; }
         public int? PurchaseId { get; set; }
         public int? PurchaseSn { get; set; }
+        public DateTime[] MissDates { get; set; }
     }
 
 

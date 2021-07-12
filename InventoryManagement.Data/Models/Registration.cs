@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace InventoryManagement.Data
 {
-    public partial class Registration
+    public class Registration
     {
         public Registration()
         {
@@ -18,6 +18,7 @@ namespace InventoryManagement.Data
             ExpenseTransportation = new HashSet<ExpenseTransportation>();
             ProductLog = new HashSet<ProductLog>();
             AdminMoneyCollection = new HashSet<AdminMoneyCollection>();
+            SellingPromiseDateMisses = new List<SellingPromiseDateMiss>();
         }
 
         public int RegistrationId { get; set; }
@@ -48,5 +49,7 @@ namespace InventoryManagement.Data
         public virtual ICollection<ExpenseTransportation> ExpenseTransportation { get; set; }
         public virtual ICollection<ProductLog> ProductLog { get; set; }
         public virtual ICollection<AdminMoneyCollection> AdminMoneyCollection { get; set; }
+        public virtual ICollection<SellingPromiseDateMiss> SellingPromiseDateMisses { get; set; }
+
     }
 }

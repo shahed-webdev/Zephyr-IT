@@ -13,6 +13,7 @@ namespace InventoryManagement.Data
             SellingExpense = new HashSet<SellingExpense>();
             Warranty = new HashSet<Warranty>();
             ProductLog = new HashSet<ProductLog>();
+            SellingPromiseDateMisses = new List<SellingPromiseDateMiss>();
         }
 
         public int SellingId { get; set; }
@@ -54,6 +55,7 @@ namespace InventoryManagement.Data
         public virtual ICollection<SellingExpense> SellingExpense { get; set; }
         public virtual ICollection<Warranty> Warranty { get; set; }
         public virtual ICollection<ProductLog> ProductLog { get; set; }
+        public virtual ICollection<SellingPromiseDateMiss> SellingPromiseDateMisses { get; set; }
 
 
         //Purchase Paid amount 
