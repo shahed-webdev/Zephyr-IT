@@ -40,7 +40,9 @@
                     <td class="text-right" style="width: 50px"><strong>Name</strong></td>
                     <td>@Model.CustomerInfo.Name</td>
                     <td class="text-right" style="width: 50px"><strong>Bill&nbsp;No</strong></td>
-                    <td style="width: 90px">@Model.SellingSn</td>
+                    <td style="width: 90px">
+                        <a class="blue-text" href="/Selling/SellingReceipt/@Model.SellingId">@Model.SellingSn</a>   
+                    </td>
                 </tr>
                 <tr>
                     <td class="text-right"><strong>Address</strong></td>
@@ -135,9 +137,9 @@
         </table>
 
         <div class="paid-record row">
-            @if (Model.Payments.Count > 0)
-            {
-                <div class="col">
+            <div class="col">
+                @if (Model.Payments.Count > 0)
+                {
                     <fieldset class="p-2">
                         <legend>Payment Record</legend>
 
@@ -151,8 +153,25 @@
                             </ul>
                         }
                     </fieldset>
-                </div>
-            }
+                }
+                
+                @if (Model.MissDates.Length > 0)
+                {
+                    <fieldset class="p-2 mt-4 d-print-none">
+                        <legend class="red-text">Missed Payment Promise Date</legend>
+
+                        @foreach (var item in Model.MissDates)
+                        {
+                            <ul class="list-group list-group-flush black-text">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <small class="red-text">@item.ToString("d MMM yyyy")</small>
+                                </li>
+                            </ul>
+                        }
+                    </fieldset>
+                }
+            </div>
+
             <div class="col">
                 <form id="formPayment">
                     <h5>Total Due: <strong id="totalDues">@Model.SellingDueAmount</strong>/-</h5>

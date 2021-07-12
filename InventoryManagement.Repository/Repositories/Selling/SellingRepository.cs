@@ -858,15 +858,14 @@ namespace InventoryManagement.Repository
 
             if (selling.PromisedPaymentDate.GetValueOrDefault() >= newDate) return new DbResponse(false, $"{newDate.ToShortDateString()} not valid date");
 
-            selling.PromisedPaymentDate = newDate;
-
             var sellingPromiseMissDate = new SellingPromiseDateMiss
             {
                 RegistrationId = registrationId,
                 SellingId = selling.SellingId,
-                MissDate = newDate
+                MissDate = selling.PromisedPaymentDate.GetValueOrDefault()
             };
 
+            selling.PromisedPaymentDate = newDate;
             Context.Selling.Update(selling);
             Context.SellingPromiseDateMiss.Add(sellingPromiseMissDate);
             await Context.SaveChangesAsync().ConfigureAwait(false);
