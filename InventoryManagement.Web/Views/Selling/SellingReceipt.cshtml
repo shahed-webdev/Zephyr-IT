@@ -7,7 +7,7 @@
 }
 
 @section Styles{
-    <link href="~/css/selling-receipt.css?v=.002" rel="stylesheet"/>
+    <link href="~/css/selling-receipt.css?v=1.0.1" rel="stylesheet"/>
     <style>
         #expenseList .delete { color: red; cursor: pointer }
         #expenseList strong { font-weight: bold;}
@@ -158,24 +158,43 @@
     </table> 
 
     <div class="paid-record row">
-        @if (Model.Payments.Count > 0)
-        {
-            <div class="col-4">
-                <fieldset>
-                    <legend>Payment Record</legend>
+       
+        <div class="col-4">
+            @if (Model.Payments.Count > 0)
+            {
+            <fieldset>
+                <legend>Payment Record</legend>
 
-                    @foreach (var item in Model.Payments)
+                @foreach (var item in Model.Payments)
+                {
+                    <ul class="list-group list-group-flush black-text">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>৳@item.PaidAmount/- <small>@item.PaymentMethod</small></span>
+                            <small>@item.PaidDate.ToString("d MMM yyyy")</small>
+                        </li>
+                    </ul>
+                }
+            </fieldset>
+            }
+
+            @if (Model.MissDates.Length > 0)
+            {
+                <fieldset class="p-2 mt-4 d-print-none">
+                    <legend class="red-text">Missed Payment Promise Date</legend>
+
+                    @foreach (var item in Model.MissDates)
                     {
                         <ul class="list-group list-group-flush black-text">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span>৳@item.PaidAmount/- <small>@item.PaymentMethod</small></span>
-                                <small>@item.PaidDate.ToString("d MMM yyyy")</small>
+                                <small class="red-text">@item.ToString("d MMM yyyy")</small>
                             </li>
                         </ul>
                     }
                 </fieldset>
-            </div>
-        }
+            }
+        </div>
+        
+
         <div class="col">
             <fieldset>
                 <legend>Note</legend>

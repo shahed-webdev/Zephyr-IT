@@ -16,7 +16,7 @@ body { background-color: #fff; }
 #amount-word { font-style: italic; font-size: 13px; color: black; }
 
 .paid-record fieldset {padding: 4px; border: 1px solid #000; }
-.paid-record fieldset legend {width: auto !important; padding: 0 8px; margin-bottom: 0; font-size: 16px; font-weight: bold; color: black !important; }
+.paid-record fieldset legend {width: auto !important; padding: 0 8px; margin-bottom: 0; font-size: 16px; font-weight: bold; color: #000; }
 .paid-record fieldset p { line-height: 16px; color: #000; font-size: small; margin-bottom: 0; }
 .paid-record .list-group-item { padding: .2rem .5rem; border-color: #000; }
 

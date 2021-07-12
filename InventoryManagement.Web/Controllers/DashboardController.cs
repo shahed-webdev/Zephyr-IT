@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using InventoryManagement.Repository;
 using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
@@ -94,13 +95,14 @@ namespace InventoryManagement.Web.Controllers
             return JsonConvert.SerializeObject(admin); //Serialize for image binary data
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+       //promise date update
+       [HttpPost]
+       public async Task<IActionResult> PromiseDateUpdate(int id, DateTime newDate)
+       {
+           var registrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);
+           var response = await _db.Selling.PromiseDateChange(id, newDate, registrationId);
+           
+           return Json(response);
+       }
     }
 }

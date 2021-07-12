@@ -112,6 +112,7 @@
             }
         }
 
+        //edit on click
         const tBody = document.getElementById('data-table');
         tBody.addEventListener('click',
             function(evt) {
@@ -128,6 +129,7 @@
                 element.innerHTML = html;
             });
 
+        //post on enter
         function updateMemo(form) {
             const id = form.parentElement.getAttribute('data-id');
             const newValue = form.inputMemo.value;
