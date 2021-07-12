@@ -418,7 +418,7 @@
                         data: "PromisedPaymentDate",
                         "render": function (data, type, row, meta) {
                             const date = data ? moment(data).format('DD MMM YYYY') : "";
-                            return `<a class="on-edit" data-old="${date}" data-id="${row.SellingId}">${date}</a>`
+                            return `<a title="click on date to update" class="on-edit" data-old="${date}" data-id="${row.SellingId}">${date}</a>`
                         }
                     }
                 ],

@@ -11,19 +11,19 @@
     <style>
         .list-group li strong { color: #777 }
         .list-group li span { margin-left: 8px; color: #000; }
-    </style>  
+    </style>
 }
 
 <div class="m-md-3">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h4 class="page-header">@Model.CustomerName</h4>
-            <a href="/Customer/List"><i class="fal fa-long-arrow-left mr-1"></i>Back to Customers</a>
+            <a href="/Vendor/List"><i class="fal fa-long-arrow-left mr-1"></i>Back to Vendors</a>
         </div>
 
         <div class="md-form input-with-post-icon m-0">
             <input id="inputCustomer" type="text" class="form-control" style="width: auto; display: inline" autocomplete="off" />
-            <label for="inputCustomer">Find Customer</label>
+            <label for="inputCustomer">Find Vendor</label>
             <i class="far fa-search input-prefix"></i>
         </div>
     </div>
@@ -32,7 +32,7 @@
         <div class="row">
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="media white z-depth-1 rounded">
-                    <i class="far fa-money-bill-alt fa-lg blue z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <i class="far fa-money-bill-alt fa-lg brown darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                     <div class="media-body p-1">
                         <p class="text-uppercase text-muted mb-1"><small>sold</small></p>
                         <h5 class="font-weight-bold mb-0">@Model.SoldAmount</h5>
@@ -42,7 +42,7 @@
 
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="media white z-depth-1 rounded">
-                    <i class="fas fa-chart-pie-alt fa-lg deep-purple z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <i class="fas fa-chart-pie-alt fa-lg lime darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                     <div class="media-body p-1">
                         <p class="text-uppercase text-muted mb-1"><small>discount</small></p>
                         <h5 class="font-weight-bold mb-0">@Model.DiscountAmount</h5>
@@ -52,7 +52,7 @@
 
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="media white z-depth-1 rounded">
-                    <i class="fas fa-chart-line fa-lg teal z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <i class="fas fa-chart-line fa-lg mdb-color darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                     <div class="media-body p-1">
                         <p class="text-uppercase text-muted mb-1"><small>paid</small></p>
                         <h5 class="font-weight-bold mb-0">@Model.ReceivedAmount</h5>
@@ -62,12 +62,12 @@
 
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="media white z-depth-1 rounded">
-                    <i class="far fa-chart-line-down fa-lg pink z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <i class="far fa-chart-line-down fa-lg pink darken-3 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                     <div class="media-body p-1">
                         <p class="text-uppercase text-muted mb-1"><small>due</small></p>
                         @if (Model.DueAmount > 0)
                         {
-                            <a href="/Selling/MultipleDueCollection/@Model.CustomerId">
+                            <a href="/Purchase/PayDueMultiple/@Model.CustomerId">
                                 <h5 class="font-weight-bold mb-0">@Model.DueAmount</h5>
                             </a>
                         }
@@ -84,8 +84,8 @@
     <section>
         <div class="row">
             <div class="col-lg-5 mb-3">
-                <ul class="list-group list-group-flush z-depth-1 rounded">
-                    <li class="list-group-item amber accent-2 d-flex justify-content-start align-items-center py-3">
+                <ul class="list-group list-group-flush z-depth-1 rounded white-text">
+                    <li class="list-group-item deep-purple darken-1 d-flex justify-content-start align-items-center py-3">
                         @{
                             var imgSrc = "";
                             imgSrc = Model.Photo != null ? $"data:image/gif;base64,{Convert.ToBase64String(Model.Photo)}" : "/images/defaultImage.jpg";
@@ -120,15 +120,15 @@
                     <div class="card-body">
                         <table id="receipt-data" class="table table-hover">
                             <thead>
-                            <tr>
-                                <th><strong>#Bill No</strong></th>
-                                <th><strong>Amount</strong></th>
-                                <th><strong>Service</strong></th>
-                                <th><strong>Discount</strong></th>
-                                <th><strong>Paid</strong></th>
-                                <th><strong>Due</strong></th>
-                                <th><strong>Date</strong></th>
-                            </tr>
+                                <tr>
+                                    <th><strong>#Bill No</strong></th>
+                                    <th><strong>Amount</strong></th>
+                                    <th><strong>Service</strong></th>
+                                    <th><strong>Discount</strong></th>
+                                    <th><strong>Paid</strong></th>
+                                    <th><strong>Due</strong></th>
+                                    <th><strong>Date</strong></th>
+                                </tr>
                             </thead>
                         </table>
                     </div>
@@ -219,3 +219,5 @@
         }
     </script>
 }
+
+

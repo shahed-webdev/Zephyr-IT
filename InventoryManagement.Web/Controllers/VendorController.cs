@@ -17,6 +17,7 @@ namespace InventoryManagement.Web.Controllers
             _db = db;
         }
 
+        #region Vendor list
         // GET: List
         [Authorize(Roles = "admin, vendor-list")]
         public IActionResult List()
@@ -29,7 +30,9 @@ namespace InventoryManagement.Web.Controllers
             var data = _db.Vendors.ToListDataTable(request);
             return Json(data);
         }
+        #endregion
 
+        #region Vendor CRUD
         // GET: Vendors/Create
         [Authorize(Roles = "admin, vendor")]
         public IActionResult Create()
@@ -95,14 +98,30 @@ namespace InventoryManagement.Web.Controllers
             if (!_db.Vendors.RemoveCustom(id)) return -1;
             return _db.SaveChanges();
         }
+        #endregion
 
-        protected override void Dispose(bool disposing)
+        #region Vendor Details
+
+        //GET:// Details
+        public IActionResult Details(int? id)
         {
-            if (disposing)
-            {
-                _db.Dispose();
-            }
-            base.Dispose(disposing);
+            if (!id.HasValue) return RedirectToAction("List");
+
+            var model = _db.Customers.ProfileDetails(id.GetValueOrDefault());
+            if (model == null) return NotFound();
+
+            return View(model);
         }
+
+        //vendor invoice data-table(ajax)
+        [HttpPost]
+        public IActionResult PurchaseRecordsData(DataRequest request)
+        {
+            var data = _db.Customers.SellingRecord(request);
+            return Json(data);
+        }
+
+
+        #endregion
     }
 }

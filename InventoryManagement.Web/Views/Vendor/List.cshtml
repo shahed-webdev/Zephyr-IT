@@ -62,7 +62,7 @@
                     },
                     columns:
                     [
-                        { data: "VendorCompanyName" },
+                        { data: "VendorCompanyName", "render": function (data, type, row, meta) { return `<a class="blue-text" href="/Vendor/Details/${row.VendorId}">${data}</a>`; } },
                         { data: "VendorName" },
                         { data: "VendorAddress" },
                         { data: "VendorPhone" },
