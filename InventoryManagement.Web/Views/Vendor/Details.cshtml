@@ -64,16 +64,6 @@
 
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="media white z-depth-1 rounded">
-                    <i class="fas fa-chart-pie-alt fa-lg lime darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
-                    <div class="media-body p-1">
-                        <p class="text-uppercase text-muted mb-1"><small>discount</small></p>
-                        <h5 id="total-discount" class="font-weight-bold mb-0">@Model.TotalDiscount</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="media white z-depth-1 rounded">
                     <i class="fas fa-chart-line fa-lg mdb-color darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                     <div class="media-body p-1">
                         <p class="text-uppercase text-muted mb-1"><small>paid</small></p>
@@ -101,22 +91,35 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="media white z-depth-1 rounded">
+                    <i class="fas fa-chart-pie-alt fa-lg lime darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <div class="media-body p-1">
+                        <p class="text-uppercase text-muted mb-1"><small>discount</small></p>
+                        <h5 id="total-discount" class="font-weight-bold mb-0">@Model.TotalDiscount</h5>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <section>
         <div class="row">
             <div class="col-lg-6 mb-3">
-                <h5 class="page-header mb-3">Payment Records</h5>
+                <h5 class="page-header mb-3">Purchase Records</h5>
                 <div class="card">
                     <div class="card-body">
-                        <table id="payment-data" class="table table-hover">
+                        <table id="purchase-data" class="table table-hover">
                             <thead>
                             <tr>
                                 <th><strong>#Bill No</strong></th>
-                                <th><strong>Paid Amount</strong></th>
-                                <th><strong>Account</strong></th>
-                                <th><strong>Paid Date</strong></th>
+                                <th><strong>Memo</strong></th>
+                                <th><strong>Amount</strong></th>
+                                <th><strong>Discount</strong></th>
+                                <th><strong>Paid</strong></th>
+                                <th><strong>Due</strong></th>
+                                <th><strong>Date</strong></th>
                             </tr>
                             </thead>
                         </table>
@@ -124,21 +127,18 @@
                 </div>
             </div>
 
-            <div class="col-lg-6">
-                <h5 class="page-header mb-3">Purchase Records</h5>
+            <div class="col-lg-6 mb-3">
+                <h5 class="page-header mb-3">Payment Records</h5>
                 <div class="card">
                     <div class="card-body">
-                        <table id="purchase-data" class="table table-hover">
+                        <table id="payment-data" class="table table-hover">
                             <thead>
-                                <tr>
-                                    <th><strong>#Bill No</strong></th>
-                                    <th><strong>Memo</strong></th>
-                                    <th><strong>Amount</strong></th>
-                                    <th><strong>Discount</strong></th>
-                                    <th><strong>Paid</strong></th>
-                                    <th><strong>Due</strong></th>
-                                    <th><strong>Date</strong></th>
-                                </tr>
+                            <tr>
+                                <th><strong>#Receipt No</strong></th>
+                                <th><strong>Paid Amount</strong></th>
+                                <th><strong>Account</strong></th>
+                                <th><strong>Paid Date</strong></th>
+                            </tr>
                             </thead>
                         </table>
                     </div>
