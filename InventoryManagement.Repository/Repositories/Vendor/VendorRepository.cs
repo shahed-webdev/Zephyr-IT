@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using InventoryManagement.Data;
 using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -112,11 +113,29 @@ namespace InventoryManagement.Repository
             };
         }
 
-        public VendorProfileViewModel ProfileDetails(int id)
+        public VendorProfileViewModel ProfileDetails(int id, DateTime? fromDate, DateTime? toDate)
         {
+            var sD = fromDate ?? new DateTime(1000, 1, 1);
+            var eD = toDate ?? new DateTime(3000, 12, 31);
             var vendor = Context.Vendor
                 .ProjectTo<VendorProfileViewModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefault(v => v.VendorId == id);
+
+            var sum = Context.Purchase
+                .Where(p => p.PurchaseDate <= eD && p.PurchaseDate >= sD)
+                .GroupBy(s => true)
+                .Select(g => new
+                {
+                    Discount = g.Sum(e => e.PurchaseDiscountAmount),
+                    TotalPrice = g.Sum(e => e.PurchaseTotalPrice),
+                    Due = g.Sum(e => e.PurchaseDueAmount),
+                    Paid = g.Sum(e => e.PurchasePaidAmount),
+                }).FirstOrDefault();
+
+            vendor.Due = sum.Due;
+            vendor.Paid = sum.Paid;
+            vendor.TotalAmount = sum.TotalPrice;
+            vendor.TotalDiscount = sum.Discount;
 
             return vendor;
         }

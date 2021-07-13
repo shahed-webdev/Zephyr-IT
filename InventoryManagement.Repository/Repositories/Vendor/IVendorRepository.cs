@@ -1,5 +1,6 @@
 ﻿using InventoryManagement.Data;
 using JqueryDataTables.LoopsIT;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace InventoryManagement.Repository
         Vendor AddCustom(VendorViewModel model);
         void UpdateCustom(VendorViewModel model);
         VendorViewModel FindCustom(int? id);
-        VendorProfileViewModel ProfileDetails(int id);
+        VendorProfileViewModel ProfileDetails(int id, DateTime? fromDate, DateTime? toDate);
         void UpdatePaidDue(int id);
         bool RemoveCustom(int id);
         bool IsPhoneExist(string number);
