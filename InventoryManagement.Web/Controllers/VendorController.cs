@@ -1,4 +1,5 @@
-﻿using InventoryManagement.Repository;
+﻿using System;
+using InventoryManagement.Repository;
 using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -103,14 +104,22 @@ namespace InventoryManagement.Web.Controllers
         #region Vendor Details
 
         //GET:// Details
-        public IActionResult Details(int? id)
+        public IActionResult Details(int? id, DateTime? from, DateTime? to)
         {
             if (!id.HasValue) return RedirectToAction("List");
 
-            var model = _db.Vendors.ProfileDetails(id.GetValueOrDefault());
-            if (model == null) return NotFound();
+            var model = _db.Vendors.ProfileDetails(id.GetValueOrDefault(), from,to);
+            if (model == null) return RedirectToAction("List");
 
             return View(model);
+        }
+
+        //get details by date
+        [HttpPost]
+        public IActionResult DetailsByDates(int id, DateTime from, DateTime to)
+        {
+            var response = _db.Vendors.ProfileDetails(id, from, to); ;
+            return Json(response);
         }
 
         //vendor purchase data-table(ajax)
