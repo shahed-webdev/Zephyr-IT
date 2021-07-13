@@ -122,7 +122,7 @@ namespace InventoryManagement.Repository
                 .FirstOrDefault(v => v.VendorId == id);
 
             var sum = Context.Purchase
-                .Where(p => p.PurchaseDate <= eD && p.PurchaseDate >= sD)
+                .Where(p => p.VendorId == id && p.PurchaseDate <= eD && p.PurchaseDate >= sD)
                 .GroupBy(s => true)
                 .Select(g => new
                 {
