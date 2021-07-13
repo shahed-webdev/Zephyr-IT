@@ -5,6 +5,8 @@
 }
 
 <div class="container">
+    <h4 class="page-header mb-3">Multiple Bill Pay</h4>
+
     <div class="card card-body">
         <section class="my-4 d-print-none">
             <div class="d-flex justify-content-between align-items-center">
@@ -18,43 +20,43 @@
 
         <table id="tableReceipt" class="table table-sm table-bordered table-hover">
             <thead class="text-center">
-                <tr>
-                    <th><strong>#Bill No</strong></th>
-                    <th><strong>Amount</strong></th>
-                    <th><strong>Discount</strong></th>
-                    <th><strong>Prev.Paid</strong></th>
-                    <th><strong>Due</strong></th>
-                    <th><strong>Paying</strong></th>
-                    <th><strong>Date</strong></th>
-                </tr>
+            <tr>
+                <th><strong>#Bill No</strong></th>
+                <th><strong>Amount</strong></th>
+                <th><strong>Discount</strong></th>
+                <th><strong>Prev.Paid</strong></th>
+                <th><strong>Due</strong></th>
+                <th><strong>Paying</strong></th>
+                <th><strong>Date</strong></th>
+            </tr>
             </thead>
             <tbody>
-                @{
-                    foreach (var item in Model.PurchaseDueRecords)
-                    {
-                        <tr>
-                            <td class="text-center">
-                                <a target="_blank" class="blue-text" href="/Purchase/PurchaseReceipt/@item.PurchaseId">@item.PurchaseSn</a>
-                            </td>
-                            <td class="text-center">@item.PurchaseTotalPrice</td>
-                            <td class="text-right">@item.PurchaseDiscountAmount</td>
-                            <td class="text-right">@item.PurchasePaidAmount</td>
-                            <td class="text-right">@item.PurchaseDueAmount</td>
-                            <td data-id="@item.PurchaseId" class="text-right font-weight-bold">0</td>
-                            <td class="text-right">@item.PurchaseDate.ToString("d MMM yyyy")</td>
-                        </tr>
-                    }
+            @{
+                foreach (var item in Model.PurchaseDueRecords)
+                {
+                    <tr>
+                        <td class="text-center">
+                            <a target="_blank" class="blue-text" href="/Purchase/PurchaseReceipt/@item.PurchaseId">@item.PurchaseSn</a>
+                        </td>
+                        <td class="text-center">@item.PurchaseTotalPrice</td>
+                        <td class="text-right">@item.PurchaseDiscountAmount</td>
+                        <td class="text-right">@item.PurchasePaidAmount</td>
+                        <td class="text-right">@item.PurchaseDueAmount</td>
+                        <td data-id="@item.PurchaseId" class="text-right font-weight-bold">0</td>
+                        <td class="text-right">@item.PurchaseDate.ToString("d MMM yyyy")</td>
+                    </tr>
                 }
+            }
             </tbody>
-        </table>  
+        </table>
 
         <form id="formPaid">
             <div class="form-inline">
                 <div class="md-form">
-                    <input id="inputPaid" step="0.01" min="0" max="@Model.TotalDue" required type="number" class="form-control" placeholder="Total Paid Amount" />
+                    <input id="inputPaid" step="0.01" min="0" max="@Model.TotalDue" required type="number" class="form-control" placeholder="Total Paid Amount"/>
                 </div>
                 <div class="md-form mx-3">
-                    <input id="inputDate" placeholder="Paid Date" type="text" class="form-control datepicker" />
+                    <input id="inputDate" placeholder="Paid Date" type="text" class="form-control datepicker"/>
                 </div>
                 <div class="md-form">
                     <select id="selectPaymentMethod" asp-items="ViewBag.Account" required class="mdb-select mb-0 mt-1 mr-2">
@@ -62,12 +64,12 @@
                     </select>
                 </div>
                 <div class="md-form">
-                    <input id="submitPaid" type="submit" class="btn btn-blue" value="Paid" />
+                    <input id="submitPaid" type="submit" class="btn btn-blue" value="Paid"/>
                     <span id="responseError" class="field-validation-error"></span>
                 </div>
             </div>
         </form>
-        
+
         <a href="/Purchase/DueReceipt">Back To List</a>
     </div>
 </div>
