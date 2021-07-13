@@ -128,12 +128,13 @@ namespace InventoryManagement.Repository
                 {
                     Discount = g.Sum(e => e.PurchaseDiscountAmount),
                     TotalPrice = g.Sum(e => e.PurchaseTotalPrice),
-                    Due = g.Sum(e => e.PurchaseDueAmount),
-                    Paid = g.Sum(e => e.PurchasePaidAmount),
+                    Due = g.Sum(e => e.PurchaseDueAmount)
                 }).FirstOrDefault();
 
+            var paid = Context.PurchasePayment
+                .Where(p => p.VendorId == id && p.PaidDate <= eD && p.PaidDate >= sD).Sum(p => p.PaidAmount);
             vendor.Due = sum.Due;
-            vendor.Paid = sum.Paid;
+            vendor.Paid = paid;
             vendor.TotalAmount = sum.TotalPrice;
             vendor.TotalDiscount = sum.Discount;
 
