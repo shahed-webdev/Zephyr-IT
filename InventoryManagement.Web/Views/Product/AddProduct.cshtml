@@ -109,7 +109,7 @@
                         {
                             data: "Stock",
                             "render": function(data, type, row, meta) {
-                                return data > 0 ? `<a class="blue-text" href="/Product/StockDetails/${row.ProductId}">${data}</a>` : data;
+                                return data > 0 ? `<a target="_blank" class="blue-text" href="/Product/StockDetails/${row.ProductId}">${data}</a>` : data;
                             }
                         },
                         { data: "Warranty" },
@@ -156,14 +156,16 @@
 
         //product details click
         $('#data-table').on("click", ".bill-details", function(evt) {
-  
             $.ajax({
                 url: '/Product/StockOutProductBill',
                 type: "POST",
                 data: { productId: this.id },
                 success: function(response) {
                     if (response) {
-                        location.href = `/Purchase/PurchaseReceipt/${response}`;
+                        const a = document.createElement('a');
+                        a.target= '_blank';
+                        a.href = `/Purchase/PurchaseReceipt/${response}`;
+                        a.click();
                         return;
                     }
 

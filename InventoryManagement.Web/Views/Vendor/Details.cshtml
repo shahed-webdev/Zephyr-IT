@@ -37,16 +37,16 @@
     </div>
 
     <form id="formPost">
-        <div class="d-flex justify-content-end align-items-center mb-4">
+        <div class="d-flex align-items-center mb-4">
             <div class="md-form m-0">
                 <label for="inputFromDate">From Date</label>
-                <input type="text" id="inputFromDate" class="form-control datepicker m-0">
+                <input type="text" name="fromDate" id="inputFromDate" class="form-control datepicker m-0">
             </div>
             <div class="md-form m-0 ml-3">
                 <label for="inputToDate">To Date</label>
-                <input type="text" id="inputToDate" class="form-control datepicker m-0">
+                <input type="text" name="toDate" id="inputToDate" class="form-control datepicker m-0">
             </div>
-            <button type="submit" class="btn btn-warning py-2"><i class="fal fa-search"></i></button>
+            <button type="submit" class="btn btn-deep-orange py-2"><i class="fal fa-search"></i></button>
         </div>
     </form>
 
@@ -57,17 +57,7 @@
                     <i class="far fa-money-bill-alt fa-lg brown darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                     <div class="media-body p-1">
                         <p class="text-uppercase text-muted mb-1"><small>purchase</small></p>
-                        <h5 class="font-weight-bold mb-0">@Model.TotalAmount</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="media white z-depth-1 rounded">
-                    <i class="fas fa-chart-pie-alt fa-lg lime darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
-                    <div class="media-body p-1">
-                        <p class="text-uppercase text-muted mb-1"><small>discount</small></p>
-                        <h5 class="font-weight-bold mb-0">@Model.TotalDiscount</h5>
+                        <h5 id="total-amount" class="font-weight-bold mb-0">@Model.TotalAmount</h5>
                     </div>
                 </div>
             </div>
@@ -77,7 +67,7 @@
                     <i class="fas fa-chart-line fa-lg mdb-color darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
                     <div class="media-body p-1">
                         <p class="text-uppercase text-muted mb-1"><small>paid</small></p>
-                        <h5 class="font-weight-bold mb-0">@Model.Paid</h5>
+                        <h5 id="paid" class="font-weight-bold mb-0">@Model.Paid</h5>
                     </div>
                 </div>
             </div>
@@ -91,13 +81,23 @@
                         @if (Model.Due > 0)
                         {
                             <a href="/Purchase/PayDueMultiple/@Model.VendorId">
-                                <h5 class="font-weight-bold mb-0">@Model.Due</h5>
+                                <h5 id="due" class="font-weight-bold mb-0">@Model.Due</h5>
                             </a>
                         }
                         else
                         {
-                            <h5 class="font-weight-bold mb-0">@Model.Due</h5>
+                            <h5 id="due" class="font-weight-bold mb-0">@Model.Due</h5>
                         }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="media white z-depth-1 rounded">
+                    <i class="fas fa-chart-pie-alt fa-lg lime darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <div class="media-body p-1">
+                        <p class="text-uppercase text-muted mb-1"><small>discount</small></p>
+                        <h5 id="total-discount" class="font-weight-bold mb-0">@Model.TotalDiscount</h5>
                     </div>
                 </div>
             </div>
@@ -107,16 +107,19 @@
     <section>
         <div class="row">
             <div class="col-lg-6 mb-3">
-                <h4 class="page-header mb-3">Payment Records</h4>
+                <h5 class="page-header mb-3">Purchase Records</h5>
                 <div class="card">
                     <div class="card-body">
-                        <table id="payment-data" class="table table-hover">
+                        <table id="purchase-data" class="table table-hover">
                             <thead>
                             <tr>
                                 <th><strong>#Bill No</strong></th>
-                                <th><strong>Paid Amount</strong></th>
-                                <th><strong>Account</strong></th>
-                                <th><strong>Paid Date</strong></th>
+                                <th><strong>Memo</strong></th>
+                                <th><strong>Amount</strong></th>
+                                <th><strong>Discount</strong></th>
+                                <th><strong>Paid</strong></th>
+                                <th><strong>Due</strong></th>
+                                <th><strong>Date</strong></th>
                             </tr>
                             </thead>
                         </table>
@@ -124,21 +127,18 @@
                 </div>
             </div>
 
-            <div class="col-lg-6">
-                <h4 class="page-header mb-3">Purchase Records</h4>
+            <div class="col-lg-6 mb-3">
+                <h5 class="page-header mb-3">Payment Records</h5>
                 <div class="card">
                     <div class="card-body">
-                        <table id="purchase-data" class="table table-hover">
+                        <table id="payment-data" class="table table-hover">
                             <thead>
-                                <tr>
-                                    <th><strong>#Bill No</strong></th>
-                                    <th><strong>Memo</strong></th>
-                                    <th><strong>Amount</strong></th>
-                                    <th><strong>Discount</strong></th>
-                                    <th><strong>Paid</strong></th>
-                                    <th><strong>Due</strong></th>
-                                    <th><strong>Date</strong></th>
-                                </tr>
+                            <tr>
+                                <th><strong>#Receipt No</strong></th>
+                                <th><strong>Paid Amount</strong></th>
+                                <th><strong>Account</strong></th>
+                                <th><strong>Paid Date</strong></th>
+                            </tr>
                             </thead>
                         </table>
                     </div>
@@ -150,18 +150,12 @@
 
 @section Scripts{
     <script>
-        $(function () {
+        $(function() {
             $('.datepicker').pickadate({
                 format: 'd-mmmm-yyyy'
             });
 
-            purchaseDataTable.filter = [];
-            purchaseDataTable.filter.push({ Field: "VendorId", Value: @Model.VendorId, Operand: 0 });
-            purchaseDataTable.getData();
-
-            paymentDataTable.filter = [];
-            paymentDataTable.filter.push({ Field: "VendorId", Value: @Model.VendorId, Operand: 0 });
-            paymentDataTable.getData();
+            initDataTable();
         });
 
         //customer autocomplete
@@ -187,13 +181,51 @@
             }
         })
 
-        //purchase data
+        //init data table with filter
+        function initDataTable(dates) {
+            purchaseDataTable.filter = [];
+            purchaseDataTable.filter.push({ Field: "VendorId", Value: @Model.VendorId, Operand: 0 });
+
+            paymentDataTable.filter = [];
+            paymentDataTable.filter.push({ Field: "VendorId", Value: @Model.VendorId, Operand: 0 });
+
+            if (dates) {
+                if (dates.from)
+                    purchaseDataTable.filter.push({ Field: "PurchaseDate", Value: dates.from, Operand: 4 });
+
+                if (dates.to)
+                    purchaseDataTable.filter.push({ Field: "PurchaseDate", Value: dates.to, Operand: 5 });
+
+                if (dates.from)
+                    paymentDataTable.filter.push({ Field: "PaidDate", Value: dates.from, Operand: 4 });
+
+                if (dates.to)
+                    paymentDataTable.filter.push({ Field: "PaidDate", Value: dates.to, Operand: 5 });
+            }
+
+            purchaseDataTable.getData();
+            paymentDataTable.getData();
+        }
+
+        //show dates on print
+        function showDateOnPrint() {
+            const from = formPost.fromDate.value;
+            const to = formPost.toDate.value;
+            const toSeparator = from && to ? ` - ${to}` : to ? `upto ${to}` : "";
+
+            const dates = `<em>${from} ${toSeparator}</em>`;
+            return dates;
+        }
+
+        //purchase data table
         const purchaseDataTable = {
             table: null,
             init: function() {
                 purchaseDataTable.table = $("#purchase-data").DataTable({
                     processing: true,
                     serverSide: true,
+                    dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>><"row"<"col-sm-12"<tr>>><"row"<"col-sm-5"i><"col-sm-7"p>>',
+                    buttons: purchaseDataTable.button,
                     language: { infoFiltered: "" },
                     ajax: {
                         url: "/Vendor/PurchaseRecordsData",
@@ -210,10 +242,10 @@
                                 return `<a class="blue-text" href="/Purchase/PurchaseReceipt/${row.PurchaseId}">${data}</a>`;
                             }
                         },
-                            { data: "MemoNumber", "render": purchaseDataTable.addSign },
-                            { data: "PurchaseAmount", "render": purchaseDataTable.addSign },
-                            { data: "PurchaseDiscountAmount", "render": purchaseDataTable.addSign },
-                            { data: "PurchasePaidAmount", "render": purchaseDataTable.addSign },
+                        { data: "MemoNumber", "render": purchaseDataTable.addSign },
+                        { data: "PurchaseAmount", "render": purchaseDataTable.addSign },
+                        { data: "PurchaseDiscountAmount", "render": purchaseDataTable.addSign },
+                        { data: "PurchasePaidAmount", "render": purchaseDataTable.addSign },
                         {
                             data: "PurchaseDueAmount",
                             "render": function(data, type, row, meta) {
@@ -233,44 +265,142 @@
             getData: function() {
                 purchaseDataTable.table ? purchaseDataTable.table.ajax.reload() : purchaseDataTable.init();
             },
-            addSign: function(data) { return `${data}/-` }
+            addSign: function(data) { return `${data}/-` },
+            button: {
+                buttons: [
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        title: '',
+                        exportOptions: {
+                            //columns: [0,1] //Column value those print
+                        
+                        },
+                        customize: function(win) {
+                            $(win.document.body).prepend(`
+                            <nav class="mb-3 navbar peach-gradient">
+                                <a class="navbar-brand ml-1">
+                                <span>Zephyr</span> IT</a>
+                            </nav>
+                            <h3 class="h3-responsive">
+                               ${$('h4').text()}
+                            </h3>
+                           <strong>Purchase Records: ${showDateOnPrint()}</strong>`);
+                        },
+                        autoPrint: true
+                    }
+                ],
+                dom: {
+                    button: {
+                        className: 'btn btn-dark btn-rounded btn-sm my-0'
+                    }
+                }
+            }
         }
 
-        //payment data
+        //payment data table
         const paymentDataTable = {
             table: null,
-            init: function () {
+            init: function() {
                 paymentDataTable.table = $("#payment-data").DataTable({
                     processing: true,
                     serverSide: true,
+                    dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>><"row"<"col-sm-12"<tr>>><"row"<"col-sm-5"i><"col-sm-7"p>>',
+                    buttons: paymentDataTable.button,
                     language: { infoFiltered: "" },
                     ajax: {
                         url: "/Vendor/PurchasePaymentRecordsData",
                         type: "POST",
-                        data: function (d) {
+                        data: function(d) {
                             d.filters = paymentDataTable.filter;
                         }
                     },
                     columns:
-                        [
-                            { data: "ReceiptSn" },
-                            { data: "PaidAmount", "render": paymentDataTable.addSign },
-                            { data: "AccountName" },
-                            { data: "PaidDate", "render": function (data) { return moment(data).format('DD MMM YYYY') } }
-                        ],
+                    [
+                        { data: "ReceiptSn" },
+                        { data: "PaidAmount", "render": paymentDataTable.addSign },
+                        { data: "AccountName" },
+                        { data: "PaidDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } }
+                    ],
                     columnDefs: [
                         { 'searchable': false, 'targets': [1] },
                         { 'className': "text-right", "targets": [1] },
-                        { 'className': "text-center", "targets": [0,2,3] }
+                        { 'className': "text-center", "targets": [0, 2, 3] }
                     ],
                     order: [[3, 'desc']]
                 });
             },
-            getData: function () {
+            getData: function() {
                 paymentDataTable.table ? paymentDataTable.table.ajax.reload() : paymentDataTable.init();
             },
-            addSign: function (data) { return `${data}/-` }
+            addSign: function(data) { return `${data}/-` },
+            button: {
+                buttons: [
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        title: '',
+                        exportOptions: {
+                            //columns: [0,1] //Column value those print
+                        
+                        },
+                        customize: function(win) {
+                            $(win.document.body).prepend(`
+                            <nav class="mb-3 navbar peach-gradient">
+                                <a class="navbar-brand ml-1">
+                                <span>Zephyr</span> IT</a>
+                            </nav>
+                            <h3 class="h3-responsive">
+                               ${$('h4').text()}
+                            </h3>
+                           <strong>Payment Records: ${showDateOnPrint()}</strong>`);
+                        },
+                        autoPrint: true
+                    }
+                ],
+                dom: {
+                    button: {
+                        className: 'btn btn-dark btn-rounded btn-sm my-0'
+                    }
+                }
+            }
         }
+
+        //find by date
+        const formPost = document.getElementById("formPost");
+        formPost.addEventListener("submit",
+            function(evt) {
+                evt.preventDefault();
+
+                const dates = { from: this.fromDate.value, to: this.toDate.value };
+
+                //init data-table
+                initDataTable(dates);
+
+                //get total amount
+                const totalAmount = document.getElementById("total-amount");
+                const totalDiscount = document.getElementById("total-discount");
+                const paid = document.getElementById("paid");
+                const due = document.getElementById("due");
+
+                dates.id = "@Model.VendorId";
+                $.ajax({
+                    url: '/Vendor/DetailsByDates',
+                    type: "POST",
+                    data: dates,
+                    success: function (response) {
+                        const { TotalAmount, TotalDiscount, Paid, Due } = response;
+
+                        totalAmount.textContent = TotalAmount.toFixed(2);
+                        totalDiscount.textContent = TotalDiscount.toFixed(2);
+                        paid.textContent = Paid.toFixed(2);
+                        due.textContent = Due.toFixed(2);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
     </script>
 }
 

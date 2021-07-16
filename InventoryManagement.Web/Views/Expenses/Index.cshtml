@@ -57,7 +57,8 @@
                         { data: "CreateBy" },
                         {
                             data: "Id",
-                            "render": function(data, type, row, meta) {
+                            "render": function (data, type, row, meta) {
+                                console.log(row.IsTransportation)
                                 const link = row.IsTransportation ? `TransportationCostDetails` : `GeneralExpenseDetails`;
                                 return `<a class="${row.IsApproved ? "text-success" : "text-danger"}" href="/Expenses/${link}/${row.Id}">Details</a>`;
                             }
