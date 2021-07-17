@@ -46,6 +46,7 @@ namespace InventoryManagement.Repository
                 {
                     response.IsSuccess = false;
                     response.Message = "Paid amount is greater than due";
+                    return response;
                 }
 
                 if (model.PaidAmount > 0)
