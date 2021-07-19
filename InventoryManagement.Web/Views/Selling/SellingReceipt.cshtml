@@ -10,8 +10,10 @@
     <link href="~/css/selling-receipt.css?v=1.0.1" rel="stylesheet"/>
     <style>
         #expenseList .delete { color: red; cursor: pointer }
-        #expenseList strong { font-weight: bold;}
-        .product-changed{ text-decoration: line-through; color: #777}
+        #expenseList strong { font-weight: bold; }
+        .product-changed { text-decoration: line-through; color: #777 }
+
+        .table-bordered { border: none; }
     </style>
 }
 
@@ -158,7 +160,6 @@
     </table> 
 
     <div class="paid-record row">
-       
         <div class="col-4">
             @if (Model.Payments.Count > 0)
             {
