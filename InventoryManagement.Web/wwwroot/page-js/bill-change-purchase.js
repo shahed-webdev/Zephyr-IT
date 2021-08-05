@@ -90,8 +90,8 @@ const purchaseUpdate = (function() {
     }
 
 
-    /**** ADD CODE ****/
-    //add product code
+    /**** ADD NEW CODE ****/
+    //add new product code
     const formAddCode = document.getElementById("formAddCode");
     formAddCode.addEventListener("submit",
         function(evt) {
@@ -264,7 +264,7 @@ const purchaseUpdate = (function() {
                 }
             });
 
-            PurchaseList.Quantity = PurchaseList.ProductStocks.length;
+            PurchaseList.Quantity = PurchaseList.ProductStocks.filter(item => !item.isRemove).length;
             cartStorage[index] = PurchaseList;
 
             renderTable();
