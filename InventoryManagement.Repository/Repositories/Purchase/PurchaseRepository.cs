@@ -516,19 +516,23 @@ namespace InventoryManagement.Repository
                 var codes = model.PurchaseList.SelectMany(l => l.AddedProductCodes).ToArray();
                 var stockList = Context
                     .ProductStock
+                    .Include(p => p.PurchaseList)
                     .Where(s => s.PurchaseList.PurchaseId == model.PurchaseId && codes.Contains(s.ProductCode))
                     .ToList();
-                //  var logs = purchase.PurchaseList.SelectMany(p => p.ProductStock.Select(c => new ProductLogAddModel
-                var productLogs = stockList.Select(c => new ProductLogAddModel
+
+                if (stockList.Any())
                 {
-                    PurchaseId = model.PurchaseId,
-                    ProductStockId = c.ProductStockId,
-                    ActivityByRegistrationId = registrationId,
-                    Details = $"Bill Updated: Product Buy at Receipt No: {purchase.PurchaseSn}",
-                    LogStatus = ProductLogStatus.PurchaseUpdate
-                }).ToList();
-                //Product log
-                db.ProductLog.AddList(productLogs);
+                    var productLogs = stockList.Select(c => new ProductLogAddModel
+                    {
+                        PurchaseId = model.PurchaseId,
+                        ProductStockId = c.ProductStockId,
+                        ActivityByRegistrationId = registrationId,
+                        Details = $"Bill Updated: Product Buy at Receipt No: {purchase.PurchaseSn}",
+                        LogStatus = ProductLogStatus.PurchaseUpdate
+                    }).ToList();
+                    //Product log
+                    db.ProductLog.AddList(productLogs);
+                }
             }
             catch (Exception e)
             {
