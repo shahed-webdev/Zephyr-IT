@@ -37,6 +37,7 @@ namespace InventoryManagement.Repository
         public decimal PurchaseDiscountAmount { get; set; }
         public decimal PurchasePaidAmount { get; set; }
         public decimal PurchaseDueAmount { get; set; }
+        public decimal PurchaseReturnAmount { get; set; }
         public string MemoNumber { get; set; }
         public DateTime PurchaseDate { get; set; }
         public ICollection<ProductViewModel> Products { get; set; }
@@ -94,6 +95,7 @@ namespace InventoryManagement.Repository
         public PurchaseUpdatePostModel()
         {
             PurchaseList = new HashSet<PurchaseUpdateProductPostModel>();
+            RemovedProductStockIds = new int[] { };
         }
         public int PurchaseId { get; set; }
         public decimal PurchaseTotalPrice { get; set; }
@@ -108,6 +110,10 @@ namespace InventoryManagement.Repository
 
     public class PurchaseUpdateProductPostModel
     {
+        public PurchaseUpdateProductPostModel()
+        {
+            AddedProductCodes = new string[]{ };
+        }
         public int PurchaseListId { get; set; }
         public int ProductId { get; set; }
         public string Description { get; set; }

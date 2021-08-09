@@ -10,7 +10,11 @@
 }
 
 <section class="d-flex justify-content-between my-4 d-print-none">
-    <a class="btn btn-success btn-rounded" href="/Purchase/PayDue/@Model.PurchaseId"><i class="fas fa-money-bill-alt mr-1"></i>Pay Due</a>
+    <div>
+        <a class="btn btn-success btn-rounded" href="/Purchase/PayDue/@Model.PurchaseId"><i class="fas fa-money-bill-alt mr-1"></i>Pay Due</a>
+        <a class="btn btn-brown btn-rounded" href="/Purchase/UpdatePurchaseBill/@Model.PurchaseId"><i class="fas fa-pen mr-1"></i>Update</a>
+    </div>
+    
     <div>
         <a class="btn btn-elegant btn-rounded" href="/Purchase/Purchase"><i class="fas fa-shopping-cart mr-1"></i>Purchase</a>
         <button class="btn btn-amber btn-rounded" onclick="print()"><i class="fas fa-print mr-1"></i>Print</button>
@@ -101,8 +105,12 @@
                         }
 
                         <h5>Paid: <strong> @Model.PurchasePaidAmount/-</strong></h5>
+                        @if (Model.PurchaseReturnAmount > 0)
+                        {
+                            <h5>Return Amount: <strong>@Model.PurchaseReturnAmount/-</strong></h5>
+                        }
                         <h5>Due: <strong>@Model.PurchaseDueAmount/-</strong></h5>
-                    </div>
+                    </div> 
                 </td>
             </tr>
         </tbody>

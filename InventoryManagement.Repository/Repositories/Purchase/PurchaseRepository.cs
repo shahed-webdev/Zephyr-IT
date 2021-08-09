@@ -163,6 +163,7 @@ namespace InventoryManagement.Repository
                     PurchaseDiscountAmount = p.PurchaseDiscountAmount,
                     PurchasePaidAmount = p.PurchasePaidAmount,
                     PurchaseDueAmount = p.PurchaseDueAmount,
+                    PurchaseReturnAmount = p.PurchaseReturnAmount,
                     PurchaseDate = p.PurchaseDate,
                     MemoNumber = p.MemoNumber,
                     Products = p.PurchaseList.Select(pd => new ProductViewModel
