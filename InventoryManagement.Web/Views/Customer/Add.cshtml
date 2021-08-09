@@ -85,11 +85,14 @@
                             <span class="corporate-field">Corporate Name</span>
                         </label>
                     </div>
-
-                    <div class="md-form mb-5">
-                        <input id="DueLimit" name="DueLimit" step="0.01" type="number" min="0" class="form-control" value="0" />
-                        <label for="DueLimit">Due Limit</label>
-                    </div>
+                    
+                    @if (!isSalesmen)
+                    {
+                        <div class="md-form mb-5">
+                            <input id="DueLimit" name="DueLimit" step="0.01" type="number" min="0" class="form-control" value="0"/>
+                            <label for="DueLimit">Due Limit</label>
+                        </div>
+                    }
 
                     <div class="individual-field">
                         <div class="md-form form-sm mb-0">

@@ -26,89 +26,91 @@
                     imgSrc = Model.Photo != null ? $"data:image/png;base64,{Convert.ToBase64String(Model.Photo)}" : "/images/defaultImage.jpg";
                 }
 
-            <div class="text-center my-2">
-                <img src="@imgSrc" class="rounded-circle z-depth-1 img-thumbnail" style="height:100px; width:100px" alt="Photo" />
-            </div>
-
-            <form id="customer-form" asp-action="Update">
-                <input id="customerId" type="hidden" name="CustomerId" value="@Model.CustomerId">
-               
-                <div class="text-center mt-4">
-                    <div class="custom-control custom-radio custom-control-inline">
-                        <input id="radioIndividual" asp-for="IsIndividual" value="true" type="radio" class="custom-control-input" onchange="radioSelected(this)">
-                        <label class="custom-control-label" for="radioIndividual">Individual</label>
-                    </div>
-
-                    <div class="custom-control custom-radio custom-control-inline">
-                        <input id="radioCorporate" asp-for="IsIndividual" value="false" type="radio" class="custom-control-input" onchange="radioSelected(this)">
-                        <label class="custom-control-label" for="radioCorporate">Corporate</label>
-                    </div>
+                <div class="text-center my-2">
+                    <img src="@imgSrc" class="rounded-circle z-depth-1 img-thumbnail" style="height:100px; width:100px" alt="Photo" />
                 </div>
 
-                <div id="phone-wrapper" class="mb-5">
-                    <partial name="_UpdatePhonePartial" model="@Model.PhoneNumbers" />
-                </div>
+                <form id="customer-form" asp-action="Update">
+                    <input id="customerId" type="hidden" name="CustomerId" value="@Model.CustomerId">
 
-                <div class="md-form mb-5">
-                    <input asp-for="CustomerName" class="form-control" required />
-                    <label asp-for="CustomerName">
-                        <span class="individual-field">Name</span>
-                        <span class="corporate-field">Concerned Person</span>
-                    </label>
-                </div>
-                <div class="md-form mb-5">
-                    <input asp-for="CustomerAddress" class="form-control" />
-                    <label asp-for="CustomerAddress">Address</label>
-                </div>
-                <div class="md-form mb-5">
-                    <input asp-for="Designation" type="text" class="form-control" />
-                    <label for="Designation">
-                        <span class="individual-field">Occupation</span>
-                        <span class="corporate-field">Designation</span>
-                    </label>
-                </div>
-                <div class="md-form mb-5 individual-field">
-                    <input asp-for="Description" class="form-control" />
-                    <label asp-for="Description">Note</label>
-                </div>
-                <div class="md-form mb-5">
-                    <input asp-for="OrganizationName" class="form-control" />
-                    <label asp-for="OrganizationName">
-                        <span class="individual-field">Working Station</span>
-                        <span class="corporate-field">Corporate Name</span>
-                    </label>
-                </div>
-                <div class="md-form mb-5">
-                    <input asp-for="DueLimit" step="0.01" type="number" class="form-control" />
-                    <label asp-for="DueLimit">Due Limit</label>
-                </div>
+                    <div class="text-center mt-4">
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input id="radioIndividual" asp-for="IsIndividual" value="true" type="radio" class="custom-control-input" onchange="radioSelected(this)">
+                            <label class="custom-control-label" for="radioIndividual">Individual</label>
+                        </div>
 
-                <div class="individual-field">
-                    <div class="md-form form-sm mb-0">
-                        <input type="hidden" id="Photo" name="Photo" />
-                        <div class="file-field">
-                            <div class="btn btn-outline-warning btn-rounded btn-sm float-left">
-                                <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose</span>
-                                <input type="file" id="upload" value="Choose a Photo" onchange="clearImage(this)">
-                            </div>
-                            <div class="file-path-wrapper">
-                                <input class="file-path validate" type="text" placeholder="Upload photo" />
-                            </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input id="radioCorporate" asp-for="IsIndividual" value="false" type="radio" class="custom-control-input" onchange="radioSelected(this)">
+                            <label class="custom-control-label" for="radioCorporate">Corporate</label>
                         </div>
                     </div>
 
-                    <div class="w-50 m-auto text-center">
-                        <div id="upload-demo" style="display:none;"></div>
-                        <img id="prevImage" alt="" />
-                        <a id="doneButton" class="btn-floating btn-lg btn-black" style="display:none;"><i class="fas fa-crop-alt"></i></a>
+                    <div id="phone-wrapper" class="mb-5">
+                        <partial name="_UpdatePhonePartial" model="@Model.PhoneNumbers" />
                     </div>
-                </div>
 
-                <div class="d-flex justify-content-between align-items-center">
-                    <button id="btnSubmit" class="btn peach-gradient btn-rounded my-4 waves-effect" type="submit">Update Customer</button>
-                    <a asp-action="List">Back to List</a>
-                </div>
-            </form>     
+                    <div class="md-form mb-5">
+                        <input asp-for="CustomerName" class="form-control" required />
+                        <label asp-for="CustomerName">
+                            <span class="individual-field">Name</span>
+                            <span class="corporate-field">Concerned Person</span>
+                        </label>
+                    </div>
+                    <div class="md-form mb-5">
+                        <input asp-for="CustomerAddress" class="form-control" />
+                        <label asp-for="CustomerAddress">Address</label>
+                    </div>
+                    <div class="md-form mb-5">
+                        <input asp-for="Designation" type="text" class="form-control" />
+                        <label for="Designation">
+                            <span class="individual-field">Occupation</span>
+                            <span class="corporate-field">Designation</span>
+                        </label>
+                    </div>
+                    <div class="md-form mb-5 individual-field">
+                        <input asp-for="Description" class="form-control" />
+                        <label asp-for="Description">Note</label>
+                    </div>
+                    <div class="md-form mb-5">
+                        <input asp-for="OrganizationName" class="form-control" />
+                        <label asp-for="OrganizationName">
+                            <span class="individual-field">Working Station</span>
+                            <span class="corporate-field">Corporate Name</span>
+                        </label>
+                    </div>
+                    @if (!isSalesmen)
+                    {
+                        <div class="md-form mb-5">
+                            <input asp-for="DueLimit" step="0.01" type="number" class="form-control" />
+                            <label asp-for="DueLimit">Due Limit</label>
+                        </div>
+                    }
+                    <div class="individual-field">
+                        <div class="md-form form-sm mb-0">
+                            <input type="hidden" id="Photo" name="Photo" />
+                            <div class="file-field">
+                                <div class="btn btn-outline-warning btn-rounded btn-sm float-left">
+                                    <span><i class="fas fa-upload mr-2" aria-hidden="true"></i>Choose</span>
+                                    <input type="file" id="upload" value="Choose a Photo" onchange="clearImage(this)">
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input class="file-path validate" type="text" placeholder="Upload photo" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-50 m-auto text-center">
+                            <div id="upload-demo" style="display:none;"></div>
+                            <img id="prevImage" alt="" />
+                            <a id="doneButton" class="btn-floating btn-lg btn-black" style="display:none;"><i class="fas fa-crop-alt"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button id="btnSubmit" class="btn peach-gradient btn-rounded my-4 waves-effect" type="submit">Update Customer</button>
+                        <a asp-action="List">Back to List</a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

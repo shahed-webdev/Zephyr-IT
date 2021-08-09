@@ -573,24 +573,22 @@ function appendInfo(item) {
 
 //check customer due limit
 function checkDueLimit() {
-    const infoContainer = formPayment.querySelector('#customerInfo')
+    const infoContainer = formPayment.querySelector('#customerInfo');
     if (!infoContainer.innerHTML) return;
 
-    const prevDue = +formPayment.querySelector('#prevDue').textContent || 0
+    const prevDue = +formPayment.querySelector('#prevDue').textContent || 0;
     const currentDue = +totalDue.textContent
-    const dueLimit = +formPayment.querySelector('#dueLimit').textContent || 0
-
-    if (dueLimit === 0) return true;
-
     const due = prevDue + currentDue;
 
-    customerError.innerText = ''
+    customerError.innerText = '';
+    const dueLimit = +formPayment.querySelector('#dueLimit').textContent || 0;
+
     if (due > dueLimit) {
-        customerError.innerText = 'Current due greater than due limit!';
-        return false
+        customerError.innerText = `Customer Due limit ${dueLimit}/-`;
+        return false;
     }
 
-    return true  
+    return true;
 }
 
 //remove localstorage
