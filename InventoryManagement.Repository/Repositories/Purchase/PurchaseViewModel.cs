@@ -94,6 +94,7 @@ namespace InventoryManagement.Repository
         public PurchaseUpdatePostModel()
         {
             PurchaseList = new HashSet<PurchaseUpdateProductPostModel>();
+            RemovedProductStockIds = new int[] { };
         }
         public int PurchaseId { get; set; }
         public decimal PurchaseTotalPrice { get; set; }
@@ -108,6 +109,10 @@ namespace InventoryManagement.Repository
 
     public class PurchaseUpdateProductPostModel
     {
+        public PurchaseUpdateProductPostModel()
+        {
+            AddedProductCodes = new string[]{ };
+        }
         public int PurchaseListId { get; set; }
         public int ProductId { get; set; }
         public string Description { get; set; }
