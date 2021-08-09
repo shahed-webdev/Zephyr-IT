@@ -37,6 +37,7 @@ namespace InventoryManagement.Repository
         public decimal PurchaseDiscountAmount { get; set; }
         public decimal PurchasePaidAmount { get; set; }
         public decimal PurchaseDueAmount { get; set; }
+        public decimal PurchaseReturnAmount { get; set; }
         public string MemoNumber { get; set; }
         public DateTime PurchaseDate { get; set; }
         public ICollection<ProductViewModel> Products { get; set; }

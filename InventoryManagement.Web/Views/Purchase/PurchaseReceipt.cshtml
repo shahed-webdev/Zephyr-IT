@@ -105,8 +105,12 @@
                         }
 
                         <h5>Paid: <strong> @Model.PurchasePaidAmount/-</strong></h5>
+                        @if (Model.PurchaseReturnAmount > 0)
+                        {
+                            <h5>Return Amount: <strong>@Model.PurchaseReturnAmount/-</strong></h5>
+                        }
                         <h5>Due: <strong>@Model.PurchaseDueAmount/-</strong></h5>
-                    </div>
+                    </div> 
                 </td>
             </tr>
         </tbody>
