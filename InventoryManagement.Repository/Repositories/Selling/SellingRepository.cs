@@ -49,6 +49,15 @@ namespace InventoryManagement.Repository
                 return response;
             }
 
+            var due = (model.SellingTotalPrice + model.ServiceCharge) - (model.SellingPaidAmount + model.SellingDiscountAmount);
+
+            if (due > 0 && db.Customers.IsDueLimitCrossed(model.CustomerId, due))
+            {
+                response.Message = "Customer Due limit crossed";
+                response.IsSuccess = false;
+                return response;
+            }
+
             var newSellingSn = await GetNewSnAsync().ConfigureAwait(false);
             var newSellingPaymentSn = await db.SellingPayments.GetNewSnAsync().ConfigureAwait(false);
             var sellingStock = await db.ProductStocks.SellingStockFromCodesAsync(codes);
@@ -680,6 +689,13 @@ namespace InventoryManagement.Repository
                 {
                     response.IsSuccess = false;
                     response.Message = "Due cannot be less than zero";
+                    return response;
+                }
+
+                if (due > selling.SellingDueAmount && db.Customers.IsDueLimitCrossed(selling.CustomerId, due - selling.SellingDueAmount))
+                {
+                    response.Message = "Customer Due limit crossed";
+                    response.IsSuccess = false;
                     return response;
                 }
 

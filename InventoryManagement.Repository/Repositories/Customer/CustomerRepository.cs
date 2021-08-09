@@ -221,6 +221,13 @@ namespace InventoryManagement.Repository
                 }).ToDataResult(request);
         }
 
+        public bool IsDueLimitCrossed(int customerId, decimal newDue)
+        {
+            var customer = Context.Customer.Find(customerId);
+
+            return customer.DueLimit < customer.Due + newDue;
+        }
+
 
         public void AddCustom(CustomerAddUpdateViewModel model)
         {
