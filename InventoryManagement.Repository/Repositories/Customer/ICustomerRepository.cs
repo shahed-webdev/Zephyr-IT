@@ -19,5 +19,7 @@ namespace InventoryManagement.Repository
         decimal TotalDue();
         ICollection<CustomerDueViewModel> TopDue(int totalCustomer);
         DataResult<CustomerDueViewModel> TopDueDataTable(DataRequest request);
+
+        bool IsDueLimitCrossed(int customerId, decimal newDue);
     }
 }
