@@ -120,31 +120,6 @@
             <form id="formPayment">
                 <div class="card card-body mb-3">
                     <ul class="mb-0">
-                        <li class="md-form">
-                            <input id="inputServiceCharge" step="0.01" type="number" min="0" value="@Model.ServiceCharge" class="form-control">
-                            <label for="inputServiceCharge">Service Charge</label>
-                        </li>
-                        <li class="d-flex justify-content-between align-items-center">
-                            <strong>Total Amount</strong>
-                            <strong><span id="totalPrice">@(Model.SellingTotalPrice + Model.ServiceCharge)</span>/-</strong>
-                        </li>
-                        <li class="md-form">
-                            <textarea id="inputServiceChargeDescription" rows="1" class="md-textarea form-control">@Model.ServiceChargeDescription</textarea>
-                            <label for="inputServiceChargeDescription">Service Charge Description</label>
-                        </li>
-                        <li class="md-form">
-                            <input id="inputServiceCost" step="0.01" value="@Model.ServiceCost" type="number" min="0" class="form-control">
-                            <label for="inputServiceCost">Service Cost</label>
-                        </li>
-                        <li class="d-flex justify-content-between align-items-center">
-                            <strong>Total Expense <a href="/Selling/SellingReceipt/@Model.SellingId"><i class="fas fa-plus-circle"></i></a></strong>
-                            <strong>@Model.ExpenseTotal/-</strong>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="card card-body mb-3">
-                    <ul class="mb-0">
                         <li class="md-form mt-4">
                             <label for="inputDiscount">Discount</label>
                             <input id="inputDiscount" step="0.01" type="number" min="0" class="form-control" value="@Model.SellingDiscountAmount">
@@ -176,6 +151,37 @@
                             <label for="inputPromisedDate">Promised Payment Date</label>
                         </li>
                     </ul>
+                    
+                    <div class="text-center">
+                        <i id="customer-error" class="mt-2 text-center red-text"></i>
+                        <input type="hidden" id="hiddenSellingId" value="@Model.SellingId" />
+                        <button type="submit" id="btnSelling" class="btn purple-gradient btn-rounded btn-block mt-0">UPDATE BILL</button>
+                    </div>
+                </div>
+
+                <div class="card card-body mb-3">
+                    <ul class="mb-0">
+                        <li class="md-form">
+                            <input id="inputServiceCharge" step="0.01" type="number" min="0" value="@Model.ServiceCharge" class="form-control">
+                            <label for="inputServiceCharge">Service Charge</label>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center">
+                            <strong>Total Amount</strong>
+                            <strong><span id="totalPrice">@(Model.SellingTotalPrice + Model.ServiceCharge)</span>/-</strong>
+                        </li>
+                        <li class="md-form">
+                            <textarea id="inputServiceChargeDescription" rows="1" class="md-textarea form-control">@Model.ServiceChargeDescription</textarea>
+                            <label for="inputServiceChargeDescription">Service Charge Description</label>
+                        </li>
+                        <li class="md-form">
+                            <input id="inputServiceCost" step="0.01" value="@Model.ServiceCost" type="number" min="0" class="form-control">
+                            <label for="inputServiceCost">Service Cost</label>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center">
+                            <strong>Total Expense <a href="/Selling/SellingReceipt/@Model.SellingId"><i class="fas fa-plus-circle"></i></a></strong>
+                            <strong>@Model.ExpenseTotal/-</strong>
+                        </li>
+                    </ul>
                 </div>
 
                 <div class="card card-body mb-3">
@@ -197,12 +203,6 @@
                             <textarea id="inputPurchaseDescription" rows="1" class="md-textarea form-control">@Model.PurchaseDescription</textarea>
                         </li>
                     </ul>
-                </div>
-
-                <div class="text-center">
-                    <i id="customer-error" class="mt-2 text-center red-text"></i>
-                    <input type="hidden" id="hiddenSellingId" value="@Model.SellingId" />
-                    <button type="submit" id="btnSelling" class="btn purple-gradient btn-rounded btn-block mt-0">UPDATE BILL</button>
                 </div>
             </form>
         </div>
