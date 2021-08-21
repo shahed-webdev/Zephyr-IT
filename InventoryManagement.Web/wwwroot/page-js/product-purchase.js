@@ -749,7 +749,7 @@ $(document).on("input", "#VendorPhone", function () {
 
 //fill customer info to input
 function autoFillInput(customer) {
-    document.querySelector("#VendorCompanyName").value = customer.CustomerName;
+    document.querySelector("#VendorCompanyName").value = customer.OrganizationName ? customer.OrganizationName : customer.CustomerName;
     document.querySelector("#VendorName").value = customer.CustomerName;
     document.querySelector("#VendorAddress").value = customer.CustomerAddress;
     document.querySelector("#Description").value = customer.Description;

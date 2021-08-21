@@ -317,7 +317,7 @@ findPurchaseBill.addEventListener("click", function () {
         type: "POST",
         success: function (response) {
             if (response.IsSuccess) {
-                calculatePayableAmount(response.Data.PurchaseAdjustedAmount);
+                //calculatePayableAmount(response.Data.PurchaseAdjustedAmount);
 
                 hiddenPurchaseId.value = response.Data.PurchaseId;
                 inputPurchaseAmount.value = response.Data.PurchaseAdjustedAmount;

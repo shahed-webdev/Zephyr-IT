@@ -15,20 +15,16 @@
 
         <div class="modal-body">
             <form data-ajax-update="#InsertModal" data-ajax="true" data-ajax-url="/Vendor/Create" data-ajax-method="post" data-ajax-success="onCreateSuccess">
-                <div class="form-row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label asp-for="VendorCompanyName">Company Name</label>
-                            <input asp-for="VendorCompanyName" class="form-control" required />
-                            <span asp-validation-for="VendorCompanyName"></span>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label asp-for="VendorName">Name</label>
-                            <input asp-for="VendorName" class="form-control" />
-                        </div>
-                    </div>
+
+                <div class="form-group">
+                    <label asp-for="VendorCompanyName">Company Name</label>
+                    <input asp-for="VendorCompanyName" class="form-control" required />
+                    <span asp-validation-for="VendorCompanyName"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="VendorName">Name</label>
+                    <input asp-for="VendorName" class="form-control" />
                 </div>
 
                 <div class="form-group">
@@ -42,7 +38,7 @@
 
                 <div class="form-group">
                     <label asp-for="VendorAddress">Address</label>
-                    <input asp-for="VendorAddress" class="form-control"/>
+                    <input asp-for="VendorAddress" class="form-control" />
                 </div>
 
                 <div class="form-group">
