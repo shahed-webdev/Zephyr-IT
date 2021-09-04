@@ -308,6 +308,42 @@ namespace InventoryManagement.Repository
             return r.ToDataResult(request);
         }
 
+        public DataResult<SellingRecordViewModel> DueRecords(DataRequest request, bool isPromiseDateExpiredRecords)
+        {
+            if (isPromiseDateExpiredRecords)
+            {
+                var currentDate = DateTime.Now.BdTime().Date;
+                var r = Context.Selling
+                    .Include(s => s.Customer)
+                    .Include(s => s.Registration)
+                    .Where(s => s.SellingDueAmount > 0 && s.PromisedPaymentDate != null &&
+                                s.PromisedPaymentDate >= currentDate)
+                    .OrderBy(s => s.PromisedPaymentDate)
+                    .Select(s => new SellingRecordViewModel
+                    {
+                        SellingId = s.SellingId,
+                        CustomerId = s.CustomerId,
+                        RegistrationId = s.RegistrationId,
+                        BillCreateBy = $" {s.Registration.Name} ({s.Registration.UserName})",
+                        CustomerName = s.Customer.CustomerName,
+                        SellingSn = s.SellingSn,
+                        SellingAmount = s.SellingTotalPrice,
+                        ServiceCharge = s.ServiceCharge,
+                        SellingPaidAmount = s.SellingPaidAmount,
+                        SellingDiscountAmount = s.SellingDiscountAmount,
+                        SellingDueAmount = s.SellingDueAmount,
+                        SellingDate = s.SellingDate,
+                        LastUpdateDate = s.LastUpdateDate.Value,
+                        PromisedPaymentDate = s.PromisedPaymentDate
+                    });
+                return r.ToDataResult(request);
+            }
+            else
+            {
+                return this.DueRecords(request);
+            }
+        }
+
         public DataResult<SellingBillProfitModel> BillWiseProfits(DataRequest request)
         {
             return Context.Selling

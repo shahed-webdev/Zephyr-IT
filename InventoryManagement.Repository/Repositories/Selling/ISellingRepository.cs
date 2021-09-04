@@ -13,6 +13,7 @@ namespace InventoryManagement.Repository
         Task<SellingReceiptViewModel> SellingReceiptAsync(int id, IUnitOfWork db);
         DataResult<SellingRecordViewModel> Records(DataRequest request);
         DataResult<SellingRecordViewModel> DueRecords(DataRequest request);
+        DataResult<SellingRecordViewModel> DueRecords(DataRequest request, bool isPromiseDateExpiredRecords);
         DataResult<SellingBillProfitModel> BillWiseProfits(DataRequest request);
         ICollection<int> Years();
         decimal TotalDue();

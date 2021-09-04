@@ -24,12 +24,12 @@ namespace InventoryManagement.Data
         public decimal ReturnAmount { get; set; }
         public decimal Paid { get; set; }
         public decimal Due { get; set; }
+        public decimal PurchaseAdjustedAmount { get; set; }
         public decimal DueLimit { get; set; }
         public byte[] Photo { get; set; }
         public DateTime InsertDate { get; set; }
         public string Designation { get; set; }
         public bool IsIndividual { get; set; }
-
         public virtual ICollection<Selling> Selling { get; set; }
         public virtual ICollection<SellingPayment> SellingPayment { get; set; }
         public virtual ICollection<Service> Service { get; set; }
