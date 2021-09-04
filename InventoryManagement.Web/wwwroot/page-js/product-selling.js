@@ -305,35 +305,35 @@ function btnScan(btn,isScan) {
     }
 }
 
-const btnScanQrCode = document.getElementById("btnScanQrCode");
-let scanner;
-btnScanQrCode.addEventListener("click", function () {
-    if (scanner) return;
+//const btnScanQrCode = document.getElementById("btnScanQrCode");
+//let scanner;
+//btnScanQrCode.addEventListener("click", function () {
+//    if (scanner) return;
 
-    const btn = this;
-    scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-    scanner.addListener('scan', onScanQRCode);
+//    const btn = this;
+//    scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+//    scanner.addListener('scan', onScanQRCode);
 
-    Instascan.Camera.getCameras().then(function (cameras) {
-        if (cameras.length > 0) {
-            scanner.start(cameras[0]);
+//    Instascan.Camera.getCameras().then(function (cameras) {
+//        if (cameras.length > 0) {
+//            scanner.start(cameras[0]);
 
-            btnScan(btn,true);
+//            btnScan(btn,true);
 
-        } else {
-            console.error('No cameras found.');
-            btnScan(btn,false);
-        }
-    }).catch(function (e) {
-        console.log(e);
-    });
-});
+//        } else {
+//            console.error('No cameras found.');
+//            btnScan(btn,false);
+//        }
+//    }).catch(function (e) {
+//        console.log(e);
+//    });
+//});
 
 //scanned value
-function onScanQRCode(content) {
-    if (!content) return;
-    getProductByCode(content.trim());
-}
+//function onScanQRCode(content) {
+//    if (!content) return;
+//    getProductByCode(content.trim());
+//}
 
 
 //get product from server

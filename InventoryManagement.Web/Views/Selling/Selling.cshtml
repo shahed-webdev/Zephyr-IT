@@ -20,12 +20,13 @@
 }
 
 <div class="m-3">
+    <h4 class="page-header d-print-none mb-3">Selling</h4>
     <div class="row">
         <div class="col-xl-9 mb-3">
-            <div class="d-flex justify-content-between align-items-center mb-3">
+            @*<div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="page-header d-print-none">Selling</h4>
                 <button id="btnScanQrCode" class="btn btn-outline-success">Scan QR Code</button>
-            </div>
+            </div>*@
 
             <div class="card card-body mb-3">
                 <form id="formCode">
@@ -79,11 +80,11 @@
                     <ul class="mb-0">
                         <li class="d-flex justify-content-between align-items-center">
                             <div class="md-form mt-2 flex-1">
-                                <input id="inputCustomer" type="text" class="form-control" autocomplete="off" />
+                                <input id="inputCustomer" type="text" class="form-control" autocomplete="off"/>
                                 <label for="inputCustomer">Find Customer</label>
                                 <div id="customerInfo" class="text-center"></div>
                             </div>
-                            <input id="hiddenCustomerId" type="hidden" />
+                            <input id="hiddenCustomerId" type="hidden"/>
                             <a href="/Customer/Add" target="_blank" class="btn-floating btn-sm blue-gradient"><i class="fas fa-plus" aria-hidden="true"></i></a>
                         </li>
                         <li class="text-center">
@@ -149,7 +150,7 @@
                 </div>
 
                 <div class="card card-body mb-3">
-                    <input id="hiddenPurchaseId" type="hidden" />
+                    <input id="hiddenPurchaseId" type="hidden"/>
                     <ul class="mb-0">
                         <li class="md-form input-group">
                             <input id="inputPurchaseBillNo" type="text" class="form-control">
@@ -177,6 +178,6 @@
 <video id="preview"></video>
 
 @section Scripts{
-    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-    <script src="~/page-js/product-selling.js?v=3.0.1"></script>
+    @*<script src="~/page-js/instascan.min.js"></script>*@
+    <script src="~/page-js/product-selling.js?v=3.1.1"></script>
 }
