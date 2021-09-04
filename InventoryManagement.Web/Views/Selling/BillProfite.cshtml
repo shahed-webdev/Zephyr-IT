@@ -22,12 +22,10 @@
             <form id="formPost">
                 <div class="d-flex align-items-center">
                     <div class="md-form m-0">
-                        <label for="inputFromDate">From Date</label>
-                        <input type="text" id="inputFromDate" class="form-control datepicker m-0">
+                        <input type="text" id="inputFromDate" placeholder="From Date" class="form-control datepicker m-0">
                     </div>
                     <div class="md-form m-0 ml-3">
-                        <label for="inputToDate">To Date</label>
-                        <input type="text" id="inputToDate" class="form-control datepicker m-0">
+                        <input type="text" id="inputToDate" placeholder="To Date" class="form-control datepicker m-0">
                     </div>
                     <button type="submit" class="btn btn-danger py-2"><i class="fal fa-search"></i></button>
                     <input type="reset" name="reset" value="Reset" class="btn btn-outline-danger btn-sm py-2" />
@@ -111,13 +109,18 @@
 @section scripts{
     <script>
         $(function() {
-            $('.datepicker').pickadate({ format: 'd-mmmm-yyyy' });
+            $('.datepicker').pickadate({
+                format: 'd-mmmm-yyyy'
+            }).val(moment(new Date()).format('DD-MMMM-YYYY'));;
 
             //get amount
             getAmountSummery();
 
             //get data-table
-            dataTable.getData();
+            filterDataTable();
+
+            //get summary
+            getAmountSummery();
         });
 
         //get data
@@ -225,21 +228,10 @@
             function(evt) {
                 evt.preventDefault();
 
-                const inputFromDate = formPost.inputFromDate.value;
-                const inputToDate = formPost.inputToDate.value;
+                filterDataTable();
 
                 //get summary
-                getAmountSummery({fromDate: inputFromDate, toDate: inputToDate});
-
-                dataTable.filter = [];
-
-                if (inputFromDate)
-                    dataTable.filter.push({ Field: "LastUpdateDate", Value: inputFromDate, Operand: dataTable.operand.GreaterThanOrEqual });
-
-                if (inputToDate)
-                    dataTable.filter.push({ Field: "LastUpdateDate", Value: inputToDate, Operand: dataTable.operand.LessThanOrEqual });
-
-                dataTable.getData();
+                getAmountSummery();
             });
 
         //reset
@@ -247,8 +239,29 @@
             location.href = "/Selling/BillProfite";
         });
 
+
+        function filterDataTable() {
+            const inputFromDate = formPost.inputFromDate.value;
+            const inputToDate = formPost.inputToDate.value;
+
+            dataTable.filter = [];
+
+            if (inputFromDate)
+                dataTable.filter.push({ Field: "LastUpdateDate", Value: inputFromDate, Operand: dataTable.operand.GreaterThanOrEqual });
+
+            if (inputToDate)
+                dataTable.filter.push({ Field: "LastUpdateDate", Value: inputToDate, Operand: dataTable.operand.LessThanOrEqual });
+
+            dataTable.getData();
+        }
+
         //get total profit sum
-        function getAmountSummery(dates) {
+        function getAmountSummery() {
+            const inputFromDate = formPost.inputFromDate.value;
+            const inputToDate = formPost.inputToDate.value;
+
+            const dates = { fromDate: inputFromDate, toDate: inputToDate }
+
             //for get and set total amount
             const serviceProfit = document.getElementById('serviceProfit');
             const billProfit = document.getElementById('billProfit');

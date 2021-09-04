@@ -23,6 +23,9 @@
         .on-edit input:focus { border: 1px solid #00bfff }
 
         .on-edit form > button { border: none; background-color: #324ca7; color: #fff; padding: 0 10px; }
+
+        /* hide search input datalist table */
+        #table-customer_filter{display: none}
     </style>
 }
 
@@ -214,7 +217,7 @@
                             </h3>
                         </div>
                     </div>
-                    <div class="card-body card-body-cascade pt-0 pb-2">
+                    <div class="card-body card-body-cascade pt-0 pb-2 mb-1">
                         <div class="form-inline d-flex justify-content-center align-items-center md-form form-sm active-cyan-2 mb-0 mt-2">
                             <input id="input-find" class="form-control form-control-sm mb-0 w-75" type="text" placeholder="Search">
                             <i class="fas fa-search" aria-hidden="true"></i>
@@ -384,14 +387,14 @@
                 format: 'd-mmmm-yyyy'
             }).val(moment(new Date()).format('DD-MMMM-YYYY'));
 
-            //customer data-table
             const customerTable = $('#table-customer').DataTable({
                 processing: true,
                 serverSide: true,
-                pageLength: 13,
-                dom: 't',
+                pageLength: 12,
+                lengthChange: false,
+                //searching: false,
                 ajax: {
-                    url: "/Selling/DueInvoiceData",
+                    url: "/Dashboard/GetPromiseDateData",
                     type: "POST"
                 },
                 columns:
