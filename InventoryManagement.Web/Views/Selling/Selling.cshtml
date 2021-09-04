@@ -9,33 +9,36 @@
         .remove:hover { color: #ff0000 }
         #formPayment ul { list-style-type: none; padding: 0; }
         #formPayment ul li strong { font-weight: 500; }
-        .md-form textarea.md-textarea {padding: .8rem 0; }
+        .md-form textarea.md-textarea { padding: .8rem 0; }
 
         table tbody tr .codeSpan span { margin-right: 5px; }
         table tbody tr .codeSpan span:not(:last-child):after { content: ',' }
-        table tbody tr .codeSpan span:hover { cursor: pointer; color: #ff0000}
+        table tbody tr .codeSpan span:hover { cursor: pointer; color: #ff0000 }
         table tbody tr .codeSpan span:hover::after { content: 'x'; }
-        .inputUnitPrice { min-width: 110px; text-align: center}
+        .inputUnitPrice { min-width: 110px; text-align: center }
     </style>
 }
 
 <div class="m-3">
-    <h4 class="mb-3 page-header d-print-none">Selling</h4>
-    
     <div class="row">
         <div class="col-xl-9 mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="page-header d-print-none">Selling</h4>
+                <button id="btnScanQrCode" class="btn btn-outline-success">Scan QR Code</button>
+            </div>
+
             <div class="card card-body mb-3">
                 <form id="formCode">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="md-form mt-0 mb-0 flex-1">
-                            <input id="inputBarCode" autocomplete="off" type="text" class="form-control" required />
+                            <input id="inputBarCode" autocomplete="off" type="text" class="form-control" required/>
                             <label for="inputBarCode">Product code</label>
                             <span id="codeExistError" class="field-validation-error"></span>
                         </div>
 
                         <button id="btnFind" type="submit" class="btn btn-sm btn-dark mr-5">
                             <i class="far fa-search text-white"></i>
-                            <i class="fas fa-circle-notch fa-spin" style="display:none"></i>
+                            <i class="fas fa-circle-notch fa-spin" style="display: none"></i>
                         </button>
                         <div class="text-right text-muted"><span id="productCount">0</span> items</div>
                     </div>
@@ -47,28 +50,28 @@
                     <form id="formTable">
                         <table class="table">
                             <thead class="text-muted">
-                                <tr>
-                                    <th>PRODUCT</th>
-                                    <th>DESCRIPTION</th>
-                                    <th>WARRANTY</th>
-                                    <th>QTY</th>
-                                    <th>U.PRICE</th>
-                                    <th class="text-right">PRICE</th>
-                                    <th></th>
-                                </tr>
+                            <tr>
+                                <th>PRODUCT</th>
+                                <th>DESCRIPTION</th>
+                                <th>WARRANTY</th>
+                                <th>QTY</th>
+                                <th>U.PRICE</th>
+                                <th class="text-right">PRICE</th>
+                                <th></th>
+                            </tr>
                             </thead>
                             <tbody id="t-body"></tbody>
                             <tfoot>
-                                <tr>
-                                    <td class="text-right" colspan="6"><strong id="productTotalPrice"></strong></td>
-                                </tr>
+                            <tr>
+                                <td class="text-right" colspan="6"><strong id="productTotalPrice"></strong></td>
+                            </tr>
                             </tfoot>
                         </table>
-                        <input id="btnProduct" type="submit" style="display:none" />
+                        <input id="btnProduct" type="submit" style="display: none"/>
                     </form>
                 </div>
             </div>
-        </div> 
+        </div>
 
         <div class="col-xl-3">
             <form id="formPayment">
@@ -83,10 +86,10 @@
                             <input id="hiddenCustomerId" type="hidden" />
                             <a href="/Customer/Add" target="_blank" class="btn-floating btn-sm blue-gradient"><i class="fas fa-plus" aria-hidden="true"></i></a>
                         </li>
-                        <div class="text-center">
+                        <li class="text-center">
                             <i id="customer-error" class="mt-2 text-center red-text"></i>
                             <button type="submit" id="btnSelling" class="btn peach-gradient btn-rounded btn-block mt-0">SELL PRODUCT</button>
-                        </div>
+                        </li>
                         <li class="md-form">
                             <input id="inputDiscount" step="0.01" type="number" min="0" class="form-control">
                             <label for="inputDiscount">Discount</label>
@@ -114,7 +117,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <div class="card card-body mb-3">
                     <ul class="mb-0">
                         <li class="md-form">
@@ -166,10 +169,14 @@
                     </ul>
                 </div>
             </form>
-        </div>  
+        </div>
     </div>
 </div>
 
+<!--scan qr code from camera-->
+<video id="preview"></video>
+
 @section Scripts{
-    <script src="~/page-js/product-selling.js?v=3.0.0"></script>
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script src="~/page-js/product-selling.js?v=3.0.1"></script>
 }

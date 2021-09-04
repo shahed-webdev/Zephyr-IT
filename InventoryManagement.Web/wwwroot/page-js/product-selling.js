@@ -291,22 +291,70 @@ const onInputUnitPrice = function (evt) {
 formTable.addEventListener("input", onInputUnitPrice)
 
 
-// onProduct code submit
-formCode.addEventListener('submit', evt => {
-    evt.preventDefault()
-    const url = '/Selling/FindProductByCode'
-    const param = { params: { code: inputBarCode.value } };
+/**SCAN QR CODE*/
+function btnScan(btn,isScan) {
+    btn.disabled = !isScan;
+    btn.textContent = isScan ? "Scanning.." : "Scan QR Code";
 
-    loading(btnFind,true)
+    if (isScan) {
+        btn.classList.remove("btn-outline-success");
+        btn.classList.add("btn-outline-danger");
+    } else {
+        btn.classList.add("btn-outline-success");
+        btn.classList.remove("btn-outline-danger");
+    }
+}
+
+const btnScanQrCode = document.getElementById("btnScanQrCode");
+let scanner;
+btnScanQrCode.addEventListener("click", function () {
+    if (scanner) return;
+
+    const btn = this;
+    scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+    scanner.addListener('scan', onScanQRCode);
+
+    Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+            scanner.start(cameras[0]);
+
+            btnScan(btn,true);
+
+        } else {
+            console.error('No cameras found.');
+            btnScan(btn,false);
+        }
+    }).catch(function (e) {
+        console.log(e);
+    });
+});
+
+//scanned value
+function onScanQRCode(content) {
+    if (!content) return;
+    getProductByCode(content.trim());
+}
+
+
+//get product from server
+function getProductByCode(code) {
+    const url = '/Selling/FindProductByCode'
+    const param = { params: { code } };
 
     axios.get(url, param)
         .then(res => storage.saveData(res.data))
         .catch(err => console.log(err))
-        .finally(() => loading(btnFind, false))
+}
+
+//add Product to cart
+formCode.addEventListener('submit', evt => {
+    evt.preventDefault();
+
+    getProductByCode(inputBarCode.value.trim())
 })
 
 // remove product click
-tbody.addEventListener("click", onRemoveClicked)
+tbody.addEventListener("click", onRemoveClicked);
 
 
 //*****CALL FUNCTION*****//
