@@ -95,8 +95,18 @@ namespace InventoryManagement.Web.Controllers
             return JsonConvert.SerializeObject(admin); //Serialize for image binary data
         }
 
-       //promise date update
-       [HttpPost]
+
+
+        //promise date
+        [HttpPost]
+        public IActionResult GetPromiseDateData(DataRequest request)
+        {
+            var data = _db.Selling.DueRecords(request,true);
+            return Json(data);
+        }
+
+
+        [HttpPost]
        public async Task<IActionResult> PromiseDateUpdate(int id, DateTime newDate)
        {
            var registrationId = _db.Registrations.GetRegID_ByUserName(User.Identity.Name);

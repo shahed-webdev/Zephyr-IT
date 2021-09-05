@@ -317,7 +317,7 @@ namespace InventoryManagement.Repository
                     .Include(s => s.Customer)
                     .Include(s => s.Registration)
                     .Where(s => s.SellingDueAmount > 0 && s.PromisedPaymentDate != null &&
-                                s.PromisedPaymentDate >= currentDate)
+                                s.PromisedPaymentDate <= currentDate)
                     .OrderBy(s => s.PromisedPaymentDate)
                     .Select(s => new SellingRecordViewModel
                     {
