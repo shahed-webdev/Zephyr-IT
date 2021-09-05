@@ -111,7 +111,7 @@
             </div>
         </section>
 
-        <section id="daily-report" class="mb-5 mt-1">
+        <section id="daily-report" class="mb-4 mt-1">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="mb-0">Daily Report<small data-toggle="modal" data-target="#helpModal" class="far fa-question-circle text-muted ml-1"></small></h5>
                 <form id="findForm">
@@ -200,6 +200,35 @@
                                 ৳<span id="totalNetProfit"></span>
                             </h5>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="row mb-5 mt-1">
+            <div class="col">
+                <div class="media white z-depth-1 rounded">
+                    <i class="fas fa-wallet fa-2x stylish-color-dark z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <div class="media-body mt-3">
+                        <p class="mb-0">
+                            Liquid Amount
+                        </p>
+                        <h5 class="font-weight-bold mb-0">
+                            ৳@Model.CapitalReport.LiquidAmount
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="media white z-depth-1 rounded">
+                    <i class="fas fa-wallet fa-2x cyan darken-2 z-depth-1 p-4 rounded-left text-white mr-3"></i>
+                    <div class="media-body mt-3">
+                        <p class="mb-0">
+                            Net Profit
+                        </p>
+                        <h5 class="font-weight-bold mb-0">
+                            ৳@Model.CapitalReport.NetProfit
+                        </h5>
                     </div>
                 </div>
             </div>
