@@ -9,5 +9,6 @@ namespace InventoryManagement.Repository
         HomeVM HomeInfo();
         int GetVoucherCountdown();
         void IncreaseVoucherCount();
+        CapitalReportModel CapitalReport();
     }
 }

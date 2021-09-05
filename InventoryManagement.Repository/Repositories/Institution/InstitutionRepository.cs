@@ -65,5 +65,14 @@ namespace InventoryManagement.Repository
             ins.VoucherCountdown++;
             Update(ins);
         }
+
+        public CapitalReportModel CapitalReport()
+        {
+            return Context.VW_CapitalProfitReport.Select(c => new CapitalReportModel
+            {
+                NetProfit = c.NetProfit,
+                LiquidAmount = c.LiquidAmount
+            }).FirstOrDefault();
+        }
     }
 }

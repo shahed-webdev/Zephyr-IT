@@ -49,6 +49,7 @@ namespace InventoryManagement.Data
         public virtual DbSet<Vendor> Vendor { get; set; }
         public virtual DbSet<Warranty> Warranty { get; set; }
         public virtual DbSet<VW_ExpenseWithTransportation> VW_ExpenseWithTransportation { get; set; }
+        public virtual DbSet<VW_CapitalProfitReport> VW_CapitalProfitReport { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new AdminMoneyCollectionConfiguration());
@@ -91,6 +92,7 @@ namespace InventoryManagement.Data
             builder.ApplyConfiguration(new VendorConfiguration());
             builder.ApplyConfiguration(new WarrantyConfiguration());
             builder.ApplyConfiguration(new VW_ExpenseWithTransportationConfiguration());
+            builder.ApplyConfiguration(new VW_CapitalProfitReportConfiguration());
 
 
             base.OnModelCreating(builder);

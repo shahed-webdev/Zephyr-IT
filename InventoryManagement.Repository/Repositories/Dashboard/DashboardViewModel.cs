@@ -11,6 +11,7 @@ namespace InventoryManagement.Repository
             DueVendors = new HashSet<VendorPaidDue>();
         }
         public DailyDashboardSummaryViewModel DailySummary { get; set; }
+        public CapitalReportModel CapitalReport { get; set; }
         public decimal MarketDue { get; set; }
         public decimal CustomerDue { get; set; }
         public decimal StockProductPurchaseValue { get; set; }
@@ -38,5 +39,4 @@ namespace InventoryManagement.Repository
         public decimal Profit { get; set; }
         public decimal NetProfit { get; set; }
     }
-
 }

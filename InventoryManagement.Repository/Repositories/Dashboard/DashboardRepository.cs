@@ -42,11 +42,16 @@ namespace InventoryManagement.Repository
                 StockProductPurchaseValue = _db.ProductStocks.StockProductPurchaseValue(),
                 MonthlySummary = GetMonthlySummary(),
                 TopDueCustomer = _db.Customers.TopDue(13),
-                DueVendors = _db.Vendors.TopDue(6)
+                DueVendors = _db.Vendors.TopDue(6),
+                CapitalReport = CapitalReport()
             };
             return dashboard;
         }
 
+        public CapitalReportModel CapitalReport()
+        {
+            return _db.Institutions.CapitalReport();
+        }
         public DailyDashboardSummaryViewModel DailyData()
         {
             _reportDay = DateTime.Now;
