@@ -71,6 +71,7 @@ namespace InventoryManagement.Repository
         public DateTime SignUpDate { get; set; }
         public ICollection<CustomerPhoneViewModel> PhoneNumbers { get; set; }
         public decimal SoldAmount { get; set; }
+        public decimal AccountTransactionCharge { get; set; }
         public decimal ReceivedAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal DueAmount { get; set; }

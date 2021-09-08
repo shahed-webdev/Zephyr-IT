@@ -23,6 +23,7 @@ namespace InventoryManagement.Data
         public decimal TotalDiscount { get; set; }
         public decimal ReturnAmount { get; set; }
         public decimal Paid { get; set; }
+        public decimal AccountTransactionCharge { get; set; }
         public decimal Due { get; set; }
         public decimal PurchaseAdjustedAmount { get; set; }
         public decimal DueLimit { get; set; }
