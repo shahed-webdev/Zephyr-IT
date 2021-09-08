@@ -15,6 +15,7 @@ namespace InventoryManagement.Repository
         public decimal SellingTotalPrice { get; set; }
         public decimal SellingDiscountAmount { get; set; }
         public decimal SellingPaidAmount { get; set; }
+        public decimal AccountTransactionCharge { get; set; }
         public string PaymentMethod { get; set; }
         public DateTime SellingDate { get; set; }
         //public string[] ProductCodes { get; set; }
@@ -74,6 +75,7 @@ namespace InventoryManagement.Repository
         public decimal SellingTotalPrice { get; set; }
         public decimal SellingDiscountAmount { get; set; }
         public decimal SellingPaidAmount { get; set; }
+        public decimal AccountTransactionCharge { get; set; }
         public decimal SellingDueAmount { get; set; }
         public decimal SellingReturnAmount { get; set; }
         public DateTime SellingDate { get; set; }
@@ -106,6 +108,7 @@ namespace InventoryManagement.Repository
         public decimal SellingAmount { get; set; }
         public decimal ServiceCharge { get; set; }
         public decimal SellingPaidAmount { get; set; }
+        public decimal AccountTransactionCharge { get; set; }
         public decimal SellingDiscountAmount { get; set; }
         public decimal SellingDueAmount { get; set; }
         public DateTime SellingDate { get; set; }
@@ -129,6 +132,7 @@ namespace InventoryManagement.Repository
         public decimal SellingDueAmount { get; set; }
         public decimal SellingReturnAmount { get; set; }
         public decimal SellingPaidAmount { get; set; }
+        public decimal AccountTransactionCharge { get; set; }
         public DateTime SellingDate { get; set; }
         public string SoildBy { get; set; }
 
@@ -158,6 +162,7 @@ namespace InventoryManagement.Repository
         public string[] AddedProductCodes { get; set; }
         public string[] RemovedProductCodes { get; set; }
         public decimal PaidAmount { get; set; }
+        public decimal AccountTransactionCharge { get; set; }
         public DateTime PaidDate { get; set; }
         public ICollection<SellingUpdateProductPostModel> Products { get; set; }
         public DateTime? PromisedPaymentDate { get; set; }

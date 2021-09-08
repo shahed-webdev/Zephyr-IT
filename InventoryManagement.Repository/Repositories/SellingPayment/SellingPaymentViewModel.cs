@@ -7,6 +7,7 @@ namespace InventoryManagement.Repository
     {
         public string PaymentMethod { get; set; }
         public decimal PaidAmount { get; set; }
+        public decimal AccountTransactionCharge { get; set; }
         public DateTime PaidDate { get; set; }
     }
 
@@ -17,6 +18,7 @@ namespace InventoryManagement.Repository
         public int RegistrationId { get; set; }
         public string PaymentMethod { get; set; }
         public decimal PaidAmount { get; set; }
+        public decimal AccountTransactionCharge { get; set; }
         public decimal SellingDiscountAmount { get; set; }
         public DateTime PaidDate { get; set; }
         public int? AccountId { get; set; }
@@ -31,15 +33,30 @@ namespace InventoryManagement.Repository
         public int CustomerId { get; set; }
         public int RegistrationId { get; set; }
         public decimal PaidAmount { get; set; }
+        public decimal AccountTransactionCharge { get; set; }
         public int? AccountId { get; set; }
         public DateTime PaidDate { get; set; }
         public ICollection<SellingDuePayMultipleBill> Bills { get; set; }
+
+        public void CalculateEachBillTransactionCharge()
+        {
+            var amount = PaidAmount - AccountTransactionCharge;
+
+            var percentage = (AccountTransactionCharge * 100) / amount;
+
+            foreach (var bill in Bills)
+            {
+                bill.AccountTransactionCharge = (percentage / 100) * bill.SellingPaidAmount;
+                bill.SellingPaidAmount += bill.AccountTransactionCharge;
+            }
+        }
     }
 
     public class SellingDuePayMultipleBill
     {
         public int SellingId { get; set; }
         public decimal SellingPaidAmount { get; set; }
+        public decimal AccountTransactionCharge { get; set; }
 
     }
 

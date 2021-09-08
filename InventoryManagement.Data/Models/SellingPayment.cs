@@ -17,6 +17,7 @@ namespace InventoryManagement.Data
         public int ReceiptSn { get; set; }
         public decimal PaidAmount { get; set; }
         public string PaymentMethod { get; set; }
+        public decimal AccountTransactionCharge { get; set; }
         public DateTime PaidDate { get; set; }
         public DateTime InsertDate { get; set; }
 

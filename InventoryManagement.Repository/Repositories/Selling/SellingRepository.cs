@@ -70,6 +70,7 @@ namespace InventoryManagement.Repository
                 SellingTotalPrice = model.SellingTotalPrice,
                 SellingDiscountAmount = model.SellingDiscountAmount,
                 SellingPaidAmount = model.SellingPaidAmount,
+                AccountTransactionCharge = model.AccountTransactionCharge,
                 SellingDate = DateTime.Now.BdTime().Date,
                 LastUpdateDate = DateTime.Now.BdTime().Date,
                 SellingList = model.ProductList.Select(l => new SellingList
@@ -91,6 +92,7 @@ namespace InventoryManagement.Repository
                         new SellingPaymentList
                         {
                             SellingPaidAmount = model.SellingPaidAmount,
+                            AccountTransactionCharge = model.AccountTransactionCharge,
                             SellingPayment = new SellingPayment
                             {
                                 SellingPaymentId = 0,
@@ -98,6 +100,7 @@ namespace InventoryManagement.Repository
                                 CustomerId  = model.CustomerId,
                                 ReceiptSn = newSellingPaymentSn,
                                 PaidAmount = model.SellingPaidAmount,
+                                AccountTransactionCharge = model.AccountTransactionCharge,
                                 PaymentMethod = model.PaymentMethod,
                                 PaidDate = DateTime.Now.BdTime().Date,
                                 AccountId = model.AccountId,
@@ -191,6 +194,7 @@ namespace InventoryManagement.Repository
                   SellingTotalPrice = s.SellingTotalPrice,
                   SellingDiscountAmount = s.SellingDiscountAmount,
                   SellingPaidAmount = s.SellingPaidAmount,
+                  AccountTransactionCharge = s.AccountTransactionCharge,
                   SellingDueAmount = s.SellingDueAmount,
                   SellingReturnAmount = s.SellingReturnAmount,
                   SellingDate = s.SellingDate,
@@ -209,6 +213,7 @@ namespace InventoryManagement.Repository
                   {
                       PaymentMethod = pp.SellingPayment.Account.AccountName,
                       PaidAmount = pp.SellingPaidAmount,
+                      AccountTransactionCharge = pp.AccountTransactionCharge,
                       PaidDate = pp.SellingPayment.PaidDate
                   }).ToList(),
                   CustomerInfo = new CustomerReceiptViewModel
@@ -272,6 +277,7 @@ namespace InventoryManagement.Repository
                     SellingAmount = s.SellingTotalPrice,
                     ServiceCharge = s.ServiceCharge,
                     SellingPaidAmount = s.SellingPaidAmount,
+                    AccountTransactionCharge = s.AccountTransactionCharge,
                     SellingDiscountAmount = s.SellingDiscountAmount,
                     SellingDueAmount = s.SellingDueAmount,
                     SellingDate = s.SellingDate,
@@ -299,6 +305,7 @@ namespace InventoryManagement.Repository
                     SellingAmount = s.SellingTotalPrice,
                     ServiceCharge = s.ServiceCharge,
                     SellingPaidAmount = s.SellingPaidAmount,
+                    AccountTransactionCharge = s.AccountTransactionCharge,
                     SellingDiscountAmount = s.SellingDiscountAmount,
                     SellingDueAmount = s.SellingDueAmount,
                     SellingDate = s.SellingDate,
@@ -330,6 +337,7 @@ namespace InventoryManagement.Repository
                         SellingAmount = s.SellingTotalPrice,
                         ServiceCharge = s.ServiceCharge,
                         SellingPaidAmount = s.SellingPaidAmount,
+                        AccountTransactionCharge = s.AccountTransactionCharge,
                         SellingDiscountAmount = s.SellingDiscountAmount,
                         SellingDueAmount = s.SellingDueAmount,
                         SellingDate = s.SellingDate,
@@ -609,6 +617,7 @@ namespace InventoryManagement.Repository
                   SellingTotalPrice = s.SellingTotalPrice,
                   SellingDiscountAmount = s.SellingDiscountAmount,
                   SellingPaidAmount = s.SellingPaidAmount,
+                  AccountTransactionCharge = s.AccountTransactionCharge,
                   SellingDueAmount = s.SellingDueAmount,
                   SellingReturnAmount = s.SellingReturnAmount,
                   SellingDate = s.SellingDate,
@@ -708,6 +717,7 @@ namespace InventoryManagement.Repository
                 selling.SellingDiscountAmount = model.SellingDiscountAmount;
                 selling.SellingReturnAmount = model.SellingReturnAmount;
                 selling.SellingPaidAmount += model.PaidAmount;
+                selling.AccountTransactionCharge += model.AccountTransactionCharge;
                 selling.SellingAccountCost += model.PaidAmount * accountCostPercentage / 100;
                 selling.LastUpdateDate = DateTime.Now.BdTime().Date;
                 selling.ServiceCharge = model.ServiceCharge;
@@ -720,7 +730,7 @@ namespace InventoryManagement.Repository
                 if (model.PromisedPaymentDate != null)
                     selling.PromisedPaymentDate = model.PromisedPaymentDate.Value.BdTime().Date;
 
-                var due = (selling.SellingTotalPrice + selling.SellingReturnAmount + selling.ServiceCharge) - (selling.SellingDiscountAmount + selling.SellingPaidAmount);
+                var due = (selling.SellingTotalPrice + selling.SellingReturnAmount + selling.ServiceCharge + selling.AccountTransactionCharge) - (selling.SellingDiscountAmount + selling.SellingPaidAmount);
                 if (due < 0)
                 {
                     response.IsSuccess = false;
@@ -803,6 +813,7 @@ namespace InventoryManagement.Repository
                         CustomerId = selling.CustomerId,
                         ReceiptSn = newSellingPaymentSn,
                         PaidAmount = model.PaidAmount,
+                        AccountTransactionCharge = model.AccountTransactionCharge,
                         AccountId = model.AccountId,
                         PaidDate = DateTime.Now.BdTime().Date,
                         AccountCostPercentage = accountCostPercentage,
@@ -811,6 +822,7 @@ namespace InventoryManagement.Repository
                             new SellingPaymentList
                             {
                                 SellingPaidAmount = model.PaidAmount,
+                                AccountTransactionCharge = model.AccountTransactionCharge,
                                 SellingId =  model.SellingId
                             }
                         }

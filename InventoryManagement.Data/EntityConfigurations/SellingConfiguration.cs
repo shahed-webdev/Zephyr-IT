@@ -27,13 +27,13 @@ namespace InventoryManagement.Data
                 .HasComputedColumnSql("(case when [SellingTotalPrice]=(0.00) then (0.00) else ([SellingDiscountAmount]*(100.00))/[SellingTotalPrice] end) PERSISTED");
 
             entity.Property(e => e.SellingDueAmount)
-                .HasComputedColumnSql("(([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount]+[PurchaseAdjustedAmount])) PERSISTED")
+                .HasComputedColumnSql("(([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount]+[AccountTransactionCharge])-([SellingDiscountAmount]+[SellingPaidAmount]+[PurchaseAdjustedAmount])) PERSISTED")
                 .HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SellingPaymentStatus)
                 .IsRequired()
                 .HasMaxLength(4)
                 .IsUnicode(false)
-                .HasComputedColumnSql("(case when (([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount])-([SellingDiscountAmount]+[SellingPaidAmount]+[PurchaseAdjustedAmount]))<=(0.00) then 'Paid' else 'Due' end) PERSISTED");
+                .HasComputedColumnSql("(case when (([SellingTotalPrice]+[ServiceCharge]+[SellingReturnAmount]+[AccountTransactionCharge])-([SellingDiscountAmount]+[SellingPaidAmount]+[PurchaseAdjustedAmount]))<=(0.00) then 'Paid' else 'Due' end) PERSISTED");
 
             entity.Property(e => e.SellingSn)
                 .HasColumnName("SellingSN");
@@ -71,6 +71,9 @@ namespace InventoryManagement.Data
             entity.Property(e => e.ExpenseTotal)
                 .HasColumnType("decimal(18, 2)");
 
+            entity.Property(e => e.AccountTransactionCharge)
+                .HasColumnType("decimal(18, 2)")
+                .HasDefaultValueSql("(0.00)");
 
             entity.Property(e => e.BuyingTotalPrice)
                 .HasColumnType("decimal(18, 2)");
@@ -88,11 +91,11 @@ namespace InventoryManagement.Data
 
             entity.Property(e => e.SellingNetProfit)
                 .HasColumnType("decimal(18, 2)")
-                .HasComputedColumnSql("([SellingTotalPrice]-([BuyingTotalPrice]+[SellingAccountCost]+[ExpenseTotal])) PERSISTED");
+                .HasComputedColumnSql("(([SellingTotalPrice]+[AccountTransactionCharge])-([BuyingTotalPrice]+[SellingAccountCost]+[ExpenseTotal])) PERSISTED");
 
             entity.Property(e => e.GrandProfit)
                 .HasColumnType("decimal(18, 2)")
-                .HasComputedColumnSql("(([SellingTotalPrice]-([BuyingTotalPrice]+[SellingDiscountAmount]+[SellingAccountCost]+[ExpenseTotal]))+([ServiceCharge]-[ServiceCost])) PERSISTED");
+                .HasComputedColumnSql("((([SellingTotalPrice]+[AccountTransactionCharge])-([BuyingTotalPrice]+[SellingDiscountAmount]+[SellingAccountCost]+[ExpenseTotal]))+([ServiceCharge]-[ServiceCost])) PERSISTED");
 
             entity.Property(e => e.PurchaseAdjustedAmount)
                 .HasColumnType("decimal(18, 2)");
