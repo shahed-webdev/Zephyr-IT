@@ -17,7 +17,7 @@ namespace InventoryManagement.Data
             entity.Property(e => e.Designation)
                 .HasMaxLength(255);
             entity.Property(e => e.Due)
-                .HasComputedColumnSql("(([TotalAmount]+[ReturnAmount])-([TotalDiscount]+[Paid]+[PurchaseAdjustedAmount])) PERSISTED");
+                .HasComputedColumnSql("(([TotalAmount]+[ReturnAmount]+[AccountTransactionCharge])-([TotalDiscount]+[Paid]+[PurchaseAdjustedAmount])) PERSISTED");
             entity.Property(e => e.InsertDate)
                 .HasColumnType("datetime")
                 .HasDefaultValueSql("(getdate())");
@@ -42,6 +42,10 @@ namespace InventoryManagement.Data
 
             entity.Property(e => e.DueLimit)
                 .HasColumnType("decimal(18, 2)");
+
+            entity.Property(e => e.AccountTransactionCharge)
+                .HasColumnType("decimal(18, 2)")
+                .HasDefaultValueSql("(0.00)");
         }
     }
 }

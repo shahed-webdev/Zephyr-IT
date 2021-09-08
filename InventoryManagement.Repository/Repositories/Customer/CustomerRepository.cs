@@ -115,7 +115,8 @@ namespace InventoryManagement.Repository
                     SoldAmount = c.TotalAmount,
                     DiscountAmount = c.TotalDiscount,
                     DueAmount = c.Due,
-                    ReceivedAmount = c.Paid
+                    ReceivedAmount = c.Paid,
+                    AccountTransactionCharge = c.AccountTransactionCharge
                 });
             return customer.FirstOrDefault(c => c.CustomerId == id);
         }
@@ -162,11 +163,13 @@ namespace InventoryManagement.Repository
                     TotalDiscount = s.Sum(c => c.SellingDiscountAmount),
                     Paid = s.Sum(c => c.SellingPaidAmount),
                     Return = s.Sum(c => c.SellingReturnAmount),
-                    PurchaseAdjustedAmount = s.Sum(c => c.PurchaseAdjustedAmount)
+                    PurchaseAdjustedAmount = s.Sum(c => c.PurchaseAdjustedAmount),
+                    AccountTransactionCharge = s.Sum(c => c.AccountTransactionCharge)
                 }).FirstOrDefault();
 
             customer.TotalAmount = obj.TotalAmount;
             customer.TotalDiscount = obj.TotalDiscount;
+            customer.AccountTransactionCharge = obj.AccountTransactionCharge;
             customer.Paid = obj.Paid;
             customer.ReturnAmount = obj.Return;
             customer.PurchaseAdjustedAmount = obj.PurchaseAdjustedAmount;
