@@ -31,6 +31,12 @@ namespace InventoryManagement.Data
                 .HasForeignKey(d => d.RegistrationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Expense_Registration");
+
+            entity.HasOne(d => d.Account)
+                .WithMany(p => p.Expense)
+                .HasForeignKey(d => d.AccountId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("FK_Expense_Account");
         }
     }
 }

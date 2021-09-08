@@ -18,7 +18,8 @@ namespace InventoryManagement.Data
         public string ExpenseNote { get; set; }
         public DateTime ExpenseDate { get; set; }
         public DateTime InsertDate { get; set; }
-
+        public int? AccountId { get; set; }
+        public Account Account { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual Registration Registration { get; set; }
         public virtual ICollection<ExpenseTransportationList> ExpenseTransportationList { get; set; }
