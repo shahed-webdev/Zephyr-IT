@@ -13,10 +13,12 @@ namespace InventoryManagement.Web.Controllers
     {
         private readonly IUnitOfWork _db;
         private readonly IExpenseCore _expense;
-        public ExpensesController(IUnitOfWork db, IExpenseCore expense)
+        private readonly IAccountCore _account;
+        public ExpensesController(IUnitOfWork db, IExpenseCore expense, IAccountCore account)
         {
             _db = db;
             _expense = expense;
+            _account = account;
         }
 
 
@@ -67,8 +69,10 @@ namespace InventoryManagement.Web.Controllers
             if (!id.HasValue) return RedirectToAction("Index");
            
             var model = _expense.GetCost(id.GetValueOrDefault()).Data;
-            ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label");
            
+            ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label");
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
+
             return View(model);
         }
 
@@ -125,6 +129,8 @@ namespace InventoryManagement.Web.Controllers
         public IActionResult TransportationCostDetails(int? id)
         {
             if (!id.HasValue) return RedirectToAction("Index");
+
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
 
             return View(_expense.GetTransportationCostDetails(id.GetValueOrDefault()).Data);
         }

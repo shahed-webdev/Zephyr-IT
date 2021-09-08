@@ -59,8 +59,11 @@
                 <a class="d-block" href="/Expenses/Index">Back To List</a>
             </div>
 
-            <div>
-                <strong id="grandTotal"></strong>
+            <div class="d-flex flex-column flex-end">
+                <select id="selectPaymentMethod" asp-items="ViewBag.Account" class="form-control my-2">
+                    <option value="" selected>[ Payment Method ]</option>
+                </select>
+                
                 <button type="submit" class="btn peach-gradient mb-1 m-0">Update <i class="fas fa-check ml-1"></i></button>
 
                 <div class="mt-2 text-right">

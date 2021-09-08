@@ -15,46 +15,47 @@ let cartProducts = [];
 
 //*****SELECTORS*****/
 // product code form
-const formCode = document.getElementById('formCode')
-const inputBarCode = formCode.inputBarCode
-const productCount = formCode.querySelector('#productCount')
-const codeExistError = formCode.querySelector('#codeExistError')
-const btnFind = formCode.btnFind
+const formCode = document.getElementById('formCode');
+const inputBarCode = formCode.inputBarCode;
+const productCount = formCode.querySelector('#productCount');
+const codeExistError = formCode.querySelector('#codeExistError');
+const btnFind = formCode.btnFind;
 
 // product table
-const formTable = document.getElementById('formTable')
-const tbody = document.getElementById('t-body')
-const productTotalPrice = document.getElementById('productTotalPrice')
+const formTable = document.getElementById('formTable');
+const tbody = document.getElementById('t-body');
+const productTotalPrice = document.getElementById('productTotalPrice');
 
 //payment selectors
-const formPayment = document.getElementById('formPayment')
-const totalPrice = formPayment.querySelector('#totalPrice')
-const inputDiscount = formPayment.inputDiscount
-const totalPayable = formPayment.querySelector('#totalPayable')
+const formPayment = document.getElementById('formPayment');
+const totalPrice = formPayment.querySelector('#totalPrice');
+const inputDiscount = formPayment.inputDiscount;
+const totalPayable = formPayment.querySelector('#totalPayable');
 const inputPaid = formPayment.inputPaid
-const totalDue = formPayment.querySelector('#totalDue')
-const selectPaymentMethod = formPayment.selectPaymentMethod
-const inputPromisedDate = formPayment.inputPromisedDate
+const totalDue = formPayment.querySelector('#totalDue');
+const selectPaymentMethod = formPayment.selectPaymentMethod;
+const inputAccountTransactionCharge = formPayment.inputAccountTransactionCharge;
+const inputPromisedDate = formPayment.inputPromisedDate;
 
 //expense
-const inputExpense = formPayment.inputExpense
-const inputExpenseDescription = formPayment.inputExpenseDescription
+const inputExpense = formPayment.inputExpense;
+const inputExpenseDescription = formPayment.inputExpenseDescription;
 
 //service charge
-const inputServiceCharge = formPayment.inputServiceCharge
-const inputServiceChargeDescription = formPayment.inputServiceChargeDescription
-const inputServiceCost = formPayment.inputServiceCost
+const inputServiceCharge = formPayment.inputServiceCharge;
+const inputServiceChargeDescription = formPayment.inputServiceChargeDescription;
+const inputServiceCost = formPayment.inputServiceCost;
 
 //purchase from customer
-const findPurchaseBill = formPayment.findPurchaseBill
-const hiddenPurchaseId = formPayment.hiddenPurchaseId
-const inputPurchaseBillNo = formPayment.inputPurchaseBillNo
-const inputPurchaseAmount = formPayment.inputPurchaseAmount
-const inputPurchaseDescription = formPayment.inputPurchaseDescription
+const findPurchaseBill = formPayment.findPurchaseBill;
+const hiddenPurchaseId = formPayment.hiddenPurchaseId;
+const inputPurchaseBillNo = formPayment.inputPurchaseBillNo;
+const inputPurchaseAmount = formPayment.inputPurchaseAmount;
+const inputPurchaseDescription = formPayment.inputPurchaseDescription;
 
 //customer
-const hiddenCustomerId = formPayment.hiddenCustomerId
-const customerError = formPayment.querySelector('#customer-error')
+const hiddenCustomerId = formPayment.hiddenCustomerId;
+const customerError = formPayment.querySelector('#customer-error');
 
 // get set storage object
 const storage = {
@@ -238,7 +239,10 @@ const sellingTotalPrice = function () {
 //append total price to DOM
 const appendTotalPrice = function () {
     const productPrice = sellingTotalPrice();
-    const totalAmount = productPrice + +inputServiceCharge.value;
+    const serviceCharge = +inputServiceCharge.value;
+    const accountTransactionCharge = +inputAccountTransactionCharge.value;
+
+    const totalAmount = productPrice + serviceCharge + accountTransactionCharge;
 
     productTotalPrice.innerText = productPrice ? `Total: ${productPrice}` : "";
     totalPrice.innerText = totalAmount
@@ -469,6 +473,12 @@ const onInputPaid = function () {
     checkDueLimit();
 }
 
+
+//Account Transaction Charge
+const onAccountTransactionCharge = function() {
+    appendTotalPrice();
+}
+
 //input Service Charge
 inputServiceCharge.addEventListener("input", function() {
     appendTotalPrice();
@@ -525,7 +535,6 @@ const onSellSubmitClicked = function (evt) {
         productList.push({ ProductId, SellingPrice, PurchasePrice, Description, Warranty, ProductCodes: codes });
     })
 
-
     const body = {
         CustomerId: +hiddenCustomerId.value,
         SellingTotalPrice: sellingTotalPrice(),
@@ -533,15 +542,16 @@ const onSellSubmitClicked = function (evt) {
         SellingPaidAmount: +inputPaid.value,
 
         PromisedPaymentDate: inputPromisedDate.value,
-        ServiceCharge: inputServiceCharge.value,
+        ServiceCharge: +inputServiceCharge.value,
         ServiceChargeDescription: inputServiceChargeDescription.value,
-        ServiceCost: inputServiceCost.value,
-        Expense:inputExpense.value,
-        ExpenseDescription:inputExpenseDescription.value,
+        ServiceCost: +inputServiceCost.value,
+        Expense: +inputExpense.value,
+        ExpenseDescription: inputExpenseDescription.value,
         AccountId: inputPaid.value ? selectPaymentMethod.value : "",
+        AccountTransactionCharge: +inputAccountTransactionCharge.value,
         ProductList: productList,
 
-        PurchaseAdjustedAmount: inputPurchaseAmount.value,
+        PurchaseAdjustedAmount: +inputPurchaseAmount.value,
         PurchaseDescription: inputPurchaseDescription.value,
         PurchaseId: hiddenPurchaseId.value
     }
@@ -575,10 +585,11 @@ const onSellSubmitClicked = function (evt) {
 }
 
 //event listener
-formPayment.addEventListener("submit", onCheckFormValid)
-formTable.addEventListener("submit", onSellSubmitClicked)
-inputDiscount.addEventListener("input", onInputDiscount)
-inputPaid.addEventListener("input", onInputPaid)
+formPayment.addEventListener("submit", onCheckFormValid);
+formTable.addEventListener("submit", onSellSubmitClicked);
+inputDiscount.addEventListener("input", onInputDiscount);
+inputPaid.addEventListener("input", onInputPaid);
+inputAccountTransactionCharge.addEventListener("input", onAccountTransactionCharge);
 
 //****CUSTOMER****//
 //customer autocomplete

@@ -120,6 +120,11 @@
             <form id="formPayment">
                 <div class="card card-body mb-3">
                     <ul class="mb-0">
+                        <li class="d-flex justify-content-between align-items-center">
+                            <strong>Total Amount</strong>
+                            <strong><span id="totalPrice">@(Model.SellingTotalPrice + Model.ServiceCharge)</span>/-</strong>
+                        </li>
+
                         <li class="md-form mt-4">
                             <label for="inputDiscount">Discount</label>
                             <input id="inputDiscount" step="0.01" type="number" min="0" class="form-control" value="@Model.SellingDiscountAmount">
@@ -165,10 +170,7 @@
                             <input id="inputServiceCharge" step="0.01" type="number" min="0" value="@Model.ServiceCharge" class="form-control">
                             <label for="inputServiceCharge">Service Charge</label>
                         </li>
-                        <li class="d-flex justify-content-between align-items-center">
-                            <strong>Total Amount</strong>
-                            <strong><span id="totalPrice">@(Model.SellingTotalPrice + Model.ServiceCharge)</span>/-</strong>
-                        </li>
+                        
                         <li class="md-form">
                             <textarea id="inputServiceChargeDescription" rows="1" class="md-textarea form-control">@Model.ServiceChargeDescription</textarea>
                             <label for="inputServiceChargeDescription">Service Charge Description</label>

@@ -8,7 +8,7 @@
 @section Styles{
     <style>
         .delete { cursor: pointer; color: red; }
-        #grandTotal { font-size: 22px; margin-right: 15px; font-weight: bold; }
+        #grandTotal { font-size: 22px; text-align: right; font-weight: bold; }
     </style>
 }
 
@@ -98,15 +98,18 @@
             <a class="d-block" href="/Expenses/Index">Back To List</a>
         </div>
 
-        <div>
+        <div class="d-flex flex-column flex-end">
             <strong id="grandTotal"></strong>
+            <select id="selectPaymentMethod" asp-items="ViewBag.Account" class="form-control my-2">
+                <option value="" selected>[ Payment Method ]</option>
+            </select>
             <button id="btnSubmit" class="btn peach-gradient mb-1 m-0">Update <i class="fas fa-check ml-1"></i></button>
 
             <div class="mt-2 text-right">
                 <input type="checkbox" class="form-check-input" id="checkApprove" @(Model.IsApproved ? "disabled" : "")>
                 <label class="form-check-label" for="checkApprove">@(Model.IsApproved ? "Approved" : "Approve Expense")</label>
             </div>
-        </div>
+        </div>   
     </div>
 </div>
 

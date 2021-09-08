@@ -294,7 +294,7 @@
                         damageAmount.textContent = res;
 
                         const net = NetProfit - res;
-                        grandProfit.textContent = net;
+                        grandProfit.textContent = net.toFixed(2);
 
                         if (net > 0) {
                             grandProfit.parentElement.classList.add("text-success");
