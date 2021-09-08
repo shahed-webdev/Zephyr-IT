@@ -129,7 +129,7 @@ namespace InventoryManagement.Web.Controllers
         }
         #endregion
 
-        #region Due Invoice
+        #region Due Invoice/collection
         //due invoice
         [Authorize(Roles = "admin, due-invoice")]
         public IActionResult DueInvoice()
@@ -176,6 +176,8 @@ namespace InventoryManagement.Web.Controllers
             ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
 
             var model =  _db.SellingPayments.GetSellingDuePayMultipleBill(id.GetValueOrDefault());
+            if(model.TotalDue <= 0) return RedirectToAction("DueInvoice");
+
             return View(model);
         }
 

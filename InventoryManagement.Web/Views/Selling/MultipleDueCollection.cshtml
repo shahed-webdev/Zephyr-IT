@@ -11,7 +11,10 @@
                 @Model.CustomerName
                 <small class="font-small d-block mt-1">@Model.CustomerAddress</small>
             </h4>
-            <h4 class="page-header">Selling Due: ৳@Model.TotalDue</h4>
+            <div>
+                <h4 class="page-header">Selling Due: ৳@Model.TotalDue</h4>
+                <input id="inputAccountTransactionCharge" placeholder="Transaction Charge" type="number" step="0.01" min="0" class="form-control mt-2">
+            </div>
         </div>
     </section>
 
@@ -70,6 +73,7 @@
             </div>
         </div>
     </form>
+
     <div>
         <a href="/Selling/DueInvoice">Back To List</a>
     </div>
@@ -78,89 +82,105 @@
 
     @section scripts{
         <script>
-        $(function() {
-            $(".mdb-select").materialSelect();
-            $(".datepicker").pickadate().val(moment(new Date()).format("DD MMMM, YYYY"));
-        });
+            $(function() {
+                $(".mdb-select").materialSelect();
+                $(".datepicker").pickadate().val(moment(new Date()).format("DD MMMM, YYYY"));
+            });
 
-        //selectors
-        const table = document.getElementById("tableReceipt");
-        const formPaid = document.getElementById("formPaid");
-        const inputTotalPaid = formPaid.inputPaid;
-        const inputDate = formPaid.inputDate;
-        const selectPaymentMethod = formPaid.selectPaymentMethod;
+            //selectors
+            const table = document.getElementById("tableReceipt");
+            const formPaid = document.getElementById("formPaid");
+            const inputTotalPaid = formPaid.inputPaid;
+            const inputDate = formPaid.inputDate;
+            const selectPaymentMethod = formPaid.selectPaymentMethod;
+            const inputAccountTransactionCharge = document.getElementById("inputAccountTransactionCharge");
 
-        //events
-        inputTotalPaid.addEventListener("input", function() {
-            const totalDue = @Model.TotalDue;
-            let totalPaid = +this.value;
+            //events
+            inputTotalPaid.addEventListener("input",
+                function() {
+                    const transactionCharge = +inputAccountTransactionCharge.value;
+                    const totalDue = @Model.TotalDue + transactionCharge;
+                    let totalPaid = +this.value - transactionCharge;
 
-            for (let i = 1, row; (row = table.rows[i]); i++) {
-                const due = +row.cells[6].textContent;
-                const pay = row.cells[7];
+                    //set max amount
+                    this.setAttribute("max", totalDue);
 
-                if (totalPaid < due && totalPaid > 0) {
-                    pay.textContent = totalPaid.toFixed();
-                } else if (totalPaid >= due) {
-                    pay.textContent = due;
-                } else {
-                    pay.textContent = 0;
-                }
+                    for (let i = 1, row; (row = table.rows[i]); i++) {
+                        const due = +row.cells[6].textContent;
+                        const pay = row.cells[7];
 
-                totalPaid -= due;
-            }
+                        if (totalPaid < due && totalPaid > 0) {
+                            pay.textContent = totalPaid.toFixed();
+                        } else if (totalPaid >= due) {
+                            pay.textContent = due;
+                        } else {
+                            pay.textContent = 0;
+                        }
 
-            if (totalDue < this.value) {
-                this.value = totalDue;
-                return;
-            }
-        })
-
-        //post paid
-        formPaid.addEventListener('submit', function(evt) {
-            evt.preventDefault();
-
-            //disable button on submit
-            const btnPaid = formPaid.submitPaid;
-            btnPaid.disabled = true;
-
-            const data = {
-                CustomerId: @Model.CustomerId,
-                PaidAmount: +inputTotalPaid.value,
-                PaidDate: inputDate.value,
-                AccountId: selectPaymentMethod.value,
-                Bills: []
-            }
-
-            for (var i = 1, row; (row = table.rows[i]); i++) {
-                const cell = row.cells[7];
-                const paid = +cell.textContent;
-
-                if (paid > 0) {
-                    const invoice = { SellingId: cell.getAttribute("data-id"), SellingPaidAmount: paid };
-                    data.Bills.push(invoice);
-                }
-            }
-
-            const url = "/Selling/PostDueCollectionMultiple";
-            $.ajax({
-                type: 'POST',
-                url,
-                data,
-                success: function (response) {
-                    if (response.IsSuccess) {
-                        location.href = `/Selling/DueInvoice`;
-                        return;
+                        totalPaid -= due;
                     }
 
-                    btnPaid.disabled = false;
-                    $.notify(response.Message, response.IsSuccess ? "success" : "error");
-                },
-                error: function(err) {
-                    console.log(err)
-                    btnPaid.disabled = false;
+                    if (totalDue < this.value) {
+                        this.value = totalDue;
+                        return;
+                    }
+                });
+
+            //reset pay amount
+            inputAccountTransactionCharge.addEventListener("input", function () {
+                inputTotalPaid.value = "";
+                for (let i = 1, row; (row = table.rows[i]); i++) {
+                    row.cells[7].textContent = 0;
                 }
             });
-        });
-        </script>  
+
+            //post paid
+            formPaid.addEventListener('submit',
+                function(evt) {
+                    evt.preventDefault();
+
+                    //disable button on submit
+                    const btnPaid = formPaid.submitPaid;
+                    btnPaid.disabled = true;
+
+                    const data = {
+                        CustomerId: @Model.CustomerId,
+                        PaidAmount: +inputTotalPaid.value,
+                        PaidDate: inputDate.value,
+                        AccountId: selectPaymentMethod.value,
+                        AccountTransactionCharge: +inputAccountTransactionCharge.value,
+                        Bills: []
+                    }
+
+                    for (var i = 1, row; (row = table.rows[i]); i++) {
+                        const cell = row.cells[7];
+                        const paid = +cell.textContent;
+
+                        if (paid > 0) {
+                            const invoice = { SellingId: cell.getAttribute("data-id"), SellingPaidAmount: paid };
+                            data.Bills.push(invoice);
+                        }
+                    }
+
+                    const url = "/Selling/PostDueCollectionMultiple";
+                    $.ajax({
+                        type: 'POST',
+                        url,
+                        data,
+                        success: function(response) {
+                            if (response.IsSuccess) {
+                                location.href = `/Selling/DueInvoice`;
+                                return;
+                            }
+
+                            btnPaid.disabled = false;
+                            $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                        },
+                        error: function(err) {
+                            console.log(err)
+                            btnPaid.disabled = false;
+                        }
+                    });
+                });
+        </script>
     }

@@ -34,6 +34,7 @@ const totalPrevPaid = formPayment.querySelector('#totalPrevPaid');
 const totalDue = formPayment.querySelector('#totalDue');
 const inputPaid = formPayment.inputPaid;
 const selectPaymentMethod = formPayment.selectPaymentMethod;
+const inputAccountTransactionCharge = formPayment.inputAccountTransactionCharge;
 const inputPromisedDate = formPayment.inputPromisedDate;
 
 //service charge
@@ -181,7 +182,11 @@ const sellingTotalPrice = function () {
 //append total price to DOM
 const appendTotalPrice = function () {
     const productPrice = sellingTotalPrice();
-    const totalAmount = productPrice + +inputServiceCharge.value;
+    const serviceCharge = +inputServiceCharge.value;
+    const accountTransactionCharge = +inputAccountTransactionCharge.value;
+
+    const totalAmount = productPrice + serviceCharge + accountTransactionCharge;
+
 
     //set max discount limit
     inputDiscount.setAttribute("max", totalAmount);
@@ -384,7 +389,6 @@ const onInputPaid = function () {
     paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
 }
 
-
 function disablePaid(dueAmount) {
     if (dueAmount > 0) {
         inputPaid.removeAttribute('disabled');
@@ -405,6 +409,10 @@ function disablePaid(dueAmount) {
     }
 }
 
+//Account Transaction Charge
+const onAccountTransactionCharge = function () {
+    appendTotalPrice();
+}
 
 //input Service Charge
 inputServiceCharge.addEventListener("input", function () {
@@ -488,6 +496,7 @@ const onSellSubmitClicked = function(evt) {
         Products: products,
 
         AccountId: inputPaid.value ? selectPaymentMethod.value : '',
+        AccountTransactionCharge: +inputAccountTransactionCharge.value,
         PromisedPaymentDate: inputPromisedDate.value,
         ServiceCharge: inputServiceCharge.value,
         ServiceChargeDescription: inputServiceChargeDescription.value,
@@ -529,6 +538,7 @@ formTable.addEventListener('submit', onSellSubmitClicked)
 inputDiscount.addEventListener('input', onInputDiscount)
 inputPaid.addEventListener('input', onInputPaid)
 inputReturnAmount.addEventListener('input', onInputReturnAmount)
+inputAccountTransactionCharge.addEventListener("input", onAccountTransactionCharge);
 
 //delete receipt
 formReceiptDelete.addEventListener('submit', function(evt) {

@@ -137,6 +137,12 @@
                         var totalAmount = Model.SellingTotalPrice + Model.ServiceCharge;
                     }
                     <h5>Total&nbspAmount:<strong>৳@totalAmount</strong></h5>
+                    
+                    @if (Model.AccountTransactionCharge > 0)
+                    {
+                        <h5>Transaction Charge:<strong>৳@Model.AccountTransactionCharge</strong></h5>
+                    }
+
                     @if (Model.SellingDiscountAmount > 0)
                     {
                         <h5 class="border-bottom border-dark pb-1">Discount:<strong>৳@Model.SellingDiscountAmount</strong></h5>
