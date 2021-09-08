@@ -10,6 +10,8 @@ namespace InventoryManagement.Data
             AccountWithdraw = new HashSet<AccountWithdraw>();
             SellingPayment = new HashSet<SellingPayment>();
             PurchasePayment = new HashSet<PurchasePayment>();
+            Expense = new HashSet<Expense>();
+            ExpenseTransportation = new HashSet<ExpenseTransportation>();
         }
         public int AccountId { get; set; }
         public string AccountName { get; set; }
@@ -19,5 +21,7 @@ namespace InventoryManagement.Data
         public virtual ICollection<AccountDeposit> AccountDeposit { get; set; }
         public virtual ICollection<SellingPayment> SellingPayment { get; set; }
         public virtual ICollection<PurchasePayment> PurchasePayment { get; set; }
+        public virtual ICollection<Expense> Expense { get; set; }
+        public virtual ICollection<ExpenseTransportation> ExpenseTransportation { get; set; }
     }
 }

@@ -29,6 +29,12 @@ namespace InventoryManagement.Data
 
             builder.Property(e => e.TotalExpense)
                 .HasColumnType("decimal(18, 2)");
+
+            builder.HasOne(d => d.Account)
+                .WithMany(p => p.ExpenseTransportation)
+                .HasForeignKey(d => d.AccountId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("FK_ExpenseTransportation_Account");
         }
     }
 }
