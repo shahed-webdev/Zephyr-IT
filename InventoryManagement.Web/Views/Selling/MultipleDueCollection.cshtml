@@ -70,9 +70,10 @@
             </div>
         </div>
     </form>
-
-    <a href="/Selling/DueInvoice">Back To List</a>
-</div> 
+    <div>
+        <a href="/Selling/DueInvoice">Back To List</a>
+    </div>
+</div>
 
 
     @section scripts{
@@ -95,8 +96,8 @@
             let totalPaid = +this.value;
 
             for (let i = 1, row; (row = table.rows[i]); i++) {
-                const due = row.cells[6].textContent;
-                const pay = row.cells[7].textContent;
+                const due = +row.cells[6].textContent;
+                const pay = row.cells[7];
 
                 if (totalPaid < due && totalPaid > 0) {
                     pay.textContent = totalPaid.toFixed();
