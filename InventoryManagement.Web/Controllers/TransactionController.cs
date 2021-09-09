@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JqueryDataTables.LoopsIT;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InventoryManagement.Web.Controllers
 {
@@ -19,11 +20,25 @@ namespace InventoryManagement.Web.Controllers
             _accountCore = accountCore;
         }
 
+        //set default account
+        [HttpPost]
+        public IActionResult SetDefaultAccount(int? accountId)
+        {
+            if(accountId == null) return Json("No Account Selected");
+
+            _accountCore.DefaultAccountSet(accountId.GetValueOrDefault());
+            return Json("Default Account Set Successfully");
+        }
+
 
         //*** Account****
         public IActionResult AddAccount()
         {
             var response = _accountCore.List();
+            
+            var defaultAccountId = _accountCore.DefaultAccountGet();
+            ViewBag.Account = new SelectList(_accountCore.DdlList(), "value", "label", defaultAccountId);
+           
             return View(response);
         }
 

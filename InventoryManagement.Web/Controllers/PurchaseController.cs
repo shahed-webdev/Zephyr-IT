@@ -109,6 +109,7 @@ namespace InventoryManagement.Web.Views
             if (id == null) return RedirectToAction("PurchaseRecords");
 
             ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
+
             var model = await _db.Purchases.PurchaseReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
 
             if (model == null) return RedirectToAction("PurchaseRecords");
@@ -142,6 +143,7 @@ namespace InventoryManagement.Web.Views
             if (id == null) return RedirectToAction("DueReceipt");
 
             ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
+
             var model = _db.PurchasePayments.GetPurchaseDuePayMultipleBill(id.GetValueOrDefault());
 
             if (model == null) return RedirectToAction("DueReceipt");
@@ -176,6 +178,7 @@ namespace InventoryManagement.Web.Views
             if (!id.HasValue) return RedirectToAction("PurchaseRecords");
            
             ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
+
             ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
 
             var model = await _db.Purchases.FindUpdateBillAsync(id.GetValueOrDefault(), _db);

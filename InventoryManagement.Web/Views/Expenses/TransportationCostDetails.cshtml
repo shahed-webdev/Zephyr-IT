@@ -100,7 +100,7 @@
 
         <div class="d-flex flex-column flex-end">
             <strong id="grandTotal"></strong>
-            <select id="selectPaymentMethod" asp-items="ViewBag.Account" class="form-control my-2">
+            <select id="selectPaymentMethod" name="@Model.AccountId" asp-items="ViewBag.Account" class="form-control my-2">
                 <option value="" selected>[ Payment Method ]</option>
             </select>
             <button id="btnSubmit" class="btn peach-gradient mb-1 m-0">Update <i class="fas fa-check ml-1"></i></button>

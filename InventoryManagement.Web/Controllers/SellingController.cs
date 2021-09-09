@@ -28,6 +28,7 @@ namespace InventoryManagement.Web.Controllers
         public IActionResult Selling()
         {
             ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
+
             return View();
         }
 
@@ -173,6 +174,7 @@ namespace InventoryManagement.Web.Controllers
         public IActionResult MultipleDueCollection(int? id)
         {
             if (id == null) return RedirectToAction("DueInvoice");
+
             ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
 
             var model =  _db.SellingPayments.GetSellingDuePayMultipleBill(id.GetValueOrDefault());
@@ -203,6 +205,7 @@ namespace InventoryManagement.Web.Controllers
         public async Task<IActionResult> BillChange(int? id)
         {
             if (id == null) return RedirectToAction("BillList");
+
             ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
 
             var data = await _db.Selling.FindUpdateBillAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
