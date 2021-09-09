@@ -42,6 +42,7 @@ namespace InventoryManagement.Web.Controllers
         public IActionResult GeneralExpense()
         {
             ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label");
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
             return View();
         }
 
@@ -111,6 +112,7 @@ namespace InventoryManagement.Web.Controllers
         [Authorize(Roles = "admin,SalesPerson, transportationCost")]
         public IActionResult TransportationCost()
         {
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
             return View();
         }
 
