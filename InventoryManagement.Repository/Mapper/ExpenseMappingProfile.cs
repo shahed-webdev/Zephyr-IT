@@ -12,6 +12,7 @@ namespace InventoryManagement.Repository
 
             CreateMap<ExpenseTransportation, ExpenseTransportationDetailsModel>()
                 .ForMember(d => d.CustomerName, opt => opt.MapFrom(c => c.Customer.CustomerName))
+                .ForMember(d => d.AccountName, opt => opt.MapFrom(c => c.Account.AccountName))
                 .ForMember(d => d.CreateBy, opt => opt.MapFrom(c => c.Registration.UserName));
 
             CreateMap<ExpenseFixedAddModel, ExpenseFixed>();

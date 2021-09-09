@@ -106,11 +106,14 @@ namespace InventoryManagement.Repository
             });
         }
 
-        public void Approved(int expenseId)
+        public decimal Approved(int expenseId, int? accountId)
         {
             var expense = Find(expenseId);
             expense.IsApproved = true;
+            expense.AccountId = accountId;
             Update(expense);
+
+            return expense.ExpenseAmount;
         }
 
         public void Edit(ExpenseAddModel model)

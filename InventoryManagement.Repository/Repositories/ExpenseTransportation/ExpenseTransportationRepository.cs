@@ -25,11 +25,14 @@ namespace InventoryManagement.Repository
             Context.ExpenseTransportation.Add(expenseTransportation);
         }
 
-        public void Approved(int expenseTransportationId)
+        public decimal Approved(int expenseTransportationId, int? accountId)
         {
             var expenseTransportation = Context.ExpenseTransportation.Find(expenseTransportationId);
             expenseTransportation.IsApproved = true;
+            expenseTransportation.AccountId = accountId;
             Context.ExpenseTransportation.Update(expenseTransportation);
+
+            return expenseTransportation.TotalExpense;
         }
 
         public void Delete(int expenseTransportationId)

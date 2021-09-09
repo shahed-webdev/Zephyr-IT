@@ -47,6 +47,9 @@ namespace InventoryManagement.BusinessLogin
                 var voucherNo = _db.Institutions.GetVoucherCountdown() + 1;
 
                 _db.Expenses.AddCustom(model, registrationId, voucherNo, isApproved);
+
+                if (isApproved && model.AccountId != null) _db.Account.BalanceSubtract(model.AccountId.Value, model.ExpenseAmount);
+
                 _db.Institutions.IncreaseVoucherCount();
                 _db.SaveChanges();
 
@@ -58,11 +61,14 @@ namespace InventoryManagement.BusinessLogin
             }
         }
 
-        public DbResponse ApprovedCost(int expenseId)
+        public DbResponse ApprovedCost(int expenseId, int? accountId)
         {
             try
             {
-                _db.Expenses.Approved(expenseId);
+                var amount = _db.Expenses.Approved(expenseId, accountId);
+
+                if (accountId != null) _db.Account.BalanceSubtract(accountId.Value, amount);
+
                 _db.SaveChanges();
 
                 return new DbResponse(true, "Approved Successfully");
@@ -126,6 +132,9 @@ namespace InventoryManagement.BusinessLogin
                 var voucherNo = _db.Institutions.GetVoucherCountdown() + 1;
 
                 _db.ExpenseTransportations.AddCustom(model, registrationId, voucherNo, isApproved);
+
+                if (isApproved && model.AccountId != null) _db.Account.BalanceSubtract(model.AccountId.Value, model.TotalExpense);
+
                 _db.Institutions.IncreaseVoucherCount();
                 _db.SaveChanges();
 
@@ -138,11 +147,14 @@ namespace InventoryManagement.BusinessLogin
 
         }
 
-        public DbResponse ApprovedTransportationCost(int expenseTransportationId)
+        public DbResponse ApprovedTransportationCost(int expenseTransportationId, int? accountId)
         {
             try
             {
-                _db.ExpenseTransportations.Approved(expenseTransportationId);
+                var amount = _db.ExpenseTransportations.Approved(expenseTransportationId, accountId);
+
+                if (accountId != null) _db.Account.BalanceSubtract(accountId.Value, amount);
+
                 _db.SaveChanges();
 
                 return new DbResponse(true, "Approved Successfully");

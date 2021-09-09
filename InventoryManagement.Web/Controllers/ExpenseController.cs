@@ -1,10 +1,10 @@
-﻿using System;
-using InventoryManagement.BusinessLogin;
+﻿using InventoryManagement.BusinessLogin;
 using InventoryManagement.Repository;
 using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 
 namespace InventoryManagement.Web.Controllers
 {
@@ -67,9 +67,9 @@ namespace InventoryManagement.Web.Controllers
         public IActionResult GeneralExpenseDetails(int? id)
         {
             if (!id.HasValue) return RedirectToAction("Index");
-           
+
             var model = _expense.GetCost(id.GetValueOrDefault()).Data;
-           
+
             ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label");
             ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
 
@@ -85,15 +85,15 @@ namespace InventoryManagement.Web.Controllers
             var response = _expense.EditCost(model);
 
             if (response.IsSuccess) return RedirectToAction("Index");
-            
+
             return Json(model);
         }
 
         //approve
         [HttpPost]
-        public IActionResult ApproveGeneralExpense(int id)
+        public IActionResult ApproveGeneralExpense(int id, int? accountId)
         {
-            var response = _expense.ApprovedCost(id);
+            var response = _expense.ApprovedCost(id, accountId);
             return Json(response);
         }
 
@@ -146,9 +146,9 @@ namespace InventoryManagement.Web.Controllers
 
         //approve
         [HttpPost]
-        public IActionResult ApproveTransportationCost(int id)
+        public IActionResult ApproveTransportationCost(int id, int? accountId)
         {
-            var response = _expense.ApprovedTransportationCost(id);
+            var response = _expense.ApprovedTransportationCost(id, accountId);
             return Json(response);
         }
 
@@ -202,7 +202,7 @@ namespace InventoryManagement.Web.Controllers
             if (string.IsNullOrEmpty(category))
                 return RedirectToAction("ExpenseReport");
 
-            return View(_expense.CategoryWistDetailsDateToDate(category,from, to).Data);
+            return View(_expense.CategoryWistDetailsDateToDate(category, from, to).Data);
         }
 
         protected override void Dispose(bool disposing)
