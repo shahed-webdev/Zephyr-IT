@@ -35,7 +35,11 @@ namespace InventoryManagement.Data
 
             entity.Property(e => e.Website).HasMaxLength(50);
 
-           // entity.HasData(new Institution {InstitutionId = 1, InstitutionName = "Institution"});
+            // entity.HasData(new Institution {InstitutionId = 1, InstitutionName = "Institution"});
+
+            entity.Property(e => e.Capital)
+                .HasColumnType("decimal(18, 2)")
+                .HasDefaultValueSql("(0.00)");
         }
     }
 }

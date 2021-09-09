@@ -125,5 +125,18 @@ namespace InventoryManagement.Repository
         {
             return Context.Institution.FirstOrDefault()?.DefaultAccountId ?? 0;
         }
+
+        public void CapitalSet(decimal amount)
+        {
+            var institution = Context.Institution.FirstOrDefault();
+            institution.Capital = amount;
+            Context.Institution.Update(institution);
+            Context.SaveChanges();
+        }
+
+        public decimal CapitalGet()
+        {
+            return Context.Institution.FirstOrDefault()?.Capital ?? 0;
+        }
     }
 }

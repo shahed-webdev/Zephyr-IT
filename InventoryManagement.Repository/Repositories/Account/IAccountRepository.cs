@@ -22,5 +22,9 @@ namespace InventoryManagement.Repository
         void DefaultAccountSet(int accountId);
         int DefaultAccountGet();
 
+        void CapitalSet(decimal amount);
+        decimal CapitalGet();
+
+
     }
 }
