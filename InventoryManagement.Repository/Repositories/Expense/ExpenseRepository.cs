@@ -116,14 +116,27 @@ namespace InventoryManagement.Repository
             return expense.ExpenseAmount;
         }
 
-        public void Edit(ExpenseAddModel model)
+        public ExpenseUpdateAccountUpdateModel Edit(ExpenseAddModel model)
         {
             var expense = Find(model.ExpenseId);
+            if (expense == null) return null;
+
+            var returnModel = new ExpenseUpdateAccountUpdateModel
+            {
+                IsApproved = expense.IsApproved,
+                PrevAmount = expense.ExpenseAmount,
+                CurrentAmount = model.ExpenseAmount,
+                PrevAccountId = expense.AccountId,
+                CurrentAccountId = model.AccountId
+            };
+
             expense.ExpenseDate = model.ExpenseDate;
             expense.ExpenseAmount = model.ExpenseAmount;
             expense.ExpenseCategoryId = model.ExpenseCategoryId;
             expense.ExpenseFor = model.ExpenseFor;
             Update(expense);
+
+            return returnModel;
         }
 
         public ExpenseDetailsModel GetDetails(int expenseId)

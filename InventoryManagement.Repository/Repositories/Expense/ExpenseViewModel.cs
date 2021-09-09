@@ -65,4 +65,13 @@ namespace InventoryManagement.Repository
         public int? AccountId { get; set; }
         public string AccountName { get; set; }
     }
+
+    public class ExpenseUpdateAccountUpdateModel
+    {
+        public bool IsApproved { get; set; }
+        public decimal PrevAmount { get; set; }
+        public decimal CurrentAmount { get; set; }
+        public int? PrevAccountId { get; set; }
+        public int? CurrentAccountId { get; set; }
+    }
 }

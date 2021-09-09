@@ -98,7 +98,25 @@ namespace InventoryManagement.BusinessLogin
         {
             try
             {
-                _db.Expenses.Edit(model);
+                var updateData = _db.Expenses.Edit(model);
+
+                if (updateData == null) return new DbResponse(false, "No data found");
+
+                if (updateData.IsApproved)
+                {
+                    if (updateData.PrevAccountId != null)
+                    {
+                        _db.Account.BalanceAdd(updateData.PrevAccountId.Value, updateData.PrevAmount);
+                    }
+
+                    _db.SaveChanges();
+
+                    if (updateData.CurrentAccountId != null)
+                    {
+                        _db.Account.BalanceSubtract(updateData.CurrentAccountId.Value, updateData.CurrentAmount);
+                    }
+                }
+
                 _db.SaveChanges();
 
                 return new DbResponse(true, "Changed Successfully");
@@ -197,7 +215,24 @@ namespace InventoryManagement.BusinessLogin
         {
             try
             {
-                _db.ExpenseTransportations.Edit(model);
+                var updateData = _db.ExpenseTransportations.Edit(model);
+
+                if (updateData == null) return new DbResponse(false, "No data found");
+
+                if (updateData.IsApproved)
+                {
+                    if (updateData.PrevAccountId != null)
+                    {
+                        _db.Account.BalanceAdd(updateData.PrevAccountId.Value, updateData.PrevAmount);
+                    }
+
+                    _db.SaveChanges();
+
+                    if (updateData.CurrentAccountId != null)
+                    {
+                        _db.Account.BalanceSubtract(updateData.CurrentAccountId.Value, updateData.CurrentAmount);
+                    }
+                }
                 _db.SaveChanges();
                 return new DbResponse(true, "Changed Successfully");
             }

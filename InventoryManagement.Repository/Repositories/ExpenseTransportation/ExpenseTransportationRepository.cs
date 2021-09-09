@@ -50,12 +50,22 @@ namespace InventoryManagement.Repository
                 .FirstOrDefault();
         }
 
-        public void Edit(ExpenseTransportationDetailsModel model)
+        public ExpenseUpdateAccountUpdateModel Edit(ExpenseTransportationDetailsModel model)
         {
             var expenseTransportation = Context.ExpenseTransportation
                 .Include(e => e.ExpenseTransportationList)
                 .FirstOrDefault(e => e.ExpenseTransportationId == model.ExpenseTransportationId);
 
+            if (expenseTransportation == null) return null;
+
+            var returnModel = new ExpenseUpdateAccountUpdateModel
+            {
+                IsApproved = expenseTransportation.IsApproved,
+                PrevAmount = expenseTransportation.TotalExpense,
+                CurrentAmount = model.TotalExpense,
+                PrevAccountId = expenseTransportation.AccountId,
+                CurrentAccountId = model.AccountId
+            };
 
             expenseTransportation.ExpenseTransportationId = model.ExpenseTransportationId;
             expenseTransportation.CustomerId = model.CustomerId;
@@ -65,7 +75,7 @@ namespace InventoryManagement.Repository
             expenseTransportation.ExpenseTransportationList = model.ExpenseTransportationList.Select(e => _mapper.Map<ExpenseTransportationList>(e)).ToList();
 
             Context.ExpenseTransportation.Update(expenseTransportation);
-
+            return returnModel;
         }
     }
 }

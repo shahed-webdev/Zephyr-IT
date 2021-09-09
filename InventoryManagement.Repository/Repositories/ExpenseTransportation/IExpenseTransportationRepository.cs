@@ -8,6 +8,6 @@ namespace InventoryManagement.Repository
         decimal Approved(int expenseTransportationId, int? accountId);
         void Delete(int expenseTransportationId);
         ExpenseTransportationDetailsModel GetDetails(int expenseTransportationId);
-        void Edit(ExpenseTransportationDetailsModel model);
+        ExpenseUpdateAccountUpdateModel Edit(ExpenseTransportationDetailsModel model);
     }
 }
