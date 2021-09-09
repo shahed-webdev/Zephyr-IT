@@ -42,7 +42,10 @@ namespace InventoryManagement.Web.Controllers
         public IActionResult GeneralExpense()
         {
             ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label");
-            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
+
+            var defaultAccountId = _account.DefaultAccountGet();
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label", defaultAccountId);
+            
             return View();
         }
 
@@ -72,7 +75,9 @@ namespace InventoryManagement.Web.Controllers
             var model = _expense.GetCost(id.GetValueOrDefault()).Data;
 
             ViewBag.ExpenseCategoryId = new SelectList(_db.ExpenseCategories.ddl(), "value", "label");
-            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
+
+            var defaultAccountId = _account.DefaultAccountGet();
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label", defaultAccountId);
 
             return View(model);
         }
@@ -112,7 +117,9 @@ namespace InventoryManagement.Web.Controllers
         [Authorize(Roles = "admin,SalesPerson, transportationCost")]
         public IActionResult TransportationCost()
         {
-            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
+            var defaultAccountId = _account.DefaultAccountGet();
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label", defaultAccountId);
+
             return View();
         }
 
@@ -132,7 +139,8 @@ namespace InventoryManagement.Web.Controllers
         {
             if (!id.HasValue) return RedirectToAction("Index");
 
-            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
+            var defaultAccountId = _account.DefaultAccountGet();
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label", defaultAccountId);
 
             return View(_expense.GetTransportationCostDetails(id.GetValueOrDefault()).Data);
         }

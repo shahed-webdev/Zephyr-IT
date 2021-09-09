@@ -13,6 +13,22 @@
 
 <div class="container">
     <h4 class="page-header mb-3">Account</h4>
+    
+    <div class="mb-3">
+        <form id="formDefaultAccount">
+            <div class="row">
+                <div class="col-4">
+                    <select name="AccountId" asp-items="ViewBag.Account" class="form-control" required>
+                        <option value="">[ Account ]</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <input class="btn btn-md btn-deep-orange m-0" type="submit" value="Change Default Account" />
+                </div>
+            </div>
+            
+        </form>
+    </div>
 
     <div class="card card-body">
         <form id="formAdd">
@@ -119,7 +135,7 @@
                 return obj;
             };
 
-            //submit form
+            //submit add account form
             const formAdd = document.getElementById("formAdd");
             formAdd.addEventListener("submit", function (evt) {
                 evt.preventDefault();
@@ -145,7 +161,7 @@
                 });
             });
 
-            //on edit/delete
+            //account edit/delete
             const modalContainer = $("#updateModal");
             const formUpdate = document.getElementById("formUpdate");
             const tBody = document.getElementById("tBody");
@@ -188,7 +204,7 @@
                 }
             })
 
-            //update post
+            //account update post
             formUpdate.addEventListener("submit", function (evt) {
                 evt.preventDefault();
 
@@ -217,6 +233,27 @@
             function disableBtn(btn, isDisable) {
                 btn.disabled = isDisable;
             }
+
+
+            //set default account
+            const formDefaultAccount = document.getElementById("formDefaultAccount");
+            formDefaultAccount.addEventListener("submit", function(evt) {
+                evt.preventDefault();
+
+                const accountId = this.AccountId.value;
+                if (!accountId) return;
+
+                $.ajax({
+                    url: '/Transaction/SetDefaultAccount',
+                    type: "POST",
+                    data: { accountId },
+                    success: response => {
+                        $.notify(response, "success");
+                    },
+                    error: error => console.log(error)
+                });
+
+            });
         })();
     </script>
 }
