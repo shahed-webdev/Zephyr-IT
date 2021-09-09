@@ -110,5 +110,20 @@ namespace InventoryManagement.Repository
             var account = Context.Account.Find(id);
             return account?.CostPercentage ?? 0;
         }
+
+        public void DefaultAccountSet(int accountId)
+        {
+            var institution = Context.Institution.FirstOrDefault();
+            if (!Context.Account.Any(a => a.AccountId == accountId)) return;
+            institution.DefaultAccountId = accountId;
+            Context.Institution.Update(institution);
+            Context.SaveChanges();
+
+        }
+
+        public int DefaultAccountGet()
+        {
+            return Context.Institution.FirstOrDefault()?.DefaultAccountId ?? 0;
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace InventoryManagement.Data
 {
@@ -20,5 +19,6 @@ namespace InventoryManagement.Data
         public string Website { get; set; }
         public byte[] InstitutionLogo { get; set; }
         public DateTime InsertDate { get; set; }
+        public int? DefaultAccountId { get; set; }
     }
 }
