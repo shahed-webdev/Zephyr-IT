@@ -23,6 +23,8 @@ namespace InventoryManagement.Repository
         [Required]
         [DisplayFormat(DataFormatString = "{0:d MMMM, yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ExpenseDate { get; set; }
+        public int? AccountId { get; set; }
+        public string AccountName { get; set; }
     }
 
     public class ExpenseCategoryWise
@@ -45,6 +47,7 @@ namespace InventoryManagement.Repository
         [Required]
         [DisplayFormat(DataFormatString = "{0:d MMMM, yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ExpenseDate { get; set; }
+        public int? AccountId { get; set; }
     }
 
     public class ExpenseDetailsModel
@@ -59,5 +62,7 @@ namespace InventoryManagement.Repository
 
         [DisplayFormat(DataFormatString = "{0:d MMMM, yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ExpenseDate { get; set; }
+        public int? AccountId { get; set; }
+        public string AccountName { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace InventoryManagement.Repository
         List<ExpenseAllViewModel> Records();
         Task<List<ExpenseViewModel>> ToListCustomAsync();
         void AddCustom(ExpenseAddModel model, int registrationId, int voucherNo, bool isApproved);
-        void Approved(int expenseId);
+        decimal Approved(int expenseId, int? accountId);
         void Edit(ExpenseAddModel model);
         ExpenseDetailsModel GetDetails(int expenseId);
         void RemoveCustom(int id);

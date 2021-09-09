@@ -12,14 +12,14 @@ namespace InventoryManagement.BusinessLogin
         DbResponse<List<ExpenseAllViewModel>> ExpenseRecords();
 
         DbResponse AddCost(ExpenseAddModel model, string userName, bool isApproved);
-        DbResponse ApprovedCost(int expenseId);
+        DbResponse ApprovedCost(int expenseId, int? accountId);
         DbResponse DeleteCost(int expenseId);
         DbResponse EditCost(ExpenseAddModel model);
 
         DbResponse<ExpenseDetailsModel> GetCost(int expenseId);
 
         DbResponse AddTransportationCost(ExpenseTransportationAddModel model, string userName, bool isApproved);
-        DbResponse ApprovedTransportationCost(int expenseTransportationId);
+        DbResponse ApprovedTransportationCost(int expenseTransportationId, int? accountId);
         DbResponse DeleteTransportationCost(int expenseTransportationId);
         DbResponse<ExpenseTransportationDetailsModel> GetTransportationCostDetails(int expenseTransportationId);
         DbResponse EditTransportationCost(ExpenseTransportationDetailsModel model);

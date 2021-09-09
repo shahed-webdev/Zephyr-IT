@@ -6,6 +6,7 @@ namespace InventoryManagement.Repository
     public class ExpenseTransportationAddModel
     {
         public int? CustomerId { get; set; }
+        public int? AccountId { get; set; }
         public decimal TotalExpense { get; set; }
         public string ExpenseNote { get; set; }
         public DateTime ExpenseDate { get; set; }
@@ -25,6 +26,8 @@ namespace InventoryManagement.Repository
     {
         public int ExpenseTransportationId { get; set; }
         public int? CustomerId { get; set; }
+        public int? AccountId { get; set; }
+        public string AccountName { get; set; }
         public bool IsApproved { get; set; }
         public string CustomerName { get; set; }
         public string CreateBy { get; set; }
