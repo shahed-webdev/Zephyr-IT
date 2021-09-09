@@ -20,16 +20,21 @@ namespace InventoryManagement.Repository
 
         public ICollection<ExpenseViewModel> ToListCustom()
         {
-            var expense = Context.Expense.Include(e => e.ExpenseCategory).Select(e => new ExpenseViewModel
-            {
-                ExpenseId = e.ExpenseId,
-                RegistrationId = e.RegistrationId,
-                ExpenseCategoryId = e.ExpenseCategoryId,
-                CategoryName = e.ExpenseCategory.CategoryName,
-                ExpenseAmount = e.ExpenseAmount,
-                ExpenseFor = e.ExpenseFor,
-                ExpenseDate = e.ExpenseDate
-            }).ToList();
+            var expense = Context.Expense
+                .Include(e => e.ExpenseCategory)
+                .Include(e => e.Account)
+                .Select(e => new ExpenseViewModel
+                {
+                    ExpenseId = e.ExpenseId,
+                    RegistrationId = e.RegistrationId,
+                    ExpenseCategoryId = e.ExpenseCategoryId,
+                    CategoryName = e.ExpenseCategory.CategoryName,
+                    ExpenseAmount = e.ExpenseAmount,
+                    ExpenseFor = e.ExpenseFor,
+                    ExpenseDate = e.ExpenseDate,
+                    AccountId = e.AccountId,
+                    AccountName = e.Account.AccountName
+                }).ToList();
 
             return expense;
         }
@@ -67,16 +72,21 @@ namespace InventoryManagement.Repository
 
         public Task<List<ExpenseViewModel>> ToListCustomAsync()
         {
-            var expense = Context.Expense.Include(e => e.ExpenseCategory).Select(e => new ExpenseViewModel
-            {
-                ExpenseId = e.ExpenseId,
-                RegistrationId = e.RegistrationId,
-                ExpenseCategoryId = e.ExpenseCategoryId,
-                CategoryName = e.ExpenseCategory.CategoryName,
-                ExpenseAmount = e.ExpenseAmount,
-                ExpenseFor = e.ExpenseFor,
-                ExpenseDate = e.ExpenseDate
-            }).ToListAsync();
+            var expense = Context.Expense
+                .Include(e => e.ExpenseCategory)
+                .Include(e => e.Account)
+                .Select(e => new ExpenseViewModel
+                {
+                    ExpenseId = e.ExpenseId,
+                    RegistrationId = e.RegistrationId,
+                    ExpenseCategoryId = e.ExpenseCategoryId,
+                    CategoryName = e.ExpenseCategory.CategoryName,
+                    ExpenseAmount = e.ExpenseAmount,
+                    ExpenseFor = e.ExpenseFor,
+                    ExpenseDate = e.ExpenseDate,
+                    AccountId = e.AccountId,
+                    AccountName = e.Account.AccountName
+                }).ToListAsync();
 
             return expense;
         }
@@ -91,7 +101,8 @@ namespace InventoryManagement.Repository
                 ExpenseFor = model.ExpenseFor,
                 ExpenseDate = model.ExpenseDate,
                 VoucherNo = voucherNo,
-                IsApproved = isApproved
+                IsApproved = isApproved,
+                AccountId = model.AccountId
             });
         }
 
@@ -117,6 +128,7 @@ namespace InventoryManagement.Repository
             var expense = Context.Expense
                 .Include(e => e.ExpenseCategory)
                 .Include(e => e.Registration)
+                .Include(e => e.Account)
                 .FirstOrDefault(e => e.ExpenseId == expenseId);
 
             return new ExpenseDetailsModel
@@ -128,7 +140,9 @@ namespace InventoryManagement.Repository
                 ExpenseFor = expense.ExpenseFor,
                 ExpenseDate = expense.ExpenseDate,
                 IsApproved = expense.IsApproved,
-                CreateBy = expense.Registration.UserName
+                CreateBy = expense.Registration.UserName,
+                AccountName = expense.Account?.AccountName,
+                AccountId = expense.AccountId
             };
         }
 
@@ -238,16 +252,21 @@ namespace InventoryManagement.Repository
             var sD = sDateTime ?? new DateTime(1000, 1, 1);
             var eD = eDateTime ?? new DateTime(3000, 1, 1);
 
-            var expense = Context.Expense.Include(e => e.ExpenseCategory).Where(e => e.ExpenseDate <= eD && e.ExpenseDate >= sD).Select(e => new ExpenseViewModel
-            {
-                ExpenseId = e.ExpenseId,
-                RegistrationId = e.RegistrationId,
-                ExpenseCategoryId = e.ExpenseCategoryId,
-                CategoryName = e.ExpenseCategory.CategoryName,
-                ExpenseAmount = e.ExpenseAmount,
-                ExpenseFor = e.ExpenseFor,
-                ExpenseDate = e.ExpenseDate
-            }).ToList();
+            var expense = Context.Expense
+                .Include(e => e.ExpenseCategory)
+                .Include(e => e.Account)
+                .Where(e => e.ExpenseDate <= eD && e.ExpenseDate >= sD).Select(e => new ExpenseViewModel
+                {
+                    ExpenseId = e.ExpenseId,
+                    RegistrationId = e.RegistrationId,
+                    ExpenseCategoryId = e.ExpenseCategoryId,
+                    CategoryName = e.ExpenseCategory.CategoryName,
+                    ExpenseAmount = e.ExpenseAmount,
+                    ExpenseFor = e.ExpenseFor,
+                    ExpenseDate = e.ExpenseDate,
+                    AccountName = e.Account.AccountName,
+                    AccountId = e.AccountId
+                }).ToList();
 
             return expense;
         }

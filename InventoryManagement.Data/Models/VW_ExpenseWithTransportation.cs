@@ -13,5 +13,7 @@ namespace InventoryManagement.Data
         public decimal ExpenseAmount { get; set; }
         public string ExpenseFor { get; set; }
         public DateTime ExpenseDate { get; set; }
+        public int? AccountId { get; set; }
+        public string AccountName { get; set; }
     }
 }

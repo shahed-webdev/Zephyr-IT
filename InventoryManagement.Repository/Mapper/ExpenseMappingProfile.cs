@@ -21,7 +21,8 @@ namespace InventoryManagement.Repository
                 .ForMember(d => d.Id, opt => opt.MapFrom(c => c.ExpenseId))
                 .ForMember(d => d.CreateBy, opt => opt.MapFrom(c => c.Registration.UserName))
                 .ForMember(d => d.ExpenseCategory, opt => opt.MapFrom(c => c.ExpenseCategory.CategoryName))
-                .ForMember(d => d.IsTransportation, opt => opt.MapFrom(c => false));
+                .ForMember(d => d.IsTransportation, opt => opt.MapFrom(c => false))
+                .ForMember(d => d.AccountName, opt => opt.MapFrom(c => c.Account.AccountName));
 
             CreateMap<ExpenseTransportation, ExpenseAllViewModel>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(c => c.ExpenseTransportationId))
@@ -29,6 +30,7 @@ namespace InventoryManagement.Repository
                 .ForMember(d => d.ExpenseCategory, opt => opt.MapFrom(c => "Transportation"))
                 .ForMember(d => d.ExpenseFor, opt => opt.MapFrom(c => c.ExpenseNote))
                 .ForMember(d => d.ExpenseAmount, opt => opt.MapFrom(c => c.TotalExpense))
+                .ForMember(d => d.AccountName, opt => opt.MapFrom(c => c.Account.AccountName))
                 .ForMember(d => d.IsTransportation, opt => opt.MapFrom(c => true));
 
             CreateMap<VW_ExpenseWithTransportation, ExpenseAllViewModel>();
