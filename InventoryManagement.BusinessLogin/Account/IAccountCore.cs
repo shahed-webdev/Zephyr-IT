@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using InventoryManagement.Repository;
+﻿using InventoryManagement.Repository;
 using JqueryDataTables.LoopsIT;
+using System.Collections.Generic;
 
 namespace InventoryManagement.BusinessLogin
 {
-    public interface IAccountCore 
+    public interface IAccountCore
     {
         DbResponse<AccountCrudModel> Add(AccountCrudModel model);
         DbResponse Edit(AccountCrudModel model);
@@ -21,5 +21,7 @@ namespace InventoryManagement.BusinessLogin
 
         DataResult<AccountDepositCrudModel> DepositList(DataRequest request);
         DataResult<AccountWithdrawCrudModel> WithdrawList(DataRequest request);
+        void DefaultAccountSet(int accountId);
+        int DefaultAccountGet();
     }
 }

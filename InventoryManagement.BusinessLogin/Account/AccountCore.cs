@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using InventoryManagement.Repository;
 using JqueryDataTables.LoopsIT;
+using System;
+using System.Collections.Generic;
 
 namespace InventoryManagement.BusinessLogin
 {
@@ -103,12 +103,12 @@ namespace InventoryManagement.BusinessLogin
         {
             try
             {
-                if (model.DepositAmount< 0)
+                if (model.DepositAmount < 0)
                     return new DbResponse<AccountDepositCrudModel>(false, "Invalid Data");
 
                 if (_db.Account.IsNull(model.AccountId))
                     return new DbResponse<AccountDepositCrudModel>(false, $"Account Not Found");
-                
+
                 _db.Account.BalanceAdd(model.AccountId, model.DepositAmount);
 
                 return _db.AccountDeposit.Add(model);
@@ -187,6 +187,16 @@ namespace InventoryManagement.BusinessLogin
         public DataResult<AccountWithdrawCrudModel> WithdrawList(DataRequest request)
         {
             return _db.AccountWithdraw.List(request);
+        }
+
+        public void DefaultAccountSet(int accountId)
+        {
+            _db.Account.DefaultAccountSet(accountId);
+        }
+
+        public int DefaultAccountGet()
+        {
+            return _db.Account.DefaultAccountGet();
         }
     }
 }
