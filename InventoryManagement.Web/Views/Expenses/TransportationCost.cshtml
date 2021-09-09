@@ -2,6 +2,7 @@
     ViewData["Title"] = "Transportation Cost";
 
     var isSalesmen = User.IsInRole("SalesPerson");
+    var isAdmin = User.IsInRole("admin");
     Layout = isSalesmen ? "_SalesmanLayout" : "_AdminLayout";
 
     var message = Context.Request.Query["Message"];
@@ -98,8 +99,16 @@
         </table>
     </div>
 
-    <div class="mt-4 text-right">
-        <strong id="grandTotal"></strong>
+    <div class="mt-4">
+        <strong class="d-block" id="grandTotal"></strong>
+        
+        @if (isAdmin)
+        {
+            <select id="selectAccountId" name="AccountId" asp-items="ViewBag.Account" class="form-control w-50 my-3">
+                <option value="">[ Payment Method ]</option>
+            </select>
+        }
+
         <button id="btnSubmit" class="btn peach-gradient mb-1 m-0">Submit <i class="fas fa-check ml-1"></i></button>
     </div>
 </div>
@@ -205,7 +214,18 @@
                 const customerId = document.getElementById("hiddenCustomerId");
                 const expenseDate = document.getElementById("expenseDate");
                 const expenseNote = document.getElementById("expenseNote");
+                const selectAccountId = document.getElementById("selectAccountId");
 
+                //Payment Method validation if admin
+                if (selectAccountId) {
+                    const selected = selectAccountId.value;
+                    if (!selected) {
+                        $.notify("Select Payment Method", "error");
+                        return;
+                    }
+                }
+
+         
                 if (!customerId.value)
                     inputCustomer.value = "";
 
@@ -214,6 +234,7 @@
                     ExpenseDate: expenseDate.value,
                     ExpenseNote: expenseNote.value,
                     TotalExpense: sumTotal(),
+                    AccountId: selectAccountId.value,
                     ExpenseTransportationList: listedData
                 }
 
