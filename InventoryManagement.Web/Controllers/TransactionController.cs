@@ -132,7 +132,16 @@ namespace InventoryManagement.Web.Controllers
         /***CAPITAL***/
         public IActionResult Capital()
         {
-            //var model = _accountCore.
+            ViewBag.Capital = _accountCore.CapitalGet();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Capital(decimal amount)
+        {
+            _accountCore.CapitalSet(amount);
+            ViewBag.Capital = _accountCore.CapitalGet();
+
             return View();
         }
     }
