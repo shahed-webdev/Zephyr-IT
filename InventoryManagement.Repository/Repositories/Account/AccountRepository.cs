@@ -138,5 +138,30 @@ namespace InventoryManagement.Repository
         {
             return Context.Institution.FirstOrDefault()?.Capital ?? 0;
         }
+
+        public void SellingReturnRecordAdd(SellingPaymentReturnRecordModel model)
+        {
+            var net = model.CurrentReturnAmount - model.PrevReturnAmount;
+            if (net == 0) return;
+
+            var returnRecord = _mapper.Map<SellingPaymentReturnRecord>(model);
+            Context.SellingPaymentReturnRecord.Add(returnRecord);
+
+            if (model.AccountId != null) BalanceSubtract(model.AccountId.Value, net);
+            Context.SaveChanges();
+        }
+
+        public void PurchaseReturnRecordAdd(PurchasePaymentReturnRecordModel model)
+        {
+            var net = model.CurrentReturnAmount - model.PrevReturnAmount;
+            if (net == 0) return;
+
+            var returnRecord = _mapper.Map<PurchasePaymentReturnRecord>(model);
+            Context.PurchasePaymentReturnRecord.Add(returnRecord);
+
+            if (model.AccountId != null) BalanceAdd(model.AccountId.Value, net);
+
+            Context.SaveChanges();
+        }
     }
 }

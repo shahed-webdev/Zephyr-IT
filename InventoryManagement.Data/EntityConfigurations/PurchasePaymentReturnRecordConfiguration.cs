@@ -18,7 +18,7 @@ namespace InventoryManagement.Data
                 .HasDefaultValueSql("(getutcdate())");
 
             entity.Property(e => e.NetReturnAmount)
-                .HasComputedColumnSql("([PrevReturnAmount]-[CurrentReturnAmount]) PERSISTED")
+                .HasComputedColumnSql("([CurrentReturnAmount]-[PrevReturnAmount]) PERSISTED")
                 .HasColumnType("decimal(18, 2)");
             entity.HasOne(d => d.Account)
                 .WithMany(p => p.PurchasePaymentReturnRecord)

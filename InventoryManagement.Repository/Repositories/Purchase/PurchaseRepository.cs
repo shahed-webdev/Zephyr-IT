@@ -387,6 +387,15 @@ namespace InventoryManagement.Repository
                     response.Message = "Not found";
                     return response;
                 }
+                var registrationId = db.Registrations.GetRegID_ByUserName(userName);
+                var returnRecord = new PurchasePaymentReturnRecordModel
+                {
+                    PrevReturnAmount = purchase.PurchaseReturnAmount,
+                    CurrentReturnAmount = model.PurchaseReturnAmount,
+                    AccountId = model.AccountId,
+                    PurchaseId = purchase.PurchaseId,
+                    RegistrationId = registrationId
+                };
 
                 purchase.PurchaseTotalPrice = model.PurchaseTotalPrice;
                 purchase.PurchaseDiscountAmount = model.PurchaseDiscountAmount;
@@ -473,7 +482,7 @@ namespace InventoryManagement.Repository
                 Context.PurchaseList.AddRange(newPurchaseList);
 
 
-                var registrationId = db.Registrations.GetRegID_ByUserName(userName);
+
                 if (model.PaidAmount > 0)
                 {
                     var newSellingPaymentSn = await db.PurchasePayments.GetNewSnAsync().ConfigureAwait(false);
@@ -500,7 +509,7 @@ namespace InventoryManagement.Repository
 
                 //Account add balance
                 if (model.PaidAmount > 0 && model.AccountId != null)
-                    db.Account.BalanceAdd(model.AccountId.Value, model.PaidAmount);
+                    db.Account.BalanceSubtract(model.AccountId.Value, model.PaidAmount);
 
 
                 await Context.SaveChangesAsync();
@@ -534,6 +543,9 @@ namespace InventoryManagement.Repository
                     //Product log
                     db.ProductLog.AddList(productLogs);
                 }
+
+                //Return amount account update 
+                db.Account.PurchaseReturnRecordAdd(returnRecord);
             }
             catch (Exception e)
             {

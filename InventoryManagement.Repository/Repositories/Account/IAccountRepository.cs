@@ -25,6 +25,7 @@ namespace InventoryManagement.Repository
         void CapitalSet(decimal amount);
         decimal CapitalGet();
 
-
+        void SellingReturnRecordAdd(SellingPaymentReturnRecordModel model);
+        void PurchaseReturnRecordAdd(PurchasePaymentReturnRecordModel model);
     }
 }

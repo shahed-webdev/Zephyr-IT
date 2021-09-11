@@ -713,6 +713,17 @@ namespace InventoryManagement.Repository
                     return response;
                 }
 
+                var returnRecord = new SellingPaymentReturnRecordModel
+                {
+                    PrevReturnAmount = selling.SellingReturnAmount,
+                    CurrentReturnAmount = model.SellingReturnAmount,
+                    AccountId = model.AccountId,
+                    SellingId = selling.SellingId,
+                    RegistrationId = model.UpdateRegistrationId
+                };
+
+
+
                 selling.SellingTotalPrice = model.SellingTotalPrice;
                 selling.SellingDiscountAmount = model.SellingDiscountAmount;
                 selling.SellingReturnAmount = model.SellingReturnAmount;
@@ -840,6 +851,9 @@ namespace InventoryManagement.Repository
                 db.Customers.UpdatePaidDue(selling.CustomerId);
                 //Product log
                 db.ProductLog.AddList(productLogs);
+
+                //Return amount account update 
+                db.Account.SellingReturnRecordAdd(returnRecord);
             }
             catch (Exception e)
             {
