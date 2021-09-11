@@ -40,6 +40,10 @@ namespace InventoryManagement.Data
             entity.Property(e => e.Capital)
                 .HasColumnType("decimal(18, 2)")
                 .HasDefaultValueSql("(0.00)");
+
+            entity.HasOne(e => e.Account)
+                .WithOne(e => e.Institution)
+                .HasForeignKey<Institution>(e => e.DefaultAccountId);
         }
     }
 }
