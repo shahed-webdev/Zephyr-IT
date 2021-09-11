@@ -10,6 +10,7 @@ namespace InventoryManagement.Data
             PurchaseList = new HashSet<PurchaseList>();
             PurchasePaymentList = new HashSet<PurchasePaymentList>();
             ProductLog = new HashSet<ProductLog>();
+            PurchasePaymentReturnRecord = new HashSet<PurchasePaymentReturnRecord>();
         }
 
         public int PurchaseId { get; set; }
@@ -34,5 +35,6 @@ namespace InventoryManagement.Data
         public virtual ICollection<PurchaseList> PurchaseList { get; set; }
         public virtual ICollection<PurchasePaymentList> PurchasePaymentList { get; set; }
         public virtual ICollection<ProductLog> ProductLog { get; set; }
+        public virtual ICollection<PurchasePaymentReturnRecord> PurchasePaymentReturnRecord { get; set; }
     }
 }

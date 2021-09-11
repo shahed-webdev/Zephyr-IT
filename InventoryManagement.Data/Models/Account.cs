@@ -13,6 +13,7 @@ namespace InventoryManagement.Data
             Expense = new HashSet<Expense>();
             ExpenseTransportation = new HashSet<ExpenseTransportation>();
             SellingPaymentReturnRecord = new HashSet<SellingPaymentReturnRecord>();
+            PurchasePaymentReturnRecord = new HashSet<PurchasePaymentReturnRecord>();
 
         }
         public int AccountId { get; set; }
@@ -27,5 +28,6 @@ namespace InventoryManagement.Data
         public virtual ICollection<Expense> Expense { get; set; }
         public virtual ICollection<ExpenseTransportation> ExpenseTransportation { get; set; }
         public virtual ICollection<SellingPaymentReturnRecord> SellingPaymentReturnRecord { get; set; }
+        public virtual ICollection<PurchasePaymentReturnRecord> PurchasePaymentReturnRecord { get; set; }
     }
 }

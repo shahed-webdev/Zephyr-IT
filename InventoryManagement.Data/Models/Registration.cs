@@ -20,6 +20,7 @@ namespace InventoryManagement.Data
             AdminMoneyCollection = new HashSet<AdminMoneyCollection>();
             SellingPromiseDateMisses = new List<SellingPromiseDateMiss>();
             SellingPaymentReturnRecord = new HashSet<SellingPaymentReturnRecord>();
+            PurchasePaymentReturnRecord = new HashSet<PurchasePaymentReturnRecord>();
         }
 
         public int RegistrationId { get; set; }
@@ -52,6 +53,7 @@ namespace InventoryManagement.Data
         public virtual ICollection<AdminMoneyCollection> AdminMoneyCollection { get; set; }
         public virtual ICollection<SellingPromiseDateMiss> SellingPromiseDateMisses { get; set; }
         public virtual ICollection<SellingPaymentReturnRecord> SellingPaymentReturnRecord { get; set; }
+        public virtual ICollection<PurchasePaymentReturnRecord> PurchasePaymentReturnRecord { get; set; }
 
     }
 }
