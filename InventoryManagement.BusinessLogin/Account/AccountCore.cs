@@ -198,5 +198,15 @@ namespace InventoryManagement.BusinessLogin
         {
             return _db.Account.DefaultAccountGet();
         }
+
+        public void CapitalSet(decimal amount)
+        {
+            _db.Account.CapitalSet(amount);
+        }
+
+        public decimal CapitalGet()
+        {
+            return _db.Account.CapitalGet();
+        }
     }
 }

@@ -23,5 +23,7 @@ namespace InventoryManagement.BusinessLogin
         DataResult<AccountWithdrawCrudModel> WithdrawList(DataRequest request);
         void DefaultAccountSet(int accountId);
         int DefaultAccountGet();
+        void CapitalSet(decimal amount);
+        decimal CapitalGet();
     }
 }
