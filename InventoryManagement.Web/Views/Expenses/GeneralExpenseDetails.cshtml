@@ -60,7 +60,7 @@
             </div>
 
             <div class="d-flex flex-column flex-end">
-                <select id="selectPaymentMethod" name="@Model.AccountId" asp-items="ViewBag.Account" class="form-control my-2">
+                <select id="selectAccountId" name="@Model.AccountId" asp-items="ViewBag.Account" class="form-control my-2" required>
                     <option value="">[ Payment Method ]</option>
                 </select>
                 
@@ -82,18 +82,33 @@
         });
 
         //approve check
+
         const checkApprove = document.getElementById("checkApprove");
-        checkApprove.addEventListener("click",
-            function() {
-                this.disabled = true;
+        checkApprove.addEventListener("click", function() {
+            const selectAccountId = document.getElementById("selectAccountId");
+
+            //Payment Method validation if admin
+            if (selectAccountId) {
+                const selected = selectAccountId.value;
+                if (!selected) {
+                    $.notify("Select Payment Method", "error");
+
+                    this.checked =false
+                    return;
+                }
+            }
+
+
+            this.disabled = true;
 
                 $.ajax({
                     type: "POST",
                     url: `/Expenses/ApproveGeneralExpense`,
-                    data: { id: @Model.ExpenseId },
+                    data: { id: @Model.ExpenseId , accountId: selectAccountId.value},
                     success: response => {
                         this.disabled = response.IsSuccess;
                         $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                        location.href = "/Expenses/Index";
                     },
                     error: response => {
                         this.disabled = false;

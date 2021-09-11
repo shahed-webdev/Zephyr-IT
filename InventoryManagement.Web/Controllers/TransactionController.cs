@@ -127,5 +127,13 @@ namespace InventoryManagement.Web.Controllers
             var response = _accountCore.DepositDelete(id);
             return Json(response);
         }
+
+
+        /***CAPITAL***/
+        public IActionResult Capital()
+        {
+            //var model = _accountCore.
+            return View();
+        }
     }
 }

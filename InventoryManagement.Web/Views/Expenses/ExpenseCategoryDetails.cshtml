@@ -46,6 +46,7 @@
     <script>
         $(function () {
             dataTable.filter = [];
+            dataTable.filter.push({ Field: "IsApproved", Value: true, Operand: dataTable.operand.Equal });
             dataTable.filter.push({ Field: "ExpenseCategory", Value: "@category", Operand: dataTable.operand.Equal });
             @if (from != "")
             {
