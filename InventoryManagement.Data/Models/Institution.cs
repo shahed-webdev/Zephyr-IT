@@ -20,6 +20,7 @@ namespace InventoryManagement.Data
         public byte[] InstitutionLogo { get; set; }
         public DateTime InsertDate { get; set; }
         public int? DefaultAccountId { get; set; }
+        public Account Account { get; set; }
         public decimal Capital { get; set; }
     }
 }

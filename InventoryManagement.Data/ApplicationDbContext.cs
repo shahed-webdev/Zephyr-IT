@@ -41,6 +41,7 @@ namespace InventoryManagement.Data
         public virtual DbSet<SellingList> SellingList { get; set; }
         public virtual DbSet<SellingPayment> SellingPayment { get; set; }
         public virtual DbSet<SellingPaymentList> SellingPaymentList { get; set; }
+        public virtual DbSet<SellingPaymentReturnRecord> SellingPaymentReturnRecord { get; set; }
         public virtual DbSet<SellingPromiseDateMiss> SellingPromiseDateMiss { get; set; }
         public virtual DbSet<Service> Service { get; set; }
         public virtual DbSet<ServiceDevice> ServiceDevice { get; set; }
@@ -84,6 +85,7 @@ namespace InventoryManagement.Data
             builder.ApplyConfiguration(new SellingListConfiguration());
             builder.ApplyConfiguration(new SellingPaymentConfiguration());
             builder.ApplyConfiguration(new SellingPaymentListConfiguration());
+            builder.ApplyConfiguration(new SellingPaymentReturnRecordConfiguration());
             builder.ApplyConfiguration(new SellingPromiseDateChangeConfiguration());
             builder.ApplyConfiguration(new ServiceConfiguration());
             builder.ApplyConfiguration(new ServiceDeviceConfiguration());
