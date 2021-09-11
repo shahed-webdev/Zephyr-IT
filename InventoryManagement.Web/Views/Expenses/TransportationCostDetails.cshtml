@@ -100,8 +100,8 @@
 
         <div class="d-flex flex-column flex-end">
             <strong id="grandTotal"></strong>
-            <select id="selectPaymentMethod" name="@Model.AccountId" asp-items="ViewBag.Account" class="form-control my-2">
-                <option value="" selected>[ Payment Method ]</option>
+            <select id="selectAccountId" name="@Model.AccountId" asp-items="ViewBag.Account" class="form-control my-2">
+                <option value="">[ Payment Method ]</option>
             </select>
             <button id="btnSubmit" class="btn peach-gradient mb-1 m-0">Update <i class="fas fa-check ml-1"></i></button>
 
@@ -162,6 +162,7 @@
                 return obj;
             };
 
+            const selectAccountId = document.getElementById("selectAccountId");
             const btnSubmit = document.getElementById("btnSubmit");
             const checkApprove = document.getElementById("checkApprove");
             const formAdd = document.getElementById("formAdd");
@@ -210,6 +211,15 @@
             btnSubmit.addEventListener("click", function(evt) {
                 evt.preventDefault();
 
+                //Payment Method validation if admin
+                if (selectAccountId) {
+                    const selected = selectAccountId.value;
+                    if (!selected) {
+                        $.notify("Select Payment Method", "error");
+                        return;
+                    }
+                }
+
                 const customerId = document.getElementById("hiddenCustomerId");
                 const expenseDate = document.getElementById("expenseDate");
                 const expenseNote = document.getElementById("expenseNote");
@@ -223,6 +233,7 @@
                     ExpenseDate: expenseDate.value,
                     ExpenseNote: expenseNote.value,
                     TotalExpense: sumTotal(),
+                    AccountId: selectAccountId.value,
                     ExpenseTransportationList: listedData
                 }
 
@@ -259,12 +270,24 @@
 
             //approve check
             checkApprove.addEventListener("click", function() {
+                //Payment Method validation if admin
+                if (selectAccountId) {
+                    const selected = selectAccountId.value;
+                    if (!selected) {
+                        $.notify("Select Payment Method", "error");
+
+                        this.checked =false
+                        return;
+                    }
+                }
+              
+
                 this.disabled = true;
 
                 $.ajax({
                     type: "POST",
                     url: `/Expenses/ApproveTransportationCost`,
-                    data: {id: @Model.ExpenseTransportationId},
+                    data: { id: @Model.ExpenseTransportationId, accountId: selectAccountId.value},
                     success: response => {
                         this.disabled = response.IsSuccess;
                         $.notify(response.Message, response.IsSuccess ? "success" : "error");
