@@ -25,14 +25,13 @@ namespace InventoryManagement.Repository
             return years.Select(y => new DDL
             {
                 value = y,
-                label = "Year: " + y.ToString()
+                label = "Year: " + y
             }).ToList();
         }
 
         public DashboardViewModel Data(int? year)
         {
             _reportYear = year ?? DateTime.Now.Year;
-
 
             var dashboard = new DashboardViewModel
             {

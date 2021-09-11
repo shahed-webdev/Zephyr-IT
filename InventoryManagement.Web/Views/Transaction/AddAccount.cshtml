@@ -1,19 +1,19 @@
-﻿@model IEnumerable<InventoryManagement.Repository.AccountCrudModel>  
+﻿@model IEnumerable<InventoryManagement.Repository.AccountCrudModel>
 @{
     ViewData["Title"] = "Add Account";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-@section Styles{ 
- <style>
-     .table tr td i { cursor:pointer}
-     .table tr td i.delete { color:red}
- </style>
+@section Styles{
+    <style>
+        .table tr td i { cursor: pointer }
+        .table tr td i.delete { color: red }
+    </style>
 }
 
-<div class="container">
+<div class="m-md-3">
     <h4 class="page-header mb-3">Account</h4>
-    
+
     <div class="mb-3">
         <form id="formDefaultAccount">
             <div class="row">
@@ -26,7 +26,7 @@
                     <input class="btn btn-md btn-deep-orange m-0" type="submit" value="Change Default Account" />
                 </div>
             </div>
-            
+
         </form>
     </div>
 
@@ -66,28 +66,77 @@
                 </tr>
             </thead>
             <tbody id="tBody">
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.AccountName</td>
-                    <td>@item.CostPercentage%</td>
-                    <td>৳@item.Balance</td>
-                    <td class="text-center"><i id="@item.AccountId" data-name="@item.AccountName" data-percentage="@item.CostPercentage" class="edit fas fa-edit"></i></td>
-                    <td class="text-center"><i id="@item.AccountId" class="delete fas fa-trash"></i></td>
-                    <td class="text-center">
-                        <a class="text-success" href="/Transaction/Deposit/@item.AccountId">
-                            <i class="fas fa-long-arrow-alt-down mr-1"></i>Deposit
-                        </a>
-                    </td>
-                    <td class="text-center">
-                        <a class="text-danger" href="/Transaction/Withdrawal/@item.AccountId">
-                            <i class="fas fa-long-arrow-alt-up mr-1"></i>Withdraw
-                        </a>
-                    </td>
-                </tr>
-            }
-            </tbody>
+                @foreach (var item in Model)
+                {
+                    var isDefaultAccount = item.AccountId == ViewBag.DefaultAccountId;
+                    var balance = item.Balance;
+
+                    <tr>
+                        <td>
+                            @item.AccountName
+                            @if (isDefaultAccount)
+                            {
+                                <i class="fas fa-check-circle text-success"></i>
+                            }
+                        </td>
+                        <td>@item.CostPercentage%</td>
+                        <td>
+                            <span class="@(balance < 0? "red-text":"")">৳@balance</span>
+
+                            @if (!isDefaultAccount && balance > 0)
+                            {
+                                <i id="@item.AccountId" data-name="@item.AccountName" data-balance="@balance" class="transfer blue-text d-block">
+                                    Transfer to Default
+                                </i>
+                            }
+                        </td>
+                        <td class="text-center"><i id="@item.AccountId" data-name="@item.AccountName" data-percentage="@item.CostPercentage" class="edit fas fa-edit"></i></td>
+                        <td class="text-center"><i id="@item.AccountId" class="delete fas fa-trash"></i></td>
+                        <td class="text-center">
+                            <a class="text-success" href="/Transaction/Deposit/@item.AccountId">
+                                <i class="fas fa-long-arrow-alt-down mr-1"></i>Deposit
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <a class="text-danger" href="/Transaction/Withdrawal/@item.AccountId">
+                                <i class="fas fa-long-arrow-alt-up mr-1"></i>Withdraw
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody> 
         </table>
+    </div>
+</div>
+
+
+
+<!-- Modal transfer to default account  -->
+<div class="modal fade" id="transferAmountModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-notify" role="document">
+        <div class="modal-content">
+            <div class="modal-header deep-orange darken-1">
+                <strong class="heading lead">Transfer To Default Account</strong>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formTransferAmount">
+                    <input type="hidden" name="AccountId">
+                    <h5>Transfer From: <strong id="transferFrom"></strong></h5>
+                    
+                    <div class="form-group">
+                        <label>Transfer Amount</label>
+                        <input type="number" step="0.01" min="0" name="TransferAmount" class="form-control" required>
+                    </div>
+
+                    <input id="btnTransfer" type="submit" class="btn btn-deep-orange" value="Transfer" />
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -125,8 +174,8 @@
 
 @section Scripts{
     <script>
-        (function () {
-            var serializeForm = function (form) {
+        (function() {
+            const serializeForm = function(form) {
                 const obj = {};
                 const formData = new FormData(form);
                 for (let key of formData.keys()) {
@@ -137,97 +186,117 @@
 
             //submit add account form
             const formAdd = document.getElementById("formAdd");
-            formAdd.addEventListener("submit", function (evt) {
-                evt.preventDefault();
+            formAdd.addEventListener("submit",
+                function(evt) {
+                    evt.preventDefault();
 
-                disableBtn(this.btnSubmit, true);
+                    disableBtn(this.btnSubmit, true);
 
-                const body = serializeForm(this);
-                $.ajax({
-                    url: '/Transaction/AddAccount',
-                    type: "POST",
-                    data: body,
-                    success: response => {
-                        $("#formAdd").notify(response.Message, response.IsSuccess ? "success" : "error");
-                        disableBtn(this.btnSubmit, false);
+                    const body = serializeForm(this);
+                    $.ajax({
+                        url: '/Transaction/AddAccount',
+                        type: "POST",
+                        data: body,
+                        success: response => {
+                            $("#formAdd").notify(response.Message, response.IsSuccess ? "success" : "error");
+                            disableBtn(this.btnSubmit, false);
 
-                        if (response.IsSuccess)
-                            location.reload();
-                    },
-                    error: error => {
-                        console.log(error);
-                        disableBtn(this.btnSubmit, false);
-                    }
+                            if (response.IsSuccess)
+                                location.reload();
+                        },
+                        error: error => {
+                            console.log(error);
+                            disableBtn(this.btnSubmit, false);
+                        }
+                    });
                 });
-            });
 
-            //account edit/delete
+            //account edit/delete/transfer
+            const formTransferAmount = document.getElementById("formTransferAmount");
+            const transferFromLabel = document.getElementById("transferFrom");
+            const modalTransfer = $("#transferAmountModal");
+
             const modalContainer = $("#updateModal");
             const formUpdate = document.getElementById("formUpdate");
             const tBody = document.getElementById("tBody");
 
-            tBody.addEventListener("click", function (evt) {
-                const element = evt.target;
+            tBody.addEventListener("click",
+                function(evt) {
+                    const element = evt.target;
 
-                const onEdit = element.classList.contains("edit");
-                const onDelete = element.classList.contains("delete");
-                const id = element.id;
+                    const onTransfer = element.classList.contains("transfer");
+                    const onEdit = element.classList.contains("edit");
+                    const onDelete = element.classList.contains("delete");
 
-                if (onEdit) {
+                    const id = element.id;
                     const name = element.getAttribute("data-name");
-                    const percentage = element.getAttribute("data-percentage");
 
-                    formUpdate.AccountId.value = id;
-                    formUpdate.AccountName.value = name;
-                    formUpdate.CostPercentage.value = percentage;
+                    //transfer
+                    if (onTransfer) {
+                        const balance = element.getAttribute("data-balance");
+                        transferFromLabel.textContent = `${name}: ${balance}/-`;
 
-                    modalContainer.modal("show");
-                }
+                        formTransferAmount.AccountId.value = id;
+                        formTransferAmount.TransferAmount.max = balance;
+                        modalTransfer.modal("show");
+                    }
 
-                if (onDelete) {
-                    $.ajax({
-                        url: '/Transaction/DeleteAccount',
-                        type: "POST",
-                        data: {id},
-                        success: response => {
-                            $.notify(response.Message, response.IsSuccess ? "success" : "error");
-                          
-                            if (response.IsSuccess) {
-                                element.parentElement.parentElement.remove();
+                    //edit
+                    if (onEdit) {
+                        const percentage = element.getAttribute("data-percentage");
+
+                        formUpdate.AccountId.value = id;
+                        formUpdate.AccountName.value = name;
+                        formUpdate.CostPercentage.value = percentage;
+
+                        modalContainer.modal("show");
+                    }
+
+                    if (onDelete) {
+                        $.ajax({
+                            url: '/Transaction/DeleteAccount',
+                            type: "POST",
+                            data: { id },
+                            success: response => {
+                                $.notify(response.Message, response.IsSuccess ? "success" : "error");
+
+                                if (response.IsSuccess) {
+                                    element.parentElement.parentElement.remove();
+                                }
+
+                            },
+                            error: error => {
+                                console.log(error);
                             }
-                               
-                        },
-                        error: error => {
-                            console.log(error);                         
-                        }
-                    });
-                }
-            })
+                        });
+                    }
+                })
 
             //account update post
-            formUpdate.addEventListener("submit", function (evt) {
-                evt.preventDefault();
+            formUpdate.addEventListener("submit",
+                function(evt) {
+                    evt.preventDefault();
 
-                disableBtn(this.btnUpdate, true);
+                    disableBtn(this.btnUpdate, true);
 
-                const body = serializeForm(this);
-                $.ajax({
-                    url: '/Transaction/UpdateAccount',
-                    type: "POST",
-                    data: body,
-                    success: response => {
-                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
-                        disableBtn(this.btnUpdate, false);
+                    const body = serializeForm(this);
+                    $.ajax({
+                        url: '/Transaction/UpdateAccount',
+                        type: "POST",
+                        data: body,
+                        success: response => {
+                            $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                            disableBtn(this.btnUpdate, false);
 
-                        if (response.IsSuccess)
-                            modalContainer.modal("hide");
-                    },
-                    error: error => {
-                        console.log(error);
-                        disableBtn(this.btnUpdate, false);
-                    }
+                            if (response.IsSuccess)
+                                modalContainer.modal("hide");
+                        },
+                        error: error => {
+                            console.log(error);
+                            disableBtn(this.btnUpdate, false);
+                        }
+                    });
                 });
-            });
 
             //disable btn on submitting
             function disableBtn(btn, isDisable) {
@@ -237,23 +306,52 @@
 
             //set default account
             const formDefaultAccount = document.getElementById("formDefaultAccount");
-            formDefaultAccount.addEventListener("submit", function(evt) {
-                evt.preventDefault();
+            formDefaultAccount.addEventListener("submit",
+                function(evt) {
+                    evt.preventDefault();
 
-                const accountId = this.AccountId.value;
-                if (!accountId) return;
+                    const accountId = this.AccountId.value;
+                    if (!accountId) return;
 
-                $.ajax({
-                    url: '/Transaction/SetDefaultAccount',
-                    type: "POST",
-                    data: { accountId },
-                    success: response => {
-                        $.notify(response, "success");
-                    },
-                    error: error => console.log(error)
+                    $.ajax({
+                        url: '/Transaction/SetDefaultAccount',
+                        type: "POST",
+                        data: { accountId },
+                        success: response => {
+                            $.notify(response, "success");
+                        },
+                        error: error => console.log(error)
+                    });
+
                 });
 
-            });
+            //transfer to default account
+            formTransferAmount.addEventListener("submit",
+                function(evt) {
+                    evt.preventDefault();
+
+                    const accountId = this.AccountId.value;
+                    if (!accountId) return;
+
+                    const btn = this.btnTransfer;
+                    disableBtn(btn, true);
+
+                    const body = serializeForm(this);
+
+                    $.ajax({
+                        url: '/Transaction/TransferToDefaultAccount',
+                        type: "POST",
+                        data: body,
+                        success: response => {
+                            location.reload();
+                        },
+                        error: error => {
+                            disableBtn(btn, false);
+                            console.log(error)
+                        }
+                    });
+
+                });
         })();
     </script>
 }

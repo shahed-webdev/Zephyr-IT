@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InventoryManagement.Web.Controllers
 {
-    [Authorize(Roles = "admin, account")]
+    [Authorize]
     public class TransactionController : Controller
     {
         private readonly IAccountCore _accountCore;
@@ -21,6 +21,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //set default account
+        [Authorize(Roles = "admin, account")]
         [HttpPost]
         public IActionResult SetDefaultAccount(int? accountId)
         {
@@ -32,17 +33,20 @@ namespace InventoryManagement.Web.Controllers
 
 
         //*** Account****
+        [Authorize(Roles = "admin, account")]
         public IActionResult AddAccount()
         {
             var response = _accountCore.List();
             
             var defaultAccountId = _accountCore.DefaultAccountGet();
+            ViewBag.DefaultAccountId = defaultAccountId;
             ViewBag.Account = new SelectList(_accountCore.DdlList(), "value", "label", defaultAccountId);
            
             return View(response);
         }
 
         //add
+        [Authorize(Roles = "admin, account")]
         [HttpPost]
         public IActionResult AddAccount(AccountCrudModel model)
         {
@@ -51,6 +55,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //update
+        [Authorize(Roles = "admin, account")]
         [HttpPost]
         public IActionResult UpdateAccount(AccountCrudModel model)
         {
@@ -59,6 +64,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
         //delete
+        [Authorize(Roles = "admin, account")]
         [HttpPost]
         public IActionResult DeleteAccount(int id)
         {
@@ -69,6 +75,7 @@ namespace InventoryManagement.Web.Controllers
 
 
         //***Withdrawal****
+        [Authorize(Roles = "admin, account")]
         public IActionResult Withdrawal(int? id)
         {
             if (!id.HasValue) return RedirectToAction("AddAccount");
@@ -100,6 +107,7 @@ namespace InventoryManagement.Web.Controllers
 
 
         //***Deposit***
+        [Authorize(Roles = "admin, account")]
         public IActionResult Deposit(int? id)
         {
             if (!id.HasValue) return RedirectToAction("AddAccount");
@@ -129,13 +137,25 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
-        /***CAPITAL***/
+        // Transfer To Default Account
+        [HttpPost]
+        public IActionResult TransferToDefaultAccount()
+        {
+            return Json("Transfer Successfully");
+        }
+
+
+       /***CAPITAL***/
+       [Authorize(Roles = "admin, capital")]
         public IActionResult Capital()
         {
             ViewBag.Capital = _accountCore.CapitalGet();
             return View();
         }
 
+
+        //post capital
+        [Authorize(Roles = "admin, capital")]
         [HttpPost]
         public IActionResult Capital(decimal amount)
         {

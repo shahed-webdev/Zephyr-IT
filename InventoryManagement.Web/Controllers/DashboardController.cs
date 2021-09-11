@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using InventoryManagement.BusinessLogin;
 using InventoryManagement.Repository;
 using JqueryDataTables.LoopsIT;
 using Microsoft.AspNetCore.Authorization;
@@ -11,16 +12,19 @@ namespace InventoryManagement.Web.Controllers
     public class DashboardController : Controller
     {
         private readonly IUnitOfWork _db;
-
-        public DashboardController(IUnitOfWork db)
+        private readonly IAccountCore _account;
+        public DashboardController(IUnitOfWork db, IAccountCore account)
         {
             _db = db;
+            _account = account;
         }
 
         [Authorize(Roles = "admin, SubAdmin")]
         public IActionResult Index(int? year)
         {
             var d = new DashboardRepository(_db);
+            ViewBag.Capital = _account.CapitalGet();
+            
             return View(d.Data(year));
         }
 
