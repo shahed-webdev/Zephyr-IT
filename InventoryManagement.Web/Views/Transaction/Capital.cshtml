@@ -4,5 +4,19 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Capital</h1>
+
+<div class="container">
+    <h4 class="page-header mb-3">Total Capital: @ViewBag.Capital</h4>
+    
+    <form asp-action="Capital">
+        <div class="card card-body">
+            <label>Capital</label>
+            <input type="number" name="amount" min="0" class="form-control" required />
+
+            <div class="mt-3">
+                <input type="submit" value="Update" class="btn btn-deep-orange" />
+            </div>
+        </div>
+    </form>
+</div>
 
