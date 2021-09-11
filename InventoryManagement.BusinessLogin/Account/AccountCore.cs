@@ -208,5 +208,10 @@ namespace InventoryManagement.BusinessLogin
         {
             return _db.Account.CapitalGet();
         }
+
+        public DbResponse TransferToDefault(int accountId, decimal amount)
+        {
+            return _db.Account.TransferToDefault(accountId, amount);
+        }
     }
 }

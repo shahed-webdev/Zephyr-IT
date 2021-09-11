@@ -27,5 +27,6 @@ namespace InventoryManagement.Repository
 
         void SellingReturnRecordAdd(SellingPaymentReturnRecordModel model);
         void PurchaseReturnRecordAdd(PurchasePaymentReturnRecordModel model);
+        DbResponse TransferToDefault(int accountId, decimal amount);
     }
 }

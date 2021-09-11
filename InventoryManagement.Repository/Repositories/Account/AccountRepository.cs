@@ -163,5 +163,26 @@ namespace InventoryManagement.Repository
 
             Context.SaveChanges();
         }
+
+        public DbResponse TransferToDefault(int accountId, decimal amount)
+        {
+            var defaultAccountId = this.DefaultAccountGet();
+
+            if (defaultAccountId == 0) return new DbResponse(false, $"Default Account not found");
+
+            var fromAccount = Context.Account.Find(accountId);
+
+            if (fromAccount == null) return new DbResponse(false, $"Account information not valid");
+
+            if (fromAccount.Balance < amount) return new DbResponse(false, $"Not sufficient balance");
+
+            this.BalanceAdd(defaultAccountId, amount);
+
+            this.BalanceSubtract(fromAccount.AccountId, amount);
+
+            Context.SaveChanges();
+
+            return new DbResponse(true, $"{amount} Tk. Transfer Successfully");
+        }
     }
 }

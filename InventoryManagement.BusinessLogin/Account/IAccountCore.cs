@@ -25,5 +25,6 @@ namespace InventoryManagement.BusinessLogin
         int DefaultAccountGet();
         void CapitalSet(decimal amount);
         decimal CapitalGet();
+        DbResponse TransferToDefault(int accountId, decimal amount);
     }
 }
