@@ -117,14 +117,18 @@ namespace InventoryManagement.Repository
                               into profit
                           from pt in profit.DefaultIfEmpty()
 
+                          join dt in _db.ProductDamaged.MonthlyDamaged(_reportYear) on m.MonthNumber equals dt.MonthNumber
+                              into damaged
+                          from dt in damaged.DefaultIfEmpty()
+
                           select new MonthlyDashboardSummaryViewModel
                           {
                               Month = m,
                               MonthlySale = Math.Round(s?.Amount ?? 0, 2),
                               MonthlyNewPurchase = Math.Round(p?.Amount ?? 0, 2),
                               MonthlyExpense = Math.Round(e?.Amount ?? 0, 2),
-                              MonthlyProfit = Math.Round(pt?.Amount ?? 0, 2) - Math.Round(e?.Amount ?? 0, 2),
-                              DailyAverageProfit = Math.Round((pt?.Amount ?? 0) / 26, 2)
+                              MonthlyProfit = Math.Round(pt?.Amount ?? 0, 2) - Math.Round(e?.Amount ?? 0, 2) - Math.Round(dt?.Amount ?? 0, 2),
+                              DailyAverageProfit = Math.Round((Math.Round(pt?.Amount ?? 0, 2) - Math.Round(e?.Amount ?? 0, 2) - Math.Round(dt?.Amount ?? 0, 2)) / 26, 2)
                           }).ToList();
 
             return result ?? new List<MonthlyDashboardSummaryViewModel>(); ;

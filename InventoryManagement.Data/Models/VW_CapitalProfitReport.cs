@@ -11,6 +11,11 @@
         public decimal TotalExpense { get; set; }
         public decimal NetProfit { get; set; }
         public decimal LiquidAmount { get; set; }
-
+        public decimal DamagedAmount { get; set; }
+        public decimal AccountLiquid { get; set; }
+        public decimal MonthlyTotalProfit { get; set; }
+        public decimal MonthlyTotalExpense { get; set; }
+        public decimal MonthlyDamagedAmount { get; set; }
+        public decimal MonthlyNetProfit { get; set; }
     }
 }

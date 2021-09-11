@@ -4,6 +4,7 @@ using InventoryManagement.Data;
 using JqueryDataTables.LoopsIT;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace InventoryManagement.Repository
@@ -57,6 +58,32 @@ namespace InventoryManagement.Repository
                 .ThenInclude(p => p.PurchaseList)
                 .Where(r => r.DamagedDate <= eD && r.DamagedDate >= sD)
                 .Sum(s => s.ProductStock.PurchaseList.PurchasePrice);
+        }
+
+        public ICollection<MonthlyAmount> MonthlyDamaged(int year)
+        {
+            var months = (from damaged in Context.ProductDamaged
+                          where damaged.DamagedDate.Year == year
+                          select new
+                          {
+                              MonthNumer = damaged.DamagedDate.Month,
+                              DamagedAmount = damaged.ProductStock.PurchaseList.PurchasePrice
+                          }
+                ).GroupBy(e => new
+                {
+                    number = e.MonthNumer
+
+                })
+                .Select(g => new MonthlyAmount
+                {
+                    MonthNumber = g.Key.number,
+                    Amount = g.Sum(s => s.DamagedAmount)
+                })
+                .ToList();
+
+
+
+            return months;
         }
     }
 }

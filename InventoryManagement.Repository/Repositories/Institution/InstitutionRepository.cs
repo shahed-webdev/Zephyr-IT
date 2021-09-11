@@ -70,7 +70,7 @@ namespace InventoryManagement.Repository
         {
             return Context.VW_CapitalProfitReport.Select(c => new CapitalReportModel
             {
-                NetProfit = c.NetProfit,
+                NetProfit = c.MonthlyNetProfit,
                 LiquidAmount = c.LiquidAmount
             }).FirstOrDefault();
         }
