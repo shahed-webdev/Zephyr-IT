@@ -139,13 +139,14 @@ namespace InventoryManagement.Web.Controllers
 
         // Transfer To Default Account
         [HttpPost]
-        public IActionResult TransferToDefaultAccount()
+        public IActionResult TransferToDefaultAccount(int accountId, decimal amount)
         {
-            return Json("Transfer Successfully");
+            var response = _accountCore.TransferToDefault(accountId, amount);
+            return Json(response);
         }
 
 
-       /***CAPITAL***/
+        /***CAPITAL***/
        [Authorize(Roles = "admin, capital")]
         public IActionResult Capital()
         {

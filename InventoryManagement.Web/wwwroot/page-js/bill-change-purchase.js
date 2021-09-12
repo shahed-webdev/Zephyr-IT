@@ -424,7 +424,7 @@ const purchaseUpdate = (function() {
     const inputDiscount = document.getElementById("inputDiscount");
     const inputReturn = document.getElementById("inputReturn");
     const inputPaid = document.getElementById("inputPaid");
-    const selectPaymentMethod = document.getElementById("selectPaymentMethod");
+    const selectAccountId = document.getElementById("selectAccountId");
  
     //sum total product price
     function sumTotal() {
@@ -445,8 +445,8 @@ const purchaseUpdate = (function() {
             inputPaid.value = '';
         }
 
-        if (selectPaymentMethod.selectedIndex > 0) {
-            selectPaymentMethod.removeAttribute('required');
+        if (selectAccountId.selectedIndex > 0) {
+            selectAccountId.removeAttribute('required');
         }
     }
 
@@ -457,15 +457,22 @@ const purchaseUpdate = (function() {
 
     //on return
     inputReturn.addEventListener("input", function () {
+        setAccountRequired();
         updateCalculation();
     });
 
     //input paid amount
     inputPaid.addEventListener("input", function () {
-        const paid = +this.value;
-        paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
+        setAccountRequired();
     });
 
+    //set account dropdown required
+    function setAccountRequired() {
+        const paid = +inputPaid.value;
+        const returnAmount = +inputReturn.value;
+
+        paid || returnAmount ? selectAccountId.setAttribute('required', true) : selectAccountId.removeAttribute('required');
+    }
 
     //dom calculate paid due
     function updateCalculation() {
@@ -486,17 +493,17 @@ const purchaseUpdate = (function() {
     function enabledDisablePaid(dueAmount) {
         if (dueAmount > 0) {
             inputPaid.removeAttribute('disabled');
-            selectPaymentMethod.removeAttribute('disabled');
+            selectAccountId.removeAttribute('disabled');
             inputPaid.setAttribute('max', dueAmount);
         } else {
             inputPaid.setAttribute('disabled', 'disabled');
-            selectPaymentMethod.setAttribute('disabled', 'disabled');
+            selectAccountId.setAttribute('disabled', 'disabled');
 
             const paid = +inputPaid.value;
 
             if (paid) inputPaid.value = '';
 
-            paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
+            paid ? selectAccountId.setAttribute('required', true) : selectAccountId.removeAttribute('required');
         }
     }
 

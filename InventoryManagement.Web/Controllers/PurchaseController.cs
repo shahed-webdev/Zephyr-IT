@@ -172,7 +172,6 @@ namespace InventoryManagement.Web.Views
         #endregion
 
         #region Bill Update
-
         public async Task<IActionResult> UpdatePurchaseBill(int? id)
         {
             if (!id.HasValue) return RedirectToAction("PurchaseRecords");

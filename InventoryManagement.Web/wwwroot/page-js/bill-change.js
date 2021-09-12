@@ -381,14 +381,16 @@ const onInputReturnAmount = function () {
     totalDue.innerText = sum;
 
     disablePaid(sum);
+    setAccountRequired();
 }
 
 //input paid amount
 const onInputPaid = function () {
-    const paid = +this.value;
-    paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
+    setAccountRequired();
 }
 
+
+//enabled/disabled paid and account
 function disablePaid(dueAmount) {
     if (dueAmount > 0) {
         inputPaid.removeAttribute('disabled');
@@ -404,10 +406,18 @@ function disablePaid(dueAmount) {
             inputPaid.value = '';
             inputPaid.previousElementSibling.classList.remove('active');
         }
-
-        paid ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
     }
 }
+
+
+//set account dropdown required
+function setAccountRequired() {
+    const paid = +inputPaid.value;
+    const returnAmount = +inputReturnAmount.value;
+
+    paid || returnAmount ? selectPaymentMethod.setAttribute('required', true) : selectPaymentMethod.removeAttribute('required');
+}
+
 
 //Account Transaction Charge
 const onAccountTransactionCharge = function () {
