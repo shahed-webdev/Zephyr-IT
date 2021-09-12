@@ -319,6 +319,7 @@
                         data: { accountId },
                         success: response => {
                             $.notify(response, "success");
+                            location.reload();
                         },
                         error: error => console.log(error)
                     });
