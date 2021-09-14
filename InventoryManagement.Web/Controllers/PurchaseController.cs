@@ -26,7 +26,9 @@ namespace InventoryManagement.Web.Views
         public IActionResult Purchase()
         {
             ViewBag.ParentId = new SelectList(_db.ProductCatalogs.CatalogDll(), "value", "label");
-            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
+
+            var defaultAccountId = _account.DefaultAccountGet();
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label", defaultAccountId);
 
             return View();
         }

@@ -271,22 +271,26 @@
 
             <div class="modal-body">
                 <form id="formAdd">
+                    <div class="form-group">
+                        <label for="inputExpenseDescription">Expense Description</label>
+                        <input id="inputExpenseDescription" name="ExpenseDescription" type="text" class="form-control" required>
+                    </div>
                     <div class="row">
-                        <div class="col lg-3">
+                        <div class="col lg-5">
                             <div class="form-group">
                                 <label for="inputExpense">Expense</label>
                                 <input id="inputExpense" name="Expense" type="number" step="0.01" min="0" class="form-control" required>
                             </div>
                         </div>
-                        <div class="col-lg-7">
-                            <div class="form-group">
-                                <label for="inputExpenseDescription">Expense Description</label>
-                                <input id="inputExpenseDescription" name="ExpenseDescription" type="text" class="form-control" required>
-                            </div>
+                        <div class="col-lg-5">
+                            <label>Account</label>
+                            <select name="AccountId" asp-items="ViewBag.Account" class="form-control" required>
+                                <option value="">[ Payment Method ]</option>
+                            </select>
                         </div>
-                        <div class="col">
+                        <div class="col-lg-2">
                             <div class="form-group pt-lg-4">
-                                <input id="btnSubmit" type="submit" value="Submit" class="btn btn-danger btn-md" />
+                                <input id="btnSubmit" type="submit" value="Submit" class="btn btn-danger btn-md"/>
                             </div>
                         </div>
                     </div>
@@ -341,9 +345,10 @@
                             btnDisabled(btn, false);
 
                             if (response.IsSuccess) {
-                                // expenseList.appendChild(appendData(response.Data));
-                                this.reset();
+                                getBillExpense();
                                 sumExpense();
+
+                                this.reset();
                             }
                         },
                         error: function(error) {
@@ -352,6 +357,26 @@
                         }
                     });
                 });
+
+            //get bill expense data
+            function getBillExpense() {
+                expenseList.innerHTML = "";
+
+                $.ajax({
+                    url: '/Selling/GetBillExpense',
+                    data: { id: @Model.SellingId },
+                    success: function(response) {
+                        response.forEach(item => {
+                            expenseList.appendChild(appendData(item));
+                        });
+
+                        sumExpense();
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
 
             //append inserted expense
             function appendData(item) {
@@ -399,26 +424,11 @@
                 });
 
             //on show modal
-            showExpenseModal.addEventListener("click",
-                function() {
-                    expenseList.innerHTML = "";
+            showExpenseModal.addEventListener("click", function () {
+                getBillExpense();
 
-                    $.ajax({
-                        url: '/Selling/GetBillExpense',
-                        data: { id: @Model.SellingId },
-                        success: function(response) {
-                            response.forEach(item => {
-                                expenseList.appendChild(appendData(item));
-                            });
-
-                            $("#modalExpense").modal("show");
-                            sumExpense();
-                        },
-                        error: function(error) {
-                            console.log(error);
-                        }
-                    });
-                });
+                $("#modalExpense").modal("show");
+            });
 
             //sum total expense
             function sumExpense() {

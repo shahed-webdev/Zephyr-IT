@@ -105,18 +105,18 @@ const getTempStorage = function () {
 }
 
 //dropdown selected index 0
-const clearMDBdropDownList = function (mainSelector) {
-    const content = mainSelector.querySelectorAll('.select-dropdown li');
-    content.forEach(li => {
-        content[0].classList.add('active','selected');
-
-        if (li.classList.contains('selected')) {
-            li.classList.remove(['active', 'selected']);
-            li.click();
-            return;
-        }
-    });
-}
+//const clearMDBdropDownList = function (mainSelector) {
+//    const content = mainSelector.querySelectorAll('.select-dropdown li');
+//    content.forEach(li => {
+//        content[0].classList.add('active','selected');
+//
+//        if (li.classList.contains('selected')) {
+//            li.classList.remove(['active', 'selected']);
+//            li.click();
+//            return;
+//        }
+//    });
+//}
 
 //calculate purchase Total
 const purchaseTotalPrice = function () {
@@ -139,7 +139,7 @@ const appendTotalPrice = function () {
         inputPaid.value = '';
 
     if (selectPaymentMethod.selectedIndex > 0) {
-        clearMDBdropDownList(formPayment);
+        //clearMDBdropDownList(formPayment);
         selectPaymentMethod.removeAttribute('required');
     }
 }
@@ -252,13 +252,6 @@ const clearInput = function () {
 //category dropdown change
 const onCategoryChanged = function() {
     const categoryId = +this.value
-
-    //$('.product-select').materialSelect("destroy");
-
-    //// Material Select Initialization
-    //$('.product-select').materialSelect();
-
-    //clearMDBdropDownList(formCart);
 
     if (!categoryId) return;
 

@@ -127,7 +127,7 @@
                         @if (Model.AccountTransactionCharge > 0)
                         {
                             <li class="d-flex justify-content-between align-items-center mt-2">
-                                <span>Prev. Transaction Charge</span>
+                                <span>Prev. Trans./Transport Cost</span>
                                 <strong>@Model.AccountTransactionCharge /-</strong>
                             </li>
                         }
@@ -159,7 +159,7 @@
                         </li>
                         <li class="md-form">
                             <input id="inputAccountTransactionCharge" type="number" step="0.01" min="0" class="form-control">
-                            <label for="inputAccountTransactionCharge">Transaction Charge</label>
+                            <label for="inputAccountTransactionCharge">Transaction/Transport Cost</label>
                         </li>
                         <li class="md-form mt-4">
                             <input id="inputPromisedDate" value="@Model.PromisedPaymentDate?.ToString("dd-MMMM-yyyy")" type="text" class="form-control datepicker">

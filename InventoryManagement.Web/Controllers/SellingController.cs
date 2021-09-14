@@ -54,6 +54,9 @@ namespace InventoryManagement.Web.Controllers
             var model = await _db.Selling.SellingReceiptAsync(id.GetValueOrDefault(), _db).ConfigureAwait(false);
             if (model == null) return RedirectToAction("Selling");
 
+            var defaultAccountId = _account.DefaultAccountGet();
+            ViewBag.Account = new SelectList(_account.DdlList(), "value", "label", defaultAccountId);
+
             return View(model);
         }
         #endregion
@@ -113,7 +116,7 @@ namespace InventoryManagement.Web.Controllers
         }
 
 
-        #region Selling Invoice
+        #region Selling Record
         //selling invoice
         [Authorize(Roles = "admin, selling-record")]
         public IActionResult SellingRecords()
