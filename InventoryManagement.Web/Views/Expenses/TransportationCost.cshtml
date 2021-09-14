@@ -115,7 +115,7 @@
 
 @section Scripts{
     <script>
-        $(function () {
+        $(function() {
             $('.datepicker').pickadate({
                 format: 'd-mmmm-yyyy',
                 clear: ''
@@ -123,27 +123,28 @@
 
             //customer autocomplete
             hiddenCustomerId.value = "";
-            inputCustomer.addEventListener("input", function () {
-                hiddenCustomerId.value = "";
-            });
+            inputCustomer.addEventListener("input",
+                function() {
+                    hiddenCustomerId.value = "";
+                });
 
             $('#inputCustomer').typeahead({
                 minLength: 1,
-                displayText: function (item) {
+                displayText: function(item) {
                     return `${item.CustomerName}  ${item.PhonePrimary ? item.PhonePrimary : ''}  ${item.OrganizationName ? item.OrganizationName : ''}`;
                 },
-                afterSelect: function (item) {
+                afterSelect: function(item) {
                     this.$element[0].value = item.CustomerName
                 },
-                source: function (request, result) {
+                source: function(request, result) {
                     $.ajax({
                         url: "/Selling/FindCustomers",
                         data: { prefix: request },
-                        success: function (response) { result(response); },
-                        error: function (err) { console.log(err) }
+                        success: function(response) { result(response); },
+                        error: function(err) { console.log(err) }
                     });
                 },
-                updater: function (item) {
+                updater: function(item) {
                     hiddenCustomerId.value = item.CustomerId;
                     return item;
                 }
@@ -151,9 +152,9 @@
         });
 
         //private method
-        (function () {
+        (function() {
             let listedData = [];
-            const serializeForm = function (form) {
+            const serializeForm = function(form) {
                 const obj = {};
                 obj.id = new Date().getTime();
 
@@ -169,14 +170,15 @@
             const tBody = document.getElementById("tbody");
 
             //add to list
-            formAdd.addEventListener("submit", function (evt) {
-                evt.preventDefault();
+            formAdd.addEventListener("submit",
+                function(evt) {
+                    evt.preventDefault();
 
-                listedData.unshift(serializeForm(this));
+                    listedData.unshift(serializeForm(this));
 
-                showTable();
-                this.reset();
-            });
+                    showTable();
+                    this.reset();
+                });
 
             function showTable() {
                 const fragment = document.createDocumentFragment();
@@ -195,73 +197,74 @@
             }
 
             //delete
-            tBody.addEventListener("click", function (evt) {
-                const onDelete = evt.target.classList.contains("delete");
-                if (!onDelete) return;
+            tBody.addEventListener("click",
+                function(evt) {
+                    const onDelete = evt.target.classList.contains("delete");
+                    if (!onDelete) return;
 
-                const id = +evt.target.id;
-                evt.target.parentElement.parentElement.remove();
+                    const id = +evt.target.id;
+                    evt.target.parentElement.parentElement.remove();
 
-                listedData = listedData.filter(el => el.id !== id);
+                    listedData = listedData.filter(el => el.id !== id);
 
-                showTable();
-            });
+                    showTable();
+                });
 
             //post data
-            btnSubmit.addEventListener("click", function (evt) {
-                evt.preventDefault();
+            btnSubmit.addEventListener("click",
+                function(evt) {
+                    evt.preventDefault();
 
-                const customerId = document.getElementById("hiddenCustomerId");
-                const expenseDate = document.getElementById("expenseDate");
-                const expenseNote = document.getElementById("expenseNote");
-                const selectAccountId = document.getElementById("selectAccountId");
+                    const customerId = document.getElementById("hiddenCustomerId");
+                    const expenseDate = document.getElementById("expenseDate");
+                    const expenseNote = document.getElementById("expenseNote");
+                    const selectAccountId = document.getElementById("selectAccountId");
 
-                //Payment Method validation if admin
-                if (selectAccountId) {
-                    const selected = selectAccountId.value;
-                    if (!selected) {
-                        $.notify("Select Payment Method", "error");
+                    //Payment Method validation if admin
+                    if (selectAccountId) {
+                        const selected = selectAccountId.value;
+                        if (!selected) {
+                            $.notify("Select Payment Method", "error");
+                            return;
+                        }
+                    }
+
+                    if (!customerId.value)
+                        inputCustomer.value = "";
+
+                    const model = {
+                        CustomerId: customerId.value,
+                        ExpenseDate: expenseDate.value,
+                        ExpenseNote: expenseNote.value,
+                        TotalExpense: sumTotal(),
+                        AccountId: selectAccountId ? selectAccountId.value : "",
+                        ExpenseTransportationList: listedData
+                    }
+
+                    if (!model.ExpenseDate || !model.ExpenseNote || !listedData.length) {
+                        $.notify("Required Info Not Provided", "error");
                         return;
                     }
-                }
 
-         
-                if (!customerId.value)
-                    inputCustomer.value = "";
+                    disableSubmit(true, this);
 
-                const model = {
-                    CustomerId: customerId.value,
-                    ExpenseDate: expenseDate.value,
-                    ExpenseNote: expenseNote.value,
-                    TotalExpense: sumTotal(),
-                    AccountId: selectAccountId.value,
-                    ExpenseTransportationList: listedData
-                }
+                    $.ajax({
+                        type: "POST",
+                        url: `/Expenses/PostTransportationCost`,
+                        data: model,
+                        success: response => {
+                            disableSubmit(false, this);
+                            $.notify(response.Message, response.IsSuccess ? "success" : "error");
 
-                if (!model.ExpenseDate || !model.ExpenseNote || !listedData.length) {
-                    $.notify("Required Info Not Provided", "error");
-                    return;
-                }
-
-                disableSubmit(true, this);
-
-                $.ajax({
-                    type: "POST",
-                    url: `/Expenses/PostTransportationCost`,
-                    data: model,
-                    success: response => {
-                        disableSubmit(false, this);
-                        $.notify(response.Message, response.IsSuccess ? "success" : "error");
-
-                        if (response.IsSuccess)
-                            location.href = "/Expenses/TransportationCost";
-                    },
-                    error: response => {
-                        disableSubmit(false, this);
-                        console.log(response);
-                    }
+                            if (response.IsSuccess)
+                                location.href = "/Expenses/TransportationCost";
+                        },
+                        error: response => {
+                            disableSubmit(false, this);
+                            console.log(response);
+                        }
+                    });
                 });
-            });
 
             function sumTotal() {
                 return listedData.reduce((acc, item) => acc + +item.ExpenseAmount, 0);
