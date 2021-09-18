@@ -73,7 +73,7 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBillExpense(SellingExpenseAddModel model)
         {
-            var response = await _db.Selling.ExpenseAdd(model);
+            var response = await _db.Selling.ExpenseAdd(model, _db);
             return Json(response);
         }
 
@@ -81,7 +81,7 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteBillExpense(int id)
         {
-            var response = await _db.Selling.ExpenseDelete(id);
+            var response = await _db.Selling.ExpenseDelete(id, _db);
             return Json(response);
         }
         #endregion
@@ -180,8 +180,8 @@ namespace InventoryManagement.Web.Controllers
 
             ViewBag.Account = new SelectList(_account.DdlList(), "value", "label");
 
-            var model =  _db.SellingPayments.GetSellingDuePayMultipleBill(id.GetValueOrDefault());
-            if(model.TotalDue <= 0) return RedirectToAction("DueInvoice");
+            var model = _db.SellingPayments.GetSellingDuePayMultipleBill(id.GetValueOrDefault());
+            if (model.TotalDue <= 0) return RedirectToAction("DueInvoice");
 
             return View(model);
         }
@@ -314,7 +314,7 @@ namespace InventoryManagement.Web.Controllers
         [HttpPost]
         public IActionResult GetCollectionByDate(DateTime? fromDate, DateTime? toDate, int? id)
         {
-            var model = id == null ? _db.SellingPayments.CollectionAmountDateWise(fromDate, toDate): _db.SellingPayments.CollectionAmountDateWise(fromDate, toDate, id.Value);
+            var model = id == null ? _db.SellingPayments.CollectionAmountDateWise(fromDate, toDate) : _db.SellingPayments.CollectionAmountDateWise(fromDate, toDate, id.Value);
             return Json(model);
         }
 

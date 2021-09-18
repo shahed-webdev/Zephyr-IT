@@ -31,8 +31,8 @@ namespace InventoryManagement.Repository
         Task<DbResponse<int>> BillUpdated(SellingUpdatePostModel model, IUnitOfWork db);
         Task<DbResponse<int>> FindBill(int billNo);
 
-        Task<DbResponse> ExpenseAdd(SellingExpenseAddModel model);
-        Task<DbResponse> ExpenseDelete(int sellingExpenseId);
+        Task<DbResponse> ExpenseAdd(SellingExpenseAddModel model, IUnitOfWork db);
+        Task<DbResponse> ExpenseDelete(int sellingExpenseId, IUnitOfWork db);
 
         List<SellingExpenseListModel> ExpenseList(int sellingId);
 

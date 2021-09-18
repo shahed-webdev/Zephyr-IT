@@ -117,7 +117,8 @@ namespace InventoryManagement.Repository
                     {
                         Expense = model.Expense,
                         ExpenseDescription = model.ExpenseDescription,
-                        InsertDateUtc = DateTime.Now.BdTime()
+                        InsertDateUtc = DateTime.Now.BdTime(),
+                        AccountId = model.AccountId
                     }
                 } : null,
                 ServiceCost = model.ServiceCost,
@@ -137,11 +138,16 @@ namespace InventoryManagement.Repository
                 if (model.SellingPaidAmount > 0 && model.AccountId != null)
                     db.Account.BalanceAdd(model.AccountId.Value, model.SellingPaidAmount);
 
+
                 //Sales parson add balance
                 if (model.SellingPaidAmount > 0)
                     db.Registrations.BalanceAdd(model.RegistrationId, model.SellingPaidAmount);
 
                 await Context.SaveChangesAsync().ConfigureAwait(false);
+
+                //Account Subtract balance for selling expense
+                if (model.Expense > 0 && model.AccountId != null)
+                    db.Account.BalanceSubtract(model.AccountId.Value, model.Expense);
 
                 db.Customers.UpdatePaidDue(model.CustomerId);
 
@@ -184,6 +190,7 @@ namespace InventoryManagement.Repository
               .ThenInclude(sp => sp.SellingPayment)
               .ThenInclude(a => a.Account)
               .Include(s => s.SellingExpense)
+              .ThenInclude(a => a.Account)
               .Include(s => s.Warranty)
               .Include(s => s.Purchase)
               .Include(s => s.SellingPromiseDateMisses)
@@ -235,6 +242,8 @@ namespace InventoryManagement.Repository
                   SellingExpenses = s.SellingExpense.Select(e => new SellingExpenseListModel
                   {
                       SellingExpenseId = e.SellingExpenseId,
+                      AccountId = e.AccountId,
+                      AccountName = e.Account.AccountName,
                       Expense = e.Expense,
                       ExpenseDescription = e.ExpenseDescription,
                       InsertDateUtc = e.InsertDateUtc
@@ -609,6 +618,7 @@ namespace InventoryManagement.Repository
               .ThenInclude(sp => sp.SellingPayment)
               .ThenInclude(a => a.Account)
               .Include(s => s.SellingExpense)
+              .ThenInclude(a => a.Account)
               .Include(s => s.Purchase)
               .Select(s => new SellingUpdateGetModel
               {
@@ -656,6 +666,8 @@ namespace InventoryManagement.Repository
                   SellingExpenses = s.SellingExpense.Select(e => new SellingExpenseListModel
                   {
                       SellingExpenseId = e.SellingExpenseId,
+                      AccountId = e.AccountId,
+                      AccountName = e.Account.AccountName,
                       Expense = e.Expense,
                       ExpenseDescription = e.ExpenseDescription,
                       InsertDateUtc = e.InsertDateUtc
@@ -876,7 +888,7 @@ namespace InventoryManagement.Repository
             return selling == null ? new DbResponse<int>(false, "Bill Not Found") : new DbResponse<int>(true, "Success", selling.SellingId);
         }
 
-        public async Task<DbResponse> ExpenseAdd(SellingExpenseAddModel model)
+        public async Task<DbResponse> ExpenseAdd(SellingExpenseAddModel model, IUnitOfWork db)
         {
 
             var selling = await Context.Selling.FindAsync(model.SellingId);
@@ -889,18 +901,23 @@ namespace InventoryManagement.Repository
             {
                 SellingId = model.SellingId,
                 Expense = model.Expense,
-                ExpenseDescription = model.ExpenseDescription
+                ExpenseDescription = model.ExpenseDescription,
+                AccountId = model.AccountId
             };
 
             await Context.SellingExpense.AddAsync(expense);
 
             selling.ExpenseTotal += model.Expense;
             Context.Selling.Update(selling);
+
+            if (model.AccountId != null)
+                db.Account.BalanceSubtract(model.AccountId.Value, model.Expense);
+
             await Context.SaveChangesAsync();
             return new DbResponse(true, $"Successfully expense added");
         }
 
-        public async Task<DbResponse> ExpenseDelete(int sellingExpenseId)
+        public async Task<DbResponse> ExpenseDelete(int sellingExpenseId, IUnitOfWork db)
         {
             var sellingExpense = await Context.SellingExpense.FindAsync(sellingExpenseId);
             var selling = await Context.Selling.FindAsync(sellingExpense.SellingId);
@@ -911,6 +928,10 @@ namespace InventoryManagement.Repository
 
             selling.ExpenseTotal -= sellingExpense.Expense;
             Context.Selling.Update(selling);
+
+            if (sellingExpense.AccountId != null)
+                db.Account.BalanceAdd(sellingExpense.AccountId.Value, sellingExpense.Expense);
+
             await Context.SaveChangesAsync();
             return new DbResponse(true, $"Successfully expense deleted");
         }
