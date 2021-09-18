@@ -9,7 +9,9 @@ namespace InventoryManagement.Repository
         {
             //CreateMap<SellingViewModel, Selling>();
             //CreateMap<SellingProductListViewModel, SellingList>();
-            CreateMap<SellingExpense, SellingExpenseListModel>().ReverseMap();
+            CreateMap<SellingExpense, SellingExpenseListModel>()
+                .ForMember(d => d.AccountName, opt => opt.MapFrom(c => c.Account.AccountName))
+                .ReverseMap();
             CreateMap<Selling, SellingBillProfitModel>()
                 .ForMember(d => d.CustomerName, opt => opt.MapFrom(c => c.Customer.CustomerName))
                 ;

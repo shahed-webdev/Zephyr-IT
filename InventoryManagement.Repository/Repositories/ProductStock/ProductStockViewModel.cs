@@ -35,6 +35,7 @@ namespace InventoryManagement.Repository
         }
         public int ProductCatalogId { get; set; }
         public string ProductCatalogName { get; set; }
+        public decimal ProductValue { get; set; }
         public List<ProductStockListModel> ProductList { get; set; }
     }
 

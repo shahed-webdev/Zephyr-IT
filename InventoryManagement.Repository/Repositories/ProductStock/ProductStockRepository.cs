@@ -151,6 +151,7 @@ namespace InventoryManagement.Repository
                 {
                     ProductCatalogId = c.ProductCatalogId,
                     ProductCatalogName = c.CatalogName,
+                    ProductValue = c.Product.Where(p => p.ProductStock.Any(s => !s.IsSold)).SelectMany(p => p.PurchaseList).Sum(l=> l.PurchasePrice),
                     ProductList = c.Product
                         .Where(p => p.ProductStock.Any(s => !s.IsSold))
                         .OrderBy(p => p.ProductName)
