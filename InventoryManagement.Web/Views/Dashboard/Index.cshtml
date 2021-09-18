@@ -30,9 +30,12 @@
 }
 
 @{
-    // var businessStatus = (Model.CustomerDue + Model.StockProductPurchaseValue) - Model.MarketDue;
-    
     var totalCapital = ViewBag.Capital;
+
+    var currentMonthProfit = Model.CapitalReport.NetProfit;
+    var businessStatus = totalCapital + (currentMonthProfit < 0 ? currentMonthProfit: 0);
+    var businessWarning = totalCapital > businessStatus ? "text-danger":"text-success";
+
     var totalStockAmount = (Model.StockProductPurchaseValue + Model.CustomerDue + Model.CapitalReport.LiquidAmount);
     var extraInvest = (totalCapital - totalStockAmount);
 }
@@ -67,7 +70,7 @@
                     <div class="row mt-4 mb-3">
                         <div class="col-md-3 col-3 text-left pl-3">
                             <div class="m-2 fa-lg">
-                                <i class="far fa-business-time fa-2x @(totalCapital > 0 ? "text-success" : "text-danger")"></i>
+                                <i class="far fa-business-time fa-2x @businessWarning"></i>
                             </div>
                         </div>
                         <div class="col-md-9 col-9 text-right pr-4">
@@ -77,7 +80,9 @@
                                        title="(Customer Due + Stock Product Price) - Market Due"
                                        class="far fa-question-circle text-muted ml-2"></small>
                             </p>
-                            <h4 class="ml-1 font-weight-bold h4-responsive @(totalCapital > 0 ? "text-success" : "text-danger")">৳@totalCapital</h4>
+                            <h4 class="ml-1 font-weight-bold h4-responsive @businessWarning">
+                                ৳@businessStatus
+                            </h4>
                         </div>
                     </div>
                 </div>
