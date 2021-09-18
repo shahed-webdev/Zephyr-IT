@@ -325,6 +325,14 @@ namespace InventoryManagement.Web.Controllers
             var response = _db.SellingPayments.Capital(fromDate, toDate);
             return Json(response);
         }
+
+        //Get Collection Account Wise
+        [HttpPost]
+        public IActionResult GetCollectionAccountSummary(DateTime? fromDate, DateTime? toDate)
+        {
+            var response = _db.SellingPayments.CollectionAccountWise(fromDate, toDate);
+            return Json(response);
+        }
         #endregion Cash Collection
 
         #region Bill Wise Profite 
