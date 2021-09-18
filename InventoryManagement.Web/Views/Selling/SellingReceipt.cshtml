@@ -270,7 +270,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="formAdd">
+                <form id="formExpenseAdd">
                     <div class="form-group">
                         <label for="inputExpenseDescription">Expense Description</label>
                         <input id="inputExpenseDescription" name="ExpenseDescription" type="text" class="form-control" required>
@@ -320,12 +320,12 @@
                 return obj;
             };
 
-            const formAdd = document.getElementById("formAdd");
+            const formExpenseAdd = document.getElementById("formExpenseAdd");
             const showExpenseModal = document.getElementById("showExpenseModal");
             const expenseList = document.getElementById("expenseList");
 
-            //post data
-            formAdd.addEventListener("submit",
+            //post bill Expense Add
+            formExpenseAdd.addEventListener("submit",
                 function(evt) {
                     evt.preventDefault();
 
@@ -381,12 +381,19 @@
             //append inserted expense
             function appendData(item) {
                 const isAdmin = '@User.IsInRole("admin")';
-                const deleteElement = isAdmin === "True"? ` <i id="${item.SellingExpenseId}" class="delete fas fa-trash"></i>` : "";
+                const deleteElement = isAdmin === "True" ? `<i id="${item.SellingExpenseId}" class="delete fas fa-trash"></i>` : "";
                 const li = document.createElement("tr");
 
                 li.className = "list-group-item d-flex justify-content-between align-items-center";
                 li.innerHTML = `<div>
-                                   <div><strong>৳<span class="expenseAmount">${item.Expense}</span></strong><small class="text-muted ml-3"><i class="far fa-clock text-muted"></i> ${moment(item.InsertDateUtc).format('DD MMM YYYY')}</small></div>
+                                   <div>
+                                    <strong>৳<span class="expenseAmount">${item.Expense}</span></strong>
+                                    <small>${item.AccountName ? item.AccountName:""}</small>
+                                    <small class="text-muted ml-3">
+                                      <i class="far fa-clock text-muted">
+                                      </i>${moment(item.InsertDateUtc).format('DD MMM YYYY')}
+                                    </small>
+                                   </div>
                                   <span>${item.ExpenseDescription}</span>
                                 </div>
                                 ${deleteElement}`;
@@ -424,11 +431,12 @@
                 });
 
             //on show modal
-            showExpenseModal.addEventListener("click", function () {
-                getBillExpense();
+            showExpenseModal.addEventListener("click",
+                function() {
+                    getBillExpense();
 
-                $("#modalExpense").modal("show");
-            });
+                    $("#modalExpense").modal("show");
+                });
 
             //sum total expense
             function sumExpense() {
