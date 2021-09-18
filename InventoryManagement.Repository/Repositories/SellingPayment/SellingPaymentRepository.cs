@@ -277,5 +277,28 @@ namespace InventoryManagement.Repository
                 .Where(r => r.PaidDate <= eD && r.PaidDate >= sD && r.RegistrationId == registrationId)
                 .Sum(s => s.PaidAmount);
         }
+
+        public List<PaymentCollectionByAccount> CollectionAccountWise(DateTime? sDateTime, DateTime? eDateTime)
+        {
+            var sD = sDateTime ?? new DateTime(DateTime.Now.BdTime().Year, 1, 1);
+            var eD = eDateTime ?? new DateTime(DateTime.Now.BdTime().Year, 12, 31);
+            var payments = Context
+                 .SellingPayment
+                 .Include(s => s.Account)
+                 .Where(r => r.PaidDate <= eD && r.PaidDate >= sD).ToList();
+
+            return payments.GroupBy(e => new
+            {
+                AccountId = e.AccountId,
+                AccountName = e.Account?.AccountName
+            })
+                  .Select(g => new PaymentCollectionByAccount
+                  {
+                      AccountId = g.Key.AccountId,
+                      AccountName = g.Key.AccountName,
+                      Amount = g.Sum(e => e.PaidAmount)
+                  })
+                  .ToList();
+        }
     }
 }

@@ -74,4 +74,11 @@ namespace InventoryManagement.Repository
         public string PaymentMethod { get; set; }
         public DateTime PaidDate { get; set; }
     }
+
+    public class PaymentCollectionByAccount
+    {
+        public int? AccountId { get; set; }
+        public string AccountName { get; set; }
+        public decimal Amount { get; set; }
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using InventoryManagement.Data;
 using JqueryDataTables.LoopsIT;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Repository
@@ -16,6 +17,6 @@ namespace InventoryManagement.Repository
         decimal Capital(DateTime? sDateTime, DateTime? eDateTime);
         decimal CollectionAmountDateWise(DateTime? sDateTime, DateTime? eDateTime);
         decimal CollectionAmountDateWise(DateTime? sDateTime, DateTime? eDateTime, int registrationId);
-
+        List<PaymentCollectionByAccount> CollectionAccountWise(DateTime? sDateTime, DateTime? eDateTime);
     }
 }
