@@ -197,12 +197,15 @@ namespace InventoryManagement.Repository
     public class SellingExpenseAddModel
     {
         public int SellingId { get; set; }
+        public int? AccountId { get; set; }
         public decimal Expense { get; set; }
         public string ExpenseDescription { get; set; }
     }
     public class SellingExpenseListModel
     {
         public int SellingExpenseId { get; set; }
+        public int? AccountId { get; set; }
+        public string AccountName { get; set; }
         public decimal Expense { get; set; }
         public string ExpenseDescription { get; set; }
         public DateTime InsertDateUtc { get; set; }

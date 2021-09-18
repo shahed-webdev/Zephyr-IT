@@ -70,7 +70,8 @@ namespace InventoryManagement.Repository
         {
             return Context.AccountDeposit.Any(a => a.AccountId == id) ||
                    Context.AccountWithdraw.Any(a => a.AccountId == id) ||
-                   Context.SellingPayment.Any(a => a.AccountId == id);
+                   Context.SellingPayment.Any(a => a.AccountId == id) ||
+                   Context.SellingExpense.Any(a => a.AccountId == id);
 
         }
 

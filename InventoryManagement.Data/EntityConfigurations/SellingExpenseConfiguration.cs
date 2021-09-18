@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InventoryManagement.Data
 {
-    public  class SellingExpenseConfiguration : IEntityTypeConfiguration<SellingExpense>
+    public class SellingExpenseConfiguration : IEntityTypeConfiguration<SellingExpense>
     {
         public void Configure(EntityTypeBuilder<SellingExpense> builder)
         {
@@ -23,6 +23,11 @@ namespace InventoryManagement.Data
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_SellingExpense_Selling");
 
+            builder.HasOne(d => d.Account)
+                .WithMany(p => p.SellingExpense)
+                .HasForeignKey(d => d.AccountId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("FK_SellingExpense_Account");
         }
     }
 }
