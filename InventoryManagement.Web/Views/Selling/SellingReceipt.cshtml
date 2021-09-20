@@ -100,11 +100,7 @@
 
                             @foreach (var code in item.ProductCodes)
                             {
-                                <span class="codeSpan">
-
-                                    @code
-
-                                </span>
+                                <span class="codeSpan">@code</span>
                             }
                         </td>
                         <td class="text-center">@item.Warranty</td>
@@ -134,20 +130,21 @@
                 </td>
                 <td colspan="4" class="text-right">
                     @{
-                        var totalAmount = Model.SellingTotalPrice + Model.ServiceCharge;
+                        var totalAmount = Model.SellingTotalPrice + Model.ServiceCharge+ Model.AccountTransactionCharge;
                     }
                     <h5>Total&nbspAmount:<strong>৳@totalAmount</strong></h5>
                     
-                    @if (Model.AccountTransactionCharge > 0)
-                    {
-                        <h5>Transaction Charge:<strong>৳@Model.AccountTransactionCharge</strong></h5>
-                    }
+                    @* @if (Model.AccountTransactionCharge > 0) *@
+                    @* { *@
+                    @*     <h5>Transaction Charge:<strong>৳@Model.AccountTransactionCharge</strong></h5> *@
+                    @* } *@
 
                     @if (Model.SellingDiscountAmount > 0)
                     {
                         <h5 class="border-bottom border-dark pb-1">Discount:<strong>৳@Model.SellingDiscountAmount</strong></h5>
                         <h5 class="mt-1">Net Payable Amount:<strong>৳@(totalAmount - Model.SellingDiscountAmount)</strong></h5>
                     }
+                
                     @if (Model.PurchaseAdjustedAmount > 0)
                     {
                         <h5>
