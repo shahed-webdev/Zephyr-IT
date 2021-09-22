@@ -716,7 +716,7 @@ $('#inputFindVendor').typeahead({
 vendorAddClick.addEventListener('click', onVendorAddClicked);
 
 //customer phone auto complete as vendor
-$(document).on("input", "#VendorPhone", function () {
+$(document).on("paste, keydown", "#VendorPhone", function () {
     $(this).typeahead({
         minLength: 1,
         displayText: function (item) {
@@ -726,19 +726,21 @@ $(document).on("input", "#VendorPhone", function () {
             this.$element[0].value = item.PhonePrimary
         },
         source: function (request, result) {
-            $.ajax({
-                url: "/Selling/FindCustomers",
-                data: { prefix: request },
-                success: function (response) { result(response); },
-                error: function (err) { console.log(err) }
-            });
+            setTimeout(() => {
+                $.ajax({
+                    url: "/Selling/FindCustomers",
+                    data: { prefix: request },
+                    success: function (response) { result(response); },
+                    error: function (err) { console.log(err) }
+                });
+            }, 1000);
         },
         updater: function (item) {
             autoFillInput(item);
             return item;
         }
     })
-})
+});
 
 //fill customer info to input
 function autoFillInput(customer) {

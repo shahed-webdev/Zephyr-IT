@@ -94,7 +94,7 @@
                         }
                     ],
                     columnDefs: [
-                        { 'searchable': false, 'targets': [2, 3, 4, 5, 6, 7, 8] },
+                        { 'searchable': false, 'targets': [2, 3, 4, 5, 7, 8] },
                         { 'className': "text-right", "targets": [2, 3, 4, 5, 6] },
                         { 'className': "text-left", "targets": [1] }
                     ],
@@ -137,9 +137,7 @@
 
                 element.innerHTML = html;
 
-                $('.datepicker2').pickadate({
-                    format: 'd-mmmm-yyyy'
-            });
+                $('.datepicker2').pickadate({ format: 'dd mmm yyyy' });
             });
 
         //post on enter
