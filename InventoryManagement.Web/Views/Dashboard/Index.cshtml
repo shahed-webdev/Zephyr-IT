@@ -7,25 +7,70 @@
 
 @section Styles{
     <style>
-        #business-status h4 { font-size: 1.2rem; }
-        #daily-report p { font-weight: 400; color: #212121; font-size: 1rem }
-        #daily-report p a { font-weight: 400; color: #212121; font-size: 1rem }
+        #business-status h4 {
+            font-size: 1.2rem;
+        }
 
-        .active-cyan-2 input.form-control[type=text]:focus:not([readonly]) { border-bottom: 1px solid #3fa3e2; box-shadow: 0 1px 0 0 #3fa3e2; }
-        .active-cyan-2 .fas { color: #3144a2; }
-        .fa-spinner { pointer-events: none }
+        #daily-report p {
+            font-weight: 400;
+            color: #212121;
+            font-size: 1rem
+        }
 
-        .past-row-color td { color: #ff1818; }
-        .today-row-color td { color: #00b107; }
+            #daily-report p a {
+                font-weight: 400;
+                color: #212121;
+                font-size: 1rem
+            }
 
-        .on-edit form { display: flex }
-        .on-edit input { border: 1px solid #B6B4B4; padding: 6px; text-align: center; box-shadow: 1px 0 7px rgba(0, 0, 0, 0.2); width: 100% }
-        .on-edit input:focus { border: 1px solid #00bfff }
+        .active-cyan-2 input.form-control[type=text]:focus:not([readonly]) {
+            border-bottom: 1px solid #3fa3e2;
+            box-shadow: 0 1px 0 0 #3fa3e2;
+        }
 
-        .on-edit form > button { border: none; background-color: #324ca7; color: #fff; padding: 0 10px; }
+        .active-cyan-2 .fas {
+            color: #3144a2;
+        }
+
+        .fa-spinner {
+            pointer-events: none
+        }
+
+        .past-row-color td {
+            color: #ff1818;
+        }
+
+        .today-row-color td {
+            color: #00b107;
+        }
+
+        .on-edit form {
+            display: flex
+        }
+
+        .on-edit input {
+            border: 1px solid #B6B4B4;
+            padding: 6px;
+            text-align: center;
+            box-shadow: 1px 0 7px rgba(0, 0, 0, 0.2);
+            width: 100%
+        }
+
+            .on-edit input:focus {
+                border: 1px solid #00bfff
+            }
+
+        .on-edit form > button {
+            border: none;
+            background-color: #324ca7;
+            color: #fff;
+            padding: 0 10px;
+        }
 
         /* hide search input datalist table */
-        #table-customer_filter{display: none}
+        #table-customer_filter {
+            display: none
+        }
     </style>
 }
 
@@ -33,168 +78,169 @@
     var totalCapital = ViewBag.Capital;
 
     var currentMonthProfit = Model.CapitalReport.NetProfit;
-    var profitWarning = currentMonthProfit < 0 ? "text-danger":"text-success";
+    var profitWarning = currentMonthProfit < 0 ? "text-danger" : "text-success";
 
-    var businessStatus = totalCapital + (currentMonthProfit < 0 ? currentMonthProfit: 0);
-    var businessWarning = totalCapital > businessStatus ? "text-danger":"text-success";
+    var businessStatus = totalCapital + (currentMonthProfit < 0 ? currentMonthProfit : 0);
+    var businessWarning = totalCapital > businessStatus ? "text-danger" : "text-success";
 
     var totalStockAmount = (Model.StockProductPurchaseValue + Model.CustomerDue + Model.CapitalReport.LiquidAmount);
-    var extraInvest = (totalCapital - totalStockAmount);
+    var extraInvest = (totalStockAmount - totalCapital);
 }
 
 <div class="container-fluid">
     @if (User.IsInRole("admin"))
     {
-    <section id="business-status" class="mt-4">
-        <div class="row">
-            <div class="col-xl-3 col-lg-6 mb-4">
-                <div class="card">
-                    <div class="row mt-4 mb-3">
-                        <div class="col-md-3 col-3 text-left pl-3">
-                            <div class="m-2 fa-lg">
-                                <i class="fas fa-hand-holding-usd fa-2x indigo-text"></i>
+        <section id="business-status" class="mt-4">
+            <div class="row">
+                <div class="col-xl-3 col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="row mt-4 mb-3">
+                            <div class="col-md-3 col-3 text-left pl-3">
+                                <div class="m-2 fa-lg">
+                                    <i class="fas fa-hand-holding-usd fa-2x indigo-text"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-9 col-9 text-right pr-4">
-                            <p class="text-dark mb-2">
-                                <a href="/Transaction/Capital">
-                                    Capital
-                                </a>
-                            </p>
-                            <h4 class="ml-1 font-weight-bold h4-responsive">৳@totalCapital</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-6 mb-4">
-                <div class="card">
-                    <div class="row mt-4 mb-3">
-                        <div class="col-md-3 col-3 text-left pl-3">
-                            <div class="m-2 fa-lg">
-                                <i class="far fa-business-time fa-2x @businessWarning"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-9 col-9 text-right pr-4">
-                            <p class="text-dark mb-2">
-                                Business Status
-                                <small data-toggle="tooltip"
-                                       title="(Customer Due + Stock Product Price) - Market Due"
-                                       class="far fa-question-circle text-muted ml-2"></small>
-                            </p>
-                            <h4 class="ml-1 font-weight-bold h4-responsive @businessWarning">
-                                ৳@businessStatus
-                            </h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-6 mb-4">
-                <div class="card">
-                    <div class="row mt-4 mb-3">
-                        <div class="col-md-3 col-3 text-left pl-3">
-                            <div class="m-2 fa-lg">
-                                <i class="fas fa-funnel-dollar fa-2x deep-orange-text"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-9 col-9 text-right pr-4">
-                            <p class="text-dark mb-2">Extra Invest
-                                <small data-toggle="tooltip"
-                                       title="(Product Price + Customer Due + Liquid Amount) - Capital"
-                                       class="far fa-question-circle text-muted ml-2"></small>
+                            <div class="col-md-9 col-9 text-right pr-4">
+                                <p class="text-dark mb-2">
+                                    <a href="/Transaction/Capital">
+                                        Capital
+                                    </a>
                                 </p>
-                            <h4 class="ml-4 font-weight-bold h4-responsive">৳@(extraInvest > 0 ? extraInvest: 0)</h4>
+                                <h4 class="ml-1 font-weight-bold h4-responsive">৳@totalCapital/@totalStockAmount</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="row mt-4 mb-3">
+                            <div class="col-md-3 col-3 text-left pl-3">
+                                <div class="m-2 fa-lg">
+                                    <i class="far fa-business-time fa-2x @businessWarning"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-9 col-9 text-right pr-4">
+                                <p class="text-dark mb-2">
+                                    Business Status
+                                    <small data-toggle="tooltip"
+                                           title="Capital - Current Month Profit"
+                                           class="far fa-question-circle text-muted ml-2"></small>
+                                </p>
+                                <h4 class="ml-1 font-weight-bold h4-responsive @businessWarning">
+                                    ৳@businessStatus
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="row mt-4 mb-3">
+                            <div class="col-md-3 col-3 text-left pl-3">
+                                <div class="m-2 fa-lg">
+                                    <i class="fas fa-funnel-dollar fa-2x deep-orange-text"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-9 col-9 text-right pr-4">
+                                <p class="text-dark mb-2">
+                                    Extra Invest
+                                    <small data-toggle="tooltip"
+                                           title="(Product Price + Customer Due + Liquid Amount) - Capital"
+                                           class="far fa-question-circle text-muted ml-2"></small>
+                                </p>
+                                <h4 class="ml-4 font-weight-bold h4-responsive">৳@(extraInvest > 0 ? extraInvest: 0)</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="row mt-4 mb-3">
+                            <div class="col-md-3 col-3 text-left pl-3">
+                                <div class="m-2 fa-lg">
+                                    <i class="fas fa-analytics fa-2x blue-text"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-9 col-9 text-right pr-4">
+                                <p class="text-dark mb-2">Market Due</p>
+                                <h4 class="ml-1 font-weight-bold h4-responsive">৳@Model.MarketDue</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xl-3 col-lg-6 mb-4">
-                <div class="card">
-                    <div class="row mt-4 mb-3">
-                        <div class="col-md-3 col-3 text-left pl-3">
-                            <div class="m-2 fa-lg">
-                                <i class="fas fa-analytics fa-2x blue-text"></i>
+            <div class="row">
+                <div class="col-xl-3 col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="row mt-4 mb-3">
+                            <div class="col-md-3 col-3 text-left pl-3">
+                                <div class="m-2 fa-lg">
+                                    <i class="far fa-shopping-bag fa-2x orange-text"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-9 col-9 text-right pr-4">
-                            <p class="text-dark mb-2">Market Due</p>
-                            <h4 class="ml-1 font-weight-bold h4-responsive">৳@Model.MarketDue</h4>
+                            <div class="col-md-9 col-9 text-right pr-4">
+                                <a href="/Purchase/StockReport">
+                                    <p class="text-dark mb-2">Product(taka)</p>
+                                    <h4 class="ml-1 font-weight-bold h4-responsive">৳@Model.StockProductPurchaseValue</h4>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-xl-3 col-lg-6 mb-4">
-                <div class="card">
-                    <div class="row mt-4 mb-3">
-                        <div class="col-md-3 col-3 text-left pl-3">
-                            <div class="m-2 fa-lg">
-                                <i class="far fa-shopping-bag fa-2x orange-text"></i>
+                <div class="col-xl-3 col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="row mt-4 mb-3">
+                            <div class="col-md-3 col-3 text-left pl-3">
+                                <div class="m-2 fa-lg">
+                                    <i class="far fa-user-chart fa-2x green-text"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-9 col-9 text-right pr-4">
-                            <a href="/Purchase/StockReport">
-                                <p class="text-dark mb-2">Product(taka)</p>
-                                <h4 class="ml-1 font-weight-bold h4-responsive">৳@Model.StockProductPurchaseValue</h4>
-                            </a>
+                            <div class="col-md-9 col-9 text-right pr-4">
+                                <p class="text-dark mb-2">Customer Due</p>
+                                <h4 class="ml-1 font-weight-bold h4-responsive">৳@Model.CustomerDue</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-xl-3 col-lg-6 mb-4">
-                <div class="card">
-                    <div class="row mt-4 mb-3">
-                        <div class="col-md-3 col-3 text-left pl-3">
-                            <div class="m-2 fa-lg">
-                                <i class="far fa-user-chart fa-2x green-text"></i>
+                <div class="col-xl-3 col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="row mt-4 mb-3">
+                            <div class="col-md-3 col-3 text-left pl-3">
+                                <div class="m-2 fa-lg">
+                                    <i class="fas fa-wallet fa-2x blue-text"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-9 col-9 text-right pr-4">
-                            <p class="text-dark mb-2">Customer Due</p>
-                            <h4 class="ml-1 font-weight-bold h4-responsive">৳@Model.CustomerDue</h4>
+                            <div class="col-md-9 col-9 text-right pr-4">
+                                <p class="text-dark mb-2">Liquid Amount</p>
+                                <h4 class="ml-1 font-weight-bold h4-responsive">৳@Model.CapitalReport.LiquidAmount</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-xl-3 col-lg-6 mb-4">
-                <div class="card">
-                    <div class="row mt-4 mb-3">
-                        <div class="col-md-3 col-3 text-left pl-3">
-                            <div class="m-2 fa-lg">
-                                <i class="fas fa-wallet fa-2x blue-text"></i>
+                <div class="col-xl-3 col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="row mt-4 mb-3">
+                            <div class="col-md-3 col-3 text-left pl-3">
+                                <div class="m-2 fa-lg">
+                                    <i class="fas fa-wallet fa-2x @profitWarning"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-9 col-9 text-right pr-4">
-                            <p class="text-dark mb-2">Liquid Amount</p>
-                            <h4 class="ml-1 font-weight-bold h4-responsive">৳@Model.CapitalReport.LiquidAmount</h4>
+                            <div class="col-md-9 col-9 text-right pr-4">
+                                <p class="text-dark mb-2">Current Month Profit</p>
+                                <h4 class="ml-1 font-weight-bold h4-responsive @profitWarning">৳@Model.CapitalReport.NetProfit</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-xl-3 col-lg-6 mb-4">
-                <div class="card">
-                    <div class="row mt-4 mb-3">
-                        <div class="col-md-3 col-3 text-left pl-3">
-                            <div class="m-2 fa-lg">
-                                <i class="fas fa-wallet fa-2x @profitWarning"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-9 col-9 text-right pr-4">
-                            <p class="text-dark mb-2">Current Month Profit</p>
-                            <h4 class="ml-1 font-weight-bold h4-responsive @profitWarning">৳@Model.CapitalReport.NetProfit</h4>
-                        </div> 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
 
         <section id="daily-report" class="mb-4 mt-1">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -757,7 +803,7 @@
 
             if (!newValue) return false;
 
-           
+
             $.ajax({
                 url: '/Dashboard/PromiseDateUpdate',
                 type: "POST",
