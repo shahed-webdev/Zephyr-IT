@@ -7,70 +7,23 @@
 
 @section Styles{
     <style>
-        #business-status h4 {
-            font-size: 1.2rem;
-        }
+        #business-status h4 { font-size: 1.2rem; }
+        #daily-report p { font-weight: 400; color: #212121; font-size: 1rem }
+        #daily-report p a { font-weight: 400; color: #212121; font-size: 1rem }
 
-        #daily-report p {
-            font-weight: 400;
-            color: #212121;
-            font-size: 1rem
-        }
+        .active-cyan-2 input.form-control[type=text]:focus:not([readonly]) { border-bottom: 1px solid #3fa3e2; box-shadow: 0 1px 0 0 #3fa3e2; }
+        .active-cyan-2 .fas { color: #3144a2; }
 
-            #daily-report p a {
-                font-weight: 400;
-                color: #212121;
-                font-size: 1rem
-            }
-
-        .active-cyan-2 input.form-control[type=text]:focus:not([readonly]) {
-            border-bottom: 1px solid #3fa3e2;
-            box-shadow: 0 1px 0 0 #3fa3e2;
-        }
-
-        .active-cyan-2 .fas {
-            color: #3144a2;
-        }
-
-        .fa-spinner {
-            pointer-events: none
-        }
-
-        .past-row-color td {
-            color: #ff1818;
-        }
-
-        .today-row-color td {
-            color: #00b107;
-        }
-
-        .on-edit form {
-            display: flex
-        }
-
-        .on-edit input {
-            border: 1px solid #B6B4B4;
-            padding: 6px;
-            text-align: center;
-            box-shadow: 1px 0 7px rgba(0, 0, 0, 0.2);
-            width: 100%
-        }
-
-            .on-edit input:focus {
-                border: 1px solid #00bfff
-            }
-
-        .on-edit form > button {
-            border: none;
-            background-color: #324ca7;
-            color: #fff;
-            padding: 0 10px;
-        }
+        .fa-spinner { pointer-events: none }
+        .past-row-color td { color: #ff1818; }
+        .today-row-color td { color: #00b107; }
+        .on-edit form { display: flex }
+        .on-edit input { border: 1px solid #B6B4B4; padding: 6px; text-align: center; box-shadow: 1px 0 7px rgba(0, 0, 0, 0.2); width: 100% }
+        .on-edit input:focus { border: 1px solid #00bfff }
+        .on-edit form > button { border: none; background-color: #324ca7; color: #fff; padding: 0 10px; }
 
         /* hide search input datalist table */
-        #table-customer_filter {
-            display: none
-        }
+        #table-customer_filter { display: none }
     </style>
 }
 
@@ -83,8 +36,8 @@
     var businessStatus = totalCapital + (currentMonthProfit < 0 ? currentMonthProfit : 0);
     var businessWarning = totalCapital > businessStatus ? "text-danger" : "text-success";
 
-    var totalStockAmount = (Model.StockProductPurchaseValue + Model.CustomerDue + Model.CapitalReport.LiquidAmount);
-    var extraInvest = (totalStockAmount - totalCapital);
+    var totalStockAmount = Model.StockProductPurchaseValue + Model.CustomerDue + Model.CapitalReport.LiquidAmount;
+    var extraInvest = totalStockAmount - totalCapital;
 }
 
 <div class="container-fluid">
@@ -101,12 +54,14 @@
                                 </div>
                             </div>
                             <div class="col-md-9 col-9 text-right pr-4">
-                                <p class="text-dark mb-2">
-                                    <a href="/Transaction/Capital">
-                                        Capital
-                                    </a>
-                                </p>
-                                <h4 class="ml-1 font-weight-bold h4-responsive">৳@totalCapital/@totalStockAmount</h4>
+                              
+                                <h4 class="ml-1 font-weight-bold h4-responsive">
+                                    <a href="/Transaction/Capital">Capital:</a> ৳@totalCapital
+                                </h4>
+                                <h4 class="ml-1 font-weight-bold h4-responsive">
+                                    ৳@totalStockAmount
+                                </h4>
+
                             </div>
                         </div>
                     </div>
@@ -335,7 +290,6 @@
                 </div>
             </div>
         </section>
-
     }
 
     <section>
