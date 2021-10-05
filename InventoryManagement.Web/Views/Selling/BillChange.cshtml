@@ -120,17 +120,18 @@
             <form id="formPayment">
                 <div class="card card-body mb-3">
                     <ul class="mb-0">
-                        <li class="d-flex justify-content-between align-items-center">
-                            <strong>Total Amount</strong>
-                            <strong><span id="totalPrice">@(Model.SellingTotalPrice + Model.ServiceCharge)</span>/-</strong>
-                        </li>
                         @if (Model.AccountTransactionCharge > 0)
                         {
-                            <li class="d-flex justify-content-between align-items-center mt-2">
+                            <li class="text-muted d-flex justify-content-between align-items-center mb-2">
                                 <span>Prev. Trans./Transport Cost</span>
-                                <strong>@Model.AccountTransactionCharge /-</strong>
+                                <strong><span id="prevTransactionCost">@Model.AccountTransactionCharge</span> /-</strong>
                             </li>
                         }
+                        <li class="d-flex justify-content-between align-items-center">
+                            <strong>Total Amount</strong>
+                            <strong><span id="totalPrice">@(Model.SellingTotalPrice + Model.ServiceCharge + Model.AccountTransactionCharge)</span>/-</strong>
+                        </li>
+
                         <li class="md-form mt-4">
                             <label for="inputDiscount">Discount</label>
                             <input id="inputDiscount" step="0.01" type="number" min="0" class="form-control" value="@Model.SellingDiscountAmount">
@@ -222,7 +223,7 @@
 </div>
 
 @section Scripts{
-    <script src="~/page-js/bill-change.js?v=2.3.3"></script>
+    <script src="~/page-js/bill-change.js?v=2.3.4"></script>
     <script>
         //save previous data
         cartProducts = @Html.Raw(Json.Serialize(Model.Products));

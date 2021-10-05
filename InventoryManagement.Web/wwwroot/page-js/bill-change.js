@@ -27,6 +27,7 @@ const productTotalPrice = document.getElementById('productTotalPrice')
 
 //payment selectors
 const formPayment = document.getElementById('formPayment');
+const prevTransactionCost = formPayment.querySelector('#prevTransactionCost');
 const totalPrice = formPayment.querySelector('#totalPrice');
 const inputDiscount = formPayment.inputDiscount;
 const inputReturnAmount = formPayment.inputReturnAmount;
@@ -183,9 +184,11 @@ const sellingTotalPrice = function () {
 const appendTotalPrice = function () {
     const productPrice = sellingTotalPrice();
     const serviceCharge = +inputServiceCharge.value;
+
+    const prevTransactionAmount = +prevTransactionCost.textContent;
     const accountTransactionCharge = +inputAccountTransactionCharge.value;
 
-    const totalAmount = productPrice + serviceCharge + accountTransactionCharge;
+    const totalAmount = productPrice + serviceCharge + accountTransactionCharge + prevTransactionAmount;
 
 
     //set max discount limit
