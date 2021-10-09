@@ -185,7 +185,7 @@ const appendTotalPrice = function () {
     const productPrice = sellingTotalPrice();
     const serviceCharge = +inputServiceCharge.value;
 
-    const prevTransactionAmount = +prevTransactionCost.textContent;
+    const prevTransactionAmount = prevTransactionCost? +prevTransactionCost.textContent:0;
     const accountTransactionCharge = +inputAccountTransactionCharge.value;
 
     const totalAmount = productPrice + serviceCharge + accountTransactionCharge + prevTransactionAmount;
