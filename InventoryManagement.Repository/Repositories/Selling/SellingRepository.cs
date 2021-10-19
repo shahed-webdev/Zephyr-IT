@@ -49,7 +49,7 @@ namespace InventoryManagement.Repository
                 return response;
             }
 
-            var due = (model.SellingTotalPrice + model.ServiceCharge) - (model.SellingPaidAmount + model.SellingDiscountAmount);
+            var due = (model.SellingTotalPrice + model.ServiceCharge) - (model.SellingPaidAmount + model.SellingDiscountAmount + model.PurchaseAdjustedAmount);
 
             if (due > 0 && db.Customers.IsDueLimitCrossed(model.CustomerId, due))
             {
