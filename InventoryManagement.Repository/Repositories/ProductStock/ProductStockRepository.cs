@@ -79,7 +79,7 @@ namespace InventoryManagement.Repository
                 .Include(p => p.SellingList)
                 .ThenInclude(sl => sl.Selling)
                 .Include(s => s.ProductDamaged)
-                .Where(s => s.ProductCode == code)
+                .Where(s => s.ProductCode == code || s.Warranty.Any(w=> w.ChangedProductCode == code))
                 .OrderByDescending(s => s.ProductStockId)
                 .Select(s => new ProductStockDetailsViewModel
                 {
