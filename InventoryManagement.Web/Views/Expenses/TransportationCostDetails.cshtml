@@ -291,6 +291,7 @@
                     success: response => {
                         this.disabled = response.IsSuccess;
                         $.notify(response.Message, response.IsSuccess ? "success" : "error");
+                        location.href = "/Expenses/Index";
                     },
                     error: response => {
                         this.disabled = false;
