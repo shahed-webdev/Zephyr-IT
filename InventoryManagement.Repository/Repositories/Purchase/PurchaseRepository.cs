@@ -390,17 +390,17 @@ namespace InventoryManagement.Repository
                 var registrationId = db.Registrations.GetRegID_ByUserName(userName);
                 var returnRecord = new PurchasePaymentReturnRecordModel
                 {
-                    PrevReturnAmount = purchase.PurchaseReturnAmount,
-                    CurrentReturnAmount = model.PurchaseReturnAmount,
+                    PrevReturnAmount = decimal.Round(purchase.PurchaseReturnAmount,2),
+                    CurrentReturnAmount = decimal.Round(model.PurchaseReturnAmount, 2),
                     AccountId = model.AccountId,
                     PurchaseId = purchase.PurchaseId,
                     RegistrationId = registrationId
                 };
 
-                purchase.PurchaseTotalPrice = model.PurchaseTotalPrice;
-                purchase.PurchaseDiscountAmount = model.PurchaseDiscountAmount;
-                purchase.PurchaseReturnAmount = model.PurchaseReturnAmount;
-                purchase.PurchasePaidAmount += model.PaidAmount;
+                purchase.PurchaseTotalPrice = decimal.Round(model.PurchaseTotalPrice, 2);
+                purchase.PurchaseDiscountAmount = decimal.Round(model.PurchaseDiscountAmount, 2);
+                purchase.PurchaseReturnAmount = decimal.Round(model.PurchaseReturnAmount, 2);
+                purchase.PurchasePaidAmount += decimal.Round(model.PaidAmount, 2);
 
 
                 var due = (purchase.PurchaseTotalPrice + purchase.PurchaseReturnAmount) - (purchase.PurchaseDiscountAmount + purchase.PurchasePaidAmount);
