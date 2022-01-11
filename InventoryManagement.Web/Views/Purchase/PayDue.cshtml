@@ -147,7 +147,7 @@
 
                     <div class="md-form">
                         <label for="inputPaid">Paid Amount</label>
-                        <input id="inputPaid" type="number" required class="form-control" min="0" max="@Model.PurchaseDueAmount">
+                        <input id="inputPaid" type="number" required class="form-control" step="0.01" min="0" max="@Model.PurchaseDueAmount">
                     </div>
                     <div class="md-form">
                         <select id="selectPaymentMethod" asp-items="ViewBag.Account" class="mdb-select" style="position: absolute; top: 1rem; left: 0; height: 0; width: 0; opacity: 0; padding: 0; pointer-events: none; display: inline !important;">
