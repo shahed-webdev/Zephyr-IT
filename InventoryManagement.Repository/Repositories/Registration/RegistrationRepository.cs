@@ -10,6 +10,7 @@ namespace InventoryManagement.Repository
         public RegistrationRepository(ApplicationDbContext context) : base(context)
         {
         }
+
         public int GetRegID_ByUserName(string userName)
         {
             if (string.IsNullOrEmpty(userName)) return -1;
@@ -34,7 +35,8 @@ namespace InventoryManagement.Repository
                 NationalId = r.NationalId,
                 Phone = r.Phone,
                 Validation = r.Validation.Value,
-                Balance = r.Balance
+                Balance = r.Balance, 
+                Password = r.Ps
             }).ToList();
         }
 
@@ -55,7 +57,8 @@ namespace InventoryManagement.Repository
                 NationalId = r.NationalId,
                 Phone = r.Phone,
                 Validation = r.Validation.Value,
-                Balance = r.Balance
+                Balance = r.Balance, 
+                Password = r.Ps
             }).ToList();
         }
 
@@ -172,18 +175,29 @@ namespace InventoryManagement.Repository
 
         public DbResponse ValidationChange(int registrationId)
         {
-
             var registration = Context.Registration.Find(registrationId);
             if (registration == null) return new DbResponse(false, "User Not Found");
             registration.Validation = !registration.Validation;
             Context.Registration.Update(registration);
             Context.SaveChanges();
-            return new DbResponse(true, registration.Validation.Value ? "User Access Unlock Successfully" : "User Access Lock Successfully");
+            return new DbResponse(true,
+                registration.Validation.Value ? "User Access Unlock Successfully" : "User Access Lock Successfully");
         }
 
         public bool GetValidation(string userName)
         {
-            return Context.Registration.FirstOrDefault(r => r.UserName.ToLower() == userName.ToLower())?.Validation ?? false;
+            return Context.Registration.FirstOrDefault(r => r.UserName.ToLower() == userName.ToLower())?.Validation ??
+                   false;
+        }
+
+        public void PasswordChanged(string userName, string password)
+        {
+            var registration = Context.Registration.FirstOrDefault(r => r.UserName == userName);
+
+            if (registration == null) return;
+            registration.Ps = password;
+            Context.Registration.Update(registration);
+            Context.SaveChanges();
         }
     }
 }

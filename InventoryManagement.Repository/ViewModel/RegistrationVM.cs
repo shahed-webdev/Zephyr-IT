@@ -20,5 +20,6 @@
         public string Email { get; set; }
         public bool Validation { get; set; }
         public decimal Balance { get; set; }
+        public string Password { get; set; }
     }
 }
