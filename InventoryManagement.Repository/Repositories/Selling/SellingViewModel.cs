@@ -145,6 +145,7 @@ namespace InventoryManagement.Repository
         public decimal ServiceCharge { get; set; }
         public string ServiceChargeDescription { get; set; }
         public DateTime? PromisedPaymentDate { get; set; }
+        public string SellingNotes { get; set; }
         public decimal ServiceCost { get; set; }
         public decimal ExpenseTotal { get; set; }
 
@@ -168,6 +169,7 @@ namespace InventoryManagement.Repository
         public DateTime PaidDate { get; set; }
         public ICollection<SellingUpdateProductPostModel> Products { get; set; }
         public DateTime? PromisedPaymentDate { get; set; }
+        public string SellingNotes { get; set; }
         public decimal ServiceCharge { get; set; }
         public decimal ServiceCost { get; set; }
         public string ServiceChargeDescription { get; set; }

@@ -166,6 +166,10 @@
                             <input id="inputPromisedDate" value="@Model.PromisedPaymentDate?.ToString("dd-MMMM-yyyy")" type="text" class="form-control datepicker">
                             <label for="inputPromisedDate">Promised Payment Date</label>
                         </li>
+                        <li class="md-form">
+                            <textarea id="inputNotes" rows="1" class="md-textarea form-control">@Model.SellingNotes</textarea>
+                            <label for="inputNotes">Notes</label>
+                        </li>
                     </ul>   
                     
                     <div class="text-center">
@@ -223,7 +227,7 @@
 </div>
 
 @section Scripts{
-    <script src="~/page-js/bill-change.js?v=2.3.5"></script>
+    <script src="~/page-js/bill-change.js"></script>
     <script>
         //save previous data
         cartProducts = @Html.Raw(Json.Serialize(Model.Products));

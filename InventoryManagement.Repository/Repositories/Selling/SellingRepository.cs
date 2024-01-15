@@ -663,6 +663,7 @@ namespace InventoryManagement.Repository
                   },
                   SoildBy = s.Registration.Name,
                   PromisedPaymentDate = s.PromisedPaymentDate,
+                  SellingNotes = s.SellingNotes,
                   ServiceCharge = s.ServiceCharge,
                   ServiceChargeDescription = s.ServiceChargeDescription,
                   SellingExpenses = s.SellingExpense.Select(e => new SellingExpenseListModel
@@ -751,6 +752,7 @@ namespace InventoryManagement.Repository
                 selling.PurchaseId = model.PurchaseId;
                 selling.PurchaseAdjustedAmount = model.PurchaseAdjustedAmount;
                 selling.PurchaseDescription = model.PurchaseDescription;
+                selling.SellingNotes = model.SellingNotes;
 
                 if (model.PromisedPaymentDate != null)
                     selling.PromisedPaymentDate = model.PromisedPaymentDate.Value.BdTime().Date;

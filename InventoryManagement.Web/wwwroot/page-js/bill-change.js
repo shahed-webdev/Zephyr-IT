@@ -37,6 +37,7 @@ const inputPaid = formPayment.inputPaid;
 const selectPaymentMethod = formPayment.selectPaymentMethod;
 const inputAccountTransactionCharge = formPayment.inputAccountTransactionCharge;
 const inputPromisedDate = formPayment.inputPromisedDate;
+const inputNotes = formPayment.inputNotes;
 
 //service charge
 const inputServiceCharge = formPayment.inputServiceCharge
@@ -459,9 +460,9 @@ const onCheckFormValid = function (evt) {
 
 //submit on server
 const onSellSubmitClicked = function(evt) {
-    evt.preventDefault()
+    evt.preventDefault();
 
-    const valid = validation()
+    const valid = validation();
     if (!valid) return;
 
 
@@ -511,6 +512,7 @@ const onSellSubmitClicked = function(evt) {
         AccountId: inputPaid.value ? selectPaymentMethod.value : '',
         AccountTransactionCharge: +inputAccountTransactionCharge.value,
         PromisedPaymentDate: inputPromisedDate.value,
+        SellingNotes: inputNotes.value,
         ServiceCharge: inputServiceCharge.value,
         ServiceChargeDescription: inputServiceChargeDescription.value,
         ServiceCost: inputServiceCost.value,
@@ -518,7 +520,7 @@ const onSellSubmitClicked = function(evt) {
         PurchaseAdjustedAmount: inputPurchaseAmount.value,
         PurchaseDescription: inputPurchaseDescription.value,
         PurchaseId: hiddenPurchaseId.value
-    }
+    };
 
     //disable button on submit
     const btnSubmit = formPayment.btnSelling;

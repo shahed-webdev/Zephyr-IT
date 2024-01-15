@@ -164,9 +164,9 @@
 
     @if (!string.IsNullOrEmpty(Model.SellingNotes))
     {
-        <div id="is-print-note" class="mb-2 text-right d-print-none">
+        <div id="is-print-note" class="mb-2 d-print-none">
             <input type="checkbox" class="form-check-input" id="checkPrint">
-            <label class="form-check-label pl-4" for="checkPrint">@Model.SellingNotes</label>
+            <label class="form-check-label pl-4" for="checkPrint">Note: @Model.SellingNotes</label>
         </div>
     }
 
