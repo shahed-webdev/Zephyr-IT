@@ -19,7 +19,7 @@ const formCode = document.getElementById('formCode');
 const inputBarCode = formCode.inputBarCode;
 const productCount = formCode.querySelector('#productCount');
 const codeExistError = formCode.querySelector('#codeExistError');
-const btnFind = formCode.btnFind;
+
 
 // product table
 const formTable = document.getElementById('formTable');
@@ -31,11 +31,12 @@ const formPayment = document.getElementById('formPayment');
 const totalPrice = formPayment.querySelector('#totalPrice');
 const inputDiscount = formPayment.inputDiscount;
 const totalPayable = formPayment.querySelector('#totalPayable');
-const inputPaid = formPayment.inputPaid
+const inputPaid = formPayment.inputPaid;
 const totalDue = formPayment.querySelector('#totalDue');
 const selectPaymentMethod = formPayment.selectPaymentMethod;
 const inputAccountTransactionCharge = formPayment.inputAccountTransactionCharge;
 const inputPromisedDate = formPayment.inputPromisedDate;
+const inputNotes = formPayment.inputNotes;
 
 //expense
 const inputExpense = formPayment.inputExpense;
@@ -425,7 +426,7 @@ function calculatePayableAmount(paidAmount) {
 //compare Validation
 const validInput = function (total, inputted) {
     return (total < inputted) ? false : true;
-}
+};
 
 //input discount amount
 const onInputDiscount = function () {
@@ -469,9 +470,9 @@ const onInputPaid = function () {
         inputPromisedDate.disabled = false;
     }
 
-    //check due limit 
+    //check due limit
     checkDueLimit();
-}
+};
 
 
 //Account Transaction Charge
@@ -492,7 +493,7 @@ const validation = function () {
     customerError.innerText = '';
 
     if (cartProducts.length || inputServiceCharge.value) {
-       
+
     } else {
         customerError.innerText = 'Add product or add service!';
         return false;
@@ -510,30 +511,30 @@ const validation = function () {
     }
 
     if (!checkDueLimit()) {
-        return false
+        return false;
     }
 
     return true;
-}
+};
 
 const onCheckFormValid = function (evt) {
-    evt.preventDefault()
-    formTable.btnProduct.click()
-}
+    evt.preventDefault();
+    formTable.btnProduct.click();
+};
 
 //submit on server
 const onSellSubmitClicked = function (evt) {
-    evt.preventDefault()
+    evt.preventDefault();
 
-    const valid = validation()
+    const valid = validation();
     if (!valid) return;
 
     const productList = [];
 
     cartProducts.forEach(product => {
-        const { ProductId, SellingPrice, PurchasePrice,Description, Warranty, codes } = product;
+        const { ProductId, SellingPrice, PurchasePrice, Description, Warranty, codes } = product;
         productList.push({ ProductId, SellingPrice, PurchasePrice, Description, Warranty, ProductCodes: codes });
-    })
+    });
 
     const body = {
         CustomerId: +hiddenCustomerId.value,
@@ -542,6 +543,7 @@ const onSellSubmitClicked = function (evt) {
         SellingPaidAmount: +inputPaid.value,
 
         PromisedPaymentDate: inputPromisedDate.value,
+        SellingNotes: inputNotes.value,
         ServiceCharge: +inputServiceCharge.value,
         ServiceChargeDescription: inputServiceChargeDescription.value,
         ServiceCost: +inputServiceCost.value,
@@ -553,13 +555,14 @@ const onSellSubmitClicked = function (evt) {
 
         PurchaseAdjustedAmount: +inputPurchaseAmount.value,
         PurchaseDescription: inputPurchaseDescription.value,
-        PurchaseId: hiddenPurchaseId.value
-    }
+        PurchaseId: hiddenPurchaseId.value,
+    };
+
 
     //disable button on submit
-    const btnSubmit = formPayment.btnSelling
-    btnSubmit.innerText = "submitting.."
-    btnSubmit.disabled = true
+    const btnSubmit = formPayment.btnSelling;
+    btnSubmit.innerText = "submitting..";
+    btnSubmit.disabled = true;
 
     $.ajax({
         url: "/Selling/Selling",
@@ -580,9 +583,9 @@ const onSellSubmitClicked = function (evt) {
             console.log(error);
             btnSubmit.innerText = "Sell Product";
             btnSubmit.disabled = false;
-        }
+        },
     });
-}
+};
 
 //event listener
 formPayment.addEventListener("submit", onCheckFormValid);

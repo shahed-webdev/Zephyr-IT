@@ -531,10 +531,9 @@
             });
 
             //on search input
-            $('#input-find').on("input",
-                function() {
-                    customerTable.search($(this).val()).draw();
-                });
+            $('#input-find').on("input", function() {
+                customerTable.search($(this).val()).draw();
+            });
 
             //vendor data-table
             const vendorTable = $('#table-vendor').DataTable({
@@ -549,8 +548,7 @@
                 columns:
                 [
                     {
-                        data: "VendorCompanyName",
-                        render: function(data, type, row, meta) {
+                        data: "VendorCompanyName", render: function(data, type, row, meta) {
                             return `<a class="blue-text" href="/Purchase/PayDueMultiple/${row.VendorId}">${data}</a>`
                         }
                     },
@@ -561,10 +559,9 @@
             });
 
             //on search input
-            $('#vendor-input-find').on("input",
-                function() {
-                    vendorTable.search($(this).val()).draw();
-                })
+            $('#vendor-input-find').on("input",function() {
+                vendorTable.search($(this).val()).draw();
+            })
         });
 
         let months = [];

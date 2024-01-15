@@ -56,9 +56,7 @@
                         { data: "ExpenseDate", "render": function(data) { return moment(data).format('DD MMM YYYY') } },
                         { data: "CreateBy" },
                         {
-                            data: "Id",
-                            "render": function (data, type, row, meta) {
-                                console.log(row.IsTransportation)
+                            data: "Id","render": function (data, type, row, meta) {
                                 const link = row.IsTransportation ? `TransportationCostDetails` : `GeneralExpenseDetails`;
                                 return `<a class="${row.IsApproved ? "text-success" : "text-danger"}" href="/Expenses/${link}/${row.Id}">Details</a>`;
                             }

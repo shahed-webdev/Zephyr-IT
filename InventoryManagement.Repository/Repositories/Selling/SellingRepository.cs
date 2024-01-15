@@ -110,6 +110,7 @@ namespace InventoryManagement.Repository
                     } : null,
                 BuyingTotalPrice = model.ProductList.Sum(p => p.PurchasePrice * p.ProductCodes.Length),
                 PromisedPaymentDate = model.PromisedPaymentDate,
+                SellingNotes = model.SellingNotes,
                 ExpenseTotal = model.Expense,
                 SellingExpense = model.Expense > 0 ? new List<SellingExpense>
                 {
@@ -238,6 +239,7 @@ namespace InventoryManagement.Repository
                   PurchaseId = s.PurchaseId,
                   PurchaseAdjustedAmount = s.PurchaseAdjustedAmount,
                   PurchaseDescription = s.PurchaseDescription,
+                  SellingNotes = s.SellingNotes,
                   PurchaseSn = s.Purchase.PurchaseSn,
                   SellingExpenses = s.SellingExpense.Select(e => new SellingExpenseListModel
                   {

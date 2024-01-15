@@ -20,7 +20,10 @@ body { background-color: #fff; }
 .paid-record fieldset p { line-height: 16px; color: #000; font-size: small; margin-bottom: 0; }
 .paid-record .list-group-item { padding: .2rem .5rem; border-color: #000; }
 
-/*@page { margin: 50.8mm 12.7mm 50.8mm 12.7mm; }*/
+
 @media print {
+    @page { size: auto !important }
     #header { display: none !important }
+
+    .form-check-input[type="checkbox"] + label::before { display: none; }
 }

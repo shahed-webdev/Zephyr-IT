@@ -33,6 +33,7 @@ namespace InventoryManagement.Data
         public DateTime InsertDate { get; set; }
 
         public DateTime? PromisedPaymentDate { get; set; }
+        public string SellingNotes { get; set; }
         public decimal ServiceCharge { get; set; }
         public decimal ServiceCost { get; set; }
         public string ServiceChargeDescription { get; set; }

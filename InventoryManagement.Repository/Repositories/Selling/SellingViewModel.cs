@@ -22,6 +22,7 @@ namespace InventoryManagement.Repository
         public ICollection<SellingProductListViewModel> ProductList { get; set; }
 
         public DateTime? PromisedPaymentDate { get; set; }
+        public string SellingNotes { get; set; }
         public decimal ServiceCharge { get; set; }
         public decimal ServiceCost { get; set; }
         public string ServiceChargeDescription { get; set; }
@@ -90,6 +91,7 @@ namespace InventoryManagement.Repository
         public DateTime? PromisedPaymentDate { get; set; }
         public decimal PurchaseAdjustedAmount { get; set; }
         public string PurchaseDescription { get; set; }
+        public string SellingNotes { get; set; }
         public int? PurchaseId { get; set; }
         public int? PurchaseSn { get; set; }
         public DateTime[] MissDates { get; set; }
