@@ -18,6 +18,7 @@ namespace InventoryManagement.Repository
         public decimal PurchasePaidAmount { get; set; }
         public string PaymentMethod { get; set; }
         public string MemoNumber { get; set; }
+        public string PurchaseNote { get; set; }
         public DateTime PurchaseDate { get; set; }
         public ICollection<ProductPurchaseViewModel> Products { get; set; }
         public int? AccountId { get; set; }
@@ -39,6 +40,7 @@ namespace InventoryManagement.Repository
         public decimal PurchaseDueAmount { get; set; }
         public decimal PurchaseReturnAmount { get; set; }
         public string MemoNumber { get; set; }
+        public string PurchaseNote { get; set; }
         public DateTime PurchaseDate { get; set; }
         public ICollection<ProductViewModel> Products { get; set; }
         public ICollection<PurchasePaymentListViewModel> Payments { get; set; }
@@ -81,6 +83,7 @@ namespace InventoryManagement.Repository
         public int PurchaseId { get; set; }
         public int PurchaseSn { get; set; }
         public string MemoNumber { get; set; }
+        public string PurchaseNote { get; set; }
         public decimal PurchaseTotalPrice { get; set; }
         public decimal PurchaseDiscountAmount { get; set; }
         public decimal PurchaseDueAmount { get; set; }
@@ -103,6 +106,7 @@ namespace InventoryManagement.Repository
         public decimal PurchaseReturnAmount { get; set; }
         public int[] RemovedProductStockIds { get; set; }
         public decimal PaidAmount { get; set; }
+        public string PurchaseNote { get; set; }
         public DateTime PaidDate { get; set; }
         public ICollection<PurchaseUpdateProductPostModel> PurchaseList { get; set; }
         public int? AccountId { get; set; }

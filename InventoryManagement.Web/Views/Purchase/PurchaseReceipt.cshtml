@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-@section Styles{
+@section Styles {
     <link href="/css/purchase-receipt.css" rel="stylesheet" />
 }
 
@@ -14,12 +14,12 @@
         <a class="btn btn-success btn-rounded" href="/Purchase/PayDue/@Model.PurchaseId"><i class="fas fa-money-bill-alt mr-1"></i>Pay Due</a>
         <a class="btn btn-brown btn-rounded" href="/Purchase/UpdatePurchaseBill/@Model.PurchaseId"><i class="fas fa-pen mr-1"></i>Update</a>
     </div>
-    
+
     <div>
         <a class="btn btn-elegant btn-rounded" href="/Purchase/Purchase"><i class="fas fa-shopping-cart mr-1"></i>Purchase</a>
         <button class="btn btn-amber btn-rounded" onclick="print()"><i class="fas fa-print mr-1"></i>Print</button>
     </div>
-</section>   
+</section>
 
 <div id="main-page">
     <div id="institution-info" class="mb-4 text-center">
@@ -82,7 +82,7 @@
                             {
                                 <span>@stock.ProductCode</span>
                             }
-                        </td> 
+                        </td>
                         <td>@item.Warranty</td>
                         <td>@item.Description</td>
                     </tr>
@@ -110,11 +110,22 @@
                             <h5>Return Amount: <strong>@Model.PurchaseReturnAmount/-</strong></h5>
                         }
                         <h5>Due: <strong>@Model.PurchaseDueAmount/-</strong></h5>
-                    </div> 
+                    </div>
                 </td>
             </tr>
         </tbody>
     </table>
+
+
+    @if (!string.IsNullOrEmpty(Model.PurchaseNote))
+    {
+        <div class="mt-3 mb-4">
+            <h5>
+                <strong>Note:</strong>
+                @Model.PurchaseNote
+            </h5>
+        </div>
+    }
 
 
     @{
@@ -147,10 +158,10 @@
 </div>
 
 
-@section scripts{
+@section scripts {
     <script src="~/js/amount-in-word.js"></script>
     <script>
-        $(function() {
+        $(function () {
             $("#amount-word").text(`Taka (in words): ${number2text(@Model.PurchaseTotalPrice).toLowerCase()}`);
         });
     </script>

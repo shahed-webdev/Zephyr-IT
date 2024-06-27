@@ -180,6 +180,14 @@
                         <small class="text-muted">(Prev. Paid: ৳<span id="previousPaid">@Model.PurchasePaidAmount</span>)</small>
                     </div>
                 </div>
+
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label>Note</label>
+                        <textarea id="inputPurchaseNote" name="PurchaseNote" class="form-control">@Model.PurchaseNote</textarea>
+                    </div>
+                </div>
+
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Payment Method</label>
@@ -272,5 +280,5 @@
             $('.mdb-select').materialSelect();
         });
     </script>
-    <script src="~/page-js/bill-change-purchase.js?v=1.2.2"></script>
+    <script src="~/page-js/bill-change-purchase.js?v=3.0.0"></script>
 }

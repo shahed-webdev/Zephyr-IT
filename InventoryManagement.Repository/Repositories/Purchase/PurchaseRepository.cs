@@ -52,6 +52,7 @@ namespace InventoryManagement.Repository
                 PurchaseDiscountAmount = model.PurchaseDiscountAmount,
                 PurchasePaidAmount = model.PurchasePaidAmount,
                 MemoNumber = model.MemoNumber,
+                PurchaseNote = model.PurchaseNote,
                 PurchaseDate = model.PurchaseDate.BdTime().Date,
                 PurchaseList = model.Products.Select(p => new PurchaseList
                 {
@@ -166,6 +167,7 @@ namespace InventoryManagement.Repository
                     PurchaseReturnAmount = p.PurchaseReturnAmount,
                     PurchaseDate = p.PurchaseDate,
                     MemoNumber = p.MemoNumber,
+                    PurchaseNote = p.PurchaseNote,
                     Products = p.PurchaseList.Select(pd => new ProductViewModel
                     {
                         PurchaseListId = pd.PurchaseListId,
@@ -342,6 +344,7 @@ namespace InventoryManagement.Repository
                   PurchaseId = p.PurchaseId,
                   PurchaseSn = p.PurchaseSn,
                   MemoNumber = p.MemoNumber,
+                  PurchaseNote = p.PurchaseNote,
                   PurchaseTotalPrice = p.PurchaseTotalPrice,
                   PurchaseDiscountAmount = p.PurchaseDiscountAmount,
                   PurchaseDueAmount = p.PurchaseDueAmount,
@@ -401,6 +404,7 @@ namespace InventoryManagement.Repository
                 purchase.PurchaseDiscountAmount = decimal.Round(model.PurchaseDiscountAmount, 2);
                 purchase.PurchaseReturnAmount = decimal.Round(model.PurchaseReturnAmount, 2);
                 purchase.PurchasePaidAmount += decimal.Round(model.PaidAmount, 2);
+                purchase.PurchaseNote = model.PurchaseNote;
 
 
                 var due = (purchase.PurchaseTotalPrice + purchase.PurchaseReturnAmount) - (purchase.PurchaseDiscountAmount + purchase.PurchasePaidAmount);
@@ -411,24 +415,21 @@ namespace InventoryManagement.Repository
                     return response;
                 }
 
-                if (model.RemovedProductStockIds != null)
+                if (model.RemovedProductStockIds != null && model.RemovedProductStockIds.Any())
                 {
-                    if (model.RemovedProductStockIds.Any())
+                    var removedStocks = Context.ProductStock
+                        .Include(s => s.ProductLog)
+                        .Include(s => s.Warranty)
+                        .Where(s => model.RemovedProductStockIds.Contains(s.ProductStockId)).ToList();
+
+                    if (removedStocks.Exists(s => s.IsSold))
                     {
-                        var removedStocks = Context.ProductStock
-                            .Include(s => s.ProductLog)
-                            .Include(s => s.Warranty)
-                            .Where(s => model.RemovedProductStockIds.Contains(s.ProductStockId)).ToList();
-
-                        if (removedStocks.Any(s => s.IsSold))
-                        {
-                            response.IsSuccess = false;
-                            response.Message = "Sold product can not be return";
-                            return response;
-                        }
-
-                        if (removedStocks.Any()) Context.ProductStock.RemoveRange(removedStocks);
+                        response.IsSuccess = false;
+                        response.Message = "Sold product can not be return";
+                        return response;
                     }
+
+                    if (removedStocks.Any()) Context.ProductStock.RemoveRange(removedStocks);
                 }
 
 

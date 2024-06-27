@@ -1,6 +1,6 @@
 ﻿let cartStorage = [];
 const purchaseUpdate = (function() {
-    //global store
+    //global store`
     const cartStorage = [...data];
     const formProductInfo = document.getElementById("formProductInfo");
     const formPayment = document.getElementById("formPayment");
@@ -424,6 +424,7 @@ const purchaseUpdate = (function() {
     const inputDiscount = document.getElementById("inputDiscount");
     const inputReturn = document.getElementById("inputReturn");
     const inputPaid = document.getElementById("inputPaid");
+    const inputPurchaseNote = document.getElementById("inputPurchaseNote");
     const selectAccountId = document.getElementById("selectAccountId");
  
     //sum total product price
@@ -562,5 +563,5 @@ const purchaseUpdate = (function() {
             }
         });
     });
-})(document);
+})();
 

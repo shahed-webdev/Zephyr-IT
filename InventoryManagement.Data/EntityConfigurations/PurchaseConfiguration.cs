@@ -12,6 +12,7 @@ namespace InventoryManagement.Data
                 .HasColumnType("datetime")
                 .HasDefaultValueSql("(getdate())");
             entity.Property(e => e.MemoNumber).HasMaxLength(50);
+            entity.Property(e => e.PurchaseNote).HasMaxLength(1024);
 
             entity.Property(e => e.PurchaseDate)
                 .HasColumnType("date")

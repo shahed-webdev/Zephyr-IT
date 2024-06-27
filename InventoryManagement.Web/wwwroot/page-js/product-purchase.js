@@ -34,6 +34,7 @@ const inputPaid = formPayment.inputPaid;
 const totalDue = formPayment.querySelector('#totalDue');
 const selectPaymentMethod = formPayment.selectPaymentMethod;
 const inputMemoNumber = formPayment.inputMemoNumber;
+const inputPurchaseNote = formPayment.inputPurchaseNote;
 const inputPurchaseDate = formPayment.inputPurchaseDate;
 const vendorError = formPayment.querySelector('#vendor-error');
 
@@ -842,6 +843,7 @@ const onPurchaseSubmitClicked = function(evt) {
         PurchasePaidAmount: +inputPaid.value || 0,
         AccountId: inputPaid.value ? selectPaymentMethod.value : '',
         MemoNumber: inputMemoNumber.value,
+        PurchaseNote: inputPurchaseNote.value,
         PurchaseDate: inputPurchaseDate.value,
         Products: storage
     }
